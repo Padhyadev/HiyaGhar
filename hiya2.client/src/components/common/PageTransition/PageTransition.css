@@ -1,0 +1,212 @@
+/* HIYAGHAR ORGANICS - PREMIUM FULL-SCREEN SHUTTER PAGE TRANSITION */
+
+.hiyaghar-shutter-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+/* Full-Screen Overlay Container (Hidden when idle to prevent 2nd sweep reset) */
+.hiyaghar-shutter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 99999;
+  pointer-events: none;
+  display: none;
+  overflow: hidden;
+}
+
+.hiyaghar-shutter-overlay.is-closing,
+.hiyaghar-shutter-overlay.is-covered,
+.hiyaghar-shutter-overlay.is-opening {
+  display: flex;
+}
+
+/* Horizontal Brand Wipe Panel (#11223A Navy with #c9983b Gold leading stripe) */
+.hiyaghar-horizontal-wipe-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #11223a;
+  background: radial-gradient(circle at 50% 50%, #182e4b 0%, #11223a 70%, #0b1728 100%);
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6);
+  transform: translateX(-101%);
+  will-change: transform;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* Leading Gold Shimmer Stripe */
+.hiyaghar-wipe-gold-stripe {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #c9983b;
+  box-shadow: 0 0 20px rgba(201, 152, 59, 0.8), 0 0 8px rgba(201, 152, 59, 0.6);
+}
+
+/* Watermark Logo Motif */
+.hiyaghar-wipe-watermark-logo {
+  max-width: 90px;
+  max-height: 90px;
+  object-fit: contain;
+  opacity: 0.15;
+  filter: invert(1) drop-shadow(0 4px 12px rgba(255, 255, 255, 0.2));
+}
+
+/* ---------------------------------------------------- */
+/* PHASE 1: CLOSING (Wipe panel slides in from left)    */
+/* ---------------------------------------------------- */
+
+.hiyaghar-shutter-overlay.is-closing .hiyaghar-horizontal-wipe-panel {
+  transform: translateX(0%);
+  transition: transform 380ms cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* ---------------------------------------------------- */
+/* PHASE 2: COVERED (Screen Fully Hidden For Route Swap) */
+/* ---------------------------------------------------- */
+
+.hiyaghar-shutter-overlay.is-covered {
+  pointer-events: all;
+}
+
+.hiyaghar-shutter-overlay.is-covered .hiyaghar-horizontal-wipe-panel {
+  transform: translateX(0%);
+}
+
+/* ---------------------------------------------------- */
+/* PHASE 3: OPENING (Wipe panel slides out to right)    */
+/* ---------------------------------------------------- */
+
+.hiyaghar-shutter-overlay.is-opening .hiyaghar-horizontal-wipe-panel {
+  transform: translateX(101%);
+  transition: transform 420ms cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* ---------------------------------------------------- */
+/* CONTROLLED STAGGER DELAYS (Propagates Across Columns)*/
+/* ---------------------------------------------------- */
+
+.hiyaghar-shutter-column:nth-child(1) { transition-delay: 0ms !important; }
+.hiyaghar-shutter-column:nth-child(2) { transition-delay: 35ms !important; }
+.hiyaghar-shutter-column:nth-child(3) { transition-delay: 70ms !important; }
+.hiyaghar-shutter-column:nth-child(4) { transition-delay: 105ms !important; }
+.hiyaghar-shutter-column:nth-child(5) { transition-delay: 140ms !important; }
+.hiyaghar-shutter-column:nth-child(6) { transition-delay: 175ms !important; }
+.hiyaghar-shutter-column:nth-child(7) { transition-delay: 210ms !important; }
+.hiyaghar-shutter-column:nth-child(8) { transition-delay: 245ms !important; }
+
+/* ---------------------------------------------------- */
+/* PAGE CONTENT UNDERNEATH SHUTTERS                      */
+/* ---------------------------------------------------- */
+
+.hiyaghar-shutter-page-stage {
+  width: 100%;
+  min-height: 100vh;
+  transition: transform 260ms ease, opacity 260ms ease;
+}
+
+/* will-change only while actually animating — held on permanently it creates a
+   containing block for position:fixed descendants, breaking every fixed-position
+   drawer/modal on the page (they end up positioned against this element instead
+   of the viewport). */
+.hiyaghar-shutter-page-stage.is-leaving,
+.hiyaghar-shutter-page-stage.is-entering {
+  will-change: transform, opacity;
+}
+
+.hiyaghar-shutter-page-stage.is-leaving {
+  transform: scale(0.992) translateY(-2px);
+  opacity: 0.9;
+}
+
+.hiyaghar-shutter-page-stage.is-entering {
+  animation: hiyagharShutterPageReveal 380ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes hiyagharShutterPageReveal {
+  0% {
+    transform: scale(0.988) translateY(6px);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Centered Brand Logo Badge on Shutters */
+.hiyaghar-shutter-logo-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.6);
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  width: 96px;
+  height: 96px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45), 0 0 0 3px rgba(201, 152, 59, 0.7);
+  transition: transform 320ms cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 250ms ease;
+}
+
+.hiyaghar-shutter-logo-center img {
+  max-width: 58px;
+  max-height: 58px;
+  object-fit: contain;
+}
+
+.hiyaghar-shutter-logo-center.is-active {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.hiyaghar-shutter-logo-center.is-exiting {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(1.22);
+  transition: transform 380ms ease, opacity 250ms ease;
+}
+
+/* ---------------------------------------------------- */
+/* ACCESSIBILITY: REDUCED MOTION OVERRIDES               */
+/* ---------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .hiyaghar-shutter-overlay {
+    display: none !important;
+  }
+
+  .hiyaghar-shutter-page-stage {
+    transition: opacity 150ms ease !important;
+    transform: none !important;
+  }
+
+  .hiyaghar-shutter-page-stage.is-leaving {
+    opacity: 0.5;
+  }
+
+  .hiyaghar-shutter-page-stage.is-entering {
+    animation: hiyagharShutterPageFade 150ms ease forwards !important;
+  }
+
+  @keyframes hiyagharShutterPageFade {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+}

@@ -1,0 +1,166 @@
+/* Floating Widgets Stack (Back to Top & WhatsApp) */
+.hiyaghar-floating-widgets-stack {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9990;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 14px;
+  pointer-events: none;
+}
+
+.hiyaghar-floating-top-btn,
+.hiyaghar-floating-whatsapp-btn,
+.hiyaghar-floating-cart-pill-wrapper {
+  pointer-events: auto;
+}
+
+/* 1. Back to Top Button
+   Only rendered in the DOM while the page is scrolled past the threshold
+   (see FloatingWidgets.tsx), so it doesn't reserve empty stack space —
+   and doesn't reserve an empty flex gap either — while hidden. The other
+   stack items (View Cart pill, WhatsApp) naturally reflow to close the
+   gap when it's absent and make room again the moment it mounts. */
+.hiyaghar-floating-top-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--hiya-navy, #11223A);
+  color: var(--hiya-gold, #CB992C);
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(17, 34, 58, 0.25);
+  transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: slideTopBtnIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideTopBtnIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.8);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.hiyaghar-floating-top-btn:hover {
+  background-color: var(--hiya-gold, #CB992C);
+  color: #ffffff;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(203, 153, 44, 0.35);
+}
+
+/* 2. WhatsApp Direct Floating Button */
+.hiyaghar-floating-whatsapp-btn {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: whatsappPulse 2.5s infinite;
+}
+
+.hiyaghar-floating-whatsapp-btn:hover {
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 12px 30px rgba(37, 211, 102, 0.55);
+}
+
+.hiyaghar-whatsapp-tooltip {
+  position: absolute;
+  right: calc(100% + 12px);
+  top: 50%;
+  transform: translateY(-50%) translateX(6px);
+  background-color: #11223A;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 200ms ease;
+}
+
+.hiyaghar-whatsapp-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  transform: translateY(-50%);
+  border-width: 5px 0 5px 5px;
+  border-style: solid;
+  border-color: transparent transparent transparent #11223A;
+}
+
+.hiyaghar-floating-whatsapp-btn:hover .hiyaghar-whatsapp-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(0);
+}
+
+@keyframes whatsappPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 14px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .hiyaghar-floating-widgets-stack {
+    bottom: 24px;
+    right: 20px;
+    gap: 12px;
+  }
+
+  .hiyaghar-floating-top-btn {
+    width: 40px;
+    height: 40px;
+  }
+
+  .hiyaghar-floating-whatsapp-btn {
+    width: 48px;
+    height: 48px;
+  }
+
+  .hiyaghar-floating-whatsapp-btn svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .hiyaghar-whatsapp-tooltip {
+    display: none;
+  }
+}
+
+/* Below 576px the "View Cart" pill becomes a full-width sticky bar pinned to
+   the very bottom of the screen (see cart.css), so Back to Top / WhatsApp need
+   to sit above it instead of in the usual bottom-right corner while it's showing. */
+@media (max-width: 576px) {
+  .hiyaghar-floating-widgets-stack.has-cart-bar {
+    bottom: 78px;
+  }
+}

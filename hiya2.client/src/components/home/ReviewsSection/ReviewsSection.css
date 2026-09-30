@@ -1,0 +1,498 @@
+/* Reviews Homepage Section Styles */
+
+.hiyaghar-reviews-section {
+  position: relative;
+  overflow-x: clip;
+  background-color: #fdfbf7;
+  padding-top: clamp(56px, 7vw, 96px);
+  padding-bottom: clamp(64px, 8vw, 104px);
+  padding-inline: clamp(24px, 5vw, 80px);
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  color: #2a2a2a;
+}
+
+/* Background Accents */
+.hiyaghar-reviews-bg-accents {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hiyaghar-reviews-glow-left {
+  position: absolute;
+  width: 380px;
+  height: 380px;
+  border-radius: 50%;
+  background-color: rgba(75, 168, 96, 0.07);
+  top: 10%;
+  left: -80px;
+  filter: blur(80px);
+}
+
+.hiyaghar-reviews-glow-right {
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background-color: rgba(242, 101, 34, 0.05);
+  bottom: 10%;
+  right: -100px;
+  filter: blur(90px);
+}
+
+/* Inner Container */
+.hiyaghar-reviews-inner-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Section Header */
+.hiyaghar-reviews-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(36px, 5vw, 56px);
+}
+
+.hiyaghar-reviews-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 20px;
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  color: var(--hiya-navy, #11223A);
+  border: 1.5px solid var(--hiya-navy, #11223A);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-full, 9999px);
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(17, 34, 58, 0.08);
+}
+
+.hiyaghar-reviews-title {
+  font-family: var(--font-family-stack, inherit);
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 900;
+  line-height: 1.12;
+  color: #2a2a2a;
+  letter-spacing: -0.025em;
+  margin: 0 0 14px 0;
+}
+
+.hiyaghar-reviews-subtitle {
+  font-size: clamp(15px, 1.8vw, 19px);
+  font-weight: 500;
+  color: #555555;
+  margin: 0 0 20px 0;
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+/* Trust Summary Badge */
+.hiyaghar-reviews-trust-summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ffffff;
+  padding: 8px 20px;
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid #efe8dd;
+}
+
+.hiyaghar-trust-stars {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+
+.hiyaghar-trust-score {
+  font-size: 14px;
+  font-weight: 800;
+  color: #2a2a2a;
+}
+
+.hiyaghar-trust-divider {
+  color: #cccccc;
+}
+
+.hiyaghar-trust-count {
+  font-size: 13px;
+  font-weight: 600;
+  color: #555555;
+}
+
+/* Carousel Container */
+.hiyaghar-reviews-carousel-wrapper {
+  position: relative;
+  width: 100%;
+  outline: none;
+}
+
+.hiyaghar-reviews-carousel-wrapper:focus-visible {
+  outline: 2px solid #2d6a4f;
+  outline-offset: 8px;
+  border-radius: 20px;
+}
+
+.hiyaghar-reviews-track-container {
+  width: 100%;
+  overflow: hidden;
+  padding: 16px 0 24px 0;
+}
+
+.hiyaghar-reviews-track {
+  display: flex;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Slide items - 3 per view on desktop */
+.hiyaghar-reviews-slide {
+  flex: 0 0 33.333%;
+  max-width: 33.333%;
+  padding: 0 12px;
+  box-sizing: border-box;
+}
+
+/* Review Card Base */
+.hiyaghar-review-card {
+  background-color: #ffffff;
+  border: 1px solid #eee8df;
+  border-radius: 20px;
+  padding: clamp(24px, 3vw, 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.03);
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 350ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 350ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-sizing: border-box;
+  min-height: 280px;
+}
+
+.hiyaghar-review-card:hover,
+.hiyaghar-review-card.active {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.07);
+  border-color: #dce7d7;
+}
+
+/* Card Header: Stars & Verified Badge */
+.hiyaghar-review-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.hiyaghar-review-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hiyaghar-review-rating-num {
+  font-size: 13px;
+  font-weight: 800;
+  color: #2a2a2a;
+  margin-left: 6px;
+}
+
+.hiyaghar-review-verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #2d6a4f;
+  background-color: #e8f5e9;
+  padding: 4px 10px;
+  border-radius: var(--radius-full, 9999px);
+}
+
+/* Review Text */
+.hiyaghar-review-body {
+  margin: 0 0 20px 0;
+  padding: 0;
+  flex-grow: 1;
+}
+
+.hiyaghar-review-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4a4a4a;
+  line-height: 1.6;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Review Footer */
+.hiyaghar-review-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid #f4efe7;
+  padding-top: 16px;
+}
+
+.hiyaghar-review-author-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hiyaghar-review-author-name {
+  font-size: 15px;
+  font-weight: 800;
+  color: #2a2a2a;
+}
+
+.hiyaghar-review-author-loc {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888888;
+}
+
+.hiyaghar-review-product-tag {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.hiyaghar-review-product-label {
+  color: #888888;
+  font-weight: 500;
+}
+
+.hiyaghar-review-product-name {
+  color: #2d6a4f;
+  font-weight: 700;
+}
+
+.hiyaghar-review-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+/* Controls: Arrow Buttons & Dots */
+.hiyaghar-reviews-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.hiyaghar-reviews-autoplay-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background-color: #ffffff;
+  border: 1px solid #e2dad0;
+  border-radius: var(--radius-full, 9999px);
+  color: #2d6a4f;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease;
+  outline: none;
+}
+
+.hiyaghar-reviews-autoplay-toggle:hover {
+  background-color: #e8f5e9;
+  border-color: #2d6a4f;
+}
+
+.hiyaghar-reviews-autoplay-toggle:focus-visible {
+  outline: 2px solid #2d6a4f;
+  outline-offset: 2px;
+}
+
+.hiyaghar-reviews-nav-btn {
+
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1px solid #e2dad0;
+  color: #2a2a2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: background-color 200ms ease, transform 200ms ease, border-color 200ms ease;
+  outline: none;
+}
+
+.hiyaghar-reviews-nav-btn:hover {
+  background-color: #2d6a4f;
+  color: #ffffff;
+  border-color: #2d6a4f;
+  transform: scale(1.06);
+}
+
+.hiyaghar-reviews-nav-btn:focus-visible {
+  outline: 2px solid #2d6a4f;
+  outline-offset: 3px;
+}
+
+/* Dots */
+.hiyaghar-reviews-dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hiyaghar-reviews-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #d1d5db;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: width 300ms ease, background-color 300ms ease, border-radius 300ms ease;
+  outline: none;
+  min-width: 10px;
+  min-height: 10px;
+}
+
+.hiyaghar-reviews-dot.active {
+  width: 28px;
+  border-radius: 10px;
+  background-color: #2d6a4f;
+}
+
+.hiyaghar-reviews-dot:focus-visible {
+  outline: 2px solid #2d6a4f;
+  outline-offset: 2px;
+}
+
+/* Primary Action Button */
+.hiyaghar-reviews-action {
+  margin-top: clamp(36px, 4vw, 56px);
+  display: flex;
+  justify-content: center;
+}
+
+.hiyaghar-reviews-explore-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 36px;
+  background-color: #2d6a4f;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: 0 8px 24px rgba(45, 106, 79, 0.22);
+  transition: background-color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+  min-height: 48px;
+  outline: none;
+}
+
+.hiyaghar-reviews-explore-btn:hover {
+  background-color: #1b4332;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(45, 106, 79, 0.32);
+}
+
+.hiyaghar-reviews-explore-btn:focus-visible {
+  outline: 2px solid #2d6a4f;
+  outline-offset: 4px;
+}
+
+.hiyaghar-reviews-arrow-icon {
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hiyaghar-reviews-explore-btn:hover .hiyaghar-reviews-arrow-icon {
+  transform: translateX(6px);
+}
+
+/* Responsive Media Queries */
+
+/* Tablet (768px - 1023px): 2 cards per view */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .hiyaghar-reviews-slide {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+
+  .hiyaghar-reviews-section {
+    padding-inline: clamp(24px, 4vw, 48px);
+  }
+}
+
+/* Mobile (< 768px): 1 card per view */
+@media (max-width: 767px) {
+  .hiyaghar-reviews-slide {
+    flex: 0 0 100%;
+    max-width: 100%;
+    padding: 0 4px;
+  }
+
+  .hiyaghar-reviews-section {
+    padding-inline: 20px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .hiyaghar-reviews-trust-summary {
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 18px;
+    border-radius: 16px;
+  }
+
+  .hiyaghar-trust-divider {
+    display: none;
+  }
+
+  .hiyaghar-reviews-explore-btn {
+    width: 100%;
+    max-width: 320px;
+    padding: 14px 28px;
+  }
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+
+  .hiyaghar-reviews-track,
+  .hiyaghar-review-card,
+  .hiyaghar-reviews-nav-btn,
+  .hiyaghar-reviews-dot,
+  .hiyaghar-reviews-explore-btn,
+  .hiyaghar-reviews-arrow-icon {
+    transition: none !important;
+  }
+
+  .hiyaghar-review-card:hover,
+  .hiyaghar-reviews-nav-btn:hover,
+  .hiyaghar-reviews-explore-btn:hover {
+    transform: none !important;
+  }
+}

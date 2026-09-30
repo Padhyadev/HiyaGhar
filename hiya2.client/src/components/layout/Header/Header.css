@@ -1,0 +1,640 @@
+/* Header Component Styles - Sticky Header & Hiya Cream Canvas (#FFFFE3) */
+
+.hiyaghar-header-wrapper {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  z-index: 10000;
+  background: transparent;
+}
+
+/* 1. Deep Navy Infinite Ticker Marquee Bar */
+.hiyaghar-ticker-bar {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 8px 0;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+  display: flex;
+}
+
+.hiyaghar-ticker-track {
+  display: flex;
+  gap: 32px;
+  animation: marquee 25s linear infinite;
+}
+
+.hiyaghar-ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  text-transform: uppercase;
+}
+
+.hiyaghar-ticker-item span {
+  font-weight: 800;
+}
+
+/* 2. Floating Header Pill Container - Transparent Wrapper */
+.hiyaghar-header-nav-container {
+  background: transparent;
+  padding: 12px 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hiyaghar-header-main-bar {
+  background-color: #ffffff;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(20px, 2vw, 36px);
+  border-radius: 30px;
+  box-shadow: 0 6px 24px rgba(17, 34, 58, 0.09);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  position: relative;
+}
+
+/* Left Header Nav */
+.hiyaghar-header-left {
+  display: flex;
+  align-items: center;
+  gap: clamp(18px, 2.2vw, 36px);
+  flex: 1;
+}
+
+.hiyaghar-header-link {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color var(--motion-duration-fast) ease;
+}
+
+.hiyaghar-header-link:hover {
+  color: var(--hiya-gold, #CB992C);
+}
+
+/* Header Dropdowns */
+.hiyaghar-header-dropdown-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.hiyaghar-header-dropdown-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  cursor: pointer;
+  padding: 8px 0;
+  transition: color var(--motion-duration-fast) ease;
+}
+
+.hiyaghar-header-dropdown-btn:hover {
+  color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-dropdown-chevron {
+  transition: transform 200ms ease;
+}
+
+.hiyaghar-header-dropdown-wrapper:hover .hiyaghar-dropdown-chevron {
+  transform: rotate(180deg);
+}
+
+.hiyaghar-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background-color: var(--hiya-white, #ffffff);
+  border-radius: 16px;
+  padding: 8px;
+  min-width: 170px;
+  box-shadow: 0 12px 32px rgba(17, 34, 58, 0.18);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  z-index: 1200;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  animation: fadeInDown 180ms ease forwards;
+}
+
+/* Invisible Hover Bridge: covers gap between button & menu so mouse never leaves wrapper */
+.hiyaghar-dropdown-menu::before {
+  content: '';
+  position: absolute;
+  top: -16px;
+  left: -20px;
+  right: -20px;
+  height: 20px;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.hiyaghar-dropdown-menu.right-aligned {
+  left: auto;
+  right: 0;
+  min-width: 190px;
+}
+
+.hiyaghar-dropdown-item {
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  text-decoration: none;
+  transition: background-color 150ms ease, color 150ms ease;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  text-align: left;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.hiyaghar-dropdown-item:hover {
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-dropdown-item.btn-style {
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+}
+
+.hiyaghar-dropdown-item.btn-style.logout {
+  color: #C0392B;
+  border-top: 1px dashed #E8E2C9;
+  margin-top: 4px;
+  padding-top: 10px;
+}
+
+.hiyaghar-dropdown-item.btn-style.logout:hover {
+  background-color: #FDEDEC;
+  color: #C0392B;
+}
+
+.hiyaghar-dropdown-header-user {
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-gold, #CB992C);
+  border-bottom: 1px solid #E8E2C9;
+  margin-bottom: 4px;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+/* Center Logo */
+.hiyaghar-header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  padding: 0 16px;
+}
+
+.hiyaghar-ref-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.hiyaghar-logo-img {
+  height: 42px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  display: block;
+}
+
+/* Right Header Nav & Cart */
+.hiyaghar-header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  flex: 1;
+}
+
+.hiyaghar-account-icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  color: var(--hiya-navy, #11223A);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) ease;
+}
+
+.hiyaghar-account-icon-btn svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+.hiyaghar-account-icon-btn:hover {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  transform: translateY(-1px);
+}
+
+.hiyaghar-wishlist-icon-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  color: var(--hiya-navy, #11223A);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) ease;
+  box-shadow: none;
+}
+
+.hiyaghar-wishlist-icon-btn:hover {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border-color: var(--hiya-navy, #11223A);
+  transform: translateY(-1px);
+}
+
+.hiyaghar-wishlist-badge-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--hiya-gold, #CB992C);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ffffff;
+  z-index: 2;
+  transition: background-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease;
+}
+
+.hiyaghar-wishlist-icon-btn:hover .hiyaghar-wishlist-badge-count {
+  background-color: #ffffff;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-cart-cyan-pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  color: var(--hiya-navy, #11223A);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) ease;
+  box-shadow: none;
+}
+
+.hiyaghar-cart-cyan-pill:hover {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border-color: var(--hiya-navy, #11223A);
+  transform: translateY(-1px);
+}
+
+.hiyaghar-cart-badge-count {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  min-width: 19px;
+  height: 19px;
+  padding: 0 4px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  border: 2px solid #ffffff;
+  z-index: 2;
+  transition: background-color var(--motion-duration-fast) ease, color var(--motion-duration-fast) ease;
+}
+
+.hiyaghar-cart-cyan-pill:hover .hiyaghar-cart-badge-count {
+  background-color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-mobile-hamburger-btn {
+  display: none;
+}
+
+/* Mobile Slide-Down Menu Overlay */
+.hiyaghar-mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 999999;
+  display: flex;
+  justify-content: flex-start;
+  animation: fadeIn 200ms ease;
+  overscroll-behavior: contain;
+  touch-action: none;
+}
+
+.hiyaghar-mobile-menu-drawer {
+  position: relative;
+  z-index: 1000000;
+  width: 320px;
+  max-width: 85vw;
+  background-color: #ffffff;
+  height: 100%;
+  height: 100dvh;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+  animation: slideInLeft 250ms ease forwards;
+}
+
+.hiyaghar-mobile-menu-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.hiyaghar-mobile-menu-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: #2a2a2a;
+}
+
+.hiyaghar-mobile-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hiyaghar-mobile-link {
+  font-size: 16px;
+  font-weight: 800;
+  color: #2a2a2a;
+  text-decoration: none;
+  padding: 8px 0;
+}
+
+.hiyaghar-mobile-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.hiyaghar-mobile-group-title {
+  font-size: 13px;
+  font-weight: 800;
+  color: #555555;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hiyaghar-mobile-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  cursor: pointer;
+  text-align: left;
+}
+
+.hiyaghar-mobile-group-header .hiyaghar-dropdown-chevron {
+  transition: transform 200ms ease;
+  color: #888888;
+}
+
+.hiyaghar-mobile-group-header .hiyaghar-dropdown-chevron.is-open {
+  transform: rotate(180deg);
+  color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-mobile-sublinks-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 4px;
+  animation: fadeIn 180ms ease;
+}
+
+.hiyaghar-mobile-sublink {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2a2a2a;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background-color: #f8fafc;
+}
+
+.hiyaghar-mobile-sublink.btn-style {
+  border: none;
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+
+.hiyaghar-mobile-sublink.btn-style.logout {
+  color: #C0392B;
+  background-color: #FDEDEC;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes fadeInDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Responsive Media Queries */
+@media (max-width: 991px) {
+  .hiyaghar-header-nav-container {
+    padding: 8px 16px;
+  }
+
+  .hiyaghar-header-main-bar {
+    padding: 0 16px;
+    height: 56px;
+    transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Compact Centered Floating Logo Pill when scrolling down on Mobile */
+  .hiyaghar-header-main-bar.is-scrolled {
+    width: fit-content;
+    max-width: 180px;
+    margin: 0 auto;
+    padding: 0 20px;
+    height: 52px;
+    justify-content: center;
+    box-shadow: 0 6px 24px rgba(17, 34, 58, 0.15);
+    border-radius: 999px;
+  }
+
+  .hiyaghar-header-main-bar.is-scrolled .hiyaghar-mobile-hamburger-btn,
+  .hiyaghar-header-main-bar.is-scrolled .hiyaghar-header-right {
+    display: none !important;
+  }
+
+  .hiyaghar-header-main-bar.is-scrolled .hiyaghar-header-center {
+    padding: 0;
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hiyaghar-header-main-bar.is-scrolled .hiyaghar-logo-img {
+    height: 36px;
+  }
+
+  .hiyaghar-header-left {
+    display: none;
+  }
+
+  .hiyaghar-mobile-hamburger-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #2a2a2a;
+    padding: 0;
+  }
+
+  .hiyaghar-header-center {
+    padding: 0;
+  }
+
+  .hiyaghar-logo-img {
+    height: 36px;
+  }
+
+  .hiyaghar-account-icon-btn,
+  .hiyaghar-wishlist-icon-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .hiyaghar-cart-cyan-pill {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    min-height: auto;
+  }
+}

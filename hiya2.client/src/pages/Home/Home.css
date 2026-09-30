@@ -1,0 +1,12 @@
+/* Home Page Styles */
+
+.hiyaghar-home-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface-base);
+}
+
+.hiyaghar-home-main {
+  flex: 1;
+}

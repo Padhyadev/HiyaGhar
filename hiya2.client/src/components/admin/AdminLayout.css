@@ -1,0 +1,240 @@
+.hiyaghar-admin-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #F7F5EF;
+  color: #10243E;
+  font-family: inherit;
+}
+
+.hiyaghar-admin-topbar {
+  background: #F7F5EF;
+  color: #10243E;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 4px 12px rgba(16, 36, 62, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.hiyaghar-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hiyaghar-sidebar-toggle {
+  background: transparent;
+  border: none;
+  color: #10243E;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.hiyaghar-sidebar-toggle:hover {
+  background: rgba(16, 36, 62, 0.05);
+}
+
+.hiyaghar-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.hiyaghar-topbar-logo {
+  height: 32px;
+  width: auto;
+  max-width: 140px;
+  object-fit: contain;
+  display: block;
+  background-color: #F7F3E8;
+  padding: 6px 12px;
+  border-radius: 8px;
+}
+
+.hiyaghar-topbar-title {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+}
+
+.hiyaghar-topbar-title small {
+  background: #D19A27;
+  color: #ffffff;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.hiyaghar-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hiyaghar-store-btn {
+  background: rgba(16, 36, 62, 0.08);
+  color: #10243E;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-store-btn:hover {
+  background: rgba(16, 36, 62, 0.15);
+}
+
+.hiyaghar-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-right: 12px;
+  border-right: 1px solid rgba(16, 36, 62, 0.15);
+}
+
+.hiyaghar-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #D19A27;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border: 2px solid #F7F5EF;
+}
+
+.hiyaghar-user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-admin-topbar .hiyaghar-user-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  line-height: 1.2;
+  color: #10243E !important;
+}
+
+.hiyaghar-admin-topbar .hiyaghar-user-role {
+  font-size: 0.75rem;
+  color: #D19A27 !important;
+  font-weight: 600;
+}
+
+.hiyaghar-admin-logout-btn {
+  background: transparent;
+  border: 1px solid rgba(16, 36, 62, 0.2);
+  color: #10243E;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-admin-logout-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+  color: #fca5a5;
+}
+
+.hiyaghar-admin-body {
+  display: flex;
+  flex: 1;
+}
+
+.hiyaghar-admin-sidebar {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid #e8e2d3;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+  min-height: calc(100vh - 64px);
+}
+
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-admin-sidebar {
+  width: 72px;
+}
+
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-nav-text,
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-sidebar-section-title,
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-sidebar-footer {
+  display: none;
+}
+
+.hiyaghar-sidebar-section-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #94a3b8;
+  padding: 24px 20px 10px;
+  letter-spacing: 0.08em;
+}
+
+.hiyaghar-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.hiyaghar-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: #10243E;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-nav-link:hover {
+  background: #F7F5EF;
+  color: #D19A27;
+}
+
+.hiyaghar-nav-link.is-active {
+  background: rgba(209, 154, 39, 0.1);
+  color: #D19A27;
+  font-weight: 700;
+}
+
+.hiyaghar-nav-icon {
+  font-size: 1.2rem;
+}
+
+.hiyaghar-sidebar-footer {
+  margin-top: auto;
+  padding: 20px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.hiyaghar-admin-content {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+}

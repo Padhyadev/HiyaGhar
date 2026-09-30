@@ -1,0 +1,771 @@
+/* Dedicated Customize Combo Page Styles
+   Redesigned to match the visual language used across the rest of the site:
+   Hiya navy (#11223A) / gold (#CB992C) accents, and the cream (#F7F3E9) / mint
+   (#F0F7F3) two-tone pattern used on the listing pages and Product Detail page. */
+
+.hiyaghar-combo-page-main {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F9F6EE 100%);
+  padding-bottom: 80px;
+}
+
+.hiyaghar-combo-page-container {
+  max-width: var(--container-max-width, 1440px);
+  margin: 0 auto;
+  padding: 0 clamp(16px, 4vw, 40px);
+}
+
+/* Workspace Section & Grid */
+.hiyaghar-combo-workspace-section {
+  padding-top: clamp(28px, 4vw, 48px);
+}
+
+.hiyaghar-combo-workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 28px;
+  align-items: start;
+}
+
+.hiyaghar-combo-workspace-left {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.hiyaghar-workspace-step-card {
+  background-color: #ffffff;
+  border: 1px solid #E8E2C9;
+  border-radius: 24px;
+  padding: clamp(20px, 3vw, 32px);
+  box-shadow: 0 8px 24px rgba(17, 34, 58, 0.05);
+}
+
+.hiyaghar-step-title-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.hiyaghar-step-num-pill {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hiyaghar-step-title {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+  margin: 0;
+}
+
+.hiyaghar-step-desc {
+  font-size: 14px;
+  color: #667085;
+  margin: 2px 0 0 0;
+}
+
+/* Step 1 — Pack Selection: pricing-tier cards */
+.hiyaghar-page-pack-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.hiyaghar-page-pack-card {
+  background-color: #FFFDF5;
+  border: 2px solid #E8E2C9;
+  border-radius: 18px;
+  padding: 22px 18px;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: transform 220ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 220ms ease, border-color 200ms ease;
+  overflow: hidden;
+}
+
+.hiyaghar-page-pack-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background-color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+  padding: 4px 10px;
+  border-radius: 10px;
+}
+
+.hiyaghar-page-pack-card:hover {
+  border-color: var(--hiya-gold, #CB992C);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 28px rgba(17, 34, 58, 0.1);
+}
+
+.hiyaghar-page-pack-card.is-selected {
+  background-color: #ffffff;
+  border-color: var(--hiya-navy, #11223A);
+  box-shadow: 0 10px 28px rgba(17, 34, 58, 0.14);
+}
+
+.hiyaghar-page-pack-name {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+  margin: 0;
+  padding-right: 60px;
+}
+
+.hiyaghar-page-pack-count {
+  font-size: 12px;
+  font-weight: 700;
+  color: #667085;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.hiyaghar-page-pack-savings {
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--hiya-gold-dark, #A97818);
+  line-height: 1.1;
+  margin-top: 4px;
+}
+
+.hiyaghar-page-pack-tagline {
+  font-size: 12px;
+  color: #667085;
+  margin-top: 2px;
+}
+
+/* Step 2 — Category Pills */
+.hiyaghar-page-cat-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.hiyaghar-page-cat-pill {
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  background-color: #ffffff;
+  border: 1.5px solid #E8E2C9;
+  color: var(--hiya-navy, #11223A);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.hiyaghar-page-cat-pill:hover {
+  border-color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-page-cat-pill.is-active {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border-color: var(--hiya-navy, #11223A);
+}
+
+/* Step 2 — Product Selection Grid (same alternating two-tone pattern as the
+   listing pages — MukhwasProductCard/BestSellersSection) */
+.hiyaghar-page-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 18px;
+}
+
+.hiyaghar-page-prod-card {
+  border-radius: 18px;
+  border: 2px solid transparent;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  position: relative;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms ease, border-color 200ms ease;
+}
+
+.hiyaghar-page-prod-card.hiyaghar-tone-cream {
+  background-color: #F7F3E9;
+}
+
+.hiyaghar-page-prod-card.hiyaghar-tone-mint {
+  background-color: #F0F7F3;
+}
+
+.hiyaghar-page-prod-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(17, 34, 58, 0.08);
+}
+
+.hiyaghar-page-prod-card.is-selected {
+  border-color: var(--hiya-gold, #CB992C);
+  box-shadow: 0 10px 24px rgba(203, 153, 44, 0.2);
+}
+
+.hiyaghar-page-prod-card.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.hiyaghar-page-prod-card.is-disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.hiyaghar-page-prod-img-wrap {
+  width: 100%;
+  height: 140px;
+  border-radius: 14px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  overflow: hidden;
+  /* Breathing room so the image never touches the wrap's edges — same technique
+     used on the listing cards and Product Detail page. */
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.hiyaghar-page-prod-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.hiyaghar-page-check-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(17, 34, 58, 0.3);
+}
+
+.hiyaghar-page-prod-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hiyaghar-page-prod-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+  margin: 2px 0 6px 0;
+  line-height: 1.3;
+}
+
+.hiyaghar-page-prod-price {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+}
+
+/* Per-card variant picker — grouped by attribute name (e.g. "Weight:" 100g/200g on
+   its own row, "Packing:" Pouch/Bottle on its own row), same pattern as the
+   Product Detail page's attribute selector, instead of one long flat pill list. */
+.hiyaghar-page-variant-groups {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiyaghar-page-variant-group-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hiyaghar-page-variant-group-label {
+  font-size: 11px;
+  font-weight: 800;
+  color: #667085;
+  flex-shrink: 0;
+}
+
+.hiyaghar-page-variant-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.hiyaghar-page-variant-pill {
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  background-color: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid #E8E2C9;
+  color: var(--hiya-navy, #11223A);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.hiyaghar-page-variant-pill:hover:not(:disabled) {
+  border-color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-page-variant-pill.is-active {
+  background-color: var(--hiya-navy, #11223A);
+  border-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+}
+
+.hiyaghar-page-variant-pill:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.hiyaghar-page-add-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 800;
+  border: 1.5px solid var(--hiya-navy, #11223A);
+  background-color: transparent;
+  color: var(--hiya-navy, #11223A);
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.hiyaghar-page-add-btn:hover:not(:disabled) {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+}
+
+.hiyaghar-page-add-btn.is-selected {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+}
+
+.hiyaghar-page-add-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* Loading skeleton (product grid while the API call is in flight) */
+.hiyaghar-page-prod-card-skeleton {
+  height: 236px;
+  border-radius: 18px;
+  background: linear-gradient(90deg, #F3F0E5 25%, #FBFAF6 37%, #F3F0E5 63%);
+  background-size: 400% 100%;
+  animation: comboSkeletonShimmer 1.4s ease infinite;
+}
+
+@keyframes comboSkeletonShimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+/* Empty state (category filter with no real products yet) */
+.hiyaghar-combo-empty-state {
+  padding: 48px 24px;
+  text-align: center;
+  color: #667085;
+  background-color: #FFFDF5;
+  border: 1.5px dashed #E8E2C9;
+  border-radius: 18px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Step 3 — Summary / Review Panel (receipt-style) */
+.hiyaghar-page-summary-sticky-card {
+  background-color: #ffffff;
+  border: 1px solid #E8E2C9;
+  border-top: 4px solid var(--hiya-gold, #CB992C);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 90px;
+  box-shadow: 0 12px 32px rgba(17, 34, 58, 0.07);
+}
+
+.hiyaghar-page-summary-pack-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hiyaghar-page-pack-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-page-discount-tag {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--hiya-gold-dark, #A97818);
+}
+
+.hiyaghar-page-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiyaghar-page-progress-info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 700;
+  color: #667085;
+}
+
+.hiyaghar-page-progress-track {
+  height: 8px;
+  background-color: #F0F7F3;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.hiyaghar-page-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--hiya-gold, #CB992C), var(--hiya-navy, #11223A));
+  border-radius: 4px;
+  transition: width 300ms ease;
+}
+
+.hiyaghar-page-slots-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.hiyaghar-page-slot-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  border: 1.5px dashed #E8E2C9;
+  background-color: #FBFAF5;
+  transition: all 250ms ease;
+}
+
+.hiyaghar-page-slot-item.has-item {
+  border-style: solid;
+  border-color: #E8E2C9;
+  background-color: #ffffff;
+}
+
+.hiyaghar-page-slot-thumb {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.hiyaghar-page-slot-details {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.hiyaghar-page-slot-name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hiyaghar-page-slot-price {
+  font-size: 12px;
+  color: #667085;
+}
+
+.hiyaghar-page-slot-remove {
+  background: none;
+  border: none;
+  color: #98A2B3;
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.hiyaghar-page-slot-remove:hover {
+  color: #B42318;
+}
+
+.hiyaghar-page-slot-empty {
+  font-size: 12px;
+  color: #98A2B3;
+  font-style: italic;
+}
+
+.hiyaghar-page-price-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px dashed #E8E2C9;
+}
+
+.hiyaghar-page-price-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #667085;
+}
+
+.hiyaghar-page-savings-row {
+  color: var(--hiya-gold-dark, #A97818);
+  font-weight: 800;
+}
+
+.hiyaghar-page-final-row {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--hiya-navy, #11223A);
+  padding-top: 10px;
+  border-top: 1px solid #E8E2C9;
+}
+
+.hiyaghar-page-final-val {
+  font-size: 24px;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-page-savings-disclaimer {
+  font-size: 11px;
+  color: #98A2B3;
+  font-style: italic;
+  line-height: 1.5;
+  margin: 4px 0 0 0;
+}
+
+/* CTA — same gold-gradient treatment as the Product Detail page's Buy Now button */
+.hiyaghar-page-submit-btn {
+  width: 100%;
+  padding: 16px 20px;
+  border-radius: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  background-color: #98A2B3;
+  color: #ffffff;
+  border: none;
+  cursor: not-allowed;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hiyaghar-page-submit-btn.is-ready {
+  background: linear-gradient(135deg, var(--hiya-gold, #CB992C) 0%, #B5831D 100%);
+  color: var(--hiya-navy, #11223A);
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(203, 153, 44, 0.3);
+}
+
+.hiyaghar-page-submit-btn.is-ready:hover {
+  background: linear-gradient(135deg, #E8C96A 0%, var(--hiya-gold, #CB992C) 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(203, 153, 44, 0.45);
+}
+
+/* Toast Alert */
+.hiyaghar-combo-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(17, 34, 58, 0.3);
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  font-size: 14px;
+  font-weight: 700;
+  z-index: 1100;
+  max-width: 90vw;
+  text-align: center;
+}
+
+/* Media Queries */
+@media (max-width: 1024px) {
+  .hiyaghar-combo-workspace-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hiyaghar-page-pack-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hiyaghar-page-summary-sticky-card {
+    position: static;
+  }
+}
+
+@media (max-width: 576px) {
+  .hiyaghar-page-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .hiyaghar-page-prod-card {
+    padding: 10px 8px;
+    border-radius: 14px;
+  }
+
+  .hiyaghar-page-prod-card-skeleton {
+    height: 180px;
+  }
+}
+
+/* Flying Image Animation to Combo Slot */
+.hiyaghar-flying-combo-item {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: var(--start-w);
+  height: var(--start-h);
+  pointer-events: none;
+  z-index: 99999;
+  border-radius: 16px;
+  background-color: #ffffff;
+  border: 2px solid var(--hiya-gold, #CB992C);
+  box-shadow: 0 12px 32px rgba(17, 34, 58, 0.25), 0 0 20px rgba(203, 153, 44, 0.5);
+  padding: 6px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: flyToComboSlot 600ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.hiyaghar-flying-combo-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@keyframes flyToComboSlot {
+  0% {
+    left: var(--start-x);
+    top: var(--start-y);
+    width: var(--start-w);
+    height: var(--start-h);
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  45% {
+    left: calc(var(--start-x) + (var(--target-x) - var(--start-x)) * 0.45);
+    top: calc(var(--start-y) + (var(--target-y) - var(--start-y)) * 0.45 - 55px);
+    width: calc(var(--start-w) + (var(--target-w) - var(--start-w)) * 0.45);
+    height: calc(var(--start-h) + (var(--target-h) - var(--start-h)) * 0.45);
+    transform: scale(0.88) rotate(-10deg);
+    opacity: 0.95;
+    box-shadow: 0 16px 40px rgba(17, 34, 58, 0.3), 0 0 25px rgba(203, 153, 44, 0.7);
+  }
+  100% {
+    left: var(--target-x);
+    top: var(--target-y);
+    width: var(--target-w);
+    height: var(--target-h);
+    transform: scale(1) rotate(0deg);
+    opacity: 0;
+    border-radius: 8px;
+  }
+}
+
+/* Slot Receiving and Landing Animations */
+.hiyaghar-page-slot-item.is-pending {
+  border-style: dashed;
+  border-color: var(--hiya-gold, #CB992C);
+  background-color: #FFFDF0;
+  animation: slotPulseReceiving 1s infinite alternate ease-in-out;
+}
+
+@keyframes slotPulseReceiving {
+  0% {
+    box-shadow: 0 0 0 0 rgba(203, 153, 44, 0.2);
+  }
+  100% {
+    box-shadow: 0 0 12px 3px rgba(203, 153, 44, 0.4);
+  }
+}
+
+.hiyaghar-page-slot-item.is-landing {
+  animation: slotPopBounce 500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slotPopBounce {
+  0% {
+    transform: scale(0.94);
+    border-color: var(--hiya-gold, #CB992C);
+    box-shadow: 0 0 0 0 rgba(203, 153, 44, 0.7);
+  }
+  50% {
+    transform: scale(1.06);
+    border-color: var(--hiya-gold, #CB992C);
+    box-shadow: 0 0 24px 6px rgba(203, 153, 44, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(203, 153, 44, 0);
+  }
+}
+
+.hiyaghar-page-slot-item.is-landing .hiyaghar-page-slot-thumb {
+  animation: slotThumbPop 450ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes slotThumbPop {
+  0% {
+    transform: scale(0.2) rotate(-20deg);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.25) rotate(6deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}

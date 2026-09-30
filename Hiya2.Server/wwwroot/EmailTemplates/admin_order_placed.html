@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>New Order Alert</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: #eef1f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #d5dae1;
+        }
+
+        .logo-row {
+            text-align: center;
+            padding: 20px 24px 4px 24px;
+        }
+
+        .header-bar {
+            background: #11223A;
+            color: #ffffff;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 0.4px;
+        }
+
+        .body-area {
+            padding: 24px;
+        }
+
+        table.info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        table.info-table td {
+            padding: 6px 8px;
+            font-size: 13px;
+            border-bottom: 1px solid #eef1f5;
+        }
+
+        table.info-table td.label {
+            width: 160px;
+            color: #667085;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: bold;
+            color: #11223A;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0 0 10px 0;
+            border-left: 3px solid #CB992C;
+            padding-left: 8px;
+        }
+
+        .total-line {
+            font-size: 15px;
+            font-weight: bold;
+            color: #11223A;
+            text-align: right;
+            padding: 10px 0;
+            border-top: 2px solid #11223A;
+        }
+
+        .footer-note {
+            padding: 12px 24px;
+            background: #f5f6f8;
+            color: #98a2b3;
+            font-size: 11px;
+            border-top: 1px solid #d5dae1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-row">
+            <img src="cid:CompanyLogo" alt="Hiya" style="max-width:140px;height:auto;" />
+        </div>
+        <div class="header-bar">🔔 NEW ORDER PLACED - {{orderNumber}}</div>
+        <div class="body-area">
+            <p class="section-title">Customer</p>
+            <table class="info-table">
+                <tr><td class="label">Name</td><td>{{customerName}}</td></tr>
+                <tr><td class="label">Email</td><td>{{customerEmail}}</td></tr>
+                <tr><td class="label">Mobile</td><td>{{customerMobile}}</td></tr>
+                <tr><td class="label">Order Date</td><td>{{orderDate}}</td></tr>
+            </table>
+
+            <p class="section-title">Items</p>
+            {{productRows}}
+
+            <div class="total-line">Order Total: ₹ {{totalAmount}}</div>
+        </div>
+        <div class="footer-note">
+            Automated internal notification from the Hiya order system. Do not reply to this email.
+        </div>
+    </div>
+</body>
+</html>

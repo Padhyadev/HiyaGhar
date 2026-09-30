@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Order Status Update</title>
+    <style>
+        body {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background: #eef1f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #d5dae1;
+        }
+
+        .logo-row {
+            text-align: center;
+            padding: 20px 24px 4px 24px;
+        }
+
+        .header-bar {
+            background: #11223A;
+            color: #ffffff;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: bold;
+            letter-spacing: 0.4px;
+        }
+
+        .body-area {
+            padding: 24px;
+        }
+
+        table.info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table.info-table td {
+            padding: 6px 8px;
+            font-size: 13px;
+            border-bottom: 1px solid #eef1f5;
+        }
+
+        table.info-table td.label {
+            width: 160px;
+            color: #667085;
+            font-weight: bold;
+        }
+
+        .status-pill {
+            display: inline-block;
+            background: #FFF5E5;
+            color: #B5721B;
+            border: 1px solid #F0D6A6;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .footer-note {
+            padding: 12px 24px;
+            background: #f5f6f8;
+            color: #98a2b3;
+            font-size: 11px;
+            border-top: 1px solid #d5dae1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-row">
+            <img src="cid:CompanyLogo" alt="Hiya" style="max-width:140px;height:auto;" />
+        </div>
+        <div class="header-bar">📋 ORDER STATUS UPDATE - {{orderNumber}}</div>
+        <div class="body-area">
+            <table class="info-table">
+                <tr><td class="label">Customer</td><td>{{customerName}}</td></tr>
+                <tr><td class="label">Email</td><td>{{customerEmail}}</td></tr>
+                <tr><td class="label">New Status</td><td><span class="status-pill">{{newStatus}}</span></td></tr>
+                <tr><td class="label">Order Total</td><td>₹ {{totalAmount}}</td></tr>
+            </table>
+        </div>
+        <div class="footer-note">
+            Automated internal notification from the Hiya order system. Do not reply to this email.
+        </div>
+    </div>
+</body>
+</html>

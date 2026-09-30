@@ -1,0 +1,10 @@
+/* Hair Oil Page Specific Styles */
+.hiyaghar-hairoil-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-hairoil-listing-view {
+  width: 100%;
+}

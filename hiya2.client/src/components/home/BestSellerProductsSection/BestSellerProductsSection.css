@@ -1,0 +1,393 @@
+/* Best Seller Products Section Styles - Grid Display (Hover Emerging Ingredients) */
+
+.hiyaghar-bestseller-products-section {
+  position: relative;
+  background-color: #ffffff;
+  padding-top: clamp(32px, 5vw, 64px);
+  padding-bottom: clamp(48px, 6vw, 80px);
+  text-align: center;
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+.hiyaghar-bestseller-products-container {
+  max-width: var(--container-max-width);
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+.hiyaghar-bestseller-products-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: clamp(24px, 4vw, 44px);
+}
+
+.hiyaghar-bestseller-products-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 20px;
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  color: var(--hiya-navy, #11223A);
+  border: 1.5px solid var(--hiya-navy, #11223A);
+  border-radius: var(--radius-full, 9999px);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(17, 34, 58, 0.08);
+}
+
+.hiyaghar-bestseller-products-title {
+  font-family: var(--font-family-stack);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #2a2a2a;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px 0;
+}
+
+.hiyaghar-bestseller-products-subtitle {
+  font-size: clamp(14px, 1.8vw, 17px);
+  font-weight: 500;
+  color: #555555;
+  margin: 0;
+  max-width: 580px;
+}
+
+/* Products Grid Layout (4 items per row on Desktop) */
+.hiyaghar-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hiyaghar-products-grid-item {
+  width: 100%;
+}
+
+/* Product Card Base Styling */
+.hiyaghar-product-card {
+  height: 430px;
+  border-radius: 24px;
+  padding: 20px 18px 18px 18px;
+  color: #11223A;
+  border: 1px solid rgba(17, 34, 58, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(17, 34, 58, 0.04);
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 500ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 300ms ease;
+  cursor: pointer;
+  overflow: hidden;
+  user-select: none;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.hiyaghar-product-card:hover,
+.hiyaghar-product-card.is-active {
+  transform: translateY(-8px) scale(1.015);
+  box-shadow: 0 16px 36px rgba(17, 34, 58, 0.12);
+  border-color: var(--hiya-gold, #CB992C);
+}
+
+/* Top Header in Product Card */
+.hiyaghar-product-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  z-index: 5;
+}
+
+.hiyaghar-product-category-pill {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background-color: rgba(17, 34, 58, 0.08);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  color: #11223A;
+}
+
+.hiyaghar-product-price-badge {
+  font-size: 14px;
+  font-weight: 900;
+  background-color: #11223A;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  box-shadow: 0 2px 8px rgba(17, 34, 58, 0.15);
+}
+
+/* Center Media & Floating Ingredients */
+.hiyaghar-product-card-media {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 6px 0;
+}
+
+.hiyaghar-product-main-img-box {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  height: 190px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiyaghar-product-main-img {
+  max-width: 82%;
+  max-height: 180px;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.18));
+  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hiyaghar-product-card:hover .hiyaghar-product-main-img,
+.hiyaghar-product-card.is-active .hiyaghar-product-main-img {
+  transform: scale(1.08) translateY(-4px);
+}
+
+/* Floating Ingredient Elements - Emerge From Behind Bottle on Hover */
+.hiyaghar-floating-ingredients-container {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hiyaghar-floating-ingredient {
+  position: absolute;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.28));
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.12) rotate(0deg);
+  transition: opacity 750ms cubic-bezier(0.16, 1, 0.3, 1),
+    top 800ms cubic-bezier(0.16, 1, 0.3, 1),
+    left 800ms cubic-bezier(0.16, 1, 0.3, 1),
+    right 800ms cubic-bezier(0.16, 1, 0.3, 1),
+    bottom 800ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+/* Ingredient sizes */
+.hiyaghar-floating-ingredient.pos-top-center {
+  width: 60px;
+  height: 60px;
+}
+
+.hiyaghar-floating-ingredient.pos-bottom-left {
+  width: 64px;
+  height: 64px;
+}
+
+.hiyaghar-floating-ingredient.pos-bottom-right {
+  width: 66px;
+  height: 66px;
+}
+
+/* Hover / Active Expansion */
+.hiyaghar-product-card:hover .hiyaghar-floating-ingredient.pos-top-center,
+.hiyaghar-product-card.is-active .hiyaghar-floating-ingredient.pos-top-center {
+  opacity: 1;
+  top: 14%;
+  left: 50%;
+  transform: translate(-50%, 0) scale(1);
+  animation: hiyagharFloatBobCenter 4.2s ease-in-out infinite alternate;
+  animation-delay: 800ms;
+}
+
+.hiyaghar-product-card:hover .hiyaghar-floating-ingredient.pos-bottom-left,
+.hiyaghar-product-card.is-active .hiyaghar-floating-ingredient.pos-bottom-left {
+  opacity: 1;
+  top: auto;
+  bottom: 18%;
+  left: 8%;
+  transform: translate(0, 0) scale(1);
+  animation: hiyagharFloatBob2 4.4s ease-in-out infinite alternate;
+  animation-delay: 940ms;
+}
+
+.hiyaghar-product-card:hover .hiyaghar-floating-ingredient.pos-bottom-right,
+.hiyaghar-product-card.is-active .hiyaghar-floating-ingredient.pos-bottom-right {
+  opacity: 1;
+  top: auto;
+  bottom: 18%;
+  left: auto;
+  right: 8%;
+  transform: translate(0, 0) scale(1);
+  animation: hiyagharFloatBob1 4.8s ease-in-out infinite alternate;
+  animation-delay: 1000ms;
+}
+
+@keyframes hiyagharFloatBobCenter {
+  0% {
+    transform: translate(-50%, 0px) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -8px) rotate(6deg);
+  }
+}
+
+@keyframes hiyagharFloatBob1 {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateY(-8px) rotate(6deg);
+  }
+}
+
+@keyframes hiyagharFloatBob2 {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+
+  100% {
+    transform: translateY(-10px) rotate(-6deg);
+  }
+}
+
+/* Bottom Card Details */
+.hiyaghar-product-card-bottom {
+  position: relative;
+  z-index: 5;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hiyaghar-product-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #11223A;
+  margin-bottom: 4px;
+}
+
+.hiyaghar-star-icon {
+  color: #d97706;
+}
+
+.hiyaghar-rating-val {
+  color: #11223A;
+}
+
+.hiyaghar-reviews-count {
+  font-weight: 500;
+  color: #555555;
+}
+
+.hiyaghar-product-card-title {
+  font-family: var(--font-family-stack);
+  font-size: 17px;
+  font-weight: 800;
+  color: #11223A;
+  margin: 0 0 10px 0;
+  line-height: 1.25;
+}
+
+.hiyaghar-add-to-cart-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 20px;
+  width: 100%;
+  background-color: #11223A;
+  color: #ffffff;
+  border-radius: var(--radius-full);
+  border: none;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background-color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+  box-shadow: 0 4px 12px rgba(17, 34, 58, 0.15);
+}
+
+.hiyaghar-add-to-cart-btn:hover {
+  background-color: #2D6A4F;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(45, 106, 79, 0.25);
+}
+
+/* Responsive Grid Breakpoints */
+@media (min-width: 1025px) {
+  .hiyaghar-products-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 1024px) and (min-width: 768px) {
+  .hiyaghar-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hiyaghar-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .hiyaghar-product-card {
+    height: auto;
+    min-height: 330px;
+    padding: 12px 10px;
+    border-radius: 16px;
+  }
+
+  .hiyaghar-product-main-img-box {
+    height: 120px;
+  }
+
+  .hiyaghar-product-main-img {
+    max-height: 110px;
+  }
+
+  .hiyaghar-product-card-title {
+    font-size: 13px;
+    margin: 0 0 6px 0;
+  }
+
+  .hiyaghar-add-to-cart-btn {
+    padding: 8px 8px;
+    font-size: 11px;
+  }
+}

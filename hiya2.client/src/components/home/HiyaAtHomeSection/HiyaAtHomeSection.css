@@ -1,0 +1,430 @@
+/* Hiya at Home Section Styles - MagicBento Lifestyle Photo Grid */
+
+.hiyaghar-athome-section {
+  position: relative;
+  background-color: #faf6f0;
+  padding-top: clamp(64px, 7vw, 104px);
+  padding-bottom: clamp(64px, 8vw, 112px);
+  padding-inline: clamp(24px, 5vw, 80px);
+  width: 100%;
+  overflow-x: hidden;
+  box-sizing: border-box;
+  color: #2a2a2a;
+}
+
+/* Background Subtle Glowing Accents */
+.hiyaghar-athome-bg-accents {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.hiyaghar-athome-glow-left {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  background-color: rgba(45, 106, 79, 0.08);
+  top: 15%;
+  left: -100px;
+  filter: blur(90px);
+}
+
+.hiyaghar-athome-glow-right {
+  position: absolute;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background-color: rgba(217, 119, 6, 0.06);
+  bottom: 10%;
+  right: -120px;
+  filter: blur(90px);
+}
+
+/* Inner Container */
+.hiyaghar-athome-inner-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Section Header */
+.hiyaghar-athome-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(36px, 5vw, 60px);
+}
+
+.hiyaghar-athome-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 20px;
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  color: var(--hiya-navy, #11223A);
+  border: 1.5px solid var(--hiya-navy, #11223A);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: var(--radius-full, 9999px);
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(17, 34, 58, 0.08);
+}
+
+.hiyaghar-athome-title {
+  font-family: var(--font-family-stack, inherit);
+  font-size: clamp(32px, 4vw, 54px);
+  font-weight: 900;
+  line-height: 1.12;
+  color: #2a2a2a;
+  letter-spacing: -0.025em;
+  margin: 0 0 14px 0;
+}
+
+.hiyaghar-athome-subtitle {
+  font-size: clamp(15px, 1.8vw, 19px);
+  font-weight: 500;
+  color: #555555;
+  margin: 0;
+  max-width: 620px;
+  line-height: 1.6;
+}
+
+/* MagicBento Asymmetric 4x3 Photo Grid Container */
+.magic-bento-grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 290px);
+  gap: clamp(18px, 2vw, 28px);
+  width: 100%;
+  box-sizing: border-box;
+  perspective: 1000px;
+}
+
+/* Card Positions Matching Reference Layout:
+   Top-Left (1x1) & Top-Mid-Left (1x1)
+   Bottom-Left (2x2 Large)
+   Top-Right (2x2 Large)
+   Bottom-Mid-Right (1x1) & Bottom-Right (1x1)
+*/
+.bento-pos-1 {
+  grid-column: 1 / span 1;
+  grid-row: 1 / span 1;
+}
+
+.bento-pos-2 {
+  grid-column: 2 / span 1;
+  grid-row: 1 / span 1;
+}
+
+.bento-pos-3 {
+  grid-column: 1 / span 2;
+  grid-row: 2 / span 2;
+}
+
+.bento-pos-4 {
+  grid-column: 3 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.bento-pos-5 {
+  grid-column: 3 / span 1;
+  grid-row: 3 / span 1;
+}
+
+.bento-pos-6 {
+  grid-column: 4 / span 1;
+  grid-row: 3 / span 1;
+}
+
+/* MagicBento Card Styling */
+.magic-bento-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff;
+  border-radius: clamp(20px, 2.5vw, 28px);
+  overflow: hidden;
+  text-decoration: none;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(45, 106, 79, 0.12);
+  box-sizing: border-box;
+  transform-style: preserve-3d;
+  will-change: transform;
+  outline: none;
+  cursor: pointer;
+}
+
+.magic-bento-card:focus-visible {
+  outline: 3px solid #2d6a4f;
+  outline-offset: 4px;
+}
+
+/* Photo Image Wrapper & Gradient Overlays */
+.magic-bento-image-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  overflow: hidden;
+}
+
+.magic-bento-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magic-bento-card:hover .magic-bento-img {
+  transform: scale(1.08);
+}
+
+.magic-bento-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0) 35%,
+      rgba(17, 34, 58, 0.4) 65%,
+      rgba(17, 34, 58, 0.88) 100%);
+  transition: opacity 350ms ease;
+}
+
+.magic-bento-card:hover .magic-bento-image-overlay {
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, 0) 25%,
+      rgba(17, 34, 58, 0.5) 60%,
+      rgba(17, 34, 58, 0.95) 100%);
+}
+
+/* Spotlight & Border Glow Effects */
+.magic-bento-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 300ms ease;
+}
+
+.magic-bento-card:hover .magic-bento-spotlight {
+  opacity: 1;
+}
+
+.magic-bento-border-glow {
+  position: absolute;
+  inset: -1px;
+  z-index: 3;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  padding: 1px;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.magic-bento-card:hover .magic-bento-border-glow {
+  opacity: 1;
+}
+
+/* Card Content Overlay - Anchored cleanly at bottom */
+.magic-bento-card-content {
+  position: relative;
+  z-index: 4;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: clamp(20px, 2.5vw, 32px);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.magic-bento-bottom-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  transform: translateY(4px);
+  transition: transform 350ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.magic-bento-card:hover .magic-bento-bottom-info {
+  transform: translateY(0);
+}
+
+.magic-bento-category {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--hiya-navy, #11223A);
+  background-color: var(--hiya-gold, #CB992C);
+  padding: 4px 12px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.magic-bento-card-title {
+  font-family: var(--font-family-stack, inherit);
+  font-size: clamp(18px, 1.8vw, 25px);
+  font-weight: 800;
+  color: #ffffff;
+  margin: 4px 0 2px 0;
+  line-height: 1.25;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+/* Action Button */
+.hiyaghar-athome-action {
+  margin-top: clamp(44px, 5vw, 64px);
+  display: flex;
+  justify-content: center;
+}
+
+.hiyaghar-athome-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 36px;
+  background-color: #2d6a4f;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  border-radius: var(--radius-full, 9999px);
+  box-shadow: 0 8px 24px rgba(45, 106, 79, 0.22);
+  transition: background-color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
+  min-height: 48px;
+  outline: none;
+}
+
+.hiyaghar-athome-share-btn:hover {
+  background-color: #1b4332;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(45, 106, 79, 0.32);
+}
+
+.hiyaghar-athome-share-btn:focus-visible {
+  outline: 2px solid #2d6a4f;
+  outline-offset: 4px;
+}
+
+.hiyaghar-athome-arrow-icon {
+  transition: transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hiyaghar-athome-share-btn:hover .hiyaghar-athome-arrow-icon {
+  transform: translateX(6px);
+}
+
+/* Responsive Media Queries */
+
+/* Tablet (768px - 1023px): 2 columns grid */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .magic-bento-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    gap: 24px;
+  }
+
+  .bento-pos-1,
+  .bento-pos-2,
+  .bento-pos-5,
+  .bento-pos-6 {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 300px;
+  }
+
+  .bento-pos-3,
+  .bento-pos-4 {
+    grid-column: span 2;
+    grid-row: span 1;
+    height: 400px;
+  }
+
+  .hiyaghar-athome-section {
+    padding-inline: clamp(24px, 4vw, 48px);
+  }
+}
+
+/* Mobile (< 768px): 1 column stacked grid */
+@media (max-width: 767px) {
+  .magic-bento-grid-container {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    gap: 24px;
+    perspective: none;
+  }
+
+  .bento-pos-1,
+  .bento-pos-2,
+  .bento-pos-3,
+  .bento-pos-4,
+  .bento-pos-5,
+  .bento-pos-6 {
+    grid-column: span 1;
+    grid-row: span 1;
+    height: 325px;
+  }
+
+  .magic-bento-card {
+    transform: none !important;
+  }
+
+  .magic-bento-spotlight,
+  .magic-bento-border-glow {
+    display: none !important;
+  }
+
+  .magic-bento-bottom-info {
+    transform: none;
+  }
+
+  .hiyaghar-athome-section {
+    padding-inline: 20px;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+
+  .magic-bento-card,
+  .magic-bento-img,
+  .magic-bento-spotlight,
+  .magic-bento-border-glow,
+  .magic-bento-bottom-info,
+  .hiyaghar-athome-share-btn,
+  .hiyaghar-athome-arrow-icon {
+    transition: none !important;
+  }
+
+  .magic-bento-card:hover,
+  .magic-bento-card:hover .magic-bento-img,
+  .hiyaghar-athome-share-btn:hover {
+    transform: none !important;
+  }
+}

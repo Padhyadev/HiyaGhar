@@ -1,0 +1,144 @@
+.pop-show-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    z-index: 99999;
+    opacity: 0;
+    transition: opacity 0.18s ease;
+}
+
+.pop-show-overlay.is-visible {
+    opacity: 1;
+}
+
+.pop-show-popup {
+    width: min(100%, 440px);
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px 28px 26px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    transform: translateY(12px) scale(0.96);
+    opacity: 0;
+    transition: transform 0.18s ease, opacity 0.18s ease;
+    text-align: center;
+    font-family: inherit;
+}
+
+.pop-show-popup.is-visible {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.pop-show-icon {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 700;
+    color: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.pop-show-icon-success {
+    background: #D19A27;
+}
+
+.pop-show-icon-error {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.pop-show-icon-confirm {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+
+.pop-show-title {
+    margin: 0;
+    font-size: 22px;
+    line-height: 1.35;
+    font-weight: 800;
+    color: #10243E;
+}
+
+.pop-show-message {
+    margin-top: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #10243E;
+    white-space: pre-wrap;
+}
+
+.pop-show-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+    flex-wrap: wrap;
+}
+
+.pop-show-btn {
+    min-width: 108px;
+    padding: 11px 26px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.pop-show-btn:hover {
+    transform: translateY(-1px);
+}
+
+.pop-show-btn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(209, 154, 39, 0.25);
+}
+
+.pop-show-confirm-btn {
+    background: #D19A27;
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(209, 154, 39, 0.25);
+}
+
+.pop-show-confirm-btn:hover {
+    background: #b88520;
+    box-shadow: 0 6px 18px rgba(209, 154, 39, 0.35);
+}
+
+.pop-show-cancel-btn {
+    background: #f1f5f9;
+    color: #10243E;
+    border: 1px solid #cbd5e1;
+}
+
+.pop-show-cancel-btn:hover {
+    background: #e2e8f0;
+    color: #10243E;
+}
+
+@media (max-width: 480px) {
+    .pop-show-popup {
+        padding: 24px 20px 20px;
+    }
+
+    .pop-show-title {
+        font-size: 20px;
+    }
+
+    .pop-show-icon {
+        width: 68px;
+        height: 68px;
+        font-size: 30px;
+    }
+}

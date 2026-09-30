@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Order Placed Successfully</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f2ea;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid #e6ddc9;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2d6a4f;
+            margin-bottom: 20px;
+        }
+
+        .order-box {
+            background: #faf7f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .row {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #666;
+            font-size: 13px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="cid:CompanyLogo" alt="Hiya" style="max-width:160px;height:auto;" />
+        </div>
+
+        <div class="title">
+            🎉 Order Placed Successfully
+        </div>
+
+        <p>Hello <strong>{{customerName}}</strong>,</p>
+
+        <p>
+            Thank you for shopping with Hiya. Your order has been placed successfully and is currently being processed.
+        </p>
+
+        <div class="order-box">
+            <div class="row">
+                <span class="label">Order Number:</span>
+                {{orderNumber}}
+            </div>
+
+            <h3>Order Items</h3>
+
+            {{productRows}}
+
+            <div class="row">
+                <span class="label">Subtotal:</span>
+                ₹ {{subtotal}}
+            </div>
+
+            <div class="row">
+                <span class="label">Discount:</span>
+                ₹ {{discountAmount}}
+            </div>
+
+            <div class="row">
+                <span class="label">Coin Discount:</span>
+                ₹ {{coinDiscountAmount}}
+            </div>
+
+            <div class="row">
+                <span class="label">Delivery Fee:</span>
+                ₹ {{deliveryFee}}
+            </div>
+
+            <hr style="margin:10px 0;border:none;border-top:1px solid #e6ddc9;" />
+
+            <div class="row">
+                <span class="label" style="font-size:16px;">Total Amount:</span>
+                <strong style="font-size:16px;color:#2d6a4f;">
+                    ₹ {{totalAmount}}
+                </strong>
+            </div>
+        </div>
+
+        <p>
+            We'll keep you updated as your order moves through confirmation, shipping, and delivery. You can log in
+            to your account at any time to track it.
+        </p>
+
+        <div class="footer">
+            Thank you for choosing Hiya.<br />
+            We appreciate your business and look forward to serving you again.
+        </div>
+    </div>
+</body>
+</html>

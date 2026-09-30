@@ -1,0 +1,578 @@
+/* Quickbeam Flying Animation & Floating Cart Pill with Bottom-Right Expand Pattern */
+
+/* Flying Product Clone Trajectory */
+.quickbeam-flying-product {
+  position: absolute;
+  z-index: 999999;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, #FFFDF0 0%, #F5EFD5 100%);
+  border: 2.5px solid var(--hiya-gold, #CB992C);
+  box-shadow: 0 10px 30px rgba(17, 34, 58, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  will-change: transform, left, top, opacity;
+}
+
+.quickbeam-flying-product img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+}
+
+/* Bounce Pulse Animation on Floating Pill */
+.quickbeam-cart-bounce {
+  animation: pillBounce 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes pillBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  30% {
+    transform: scale(1.15) rotate(-3deg);
+  }
+
+  60% {
+    transform: scale(0.95) rotate(2deg);
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/* 1. FLOATING "VIEW CART" PILL BUTTON
+   Rendered as a flex item inside .hiyaghar-floating-widgets-stack (FloatingWidgets.tsx),
+   stacked between the Back-to-Top button and the WhatsApp button — not independently
+   fixed-positioned, so it can never overlap the other floating buttons. */
+.hiyaghar-floating-cart-pill-wrapper {
+  pointer-events: auto;
+  animation: slidePillUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slidePillUp {
+  from {
+    transform: translateY(40px) scale(0.9);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.hiyaghar-floating-cart-pill {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 12px 8px 14px;
+  border-radius: 50px;
+  /* Brand Theme Colors: Rich Hiya Navy & Gold Accent */
+  background: linear-gradient(135deg, var(--hiya-navy, #11223A) 0%, #1b355a 100%);
+  color: #ffffff;
+  border: 2px solid var(--hiya-gold, #CB992C);
+  box-shadow: 0 12px 36px rgba(17, 34, 58, 0.4);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.hiyaghar-floating-cart-pill:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 16px 45px rgba(203, 153, 44, 0.45);
+  border-color: #E8C96A;
+}
+
+/* Left: Overlapping Circular Product Thumbnails */
+.hiyaghar-pill-avatars-group {
+  display: flex;
+  align-items: center;
+}
+
+.hiyaghar-pill-avatar-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 2.5px solid #ffffff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-left: -10px;
+  transition: transform 0.2s ease;
+}
+
+.hiyaghar-pill-avatar-circle:first-child {
+  margin-left: 0;
+}
+
+.hiyaghar-pill-avatar-circle img {
+  width: 85%;
+  height: 85%;
+  object-fit: contain;
+}
+
+/* Center: Title & Subtitle */
+.hiyaghar-pill-text-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  line-height: 1.15;
+}
+
+.hiyaghar-pill-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.2px;
+}
+
+.hiyaghar-pill-subtitle {
+  font-size: 12px;
+  color: var(--hiya-gold-light, #E8C96A);
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+/* Right: Circular Arrow Accent */
+.hiyaghar-pill-arrow-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--hiya-gold, #CB992C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--hiya-navy, #11223A);
+  font-size: 15px;
+  font-weight: 900;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hiyaghar-floating-cart-pill:hover .hiyaghar-pill-arrow-circle {
+  background-color: #E8C96A;
+  transform: translateX(3px);
+}
+
+/* 2. BIG CART WIDGET MODAL (Smooth Expand Directly From Bottom-Right Floating Pill) */
+.hiyaghar-side-cart-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(17, 34, 58, 0.45);
+  backdrop-filter: blur(5px);
+  z-index: 10000;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  padding: 24px;
+  animation: fadeIn 0.25s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Big Cart Widget Modal Box (Anchored Bottom-Right Right Above Pill) */
+.hiyaghar-side-cart-widget {
+  width: 100%;
+  max-width: 390px;
+  /* Brand Theme Colors: Deep Hiya Navy with Gold Glass Accent */
+  background: linear-gradient(165deg, var(--hiya-navy, #11223A) 0%, #0d1a2d 100%);
+  border-radius: 28px;
+  color: #ffffff;
+  padding: 24px 22px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  border: 2px solid var(--hiya-gold, #CB992C);
+  transform-origin: bottom right;
+  animation: expandFromPill 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  max-height: 82vh;
+  overflow: hidden;
+  margin-bottom: 75px;
+  /* Sits directly above the floating pill button */
+}
+
+@keyframes expandFromPill {
+  from {
+    transform: scale(0.2) translate(120px, 120px);
+    opacity: 0;
+  }
+
+  to {
+    transform: scale(1) translate(0, 0);
+    opacity: 1;
+  }
+}
+
+/* Header */
+.hiyaghar-side-cart-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(203, 153, 44, 0.25);
+  padding-bottom: 12px;
+}
+
+.hiyaghar-side-cart-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-side-cart-title {
+  font-size: 22px;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.hiyaghar-side-cart-badge {
+  background-color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+  font-size: 13px;
+  font-weight: 800;
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+
+.hiyaghar-side-cart-close {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.hiyaghar-side-cart-close:hover {
+  background-color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+  transform: rotate(90deg);
+}
+
+/* Item List Body */
+.hiyaghar-side-cart-body {
+  overflow-y: auto;
+  max-height: 46vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-right: 2px;
+}
+
+.hiyaghar-side-cart-body::-webkit-scrollbar {
+  width: 4px;
+}
+
+.hiyaghar-side-cart-body::-webkit-scrollbar-thumb {
+  background-color: rgba(203, 153, 44, 0.4);
+  border-radius: 4px;
+}
+
+/* Item Card Row */
+.hiyaghar-side-cart-item {
+  background-color: rgba(255, 255, 255, 0.07);
+  border-radius: 18px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(203, 153, 44, 0.2);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.hiyaghar-side-cart-item:hover {
+  background-color: rgba(255, 255, 255, 0.12);
+  border-color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-side-cart-item-img {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background-color: transparent;
+  padding: 0;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: none;
+}
+
+.hiyaghar-side-cart-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-side-cart-item-cat {
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--hiya-gold-light, #E8C96A);
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.hiyaghar-side-cart-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+  margin: 2px 0 4px 0;
+}
+
+.hiyaghar-side-cart-item-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.hiyaghar-side-cart-item-price {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.hiyaghar-side-cart-qty-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 3px 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.hiyaghar-side-cart-qty-row button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.hiyaghar-side-cart-qty-row button:hover {
+  color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-side-cart-qty-row span {
+  font-size: 12px;
+  font-weight: 800;
+}
+
+/* Shipping Progress Bar */
+.hiyaghar-side-cart-shipping-bar {
+  background: linear-gradient(135deg, rgba(203, 153, 44, 0.25) 0%, rgba(203, 153, 44, 0.1) 100%);
+  border: 1px solid rgba(203, 153, 44, 0.4);
+  border-radius: 16px;
+  padding: 11px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-gold-light, #E8C96A);
+}
+
+.hiyaghar-side-cart-subtotal-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.hiyaghar-side-cart-subtotal-label {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+.hiyaghar-side-cart-subtotal-val {
+  font-size: 24px;
+  font-weight: 900;
+  color: #ffffff;
+}
+
+/* Checkout Pill Button */
+.hiyaghar-side-cart-checkout-btn {
+  width: 100%;
+  padding: 15px 22px;
+  border-radius: 50px;
+  border: none;
+  background: linear-gradient(135deg, var(--hiya-gold, #CB992C) 0%, #A97818 100%);
+  color: var(--hiya-navy, #11223A);
+  font-size: 16px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  box-shadow: 0 10px 25px rgba(203, 153, 44, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hiyaghar-side-cart-checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(203, 153, 44, 0.55);
+  background: linear-gradient(135deg, #E8C96A 0%, var(--hiya-gold, #CB992C) 100%);
+}
+
+.hiyaghar-side-cart-view-all-header-link {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(203, 153, 44, 0.4);
+  color: var(--hiya-gold-light, #E8C96A);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-side-cart-view-all-header-link:hover {
+  background: var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-side-cart-actions-column {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hiyaghar-side-cart-fullpage-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(203, 153, 44, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-side-cart-fullpage-btn:hover {
+  background: rgba(203, 153, 44, 0.25);
+  border-color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-light, #E8C96A);
+}
+
+/* Mobile Adjustments */
+@media (max-width: 576px) {
+  .hiyaghar-side-cart-overlay {
+    padding: 12px;
+    align-items: flex-end;
+  }
+
+  .hiyaghar-side-cart-widget {
+    max-width: 100%;
+    margin-bottom: 60px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+  }
+
+  /* "View Cart" as a full-width sticky bar on mobile, anchored to the very
+     bottom edge (like a mini action bar) instead of a small floating badge
+     that drifts over whatever product card happens to be scrolled underneath
+     it. It stays up persistently (no auto-hide) — the page reserves space for
+     it instead (see body.hiyaghar-has-mobile-cart-bar below), so it never covers
+     another product's Add to Cart / Buy Now buttons. */
+  .hiyaghar-floating-cart-pill-wrapper {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9992;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    background: linear-gradient(135deg, var(--hiya-navy, #11223A) 0%, #1b355a 100%);
+    box-shadow: 0 -10px 28px rgba(17, 34, 58, 0.35);
+    animation: slideBarUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  @keyframes slideBarUp {
+    from {
+      transform: translateY(100%);
+    }
+
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  .hiyaghar-floating-cart-pill {
+    width: 100%;
+    max-width: none;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: 0;
+    border: none;
+    border-top: 2px solid var(--hiya-gold, #CB992C);
+    box-shadow: none;
+  }
+
+  .hiyaghar-floating-cart-pill:hover {
+    transform: none;
+  }
+
+  .hiyaghar-pill-avatar-circle {
+    width: 32px;
+    height: 32px;
+  }
+
+  .hiyaghar-pill-title {
+    font-size: 13px;
+  }
+
+  .hiyaghar-pill-subtitle {
+    font-size: 11px;
+  }
+
+  .hiyaghar-pill-arrow-circle {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+}
+
+/* Reserves bottom space on mobile while the sticky cart bar is showing, so
+   page content (e.g. the last row of product cards) never renders underneath
+   it. Toggled on <body> from FloatingWidgets.tsx. */
+@media (max-width: 576px) {
+  body.hiyaghar-has-mobile-cart-bar {
+    padding-bottom: 70px;
+  }
+}

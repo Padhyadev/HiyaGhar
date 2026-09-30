@@ -1,0 +1,119 @@
+.hiyaghar-admin-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.hiyaghar-dashboard-welcome h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #10243E;
+  margin: 0 0 4px 0;
+}
+
+.hiyaghar-dashboard-welcome p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.hiyaghar-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.hiyaghar-metric-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-metric-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(209, 154, 39, 0.2);
+  border-color: #D19A27;
+}
+
+.hiyaghar-metric-icon {
+  font-size: 2.2rem;
+  background: rgba(209, 154, 39, 0.1);
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiyaghar-metric-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-metric-value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #10243E;
+  line-height: 1.2;
+}
+
+.hiyaghar-metric-label {
+  font-size: 0.85rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.hiyaghar-dash-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+  border: 1px solid #e2e8f0;
+}
+
+.hiyaghar-dash-card h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin: 0 0 20px 0;
+  color: #10243E;
+}
+
+.hiyaghar-dash-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.hiyaghar-quick-btn {
+  background: #F7F5EF;
+  border: 1px solid #e2e8f0;
+  padding: 16px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #10243E;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.hiyaghar-quick-btn:hover {
+  background: rgba(209, 154, 39, 0.1);
+  border-color: #D19A27;
+  color: #D19A27;
+}
+
+.hiyaghar-q-icon {
+  font-size: 1.3rem;
+}

@@ -1,0 +1,598 @@
+.hiyaghar-role-mgmt-page {
+  min-height: 100vh;
+  background-color: #F7F5EF;
+  color: #10243E;
+  font-family: inherit;
+}
+
+.hiyaghar-role-toast {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  background: #10243E;
+  color: #ffffff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  z-index: 9999;
+  font-weight: 600;
+  font-size: 0.95rem;
+  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.hiyaghar-role-mgmt-header {
+  background: #F7F5EF;
+  color: #10243E;
+  padding: 40px 0;
+}
+
+.hiyaghar-role-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: #D19A27;
+  margin-bottom: 12px;
+}
+
+.hiyaghar-breadcrumb-link {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.hiyaghar-role-title {
+  font-size: 2rem;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.hiyaghar-role-subtitle {
+  font-size: 1rem;
+  color: #10243E;
+  margin: 0;
+  max-width: 700px;
+}
+
+.hiyaghar-role-main-container {
+  margin-top: -24px;
+  padding-bottom: 60px;
+}
+
+.hiyaghar-role-loading {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 60px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.hiyaghar-role-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid #e2e8f0;
+  border-top-color: #D19A27;
+  border-radius: 50%;
+  margin: 0 auto 16px;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.hiyaghar-role-grid-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .hiyaghar-role-grid-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hiyaghar-role-sidebar-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.hiyaghar-role-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.hiyaghar-role-sidebar-header h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.hiyaghar-role-add-btn {
+  background: #D19A27;
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-role-add-btn:hover {
+  background: #b88520;
+}
+
+.hiyaghar-role-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hiyaghar-role-list-item {
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-role-list-item:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+.hiyaghar-role-list-item.is-active {
+  background: rgba(209, 154, 39, 0.1);
+  border-color: #D19A27;
+  box-shadow: 0 4px 12px rgba(209, 154, 39, 0.2);
+}
+
+.hiyaghar-role-name-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.hiyaghar-role-name {
+  font-weight: 700;
+  font-size: 0.98rem;
+  color: #0f172a;
+}
+
+.hiyaghar-role-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.hiyaghar-role-badge.system {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.hiyaghar-role-code {
+  font-size: 0.78rem;
+  font-family: monospace;
+  color: #64748b;
+}
+
+.hiyaghar-role-matrix-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 28px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+.hiyaghar-matrix-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.hiyaghar-matrix-header h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+}
+
+.hiyaghar-highlight {
+  color: #D19A27;
+}
+
+.hiyaghar-role-desc {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.hiyaghar-role-save-btn {
+  background: #D19A27;
+  color: #ffffff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.92rem;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(209, 154, 39, 0.25);
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-role-save-btn:hover {
+  background: #b88520;
+  transform: translateY(-1px);
+}
+
+.hiyaghar-matrix-table-wrapper {
+  overflow-x: auto;
+}
+
+.hiyaghar-matrix-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.hiyaghar-matrix-table th {
+  background: #f8fafc;
+  padding: 14px 16px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.th-perm {
+  text-align: center;
+  width: 90px;
+}
+
+.th-action {
+  text-align: center;
+  width: 120px;
+}
+
+.hiyaghar-matrix-table td {
+  padding: 16px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.td-perm {
+  text-align: center;
+}
+
+.td-perm input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #D19A27;
+  cursor: pointer;
+}
+
+.hiyaghar-menu-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-menu-title {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #0f172a;
+}
+
+.hiyaghar-menu-key {
+  font-size: 0.78rem;
+  font-family: monospace;
+  color: #94a3b8;
+}
+
+.hiyaghar-row-toggle-btn {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-row-toggle-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.hiyaghar-role-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.hiyaghar-role-modal {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.hiyaghar-role-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.hiyaghar-role-modal-header h3 {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.hiyaghar-modal-close {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #64748b;
+}
+
+.hiyaghar-role-modal-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hiyaghar-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiyaghar-form-group label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+.hiyaghar-form-group input,
+.hiyaghar-form-group textarea {
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+
+.hiyaghar-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.hiyaghar-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.hiyaghar-btn-submit {
+  background: #D19A27;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* Multi-Select Dropdown Component Styles */
+.hiyaghar-multiselect-wrapper {
+  position: relative;
+  width: 100%;
+  font-family: inherit;
+}
+
+.hiyaghar-multiselect-trigger {
+  min-height: 48px;
+  padding: 8px 14px;
+  background: #ffffff;
+  border: 2px solid #cbd5e1;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-multiselect-trigger:hover,
+.hiyaghar-multiselect-trigger.is-open {
+  border-color: #D19A27;
+  box-shadow: 0 0 0 3px rgba(209, 154, 39, 0.12);
+}
+
+.hiyaghar-multiselect-tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  flex: 1;
+}
+
+.hiyaghar-multiselect-tag {
+  background: rgba(209, 154, 39, 0.1);
+  color: #10243E;
+  border: 1px solid #D19A27;
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hiyaghar-multiselect-tag-remove {
+  background: none;
+  border: none;
+  color: #D19A27;
+  font-size: 0.9rem;
+  font-weight: 800;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+.hiyaghar-multiselect-tag-remove:hover {
+  color: #b91c1c;
+}
+
+.hiyaghar-multiselect-placeholder {
+  color: #94a3b8;
+  font-size: 0.92rem;
+}
+
+.hiyaghar-multiselect-arrow {
+  font-size: 0.8rem;
+  color: #64748b;
+  transition: transform 0.2s ease;
+}
+
+.hiyaghar-multiselect-arrow.is-open {
+  transform: rotate(180deg);
+}
+
+.hiyaghar-multiselect-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  z-index: 100;
+  overflow: hidden;
+  animation: fadeInDown 0.15s ease-out;
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hiyaghar-multiselect-actions-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.hiyaghar-multiselect-action-btn {
+  background: none;
+  border: none;
+  color: #D19A27;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.hiyaghar-multiselect-action-btn:hover {
+  text-decoration: underline;
+}
+
+.hiyaghar-multiselect-search-box {
+  padding: 8px 12px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.hiyaghar-multiselect-search-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  outline: none;
+}
+
+.hiyaghar-multiselect-search-input:focus {
+  border-color: #D19A27;
+}
+
+.hiyaghar-multiselect-list {
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 6px 0;
+}
+
+.hiyaghar-multiselect-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.hiyaghar-multiselect-item:hover {
+  background: #f1f5f9;
+}
+
+.hiyaghar-multiselect-item.is-selected {
+  background: rgba(209, 154, 39, 0.1);
+}
+
+.hiyaghar-multiselect-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hiyaghar-multiselect-item-label {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+

@@ -1,0 +1,240 @@
+/* ==========================================================================
+   HIYA GLOBAL REUSABLE TYPOGRAPHY SYSTEM (DM SANS)
+   ========================================================================== */
+
+/* 1. Global Font Import (Single Source of Truth) */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+
+:root {
+  --font-family-primary: 'DM Sans', sans-serif;
+  --font-family-stack: 'DM Sans', sans-serif;
+}
+
+/* 2. Global Base Reset */
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* Universal Tabular Numerals for Numeric Consistency Across Site */
+body, button, input, select, textarea,
+.hiya-price, .hiyaghar-detail-price, .hiyaghar-current-price, .hiyaghar-cart-item-subtotal,
+.quantity, .qty, .stat, .number, .amount, .total, .subtotal {
+  font-variant-numeric: tabular-nums;
+  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: "tnum";
+}
+
+/* ==========================================================================
+   3. CENTRAL REUSABLE TYPOGRAPHY CLASSES
+   ========================================================================== */
+
+/* Hero / Main H1 (DM Sans 700) */
+.hiya-heading-xl {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.8rem, 4.8vw, 4.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+/* Major Section Headings (DM Sans 600) */
+.hiya-heading-lg {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 3.2vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+/* Category & Secondary Headings (DM Sans 700) */
+.hiya-heading-md {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+/* Small Headings (DM Sans 600) */
+.hiya-heading-sm {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.1rem;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+/* Body Text Variants (DM Sans 400) */
+.hiya-body-lg {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: clamp(1rem, 1.15vw, 1.15rem);
+  line-height: 1.7;
+  letter-spacing: -0.005em;
+}
+
+.hiya-body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+.hiya-body-sm {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+/* Eyebrows / Badges / Labels (DM Sans 500) */
+.hiya-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.65rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1.2;
+}
+
+/* Buttons / CTAs (DM Sans 600) */
+.hiya-button {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  line-height: 1;
+  letter-spacing: 0.005em;
+}
+
+/* Prices (DM Sans 600) */
+.hiya-price {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
+/* Product Titles (DM Sans 500-600) */
+.hiya-product-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+/* Product Meta (DM Sans 500) */
+.hiya-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+/* Navigation Links (DM Sans 500) */
+.hiya-nav {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+/* Footer Headings & Links */
+.hiya-footer-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.hiya-footer-link {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+/* ==========================================================================
+   4. SEMANTIC COMPONENT MAPPER (DM SANS ARCHITECTURE)
+   ========================================================================== */
+
+.hero-title,
+.main-hero-title,
+.hiyaghar-hero-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.8rem, 4.8vw, 4.8rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+}
+
+.hiyaghar-section-title,
+.hiyaghar-combo-title,
+.hiyaghar-bestseller-title,
+.hiyaghar-cart-title,
+.hiyaghar-mukhwas-hero-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 3.2vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+.hiyaghar-summary-title,
+.hiyaghar-detail-title,
+.hiyaghar-hero-user-name,
+.hiyaghar-addons-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.hiyaghar-mukhwas-card-title,
+.hiyaghar-product-card-title,
+.hiyaghar-cart-item-name,
+.hiyaghar-addon-name {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.hiyaghar-current-price,
+.hiyaghar-detail-price,
+.hiyaghar-cart-item-subtotal,
+.hiyaghar-product-price-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+}
+
+.hiyaghar-nav-link,
+.hiyaghar-mobile-link {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.82rem;
+  line-height: 1.2;
+}
+
+.hiyaghar-footer-heading,
+.footer-col-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.hiyaghar-footer-link,
+.footer-link {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}

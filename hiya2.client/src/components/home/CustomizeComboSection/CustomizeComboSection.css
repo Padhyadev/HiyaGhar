@@ -1,0 +1,329 @@
+/* Customize Your Combo Component Styles */
+
+.hiyaghar-combo-section {
+  background-color: var(--hiya-cream, #FFFFE3);
+  padding: clamp(48px, 6vw, 88px) clamp(16px, 4vw, 40px);
+  width: 100%;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.hiyaghar-combo-inner-container {
+  max-width: var(--container-max-width, 1440px);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Header */
+.hiyaghar-combo-header {
+  text-align: center;
+  margin-bottom: clamp(28px, 4vw, 48px);
+  max-width: 680px;
+}
+
+.hiyaghar-combo-title {
+  font-family: var(--font-family-stack);
+  font-size: clamp(32px, 4.5vw, 48px);
+  font-weight: 900;
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 10px 0;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.hiyaghar-combo-subtitle {
+  font-size: clamp(16px, 1.8vw, 19px);
+  font-weight: 500;
+  color: var(--hiya-text, #344054);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* 1. First Line Continuous Infinite Loop Marquee Showcase (Single Clean Card Layout) */
+.hiyaghar-combo-marquee-wrap {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: clamp(28px, 4vw, 44px);
+  padding: 12px 0;
+  background-color: transparent;
+}
+
+.hiyaghar-combo-marquee-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+  animation: continuousMarqueeLoop 25s linear infinite;
+  will-change: transform;
+}
+
+.hiyaghar-combo-marquee-wrap:hover .hiyaghar-combo-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes continuousMarqueeLoop {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-33.3333%);
+  }
+}
+
+.hiyaghar-combo-marquee-card {
+  width: 220px;
+  flex-shrink: 0;
+  background-color: var(--hiya-white, #ffffff);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  border-radius: 22px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(17, 34, 58, 0.05);
+  transition: transform 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
+  cursor: pointer;
+}
+
+.hiyaghar-combo-marquee-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--hiya-gold, #CB992C);
+  box-shadow: 0 10px 25px rgba(17, 34, 58, 0.1);
+}
+
+.hiyaghar-combo-marquee-img-wrap {
+  width: 100%;
+  height: 190px;
+  background-color: transparent;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.hiyaghar-combo-marquee-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 4px;
+  box-sizing: border-box;
+  display: block;
+  transition: transform 300ms ease;
+}
+
+.hiyaghar-combo-marquee-card:hover .hiyaghar-combo-marquee-img {
+  transform: scale(1.06);
+}
+
+.hiyaghar-combo-marquee-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: center;
+  text-align: center;
+}
+
+.hiyaghar-combo-marquee-name {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+  margin: 0;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.hiyaghar-combo-marquee-price {
+  font-size: 15px;
+  font-weight: 900;
+  color: var(--hiya-gold-dark, #A97818);
+  margin-top: 2px;
+}
+
+/* 2. 3 Interactive Step Cards Grid (Compact & Sleek) */
+.hiyaghar-combo-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto clamp(24px, 3vw, 36px);
+}
+
+.hiyaghar-combo-step-card {
+  background-color: var(--hiya-white, #ffffff);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  border-radius: 16px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(17, 34, 58, 0.03);
+  transition: all 250ms ease;
+}
+
+.hiyaghar-combo-step-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--hiya-gold, #CB992C);
+  box-shadow: 0 6px 16px rgba(17, 34, 58, 0.07);
+}
+
+.hiyaghar-step-icon-wrap {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.hiyaghar-step-num {
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.hiyaghar-step-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.hiyaghar-step-card-desc {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--hiya-text, #344054);
+  margin: 2px 0 0 0;
+  line-height: 1.3;
+}
+
+/* 3. Main CTA Button Wrapper */
+.hiyaghar-combo-main-cta-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.hiyaghar-combo-hero-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 44px;
+  background-color: var(--hiya-navy, #11223A);
+  color: var(--hiya-white, #ffffff);
+  border-radius: 32px;
+  font-size: 18px;
+  font-weight: 800;
+  border: 2px solid var(--hiya-navy, #11223A);
+  cursor: pointer;
+  transition: all 250ms cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 6px 24px rgba(17, 34, 58, 0.22);
+}
+
+.hiyaghar-combo-hero-cta-btn:hover {
+  background-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 30px rgba(203, 153, 44, 0.35);
+}
+
+/* Toast */
+.hiyaghar-combo-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  padding: 14px 28px;
+  border-radius: 30px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 768px) {
+  .hiyaghar-combo-steps-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hiyaghar-combo-hero-cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .hiyaghar-combo-marquee-wrap {
+    padding: 6px 0;
+    margin-bottom: 24px;
+  }
+
+  .hiyaghar-combo-marquee-track {
+    gap: 10px;
+  }
+
+  .hiyaghar-combo-marquee-card {
+    width: calc((100vw - 42px) / 2);
+    min-width: calc((100vw - 42px) / 2);
+    border-radius: 18px;
+    padding: 12px 8px;
+  }
+
+  .hiyaghar-combo-marquee-img-wrap {
+    height: 140px;
+    margin-bottom: 8px;
+  }
+
+  .hiyaghar-combo-marquee-name {
+    font-size: 13px;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+  }
+
+  .hiyaghar-combo-marquee-price {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 420px) {
+  .hiyaghar-combo-marquee-track {
+    gap: 8px;
+  }
+
+  .hiyaghar-combo-marquee-card {
+    width: calc((100vw - 36px) / 2);
+    min-width: calc((100vw - 36px) / 2);
+    padding: 10px 6px;
+    border-radius: 16px;
+  }
+
+  .hiyaghar-combo-marquee-img-wrap {
+    height: 125px;
+    margin-bottom: 6px;
+  }
+
+  .hiyaghar-combo-marquee-name {
+    font-size: 12px;
+  }
+
+  .hiyaghar-combo-marquee-price {
+    font-size: 12px;
+  }
+}

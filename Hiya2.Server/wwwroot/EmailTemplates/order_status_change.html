@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Order Status Updated</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f2ea;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: auto;
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 30px;
+            border: 1px solid #e6ddc9;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #2d6a4f;
+            margin-bottom: 20px;
+        }
+
+        .status-box {
+            background: #faf7f0;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+        }
+
+        .row {
+            margin-bottom: 10px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        .footer {
+            margin-top: 25px;
+            color: #666;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div style="text-align:center;margin-bottom:20px;">
+            <img src="cid:CompanyLogo" alt="Hiya" style="max-width:160px;height:auto;" />
+        </div>
+
+        <div class="title">
+            Order Status Updated
+        </div>
+
+        <p>Hello {{customerName}},</p>
+
+        <p>Your order status has been updated.</p>
+
+        <div class="status-box">
+            <div class="row">
+                <span class="label">Order Number:</span>
+                {{orderNumber}}
+            </div>
+
+            <div class="row">
+                <span class="label">Product:</span>
+                {{productName}}
+            </div>
+
+            <div class="row">
+                <span class="label">New Status:</span>
+                {{newStatus}}
+            </div>
+        </div>
+
+        <p>
+            You can log in to your account to view more details.
+        </p>
+
+        <div class="footer">
+            Thank you for shopping with Hiya.
+        </div>
+    </div>
+</body>
+</html>

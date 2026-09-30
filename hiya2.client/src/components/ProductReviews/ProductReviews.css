@@ -1,0 +1,188 @@
+.hiyaghar-pr-container {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.hiyaghar-pr-summary {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background-color: #FFFDF5;
+  border: 1px solid #F0E6C8;
+  border-radius: 12px;
+}
+
+.hiyaghar-pr-summary-score {
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  line-height: 1;
+}
+
+.hiyaghar-pr-summary-details {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiyaghar-pr-summary-count {
+  font-size: 13px;
+  color: #667085;
+}
+
+.hiyaghar-pr-stars {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.hiyaghar-pr-write {
+  padding: 20px;
+  border: 1px solid #EAECF0;
+  border-radius: 12px;
+}
+
+.hiyaghar-pr-write-title {
+  margin: 0 0 14px;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-pr-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hiyaghar-pr-star-picker {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.hiyaghar-pr-star-btn {
+  background: none;
+  border: none;
+  padding: 2px;
+  cursor: pointer;
+  line-height: 0;
+}
+
+.hiyaghar-pr-textarea {
+  width: 100%;
+  border: 1px solid #D0D5DD;
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--hiya-navy, #11223A);
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+.hiyaghar-pr-textarea:focus {
+  outline: none;
+  border-color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-pr-form-message {
+  margin: 0;
+  font-size: 13px;
+  color: #B42318;
+}
+
+.hiyaghar-pr-submit-btn {
+  align-self: flex-start;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--hiya-gold, #CB992C) 0%, #B5831D 100%);
+  color: var(--hiya-navy, #11223A);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.hiyaghar-pr-submit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.hiyaghar-pr-login-prompt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-pr-login-prompt p {
+  margin: 0;
+  color: #475467;
+  font-size: 14px;
+}
+
+.hiyaghar-pr-login-btn {
+  padding: 9px 22px;
+  border: 2px solid var(--hiya-navy, #11223A);
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.hiyaghar-pr-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hiyaghar-pr-empty {
+  color: #667085;
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 0;
+}
+
+.hiyaghar-pr-card {
+  padding: 16px 18px;
+  border: 1px solid #EAECF0;
+  border-radius: 10px;
+  background-color: #ffffff;
+}
+
+.hiyaghar-pr-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.hiyaghar-pr-card-date {
+  font-size: 12px;
+  color: #98A2B3;
+}
+
+.hiyaghar-pr-card-text {
+  margin: 0 0 8px;
+  color: #344054;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.hiyaghar-pr-card-author {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hiya-navy, #11223A);
+}
+
+@media (max-width: 480px) {
+  .hiyaghar-pr-summary {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

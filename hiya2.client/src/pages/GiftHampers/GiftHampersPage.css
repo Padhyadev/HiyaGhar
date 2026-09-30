@@ -1,0 +1,391 @@
+/* ==========================================================================
+   HIIYA PREMIUM GIFTING PAGE STYLING (ASYMMETRIC 5-CARD GALLERY GRID)
+   ========================================================================== */
+
+.hiyaghar-gift-hampers-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FAF6EA; /* Warm off-white / cream */
+}
+
+.hiyaghar-gift-hampers-main {
+  flex: 1;
+  padding-bottom: 80px;
+}
+
+.hiyaghar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* 1. GIFTING HEADER & CHOOSE OCCASION */
+.hiyaghar-gifting-header-section {
+  padding: 20px 0 12px 0;
+  background-color: #FAF6EA;
+}
+
+.hiyaghar-occasion-eyebrow-wrapper {
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;
+}
+
+.hiyaghar-occasion-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--hiya-gold, #CB992C);
+  background: rgba(203, 153, 44, 0.08);
+  border: 1px solid rgba(203, 153, 44, 0.25);
+  padding: 4px 16px;
+  border-radius: 999px;
+}
+
+/* 2. ASYMMETRIC 5-CARD GALLERY GRID (TALL ASPECT RATIO) */
+.hiyaghar-occasion-grid-section {
+  padding: 16px 0 44px 0;
+}
+
+.hiyaghar-asymmetric-5card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* Left Featured Card (Wedding - Tall Portrait) */
+.hiyaghar-5card-item.is-featured {
+  height: 100%;
+  min-height: 580px;
+  padding: 36px 28px;
+}
+
+/* Right 2x2 Grid */
+.hiyaghar-5card-right-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  height: 100%;
+}
+
+/* Card Base Styles */
+.hiyaghar-5card-item {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
+  padding: 24px 20px;
+  min-height: 280px;
+  cursor: pointer;
+  background-color: var(--hiya-navy, #11223A);
+  border: 2px solid transparent;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(17, 34, 58, 0.08);
+}
+
+.hiyaghar-5card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 28px rgba(17, 34, 58, 0.16);
+}
+
+.hiyaghar-5card-item:active {
+  transform: scale(0.97) translateY(0);
+  transition: transform 0.1s ease;
+}
+
+/* Active Highlighted State */
+.hiyaghar-5card-item.is-active {
+  border: 2.5px solid var(--hiya-gold, #CB992C) !important;
+  box-shadow: 0 8px 30px rgba(203, 153, 44, 0.45), 0 0 0 4px rgba(203, 153, 44, 0.25) !important;
+  transform: translateY(-4px);
+}
+
+.hiyaghar-5card-item.is-active .card-bg-image {
+  transform: scale(1.08);
+}
+
+/* Active Badge Top Right */
+.hiyaghar-card-active-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 4;
+  background: var(--hiya-gold, #CB992C);
+  color: #11223A;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: hiyagharPopIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes hiyagharPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.hiyaghar-5card-item .card-bg-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hiyaghar-5card-item:hover .card-bg-image {
+  transform: scale(1.06);
+}
+
+.hiyaghar-5card-item .card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(17, 34, 58, 0.05) 30%, rgba(17, 34, 58, 0.85) 100%);
+  z-index: 2;
+  transition: background 0.3s ease;
+}
+
+.hiyaghar-5card-item:hover .card-overlay {
+  background: linear-gradient(180deg, rgba(17, 34, 58, 0.02) 20%, rgba(17, 34, 58, 0.9) 100%);
+}
+
+.hiyaghar-5card-item .card-content {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  width: 100%;
+}
+
+.hiyaghar-5card-item .card-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  color: #FFFFFF;
+  margin: 0;
+  letter-spacing: 0.02em;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.hiyaghar-5card-item.is-featured .card-title {
+  font-size: 1.85rem;
+}
+
+.hiyaghar-5card-item .card-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  max-width: 260px;
+  line-height: 1.35;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hiyaghar-5card-item.is-featured .card-desc {
+  font-size: 0.98rem;
+  max-width: 360px;
+}
+
+.hiyaghar-5card-item .card-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--hiya-navy, #11223A);
+  background: #FFFFFF;
+  border: none;
+  border-radius: 999px;
+  padding: 7px 18px;
+  margin-top: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.25s ease;
+}
+
+.hiyaghar-5card-item:hover .card-cta-btn {
+  background: var(--hiya-gold, #CB992C);
+  color: #FFFFFF;
+}
+
+.hiyaghar-5card-item:hover .card-cta-btn span {
+  transform: translateX(3px);
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+/* ACTIVE STATE FOR ALL CARDS */
+.hiyaghar-5card-item.is-active {
+  border-color: var(--hiya-gold, #CB992C);
+  box-shadow: 0 6px 20px rgba(203, 153, 44, 0.25);
+}
+
+.hiyaghar-5card-item.is-active .card-cta-btn {
+  background: var(--hiya-gold, #CB992C);
+  color: #FFFFFF;
+}
+
+/* 3. PRODUCT LISTING SECTION */
+.hiyaghar-gh-products-section {
+  padding: 24px 0 60px 0;
+}
+
+.hiyaghar-gh-products-bar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #E8E2C9;
+  margin-bottom: 28px;
+}
+
+.products-heading-group .hiyaghar-gh-products-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2.2vw, 1.75rem);
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 4px 0;
+}
+
+.products-heading-group .hiyaghar-gh-products-count {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 0.88rem;
+  color: #667085;
+  margin: 0;
+}
+
+.hiyaghar-clear-filter-btn {
+  background: rgba(203, 153, 44, 0.12);
+  border: 1px solid rgba(203, 153, 44, 0.3);
+  color: var(--hiya-navy, #11223A);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-clear-filter-btn:hover {
+  background: var(--hiya-gold, #CB992C);
+  color: #ffffff;
+}
+
+.hiyaghar-gh-sort-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hiyaghar-sort-lbl {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: #667085;
+}
+
+.hiyaghar-gh-sort-select {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 0.85rem;
+  color: var(--hiya-navy, #11223A);
+  background: #FFFDF0;
+  border: 1px solid #E8E2C9;
+  border-radius: 999px;
+  padding: 8px 16px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-gh-sort-select:focus,
+.hiyaghar-gh-sort-select:hover {
+  border-color: var(--hiya-gold, #CB992C);
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .hiyaghar-asymmetric-5card-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .hiyaghar-5card-item.is-featured {
+    min-height: 220px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-occasion-grid-section {
+    padding: 8px 0 20px 0;
+  }
+
+  .hiyaghar-asymmetric-5card-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .hiyaghar-5card-item.is-featured {
+    min-height: 110px;
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+
+  .hiyaghar-5card-item.is-featured .card-title {
+    font-size: 1.2rem;
+  }
+
+  .hiyaghar-5card-right-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+
+  .hiyaghar-5card-item {
+    min-height: 95px;
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  .hiyaghar-5card-item .card-title {
+    font-size: 0.95rem;
+  }
+
+  .hiyaghar-card-active-badge {
+    top: 8px;
+    right: 8px;
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+}
