@@ -1,0 +1,109 @@
+/* Official Hiya Brand Color System & Design Tokens */
+
+:root {
+  /* Hiya Brand Palette */
+  --hiya-navy: #11223A;
+  --hiya-gold: #CB992C;
+  --hiya-gold-dark: #A97818;
+  --hiya-gold-light: #E8C96A;
+
+  /* Hiya Backgrounds */
+  --hiya-cream: #FFFFE3;
+  --hiya-soft-cream: #FFFDF0;
+  --hiya-beige: #F5EFD5;
+
+  /* Typography */
+  --hiya-text: #344054;
+  --hiya-muted: #667085;
+
+  /* UI */
+  --hiya-white: #FFFFFF;
+  --hiya-border: #E8E2C9;
+
+  /* Color Palette - Brand & Semantic Tokens */
+  --color-text-primary: var(--hiya-navy);
+  --color-text-body: var(--hiya-text);
+  --color-text-secondary: var(--hiya-muted);
+  --color-text-tertiary: var(--hiya-muted);
+  --color-text-inverted: var(--hiya-white);
+  --color-text-accent: var(--hiya-gold);
+
+  --color-surface-base: var(--hiya-cream);
+  --color-surface-soft: var(--hiya-soft-cream);
+  --color-surface-beige: var(--hiya-beige);
+  --color-surface-card: var(--hiya-white);
+  --color-surface-dark: var(--hiya-navy);
+
+  /* Reference Branding Colors */
+  --color-hero-cyan: var(--hiya-cream);
+  --color-hero-cyan-gradient: var(--hiya-cream);
+  --color-ticker-magenta: var(--hiya-navy);
+  --color-shipping-yellow: var(--hiya-gold);
+  --color-brand-primary: var(--hiya-navy);
+  --color-brand-accent: var(--hiya-gold);
+  --color-brand-accent-hover: var(--hiya-gold-dark);
+
+  --color-border-default: var(--hiya-border);
+  --color-border-subtle: var(--hiya-border);
+  --color-border-focus: var(--hiya-gold);
+
+  /* Typography Tokens */
+  --font-family-primary: 'DM Sans', sans-serif;
+  --font-family-stack: 'DM Sans', sans-serif;
+
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-md: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 38px;
+  --font-size-5xl: 52px;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-heavy: 800;
+
+  --line-height-tight: 1.1;
+  --line-height-heading: 1.2;
+  --line-height-base: 1.5;
+
+  /* Spacing Scale Tokens */
+  --space-1: 3px;
+  --space-2: 4px;
+  --space-3: 5px;
+  --space-4: 7px;
+  --space-5: 8px;
+  --space-6: 10px;
+  --space-7: 11px;
+  --space-8: 12px;
+  --space-9: 16px;
+  --space-10: 20px;
+  --space-11: 24px;
+  --space-12: 32px;
+  --space-13: 40px;
+  --space-14: 48px;
+  --space-15: 64px;
+
+  /* Border Radius Tokens */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-full: 9999px;
+
+  /* Motion Tokens */
+  --motion-duration-fast: 300ms;
+  --motion-duration-normal: 400ms;
+
+  --shadow-sm: 0 1px 3px rgba(17, 34, 58, 0.05);
+  --shadow-md: 0 4px 12px rgba(17, 34, 58, 0.08);
+  --shadow-lg: 0 10px 30px rgba(17, 34, 58, 0.12);
+
+  --container-max-width: 1440px;
+  --header-height: 72px;
+}

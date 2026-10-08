@@ -1,0 +1,84 @@
+.hiyaghar-denied-page {
+  min-height: 70vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+}
+
+.hiyaghar-denied-card {
+  background: #ffffff;
+  border-radius: 20px;
+  max-width: 520px;
+  width: 100%;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid #fee2e2;
+}
+
+.hiyaghar-denied-icon {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+}
+
+.hiyaghar-denied-code {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #dc2626;
+  background: #fef2f2;
+  padding: 4px 12px;
+  border-radius: 20px;
+  letter-spacing: 0.08em;
+  margin-bottom: 16px;
+}
+
+.hiyaghar-denied-card h2 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #10243E;
+  margin: 0 0 12px 0;
+}
+
+.hiyaghar-denied-card p {
+  font-size: 0.95rem;
+  color: #10243E;
+  margin: 0 0 8px 0;
+  line-height: 1.5;
+}
+
+.hiyaghar-denied-subtext {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 28px !important;
+}
+
+.hiyaghar-denied-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-btn-dashboard {
+  background: #D19A27;
+  color: #ffffff;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.hiyaghar-btn-home {
+  background: #f1f5f9;
+  color: #10243E;
+  border: 1px solid #cbd5e1;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.9rem;
+}

@@ -1,0 +1,412 @@
+.hiyaghar-legal-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FAF8F2;
+  color: #11223A;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.hiyaghar-legal-main {
+  flex: 1;
+}
+
+/* ==========================================================================
+   HERO BANNER WITH BACKGROUND PICTURE (FULL WIDTH EDGE-TO-EDGE)
+   ========================================================================== */
+.hiyaghar-legal-hero-banner {
+  width: 100%;
+  margin-top: -88px;
+  margin-bottom: 24px;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.hiyaghar-legal-hero-banner-card {
+  position: relative;
+  width: 100%;
+  min-height: 420px;
+  padding-top: 100px;
+  padding-bottom: 50px;
+  background-image: url('/image/hero_natural_wellness_banner.webp');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  border-radius: 0 0 32px 32px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16px 40px rgba(17, 34, 58, 0.16);
+}
+
+.hiyaghar-legal-hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 34, 58, 0.75) 0%,
+    rgba(17, 34, 58, 0.88) 100%
+  );
+  z-index: 1;
+}
+
+.hiyaghar-legal-hero-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #ffffff;
+}
+
+.hiyaghar-legal-banner-breadcrumb {
+  margin-bottom: 14px;
+}
+
+.hiyaghar-legal-breadcrumb-list {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.hiyaghar-legal-breadcrumb-list li a {
+  color: #E2E8F0;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.hiyaghar-legal-breadcrumb-list li a:hover {
+  color: #CB992C;
+}
+
+.hiyaghar-legal-breadcrumb-list .sep {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.hiyaghar-legal-breadcrumb-list .current {
+  color: #F8FAFC;
+}
+
+.hiyaghar-legal-breadcrumb-list .current-sub {
+  color: #CB992C;
+  font-weight: 700;
+}
+
+.hiyaghar-legal-hero-eyebrow {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #CB992C;
+  background: rgba(203, 153, 44, 0.18);
+  border: 1px solid rgba(203, 153, 44, 0.35);
+  padding: 5px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.hiyaghar-legal-hero-title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 10px 0;
+  color: #FFFFFF;
+}
+
+.hiyaghar-legal-hero-subtitle {
+  font-size: clamp(0.95rem, 1.8vw, 1.05rem);
+  line-height: 1.6;
+  color: #E2E8F0;
+  max-width: 680px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   QUICK NAVIGATION POLICY TABS
+   ========================================================================== */
+.hiyaghar-legal-tabs-wrapper {
+  max-width: 960px;
+  margin: -20px auto 32px auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 5;
+}
+
+.hiyaghar-legal-tabs-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  background: #FFFFFF;
+  padding: 10px 14px;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 8px 24px rgba(17, 34, 58, 0.08);
+}
+
+.hiyaghar-legal-tab-btn {
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: #F8FAFC;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.hiyaghar-legal-tab-btn:hover {
+  background: #EFF6FF;
+  color: #11223A;
+  border-color: #CBD5E1;
+}
+
+.hiyaghar-legal-tab-btn.active {
+  background: #11223A;
+  color: #FFFFFF;
+  border-color: #11223A;
+  box-shadow: 0 4px 12px rgba(17, 34, 58, 0.2);
+}
+
+/* ==========================================================================
+   MAIN LEGAL CONTENT CARD
+   ========================================================================== */
+.hiyaghar-legal-container-outer {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 20px 60px 20px;
+}
+
+.hiyaghar-legal-card {
+  background-color: #FFFFFF;
+  border-radius: 24px;
+  padding: clamp(28px, 5vw, 48px);
+  border: 1px solid rgba(17, 34, 58, 0.08);
+  box-shadow: 0 10px 30px rgba(17, 34, 58, 0.05);
+}
+
+.hiyaghar-legal-header-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-bottom: 20px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.hiyaghar-legal-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(203, 153, 44, 0.12);
+  color: #B47C1C;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(203, 153, 44, 0.25);
+}
+
+.hiyaghar-legal-last-updated {
+  font-size: 0.85rem;
+  color: #64748B;
+  font-weight: 500;
+}
+
+.hiyaghar-legal-content {
+  color: #334155;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.hiyaghar-legal-content h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #11223A;
+  margin: 32px 0 12px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hiyaghar-legal-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background: #CB992C;
+  border-radius: 2px;
+}
+
+.hiyaghar-legal-content p {
+  margin-bottom: 16px;
+}
+
+.hiyaghar-legal-content strong {
+  color: #0F172A;
+}
+
+.hiyaghar-legal-content ul {
+  margin: 12px 0 24px 20px;
+  padding: 0;
+}
+
+.hiyaghar-legal-content li {
+  margin-bottom: 10px;
+  padding-left: 4px;
+}
+
+.hiyaghar-trust-badge-card {
+  background: #FAF8F2;
+  border: 1px solid #EBE4D5;
+  border-radius: 16px;
+  padding: 20px 24px;
+  margin: 28px 0;
+}
+
+.hiyaghar-trust-badge-card h2 {
+  margin-top: 0;
+  font-size: 1.15rem;
+}
+
+.hiyaghar-trust-badge-card p {
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.hiyaghar-trust-badge-card p:last-child {
+  margin-bottom: 0;
+}
+
+/* ==========================================================================
+   DYNAMIC HELP & CONTACT CARD
+   ========================================================================== */
+.hiyaghar-legal-help-card {
+  margin-top: 40px;
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #11223A 0%, #1E3A5F 100%);
+  border-radius: 18px;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.hiyaghar-legal-help-info h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: #FFFFFF;
+}
+
+.hiyaghar-legal-help-info p {
+  margin: 0;
+  font-size: 0.92rem;
+  color: #CBD5E1;
+  max-width: 500px;
+}
+
+.hiyaghar-legal-help-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-legal-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #25D366;
+  color: #FFFFFF;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hiyaghar-legal-wa-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(37, 211, 102, 0.4);
+}
+
+.hiyaghar-legal-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-legal-contact-btn:hover {
+  background: #FFFFFF;
+  color: #11223A;
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-legal-hero-banner-card {
+    min-height: 360px;
+    padding-top: 90px;
+    padding-bottom: 40px;
+    border-radius: 0 0 24px 24px;
+  }
+
+  .hiyaghar-legal-tabs-wrapper {
+    margin-top: -15px;
+    padding: 0 16px;
+  }
+
+  .hiyaghar-legal-card {
+    padding: 24px 18px;
+  }
+
+  .hiyaghar-legal-help-card {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 20px;
+  }
+
+  .hiyaghar-legal-help-actions {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .hiyaghar-legal-wa-btn,
+  .hiyaghar-legal-contact-btn {
+    flex: 1;
+    justify-content: center;
+  }
+}
+

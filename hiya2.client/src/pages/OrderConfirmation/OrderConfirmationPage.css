@@ -1,0 +1,406 @@
+/* Premium Classic Elegant Order Confirmation Styling */
+
+.hiyaghar-confirmation-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F9F6EE 100%);
+  color: var(--hiya-navy, #11223A);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.hiyaghar-confirmation-main {
+  flex: 1;
+  padding: clamp(30px, 4vw, 60px) 0;
+}
+
+.hiyaghar-confirmation-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: clamp(32px, 5vw, 60px);
+  border: 1px solid #E8E2C9;
+  box-shadow: 0 16px 40px rgba(17, 34, 58, 0.05);
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Gold Checkmark Success Animation */
+.hiyaghar-success-animation-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.hiyaghar-gold-checkmark-circle {
+  width: 84px;
+  height: 84px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #CB992C 0%, #E6B74A 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 30px rgba(203, 153, 44, 0.35);
+  animation: goldPulse 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes goldPulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  70% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.hiyaghar-thankyou-heading {
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.5px;
+}
+
+.hiyaghar-thankyou-subtitle {
+  font-size: 16px;
+  color: #7A7265;
+  margin: 0 0 32px 0;
+}
+
+.hiyaghar-order-meta-banner {
+  background: #FDFBF7;
+  border: 1px solid #E8E2C9;
+  border-radius: 16px;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-bottom: 32px;
+}
+
+.hiyaghar-meta-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.hiyaghar-meta-item .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #8C8272;
+  font-weight: 600;
+}
+
+.hiyaghar-meta-item .value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-meta-item .value.order-id {
+  color: var(--hiya-gold, #CB992C);
+}
+
+/* Details Grid */
+.hiyaghar-confirmation-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+@media (max-width: 640px) {
+  .hiyaghar-confirmation-details-grid,
+  .hiyaghar-order-meta-banner {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hiyaghar-conf-info-box {
+  background: #FDFBF7;
+  border: 1px solid #E8E2C9;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.box-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 10px 0;
+}
+
+.box-text {
+  font-size: 13px;
+  color: #554D40;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Items & Bill Section */
+.hiyaghar-conf-items-section {
+  background: #ffffff;
+  border: 1px solid #E8E2C9;
+  border-radius: 16px;
+  padding: 24px;
+  text-align: left;
+  margin-bottom: 32px;
+}
+
+.hiyaghar-conf-items-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #F0EAE1;
+}
+
+.hiyaghar-conf-items-header .section-title {
+  margin: 0;
+}
+
+.hiyaghar-conf-bill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ECFDF5;
+  color: #065F46;
+  border: 1px solid #A7F3D0;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.hiyaghar-conf-bill-badge .badge-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #10B981;
+  border-radius: 50%;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 14px 0;
+}
+
+.hiyaghar-conf-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.hiyaghar-conf-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px dashed #F0EAE1;
+  padding-bottom: 12px;
+}
+
+.hiyaghar-conf-item-row:last-child {
+  border-bottom: none;
+  padding-bottom: 4px;
+}
+
+.hiyaghar-conf-item-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  background: #FDFBF7;
+  border-radius: 8px;
+  padding: 4px;
+  border: 1px solid #F0EAE1;
+}
+
+.hiyaghar-conf-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-conf-item-info .name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-conf-item-info .meta {
+  font-size: 12px;
+  color: #7A7265;
+  margin-top: 2px;
+}
+
+.hiyaghar-conf-item-row .price {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+/* Detailed Bill Breakdown */
+.hiyaghar-conf-bill-breakdown {
+  background: #FDFBF7;
+  border: 1px solid #E8E2C9;
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-top: 16px;
+}
+
+.bill-breakdown-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 12px 0;
+  display: flex;
+  align-items: center;
+}
+
+.bill-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  color: #554D40;
+  margin-bottom: 8px;
+}
+
+.bill-row:last-child {
+  margin-bottom: 0;
+}
+
+.bill-label {
+  color: #6B7280;
+}
+
+.bill-value {
+  font-weight: 600;
+  color: var(--hiya-navy, #11223A);
+}
+
+.discount-row {
+  color: #059669;
+}
+
+.discount-row .bill-label {
+  color: #059669;
+}
+
+.discount-value {
+  color: #059669;
+  font-weight: 700;
+}
+
+.free-shipping-text {
+  color: #059669;
+  font-weight: 700;
+}
+
+.bill-divider {
+  height: 1px;
+  background-color: #E8E2C9;
+  margin: 12px 0;
+}
+
+.bill-row.total-row {
+  font-size: 16px;
+  font-weight: 800;
+  margin-top: 4px;
+}
+
+.bill-total-label {
+  color: var(--hiya-navy, #11223A);
+  font-weight: 700;
+}
+
+.bill-total-value {
+  font-size: 19px;
+  color: var(--hiya-gold, #CB992C);
+  font-weight: 800;
+}
+
+/* Bill & Invoice Download / Print Actions */
+.hiyaghar-conf-invoice-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-btn-invoice-download,
+.hiyaghar-btn-invoice-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-btn-invoice-download {
+  background: #F4F1EA;
+  color: var(--hiya-navy, #11223A);
+  border: 1px solid #D8CFC0;
+  flex: 1;
+  justify-content: center;
+}
+
+.hiyaghar-btn-invoice-download:hover {
+  background: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border-color: var(--hiya-navy, #11223A);
+  box-shadow: 0 4px 12px rgba(17, 34, 58, 0.15);
+}
+
+.hiyaghar-btn-invoice-print {
+  background: #ffffff;
+  color: #554D40;
+  border: 1px solid #D8CFC0;
+  justify-content: center;
+}
+
+.hiyaghar-btn-invoice-print:hover {
+  background: #F4F1EA;
+  color: var(--hiya-navy, #11223A);
+  border-color: #B8AC99;
+}
+
+/* Actions */
+.hiyaghar-conf-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-conf-actions .track-btn {
+  background: linear-gradient(135deg, #11223A 0%, #1A345B 100%);
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  padding: 16px 36px;
+  border-radius: 14px;
+  font-size: 16px;
+}
+
+.hiyaghar-no-order-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 60px 24px;
+  text-align: center;
+  border: 1px solid #E8E2C9;
+  max-width: 500px;
+  margin: 40px auto;
+}

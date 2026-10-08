@@ -1,0 +1,175 @@
+/* ==========================================================================
+   HIYAGHAR LUXURY D2C - FROSTED GLASS & CLEAN MINIMAL BRAND SPINNER
+   ========================================================================== */
+
+.hiyaghar-page-container-root {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+/* ---------------------------------------------------- */
+/* FROSTED GLASS OVERLAY & BACKDROP BLUR                */
+/* ---------------------------------------------------- */
+.hiyaghar-frosted-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), backdrop-filter 0.25s ease;
+  will-change: opacity, backdrop-filter;
+}
+
+.hiyaghar-frosted-overlay.is-exiting {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Glass Backdrop with Ultra-Clean Blur */
+.hiyaghar-frosted-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(14px) saturate(180%);
+  -webkit-backdrop-filter: blur(14px) saturate(180%);
+}
+
+/* ---------------------------------------------------- */
+/* FROSTED GLASS CENTER EMBLEM CARD                     */
+/* ---------------------------------------------------- */
+.hiyaghar-frosted-card {
+  position: relative;
+  z-index: 2;
+  width: 110px;
+  height: 110px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(203, 153, 44, 0.25);
+  border-radius: 24px;
+  box-shadow: 
+    0 20px 40px -10px rgba(17, 34, 58, 0.12),
+    0 0 25px rgba(203, 153, 44, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: cardPopIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes cardPopIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.85) translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ---------------------------------------------------- */
+/* DUAL LUXURY GOLD SPINNER ARCS                        */
+/* ---------------------------------------------------- */
+.hiyaghar-brand-spinner {
+  position: absolute;
+  inset: -8px;
+  border-radius: 30px;
+  pointer-events: none;
+}
+
+.spinner-arc-outer {
+  position: absolute;
+  inset: 0;
+  border-radius: 30px;
+  border: 2px solid transparent;
+  border-top-color: #cb992c;
+  border-right-color: rgba(203, 153, 44, 0.3);
+  animation: spinOuter 0.9s linear infinite;
+}
+
+.spinner-arc-inner {
+  position: absolute;
+  inset: -4px;
+  border-radius: 34px;
+  border: 1.5px solid transparent;
+  border-bottom-color: #11223a;
+  border-left-color: rgba(17, 34, 58, 0.2);
+  animation: spinInner 1.3s linear infinite reverse;
+}
+
+@keyframes spinOuter {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spinInner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------------- */
+/* LOGO STYLING INSIDE GLASS CARD                       */
+/* ---------------------------------------------------- */
+.hiyaghar-frosted-logo-box {
+  width: 62px;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiyaghar-frosted-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(17, 34, 58, 0.15));
+  animation: logoPulse 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes logoPulse {
+  0% { transform: scale(0.96); opacity: 0.9; }
+  100% { transform: scale(1.02); opacity: 1; }
+}
+
+/* Micro 3 Gold Dots Loading Sequence */
+.hiyaghar-frosted-tagline {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.hiyaghar-frosted-tagline .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: #cb992c;
+  animation: dotBlink 0.8s ease-in-out infinite;
+}
+
+.hiyaghar-frosted-tagline .dot-1 { animation-delay: 0s; }
+.hiyaghar-frosted-tagline .dot-2 { animation-delay: 0.15s; }
+.hiyaghar-frosted-tagline .dot-3 { animation-delay: 0.3s; }
+
+@keyframes dotBlink {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* ---------------------------------------------------- */
+/* MAIN PAGE CONTENT                                    */
+/* ---------------------------------------------------- */
+.hiyaghar-page-content-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  transition: filter 0.2s ease;
+}
+
+.hiyaghar-page-content-wrapper.page-blur {
+  filter: blur(2px);
+}

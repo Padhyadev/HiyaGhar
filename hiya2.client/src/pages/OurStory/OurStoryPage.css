@@ -1,0 +1,520 @@
+.hiyaghar-story-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FAF8F2;
+  color: #11223A;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.hiyaghar-story-main {
+  flex: 1;
+}
+
+/* ==========================================================================
+   HERO BANNER (ELEGANT D2C HERITAGE STYLE)
+   ========================================================================== */
+.hiyaghar-story-hero-banner {
+  width: 100%;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.hiyaghar-story-hero-banner-card {
+  position: relative;
+  width: 100%;
+  /* Height follows the banner image ratio (1664x894 ≈ 100/53.7) so the
+     background image fits whole on every screen without awkward cropping.
+     min-height keeps content safe; box still grows if content is taller. */
+  min-height: clamp(420px, 53.7vw, 100vh);
+  padding: 60px 24px 70px;
+  background: linear-gradient(135deg, #11223A 0%, #1A365D 50%, #0F172A 100%);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16px 40px rgba(17, 34, 58, 0.12);
+}
+
+.hiyaghar-story-hero-banner-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(203, 153, 44, 0.15) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Crawlable SEO hero background image (real <img> instead of CSS background) */
+.hiyaghar-story-hero-banner-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+/* Dark tint overlay above the image for clear, accessible typography */
+.hiyaghar-story-hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 34, 58, 0.78) 0%,
+    rgba(15, 23, 42, 0.9) 100%
+  );
+  z-index: 1;
+}
+
+.hiyaghar-story-hero-container {
+  max-width: 860px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: #ffffff;
+}
+
+.hiyaghar-story-banner-breadcrumb {
+  margin-bottom: 20px;
+}
+
+.hiyaghar-story-breadcrumb-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hiyaghar-story-breadcrumb-list a {
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.hiyaghar-story-breadcrumb-list a:hover {
+  color: #ffffff;
+}
+
+.hiyaghar-story-breadcrumb-list .sep {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.hiyaghar-story-breadcrumb-list .current {
+  color: #CB992C;
+  font-weight: 700;
+}
+
+.hiyaghar-story-hero-eyebrow {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #CB992C;
+  text-transform: uppercase;
+  background: rgba(203, 153, 44, 0.18);
+  border: 1px solid rgba(203, 153, 44, 0.4);
+  padding: 6px 18px;
+  border-radius: 9999px;
+  margin-bottom: 18px;
+}
+
+.hiyaghar-story-hero-title {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: clamp(30px, 4.5vw, 48px);
+  font-weight: 800;
+  line-height: 1.2;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+}
+
+.hiyaghar-story-hero-subtitle {
+  font-size: clamp(15px, 1.8vw, 17px);
+  line-height: 1.7;
+  color: #CBD5E1;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+/* Stats Ribbon */
+.hiyaghar-story-stats-container {
+  max-width: 1040px;
+  margin: -30px auto 50px;
+  background: #ffffff;
+  border: 1.5px solid #EAE4D5;
+  border-radius: 20px;
+  padding: 24px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 3;
+}
+
+.hiyaghar-story-stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hiyaghar-story-stat-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #CB992C;
+  line-height: 1.2;
+}
+
+.hiyaghar-story-stat-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #556575;
+  margin-top: 4px;
+}
+
+.hiyaghar-story-stat-divider {
+  width: 1px;
+  height: 36px;
+  background-color: #E2E8F0;
+}
+
+/* Content Sections Container */
+.hiyaghar-story-container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding: 0 24px 80px;
+}
+
+/* Two-column Story Block */
+.hiyaghar-story-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  align-items: center;
+  margin-bottom: 70px;
+}
+
+.hiyaghar-story-block.reversed {
+  direction: rtl;
+}
+
+.hiyaghar-story-block.reversed > * {
+  direction: ltr;
+}
+
+.hiyaghar-story-image-wrap {
+  position: relative;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 16px 36px rgba(17, 34, 58, 0.08);
+  border: 4px solid #ffffff;
+  background: #FAF4E8;
+}
+
+.hiyaghar-story-img-container {
+  width: 100%;
+  height: 380px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F7F3E9;
+  overflow: hidden;
+}
+
+/* Fix for cut/clipped images */
+.hiyaghar-story-img-contain {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 16px;
+  transition: transform 0.4s ease;
+}
+
+.hiyaghar-story-img-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.hiyaghar-story-image-wrap:hover img {
+  transform: scale(1.03);
+}
+
+.hiyaghar-story-image-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  background: rgba(17, 34, 58, 0.9);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.hiyaghar-story-text-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hiyaghar-story-tag {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #CB992C;
+  text-transform: uppercase;
+}
+
+.hiyaghar-story-heading {
+  font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
+  font-size: clamp(26px, 3.2vw, 36px);
+  font-weight: 800;
+  color: #11223A;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.hiyaghar-story-para {
+  font-size: 15.5px;
+  line-height: 1.8;
+  color: #475569;
+  margin: 0;
+}
+
+/* Values Grid */
+.hiyaghar-story-values-section {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 60px 40px;
+  border: 1px solid #EFEAE0;
+  box-shadow: 0 10px 30px rgba(17, 34, 58, 0.04);
+  margin-bottom: 70px;
+  text-align: center;
+}
+
+.hiyaghar-story-values-header {
+  max-width: 620px;
+  margin: 0 auto 48px;
+}
+
+.hiyaghar-story-values-header h2 {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 800;
+  color: #11223A;
+  margin: 10px 0 12px;
+}
+
+.hiyaghar-story-values-header p {
+  color: #64748B;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hiyaghar-story-values-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.hiyaghar-story-value-card {
+  background: #FAF8F2;
+  border: 1px solid #EAE4D5;
+  border-radius: 18px;
+  padding: 28px 20px;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.hiyaghar-story-value-card:hover {
+  transform: translateY(-4px);
+  border-color: #CB992C;
+  box-shadow: 0 12px 24px rgba(203, 153, 44, 0.12);
+}
+
+.hiyaghar-story-value-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #FFF5E0;
+  color: #CB992C;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 18px;
+}
+
+.hiyaghar-story-value-card h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: #11223A;
+  margin: 0 0 10px;
+}
+
+.hiyaghar-story-value-card p {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: #5A6A7D;
+  margin: 0;
+}
+
+/* CTA Box */
+.hiyaghar-story-cta-box {
+  background: linear-gradient(135deg, #11223A 0%, #1D3557 100%);
+  border-radius: 24px;
+  padding: 60px 40px;
+  text-align: center;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.hiyaghar-story-cta-box h2 {
+  font-size: clamp(26px, 3.5vw, 36px);
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: #ffffff;
+}
+
+.hiyaghar-story-cta-box p {
+  font-size: 16px;
+  color: #E2E8F0;
+  max-width: 580px;
+  margin: 0 auto 30px;
+  line-height: 1.6;
+}
+
+.hiyaghar-story-cta-btns {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-story-btn-primary {
+  background-color: #CB992C;
+  color: #11223A;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 14px 32px;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-story-btn-primary:hover {
+  background-color: #dfaa37;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(203, 153, 44, 0.35);
+}
+
+.hiyaghar-story-btn-secondary {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px 28px;
+  border-radius: 999px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-story-btn-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .hiyaghar-story-values-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .hiyaghar-story-hero-banner {
+    margin-top: -74px;
+  }
+
+  .hiyaghar-story-hero-banner-card {
+    padding-top: 80px;
+    padding-bottom: 40px;
+    border-radius: 0 0 24px 24px;
+  }
+
+  /* The banner art is 1664x894 (~1.86:1). On narrow screens the card is far
+     taller than that ratio (content + header clearance), so `cover` slices a
+     large part off the sides of the image. `contain` keeps the complete
+     banner visible; the card's navy gradient fills the space above/below it. */
+  .hiyaghar-story-hero-banner-bg {
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .hiyaghar-story-stats-container {
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    margin-top: -20px;
+  }
+
+  .hiyaghar-story-stat-divider {
+    display: none;
+  }
+
+  .hiyaghar-story-block {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    margin-bottom: 50px;
+  }
+
+  .hiyaghar-story-block.reversed {
+    direction: ltr;
+  }
+
+  .hiyaghar-story-img-container {
+    height: 300px;
+  }
+
+  .hiyaghar-story-values-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .hiyaghar-story-values-section {
+    padding: 40px 20px;
+  }
+
+  .hiyaghar-story-cta-box {
+    padding: 40px 20px;
+  }
+}

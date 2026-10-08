@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37516.0 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "hiya2.client", "hiya2.client\hiya2.client.esproj", "{C001A7EC-DFFF-D52C-3ECD-815342FAADB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hiya2.Server", "Hiya2.Server\Hiya2.Server.csproj", "{579BA1AE-2605-41BC-87C8-81092B442470}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C001A7EC-DFFF-D52C-3ECD-815342FAADB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C001A7EC-DFFF-D52C-3ECD-815342FAADB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C001A7EC-DFFF-D52C-3ECD-815342FAADB3}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C001A7EC-DFFF-D52C-3ECD-815342FAADB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C001A7EC-DFFF-D52C-3ECD-815342FAADB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C001A7EC-DFFF-D52C-3ECD-815342FAADB3}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{579BA1AE-2605-41BC-87C8-81092B442470}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{579BA1AE-2605-41BC-87C8-81092B442470}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{579BA1AE-2605-41BC-87C8-81092B442470}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{579BA1AE-2605-41BC-87C8-81092B442470}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCED6084-A5FF-4C4A-B537-57EB60D5BB95}
+	EndGlobalSection
+EndGlobal

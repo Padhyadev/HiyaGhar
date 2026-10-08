@@ -1,0 +1,539 @@
+.hiyaghar-contact-page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #FAF8F2;
+  color: #11223A;
+  font-family: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.hiyaghar-contact-main {
+  flex: 1;
+}
+
+/* ==========================================================================
+   HERO BANNER WITH BACKGROUND PICTURE (FULL WIDTH EDGE-TO-EDGE)
+   ========================================================================== */
+.hiyaghar-contact-hero-banner {
+  width: 100%;
+  margin-top: -88px;
+  margin-bottom: 24px;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.hiyaghar-contact-hero-banner-card {
+  position: relative;
+  width: 100%;
+  min-height: 440px;
+  padding-top: 100px;
+  padding-bottom: 50px;
+  background-image: url('/image/contact_story_warm_banner.webp');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  border-radius: 0 0 32px 32px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 16px 40px rgba(17, 34, 58, 0.16);
+}
+
+.hiyaghar-contact-hero-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 34, 58, 0.75) 0%,
+    rgba(17, 34, 58, 0.88) 100%
+  );
+  z-index: 1;
+}
+
+.hiyaghar-contact-hero-container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  color: #ffffff;
+}
+
+.hiyaghar-contact-banner-breadcrumb {
+  margin-bottom: 16px;
+}
+
+.hiyaghar-contact-breadcrumb-list {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.hiyaghar-contact-breadcrumb-list a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.hiyaghar-contact-breadcrumb-list a:hover {
+  color: #ffffff;
+}
+
+.hiyaghar-contact-breadcrumb-list .sep {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.hiyaghar-contact-breadcrumb-list .current {
+  color: #D39B27;
+  font-weight: 700;
+}
+
+.hiyaghar-contact-eyebrow {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  color: #D39B27;
+  text-transform: uppercase;
+  background: rgba(211, 155, 39, 0.18);
+  border: 1px solid rgba(211, 155, 39, 0.4);
+  padding: 6px 18px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+
+.hiyaghar-contact-hero-title {
+  font-size: clamp(32px, 5vw, 50px);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+  margin: 0 0 16px 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
+}
+
+.hiyaghar-contact-hero-subtitle {
+  font-size: clamp(16px, 2vw, 18px);
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 auto;
+  max-width: 680px;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Container */
+.hiyaghar-contact-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 24px 80px;
+}
+
+/* Grid */
+.hiyaghar-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr;
+  gap: 40px;
+  margin-bottom: 50px;
+}
+
+/* Left Info Card */
+.hiyaghar-contact-info-card {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #EAE4D5;
+  padding: 36px 32px;
+  box-shadow: 0 12px 32px rgba(17, 34, 58, 0.05);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-contact-info-card h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #11223A;
+  margin: 0 0 10px;
+}
+
+.hiyaghar-contact-info-desc {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #5A6A7D;
+  margin: 0 0 28px;
+}
+
+.hiyaghar-contact-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  flex: 1;
+}
+
+.hiyaghar-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.hiyaghar-contact-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #FAF8F2;
+  border: 1px solid #EAE4D5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #CB992C;
+  flex-shrink: 0;
+}
+
+.hiyaghar-contact-icon.whatsapp-icon {
+  background: #E8F7F0;
+  border-color: #C3E6D6;
+  color: #10B981;
+}
+
+.hiyaghar-contact-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hiyaghar-contact-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #8C9CAE;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.hiyaghar-contact-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: #11223A;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.hiyaghar-contact-val:hover {
+  color: #CB992C;
+}
+
+.hiyaghar-contact-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #334155;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.hiyaghar-whatsapp-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #10B981;
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+  margin-top: 4px;
+  width: fit-content;
+  transition: background 0.2s ease;
+}
+
+.hiyaghar-whatsapp-badge:hover {
+  background: #059669;
+}
+
+.hiyaghar-fssai-pill {
+  margin-top: 32px;
+  background: #FFF9ED;
+  border: 1px dashed #CB992C;
+  border-radius: 14px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.fssai-tag {
+  font-size: 11px;
+  font-weight: 800;
+  color: #CB992C;
+  letter-spacing: 0.08em;
+}
+
+.fssai-num {
+  font-size: 13px;
+  font-weight: 700;
+  color: #11223A;
+}
+
+/* Right Form Card */
+.hiyaghar-contact-form-card {
+  background: #ffffff;
+  border-radius: 24px;
+  border: 1px solid #EAE4D5;
+  padding: 36px 36px;
+  box-shadow: 0 12px 32px rgba(17, 34, 58, 0.05);
+}
+
+.hiyaghar-contact-form-card h2 {
+  font-size: 24px;
+  font-weight: 800;
+  color: #11223A;
+  margin: 0 0 8px;
+}
+
+.hiyaghar-form-desc {
+  font-size: 14.5px;
+  color: #5A6A7D;
+  margin: 0 0 24px;
+}
+
+.hiyaghar-form-success {
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+  border-radius: 14px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.hiyaghar-form-success .success-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #10B981;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 16px;
+}
+
+.hiyaghar-form-success h4 {
+  margin: 0 0 4px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #065F46;
+}
+
+.hiyaghar-form-success p {
+  margin: 0;
+  font-size: 13px;
+  color: #047857;
+}
+
+.hiyaghar-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hiyaghar-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.hiyaghar-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hiyaghar-form-group.full-width {
+  grid-column: 1 / -1;
+}
+
+.hiyaghar-form-group label {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #11223A;
+}
+
+.hiyaghar-form-group label .req {
+  color: #DC2626;
+}
+
+.hiyaghar-form-group input,
+.hiyaghar-form-group select,
+.hiyaghar-form-group textarea {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1.5px solid #DCE3EC;
+  background-color: #FAF8F5;
+  font-size: 14.5px;
+  font-family: inherit;
+  color: #11223A;
+  transition: all 0.2s ease;
+  box-sizing: border-box;
+}
+
+.hiyaghar-form-group input:focus,
+.hiyaghar-form-group select:focus,
+.hiyaghar-form-group textarea:focus {
+  outline: none;
+  border-color: #CB992C;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(203, 153, 44, 0.12);
+}
+
+/* Field-Level Error Styling */
+.hiyaghar-form-group.has-error input,
+.hiyaghar-form-group.has-error textarea {
+  border-color: #EF4444 !important;
+  background-color: #FFF5F5 !important;
+}
+
+.hiyaghar-form-group.has-error input:focus,
+.hiyaghar-form-group.has-error textarea:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.14) !important;
+}
+
+.field-error-msg {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #DC2626;
+  margin-top: -2px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.hiyaghar-contact-submit-btn {
+  background: linear-gradient(135deg, #CB992C 0%, #B8831E 100%);
+  color: #11223A;
+  font-size: 15px;
+  font-weight: 800;
+  padding: 14px 28px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  width: fit-content;
+  align-self: flex-start;
+  box-shadow: 0 6px 18px rgba(203, 153, 44, 0.25);
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hiyaghar-contact-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(203, 153, 44, 0.35);
+}
+
+.hiyaghar-contact-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* FAQ Preview */
+.hiyaghar-contact-faq-preview {
+  background: linear-gradient(135deg, #11223A 0%, #1E385B 100%);
+  border-radius: 20px;
+  padding: 40px 32px;
+  color: #ffffff;
+  text-align: center;
+}
+
+.hiyaghar-faq-box h3 {
+  font-size: clamp(20px, 2.5vw, 24px);
+  font-weight: 800;
+  margin: 0 0 10px;
+}
+
+.hiyaghar-faq-box p {
+  font-size: 15px;
+  color: #CBD5E1;
+  max-width: 580px;
+  margin: 0 auto 24px;
+}
+
+.hiyaghar-faq-links {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-faq-btn {
+  background-color: #CB992C;
+  color: #11223A;
+  padding: 10px 22px;
+  border-radius: 999px;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hiyaghar-faq-btn:hover {
+  background-color: #E2AD39;
+  transform: translateY(-2px);
+}
+
+.hiyaghar-faq-btn.secondary {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.hiyaghar-faq-btn.secondary:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .hiyaghar-contact-hero-banner {
+    margin-top: -74px;
+  }
+
+  .hiyaghar-contact-hero-banner-card {
+    min-height: 350px;
+    padding-top: 80px;
+    padding-bottom: 36px;
+    border-radius: 0 0 24px 24px;
+  }
+
+  .hiyaghar-contact-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .hiyaghar-form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .hiyaghar-contact-info-card,
+  .hiyaghar-contact-form-card {
+    padding: 28px 20px;
+  }
+
+  .hiyaghar-contact-submit-btn {
+    width: 100%;
+  }
+}

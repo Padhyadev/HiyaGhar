@@ -1,0 +1,265 @@
+@import '../tokens/tokens.css';
+@import '../typography.css';
+
+/* Global Reset & Base Typography */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure Font Awesome 6 font-family & pseudo-elements are never overridden by wildcard resets */
+i[class*="fa-"],
+i[class*="fa-"]::before,
+i[class*="fa-"]::after,
+.fa,
+.fa::before,
+.fa::after,
+.fas,
+.fas::before,
+.fas::after,
+.far,
+.far::before,
+.far::after,
+.fab,
+.fab::before,
+.fab::after,
+.fa-solid,
+.fa-solid::before,
+.fa-solid::after,
+.fa-regular,
+.fa-regular::before,
+.fa-regular::after,
+.fa-brands,
+.fa-brands::before,
+.fa-brands::after {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', sans-serif !important;
+  font-style: normal !important;
+  font-variant: normal !important;
+  text-rendering: auto !important;
+  line-height: 1 !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.fa-solid,
+.fa-solid::before,
+.fas,
+.fas::before {
+  font-weight: 900 !important;
+}
+
+.fa-regular,
+.fa-regular::before,
+.far,
+.far::before {
+  font-weight: 400 !important;
+}
+
+.fa-brands,
+.fa-brands::before,
+.fab,
+.fab::before {
+  font-family: 'Font Awesome 6 Brands' !important;
+  font-weight: 400 !important;
+}
+
+html {
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--color-text-primary);
+  background-color: var(--color-surface-base);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: clip;
+}
+
+/* ==========================================================================
+   GLOBAL NUMBER & TYPOGRAPHY SYSTEM (MANROPE + TABULAR NUMERALS)
+   ========================================================================== */
+
+/* 1. Universal Tabular Numerals for Numeric Consistency Across Site */
+body, button, input, select, textarea,
+.price, .price-val, .discount-price, .original-price, .grand-val, .line-price,
+.quantity, .qty, .stat, .number, .amount, .total, .subtotal, .stat-total-box,
+.tracking-code, .tracking-id, .order-id, .order-number, .order-id-tag,
+.phone, .mobile, .pincode, .date, .time, .timestamp, .placed-date,
+.weight, .variant, .rating-score, .percent, .discount-tag,
+.hiyaghar-pill-title, .hiyaghar-side-cart-subtotal-val, .cart-count, .badge, .status-badge {
+  font-variant-numeric: tabular-nums;
+  -webkit-font-feature-settings: "tnum";
+  font-feature-settings: "tnum";
+}
+
+/* 2. Hero Headings */
+.hiyaghar-hero-heading,
+.hero-title,
+.main-hero-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 54px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
+/* 3. Page Headings */
+h1, .page-title, .order-id-heading, .cart-page-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(24px, 3.5vw, 32px);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+/* 4. Section Headings */
+h2, h3, .section-title, .card-heading {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: clamp(17px, 2vw, 20px);
+  line-height: 1.3;
+}
+
+/* 5. Navigation & Buttons */
+button, .hiyaghar-btn, .header-action-btn, .support-btn, .hiyaghar-header-link {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+}
+
+/* 6. Form Fields & Labels */
+label, .hiyaghar-field-label {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 13.5px;
+}
+
+input, select, textarea {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 14.5px;
+}
+
+/* 7. Status Badges & Small Metadata Labels */
+.status-badge, .badge, .small-label, .hero-label, .courier-item .lbl {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+/* Accessible Focus Visible Indicator (WCAG 2.2 AA) */
+:focus-visible {
+  outline: 3px solid var(--color-border-focus);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+button:focus:not(:focus-visible),
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Links & Interactive Elements */
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--motion-duration-instant) ease;
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+}
+
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Accessibility Utility - Screen Readers Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Container Layout Utility */
+.hiyaghar-container {
+  width: 100%;
+  max-width: var(--container-max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--space-9);
+  padding-right: var(--space-9);
+}
+
+.hiyaghar-mukhwas-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+@media (max-width: 1199px) {
+  .hiyaghar-mukhwas-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .hiyaghar-mukhwas-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-container {
+    padding-left: var(--space-9);
+    padding-right: var(--space-9);
+  }
+
+  /* Universal Mobile 2-Product Grid Enforcement */
+  .hiyaghar-mukhwas-products-grid,
+  .hiyaghar-products-grid,
+  .hiyaghar-buy-again-grid,
+  .hiyaghar-rec-products-grid,
+  .hiyaghar-wishlist-grid,
+  .products-grid,
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}

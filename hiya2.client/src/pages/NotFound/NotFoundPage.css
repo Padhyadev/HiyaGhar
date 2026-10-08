@@ -1,0 +1,87 @@
+.hiyaghar-notfound-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--hiya-cream, #FFFFE3);
+}
+
+.hiyaghar-notfound-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+.hiyaghar-notfound-card {
+  max-width: 520px;
+  width: 100%;
+  background-color: #ffffff;
+  border-radius: 28px;
+  padding: 48px 32px;
+  text-align: center;
+  border: 1px solid rgba(17, 34, 58, 0.08);
+  box-shadow: 0 12px 36px rgba(17, 34, 58, 0.06);
+}
+
+.hiyaghar-notfound-code {
+  font-size: 80px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--hiya-gold, #CB992C);
+  margin-bottom: 12px;
+  letter-spacing: -0.04em;
+}
+
+.hiyaghar-notfound-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+  margin-bottom: 12px;
+}
+
+.hiyaghar-notfound-sub {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 28px;
+}
+
+.hiyaghar-notfound-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-notfound-btn {
+  padding: 12px 24px;
+  border-radius: 9999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 200ms ease;
+  min-height: 44px;
+}
+
+.hiyaghar-notfound-btn.primary {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border: none;
+}
+
+.hiyaghar-notfound-btn.primary:hover {
+  background-color: #1a365d;
+  transform: translateY(-2px);
+}
+
+.hiyaghar-notfound-btn.secondary {
+  background-color: transparent;
+  color: var(--hiya-navy, #11223A);
+  border: 1.5px solid var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-notfound-btn.secondary:hover {
+  background-color: #f1f5f9;
+  transform: translateY(-2px);
+}

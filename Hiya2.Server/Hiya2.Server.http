@@ -1,0 +1,6 @@
+@Hiya2.Server_HostAddress = http://localhost:5196
+
+GET {{Hiya2.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

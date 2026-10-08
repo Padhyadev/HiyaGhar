@@ -1,0 +1,223 @@
+/* ==========================================================================
+   HIYA GHAR - ADMIN STORE SETTINGS ENHANCED STYLING
+   ========================================================================== */
+
+.hiyaghar-store-settings-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hiyaghar-setting-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px 24px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hiyaghar-setting-card.is-active-edit {
+  border-color: #D19A27;
+  box-shadow: 0 4px 18px rgba(209, 154, 39, 0.1);
+  background: #FFFDF9;
+}
+
+.hiyaghar-setting-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f5f9;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.hiyaghar-setting-card-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #10243E;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hiyaghar-setting-card-title i {
+  color: #D19A27;
+  font-size: 1.1rem;
+}
+
+/* Form Controls and Inputs */
+.hiyaghar-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiyaghar-form-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #10243E;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hiyaghar-input-prefix-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.hiyaghar-input-prefix {
+  position: absolute;
+  left: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748b;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hiyaghar-input-suffix {
+  position: absolute;
+  right: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748b;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.hiyaghar-input-control {
+  width: 100%;
+  height: 44px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1.5px solid #cbd5e1;
+  background: #ffffff;
+  color: #10243E;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.hiyaghar-input-control.has-prefix {
+  padding-left: 32px;
+}
+
+.hiyaghar-input-control.has-suffix {
+  padding-right: 34px;
+}
+
+.hiyaghar-input-control:focus:not(:disabled) {
+  border-color: #D19A27;
+  box-shadow: 0 0 0 3px rgba(209, 154, 39, 0.15);
+}
+
+.hiyaghar-input-control:disabled {
+  background: #f8fafc;
+  color: #475569;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.95;
+}
+
+.hiyaghar-input-control.input-error {
+  border-color: #ef4444;
+  background: #fef2f2;
+}
+
+.hiyaghar-form-help {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+/* Custom Checkbox Toggle */
+.hiyaghar-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #10243E;
+  cursor: pointer;
+  user-select: none;
+}
+
+.hiyaghar-toggle-label.is-disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
+.hiyaghar-toggle-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: #D19A27;
+  cursor: pointer;
+}
+
+/* Buttons */
+.hiyaghar-section-btn-edit {
+  background: #D19A27;
+  color: #ffffff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(209, 154, 39, 0.2);
+}
+
+.hiyaghar-section-btn-edit:hover {
+  background: #b88520;
+  transform: translateY(-1px);
+}
+
+.hiyaghar-section-btn-save {
+  background: #2D6A4F;
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(45, 106, 79, 0.2);
+}
+
+.hiyaghar-section-btn-save:hover {
+  background: #1b4332;
+  transform: translateY(-1px);
+}
+
+.hiyaghar-section-btn-cancel {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-section-btn-cancel:hover {
+  background: #e2e8f0;
+}

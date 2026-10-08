@@ -1,0 +1,64 @@
+.review-status-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.review-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+
+.review-toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.review-toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ef4444;
+  /* Red color for inactive */
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.review-toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.review-toggle-switch input:checked+.review-toggle-slider {
+  background-color: #D19A27;
+}
+
+.review-toggle-switch input:checked+.review-toggle-slider:before {
+  transform: translateX(20px);
+}
+
+.review-toggle-switch.disabled .review-toggle-slider {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.review-status-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #10243E;
+  min-width: 55px;
+}

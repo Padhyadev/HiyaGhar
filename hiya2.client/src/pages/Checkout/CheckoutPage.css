@@ -1,0 +1,881 @@
+/* Premium Classic Elegant Checkout Page Styling */
+
+.hiyaghar-checkout-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F9F6EE 100%);
+  color: var(--hiya-navy, #11223A);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.hiyaghar-checkout-main {
+  flex: 1;
+  padding-bottom: clamp(40px, 6vw, 80px);
+}
+
+/* Breadcrumbs */
+.hiyaghar-checkout-breadcrumb {
+  padding: clamp(16px, 3vw, 24px) 0 12px 0;
+}
+
+.hiyaghar-checkout-breadcrumb-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+}
+
+.hiyaghar-checkout-breadcrumb-list a {
+  color: #7A7265;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.hiyaghar-checkout-breadcrumb-list a:hover {
+  color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-checkout-breadcrumb-list .sep {
+  color: #C5BDAB;
+}
+
+.hiyaghar-checkout-breadcrumb-list .current {
+  color: var(--hiya-navy, #11223A);
+  font-weight: 700;
+}
+
+/* 12. STEPPER PROGRESS BAR */
+.hiyaghar-checkout-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  border: 1px solid #E8E2C9;
+  border-radius: 16px;
+  padding: 16px 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 4px 16px rgba(17, 34, 58, 0.03);
+}
+
+.hiyaghar-step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
+
+.hiyaghar-step-item.is-active,
+.hiyaghar-step-item.is-complete {
+  opacity: 1;
+}
+
+.hiyaghar-step-num {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #F4F0E6;
+  color: #7A7265;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.hiyaghar-step-item.is-active .hiyaghar-step-num {
+  background: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-step-item.is-complete .hiyaghar-step-num {
+  background: #27AE60;
+  color: #ffffff;
+}
+
+.hiyaghar-step-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-step-line {
+  flex: 1;
+  height: 2px;
+  background: #E8E2C9;
+  margin: 0 16px;
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-checkout-stepper {
+    padding: 12px 16px;
+  }
+  .hiyaghar-step-label {
+    display: none;
+  }
+  .hiyaghar-step-line {
+    margin: 0 8px;
+  }
+}
+
+/* Grid Layout */
+.hiyaghar-checkout-grid {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+@media (max-width: 1024px) {
+  .hiyaghar-checkout-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Checkout Card */
+.hiyaghar-checkout-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 32px;
+  border: 1px solid #E8E2C9;
+  box-shadow: 0 8px 30px rgba(17, 34, 58, 0.04);
+}
+
+.hiyaghar-checkout-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #F0EAE1;
+  padding-bottom: 18px;
+  margin-bottom: 24px;
+}
+
+.hiyaghar-card-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  margin: 0;
+}
+
+.hiyaghar-guest-badge,
+.hiyaghar-secure-badge {
+  font-size: 12px;
+  background: #FDFBF7;
+  color: #8C6615;
+  border: 1px solid #E8E2C9;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-weight: 600;
+}
+
+/* Address Form Styling */
+.hiyaghar-address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.hiyaghar-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+@media (max-width: 640px) {
+  .hiyaghar-form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.hiyaghar-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiyaghar-form-group label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-form-group input,
+.hiyaghar-form-group textarea,
+.hiyaghar-pm-details-box select {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid #DED7C5;
+  background: #FDFBF7;
+  font-size: 14px;
+  color: var(--hiya-navy, #11223A);
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.2s ease;
+}
+
+.hiyaghar-form-group input:focus,
+.hiyaghar-form-group textarea:focus {
+  border-color: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-form-group input.has-error,
+.hiyaghar-form-group textarea.has-error {
+  border-color: #E74C3C;
+  background-color: #FDF2E9;
+}
+
+.field-error {
+  font-size: 12px;
+  color: #E74C3C;
+  font-weight: 600;
+}
+
+.hiyaghar-pincode-status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.hiyaghar-pincode-status.is-ok {
+  background: #E8F8F5;
+  color: #117A65;
+  border: 1px solid #A3E4D7;
+}
+
+.hiyaghar-pincode-status.is-error {
+  background: #FDEDEC;
+  color: #C0392B;
+  border: 1px solid #FADBD8;
+}
+
+/* Delivery Options */
+.hiyaghar-delivery-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.hiyaghar-delivery-option-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: #FDFBF7;
+  border: 1.5px solid #E8E2C9;
+  border-radius: 14px;
+  padding: 18px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-delivery-option-card.is-selected {
+  border-color: var(--hiya-gold, #CB992C);
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(203, 153, 44, 0.12);
+}
+
+.hiyaghar-delivery-option-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hiyaghar-delivery-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-delivery-est {
+  font-size: 13px;
+  color: #8C6615;
+  font-weight: 600;
+}
+
+.hiyaghar-delivery-desc {
+  font-size: 12px;
+  color: #7A7265;
+}
+
+.hiyaghar-delivery-price-col {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-delivery-price-col .free-badge {
+  background: #E8F8F5;
+  color: #117A65;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+}
+
+/* Step Action Buttons */
+.hiyaghar-step-continue-btn {
+  background: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border: 1px solid var(--hiya-gold, #CB992C);
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 12px;
+  transition: background 0.2s ease;
+}
+
+.hiyaghar-step-continue-btn:hover {
+  background: #1C355E;
+}
+
+.hiyaghar-step-actions-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+}
+
+.hiyaghar-back-btn {
+  background: none;
+  border: none;
+  color: #7A7265;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Payment Methods */
+.hiyaghar-payment-methods-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.hiyaghar-payment-method-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #FDFBF7;
+  border: 1.5px solid #E8E2C9;
+  border-radius: 14px;
+  padding: 16px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-payment-method-item.is-selected {
+  border-color: var(--hiya-gold, #CB992C);
+  background: #ffffff;
+}
+
+.hiyaghar-pm-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-pm-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-pm-sub {
+  font-size: 12px;
+  color: #7A7265;
+}
+
+.hiyaghar-pm-details-box {
+  background: #FDFBF7;
+  border: 1px solid #E8E2C9;
+  border-radius: 12px;
+  padding: 16px;
+  margin-left: 28px;
+  margin-top: -4px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hiyaghar-upi-note {
+  font-size: 12px;
+  color: #8C6615;
+}
+
+/* Review Step */
+.hiyaghar-review-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hiyaghar-review-block {
+  background: #FDFBF7;
+  border: 1px solid #E8E2C9;
+  border-radius: 14px;
+  padding: 18px;
+}
+
+.hiyaghar-review-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.hiyaghar-review-block-header h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  margin: 0;
+}
+
+.hiyaghar-edit-step-btn {
+  background: none;
+  border: none;
+  color: var(--hiya-gold, #CB992C);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.hiyaghar-review-text {
+  font-size: 14px;
+  color: #554D40;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.hiyaghar-review-items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.hiyaghar-review-item-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hiyaghar-review-item-img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 2px;
+}
+
+.hiyaghar-review-item-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-review-item-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-review-item-meta {
+  font-size: 12px;
+  color: #7A7265;
+}
+
+.hiyaghar-review-item-price {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+/* Final Place Order CTA */
+.hiyaghar-place-order-cta-wrapper {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.hiyaghar-place-order-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #11223A 0%, #1A345B 100%);
+  color: #ffffff;
+  border: 2px solid var(--hiya-gold, #CB992C);
+  padding: 18px 32px;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(17, 34, 58, 0.25);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hiyaghar-place-order-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 36px rgba(17, 34, 58, 0.32);
+}
+
+.hiyaghar-place-order-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.hiyaghar-loading-spinner-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.hiyaghar-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hiyaghar-checkout-security-subtext {
+  font-size: 13px !important;
+  color: #11223A !important;
+  font-weight: 600 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  margin-top: 8px !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+.hiyaghar-checkout-error-banner {
+  background: #FDEDEC;
+  border: 1px solid #F5B7B1;
+  color: #C0392B;
+  padding: 12px 16px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Sticky Summary Right Column */
+.hiyaghar-checkout-right-col {
+  position: sticky;
+  top: 100px;
+}
+
+.hiyaghar-checkout-summary-card {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px;
+  border: 1px solid #E8E2C9;
+  box-shadow: 0 8px 24px rgba(17, 34, 58, 0.04);
+}
+
+.hiyaghar-summary-items-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.hiyaghar-summary-item-preview {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hiyaghar-summary-item-preview img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+  background: #FDFBF7;
+  border-radius: 6px;
+  padding: 2px;
+}
+
+.hiyaghar-summary-item-preview .info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-summary-item-preview .name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-summary-item-preview .meta {
+  font-size: 11px;
+  color: #7A7265;
+}
+
+.hiyaghar-summary-item-preview .price {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+/* ==========================================================================
+   CHECKOUT ADDRESS DROPDOWN & ADD ADDRESS FORM STYLES
+   ========================================================================== */
+.hiyaghar-add-address-quick-btn {
+  background: #FFFDF4;
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-add-address-quick-btn:hover {
+  background: var(--hiya-gold, #CB992C);
+  color: #ffffff;
+}
+
+.hiyaghar-address-dropdown-wrapper {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hiyaghar-field-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-address-select-control {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1.5px solid #E8DFC8;
+  background: #FFFDF4;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--hiya-navy, #12243D);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.hiyaghar-address-select-control:focus {
+  border-color: var(--hiya-gold, #CB992C);
+  box-shadow: 0 0 0 3px rgba(203, 153, 44, 0.15);
+}
+
+/* Saved Address Cards Grid in Checkout */
+.hiyaghar-checkout-address-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.hiyaghar-checkout-addr-card {
+  background: #FDFBF7;
+  border: 1.5px solid #E8DFC8;
+  border-radius: 16px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hiyaghar-checkout-addr-card:hover {
+  border-color: var(--hiya-gold, #CB992C);
+  transform: translateY(-2px);
+}
+
+.hiyaghar-checkout-addr-card.is-selected {
+  background: #ffffff;
+  border-color: var(--hiya-gold, #CB992C);
+  box-shadow: 0 4px 16px rgba(203, 153, 44, 0.15);
+}
+
+.addr-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.hiyaghar-addr-edit-trigger {
+  background: transparent;
+  border: 1px solid #D19A27;
+  color: #D19A27;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-addr-edit-trigger:hover {
+  background: #D19A27;
+  color: #ffffff;
+}
+
+.selected-badge {
+  font-size: 10px;
+  font-weight: 800;
+  color: #15803D;
+  background: #F0FDF4;
+  padding: 2px 8px;
+  border-radius: 10px;
+  border: 1px solid #BBF7D0;
+}
+
+.hiyaghar-selected-summary-box {
+  background: #FFFDF4;
+  border: 1.5px solid #E8DFC8;
+  padding: 16px 20px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+}
+
+.summary-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--hiya-gold, #CB992C);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.summary-details {
+  font-size: 13.5px;
+  color: var(--hiya-navy, #12243D);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* New Address Inline Form */
+.hiyaghar-new-address-inline-form {
+  background: #FFFDF4;
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  border-radius: 18px;
+  padding: 24px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hiyaghar-new-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #E8DFC8;
+  padding-bottom: 12px;
+}
+
+.hiyaghar-new-form-header h3 {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--hiya-navy, #12243D);
+  margin: 0;
+}
+
+.hiyaghar-cancel-new-addr-btn {
+  background: transparent;
+  border: none;
+  color: #C53030;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.hiyaghar-select-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #E8DFC8;
+  background: #ffffff;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--hiya-navy, #12243D);
+}
+
+.hiyaghar-save-address-btn {
+  background: var(--hiya-navy, #12243D);
+  color: #ffffff;
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  align-self: flex-start;
+  margin-top: 10px;
+}
+
+.hiyaghar-save-address-btn:hover {
+  background: var(--hiya-gold, #CB992C);
+  color: #ffffff;
+}
+
+.hiyaghar-checkout-toast-banner {
+  position: fixed;
+  top: 90px;
+  right: 24px;
+  background: var(--hiya-navy, #12243D);
+  color: #FFFDF4;
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  padding: 12px 20px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  font-weight: 700;
+  font-size: 14px;
+  animation: slideInRight 0.3s ease;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

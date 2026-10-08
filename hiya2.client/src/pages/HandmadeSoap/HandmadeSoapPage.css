@@ -1,0 +1,18 @@
+/* Handmade Soap Page Specific Styles */
+.hiyaghar-soap-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-soap-listing-view {
+  width: 100%;
+}
+
+.hiyaghar-soap-detail-view {
+  padding: 32px 0 64px 0;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: 20px;
+  padding-right: 20px;
+}

@@ -1,0 +1,44 @@
+/* Scroll Reveal Animation Utility Styles */
+
+.reveal-element {
+  opacity: 0;
+  will-change: transform, opacity;
+  transition: opacity 1150ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 1150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Directional variants */
+.reveal-fade-up {
+  transform: translateY(48px);
+}
+
+.reveal-fade-down {
+  transform: translateY(-48px);
+}
+
+.reveal-fade-left {
+  transform: translateX(-50px);
+}
+
+.reveal-fade-right {
+  transform: translateX(50px);
+}
+
+.reveal-scale-up {
+  transform: scale(0.92) translateY(24px);
+}
+
+/* Revealed state triggered when element enters viewport */
+.reveal-element.is-revealed {
+  opacity: 1;
+  transform: translate(0, 0) scale(1);
+}
+
+/* Reduced Motion Preferences */
+@media (prefers-reduced-motion: reduce) {
+  .reveal-element {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}

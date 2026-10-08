@@ -1,0 +1,120 @@
+.hiyaghar-wishlist-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #FDFBF7 0%, #F9F6EE 100%);
+  color: var(--hiya-navy, #11223A);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.hiyaghar-wishlist-main {
+  flex: 1;
+  padding-bottom: clamp(40px, 6vw, 80px);
+  position: relative;
+}
+
+/* Toast Banner */
+.hiyaghar-wishlist-toast {
+  position: fixed;
+  bottom: 28px;
+  left: 28px;
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  padding: 14px 22px;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(17, 34, 58, 0.25);
+  z-index: 1100;
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  animation: wishlistToastSlideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes wishlistToastSlideIn {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.hiyaghar-wishlist-content {
+  padding-top: clamp(48px, 6vw, 64px);
+}
+
+/* Empty State */
+.hiyaghar-wishlist-empty-state {
+  text-align: center;
+  padding: 60px 0;
+}
+
+.hiyaghar-wishlist-empty-state .empty-title {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 6px 0;
+}
+
+.hiyaghar-wishlist-empty-state .empty-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
+  font-size: 0.9rem;
+  color: #667085;
+  margin: 0 0 20px 0;
+}
+
+.hiyaghar-panel-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 12px 24px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: none;
+  text-decoration: none;
+}
+
+.hiyaghar-panel-btn.primary {
+  background: var(--hiya-navy, #11223A);
+  color: #FFFFFF;
+  border: 1px solid var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-panel-btn.primary:hover {
+  background: #1A345B;
+  border-color: #1A345B;
+  box-shadow: 0 4px 12px rgba(17, 34, 58, 0.15);
+}
+
+/* Wishlist Grid */
+.hiyaghar-wishlist-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .hiyaghar-wishlist-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .hiyaghar-wishlist-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

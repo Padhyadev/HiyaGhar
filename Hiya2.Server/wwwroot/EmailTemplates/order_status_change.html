@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Order Status Update - HIYAGHAR</title>
+  <style>
+    body { font-family: 'Segoe UI', Helvetica, Arial, sans-serif; background-color: #f4f6f9; margin: 0; padding: 24px; color: #222222; }
+    .container { max-width: 620px; background-color: #ffffff; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .header { background-color: #11223a; padding: 24px 28px; border-bottom: 3px solid #cb992c; text-align: center; }
+    .header-title { margin: 0; font-size: 24px; font-weight: 700; letter-spacing: 2px; color: #ffffff; }
+    .header-subtitle { margin: 6px 0 0 0; font-size: 13px; color: #cb992c; letter-spacing: 0.5px; }
+    .content { padding: 28px; }
+    .greeting { font-size: 16px; font-weight: 700; color: #11223a; margin-bottom: 12px; }
+    .intro-text { font-size: 14px; line-height: 1.6; color: #475569; margin-bottom: 20px; }
+    .status-card { background-color: #fdfbf7; border: 1px solid #e8e2c9; border-radius: 6px; padding: 18px; margin: 20px 0; text-align: center; }
+    .status-caption { font-size: 12px; color: #78716c; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .status-value { font-size: 22px; font-weight: 700; color: #11223a; }
+    .details-box { background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 14px; margin-top: 20px; font-size: 13.5px; color: #334155; line-height: 1.6; }
+    .footer { background-color: #f8fafc; padding: 20px 28px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-title">HIYAGHAR</div>
+      <div class="header-subtitle">Order Status Notification</div>
+    </div>
+    
+    <div class="content">
+      <div class="greeting">Dear {{customerName}},</div>
+      <div class="intro-text">
+        The status of your order <strong>#{{orderNumber}}</strong> has been updated.
+      </div>
+
+      <div class="status-card">
+        <div class="status-caption">Current Status</div>
+        <div class="status-value">{{newStatus}}</div>
+      </div>
+
+      <div class="details-box">
+        <div><strong>Order Items:</strong> {{productName}}</div>
+      </div>
+
+      <p style="margin-top: 24px; font-size: 13px; line-height: 1.5; color: #64748b;">
+        You can check the detailed tracking history by logging into your account on the HIYAGHAR portal.
+      </p>
+    </div>
+
+    <div class="footer">
+      HIYAGHAR Store &bull; All Rights Reserved
+    </div>
+  </div>
+</body>
+</html>

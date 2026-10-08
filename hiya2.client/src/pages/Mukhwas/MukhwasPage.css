@@ -1,0 +1,111 @@
+/* Mukhwas Page Layout Styling adhering strictly to Hiya tokens */
+
+.hiyaghar-mukhwas-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface-base);
+}
+
+.hiyaghar-mukhwas-page-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Product Grid Section */
+.hiyaghar-mukhwas-grid-section {
+  padding-top: var(--space-11);
+  padding-bottom: var(--space-12);
+}
+
+.hiyaghar-mukhwas-products-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+/* Narrower main column when a category sidebar sits alongside the grid */
+@media (min-width: 992px) {
+  .hiyaghar-main-column .hiyaghar-mukhwas-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1199px) {
+  .hiyaghar-mukhwas-products-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .hiyaghar-mukhwas-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-mukhwas-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hiyaghar-mukhwas-products-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+}
+
+/* Empty State */
+.hiyaghar-mukhwas-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-15) var(--space-9);
+  background-color: var(--hiya-white);
+  border-radius: var(--radius-xl);
+  border: 1px dashed var(--color-border-default);
+  text-align: center;
+  max-width: 540px;
+  margin: var(--space-10) auto;
+}
+
+.hiyaghar-empty-icon {
+  font-size: 48px;
+  margin-bottom: var(--space-6);
+}
+
+.hiyaghar-empty-title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--hiya-navy);
+  margin: 0 0 var(--space-4) 0;
+}
+
+.hiyaghar-empty-desc {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  line-height: 1.6;
+  margin-bottom: var(--space-9);
+}
+
+.hiyaghar-btn-reset-filters {
+  padding: 12px 24px;
+  border-radius: var(--radius-full);
+  border: none;
+  background-color: var(--hiya-navy);
+  color: var(--hiya-white);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: all var(--motion-duration-fast) ease;
+}
+
+.hiyaghar-btn-reset-filters:hover {
+  background-color: var(--hiya-gold);
+  color: var(--hiya-navy);
+}

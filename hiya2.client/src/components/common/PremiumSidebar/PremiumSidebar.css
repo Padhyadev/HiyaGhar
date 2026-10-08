@@ -1,0 +1,119 @@
+.hiyaghar-premium-sidebar {
+  width: 100%;
+  padding: 28px 24px;
+  background-color: var(--hiya-white, #FFFFFF);
+  border: 1px solid var(--hiya-border, #E8E2C9);
+  border-radius: var(--radius-lg, 20px);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(17, 34, 58, 0.05));
+  box-sizing: border-box;
+}
+
+.hiyaghar-sidebar-section {
+  margin-bottom: 0;
+}
+
+.hiyaghar-sidebar-title {
+  font-size: var(--font-size-xl, 20px);
+  font-weight: var(--font-weight-heavy, 800);
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 16px 0;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hiya-border, #E8E2C9);
+  position: relative;
+  letter-spacing: -0.3px;
+}
+
+.hiyaghar-sidebar-title::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 36px;
+  height: 3px;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-sidebar-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.hiyaghar-sidebar-item {
+  border-bottom: 1px solid var(--hiya-border, #E8E2C9);
+}
+
+.hiyaghar-sidebar-item:last-child {
+  border-bottom: none;
+}
+
+.hiyaghar-sidebar-link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  background: none;
+  border: none;
+  padding: 14px 4px;
+  font-size: var(--font-size-md, 16px);
+  font-family: inherit;
+  color: var(--hiya-text, #344054);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--motion-duration-fast, 300ms) ease;
+  border-radius: var(--radius-xs, 4px);
+}
+
+.hiyaghar-sidebar-bullet {
+  width: 6px;
+  height: 6px;
+  flex-shrink: 0;
+  background-color: var(--hiya-border, #E8E2C9);
+  border-radius: 50%;
+  margin-right: 12px;
+  transition: all var(--motion-duration-fast, 300ms) ease;
+}
+
+.hiyaghar-sidebar-link:hover {
+  color: var(--hiya-gold-dark, #A97818);
+  padding-left: 10px;
+}
+
+.hiyaghar-sidebar-link:hover .hiyaghar-sidebar-bullet {
+  background-color: var(--hiya-gold, #CB992C);
+  transform: scale(1.3);
+}
+
+.hiyaghar-sidebar-link.active {
+  color: var(--hiya-navy, #11223A);
+  font-weight: var(--font-weight-bold, 700);
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  padding-left: 10px;
+}
+
+.hiyaghar-sidebar-link.active .hiyaghar-sidebar-bullet {
+  background-color: var(--hiya-gold, #CB992C);
+  transform: scale(1.3);
+}
+
+/* Reusable Sidebar Layout Classes */
+.hiyaghar-page-with-sidebar {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.hiyaghar-main-column {
+  width: 100%;
+}
+
+@media (max-width: 991px) {
+  .hiyaghar-page-with-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .hiyaghar-premium-sidebar-desktop {
+    display: none;
+  }
+}

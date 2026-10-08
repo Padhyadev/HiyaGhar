@@ -1,0 +1,497 @@
+.hiyaghar-admin-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #F7F5EF;
+  color: #10243E;
+  font-family: inherit;
+}
+
+.hiyaghar-admin-topbar {
+  background: #F7F5EF;
+  color: #10243E;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  box-shadow: 0 4px 12px rgba(16, 36, 62, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.hiyaghar-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hiyaghar-sidebar-toggle {
+  background: transparent;
+  border: none;
+  color: #10243E;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.hiyaghar-sidebar-toggle:hover {
+  background: rgba(16, 36, 62, 0.05);
+}
+
+.hiyaghar-topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.hiyaghar-topbar-logo {
+  height: 44px;
+  width: auto;
+  max-width: 170px;
+  object-fit: contain;
+  display: block;
+  background-color: #F7F3E8;
+  padding: 4px 14px;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+}
+
+.hiyaghar-topbar-brand:hover .hiyaghar-topbar-logo {
+  transform: scale(1.03);
+}
+
+.hiyaghar-topbar-title {
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.05em;
+}
+
+.hiyaghar-topbar-title small {
+  background: #D19A27;
+  color: #ffffff;
+  font-size: 0.65rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+.hiyaghar-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.hiyaghar-store-btn {
+  background: rgba(16, 36, 62, 0.08);
+  color: #10243E;
+  border: 1px solid rgba(16, 36, 62, 0.15);
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hiyaghar-store-btn:hover {
+  background: rgba(16, 36, 62, 0.15);
+}
+
+.hiyaghar-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 12px 4px 6px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-user-badge:hover {
+  background: rgba(209, 154, 39, 0.12);
+  border-color: rgba(209, 154, 39, 0.3);
+}
+
+.hiyaghar-user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #D19A27;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border: 2px solid #F7F5EF;
+  transition: transform 0.2s ease;
+}
+
+.hiyaghar-user-badge:hover .hiyaghar-user-avatar {
+  transform: scale(1.08);
+}
+
+.hiyaghar-user-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.hiyaghar-admin-topbar .hiyaghar-user-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  line-height: 1.2;
+  color: #10243E !important;
+}
+
+.hiyaghar-admin-topbar .hiyaghar-user-role {
+  font-size: 0.75rem;
+  color: #D19A27 !important;
+  font-weight: 600;
+}
+
+.hiyaghar-admin-password-btn {
+  background: rgba(209, 154, 39, 0.1);
+  border: 1px solid rgba(209, 154, 39, 0.3);
+  color: #9A6F14;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hiyaghar-admin-password-btn:hover {
+  background: #D19A27;
+  border-color: #D19A27;
+  color: #ffffff;
+}
+
+.hiyaghar-admin-logout-btn {
+  background: transparent;
+  border: 1px solid rgba(16, 36, 62, 0.2);
+  color: #10243E;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hiyaghar-admin-logout-btn:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+  color: #ef4444;
+}
+
+.hiyaghar-admin-body {
+  display: flex;
+  flex: 1;
+}
+
+.hiyaghar-admin-sidebar {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid #e8e2d3;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.2s ease;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  max-height: calc(100vh - 64px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 90;
+  flex-shrink: 0;
+}
+
+/* Custom Sleek Scrollbar for Sidebar */
+.hiyaghar-admin-sidebar::-webkit-scrollbar {
+  width: 5px;
+}
+
+.hiyaghar-admin-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.hiyaghar-admin-sidebar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.hiyaghar-admin-sidebar::-webkit-scrollbar-thumb:hover {
+  background: #D19A27;
+}
+
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-admin-sidebar {
+  width: 72px;
+}
+
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-nav-text,
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-sidebar-section-title,
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-sidebar-footer {
+  display: none;
+}
+
+.hiyaghar-sidebar-section-title {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #94a3b8;
+  padding: 24px 20px 10px;
+  letter-spacing: 0.08em;
+}
+
+.hiyaghar-sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px;
+}
+
+.hiyaghar-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  color: #10243E;
+  text-decoration: none;
+  font-size: 0.92rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  /* Button reset */
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-family: inherit;
+}
+
+.hiyaghar-nav-link:hover {
+  background: #F7F5EF;
+  color: #D19A27;
+}
+
+.hiyaghar-nav-link.is-active {
+  background: rgba(209, 154, 39, 0.1);
+  color: #D19A27;
+  font-weight: 700;
+}
+
+.hiyaghar-nav-icon {
+  font-size: 1.2rem;
+}
+
+.hiyaghar-sidebar-footer {
+  margin-top: auto;
+  padding: 20px;
+  border-top: 1px solid #f1f5f9;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.hiyaghar-admin-content {
+  flex: 1;
+  padding: 32px;
+  min-width: 0;
+}
+
+.hiyaghar-sidebar-header-mobile {
+  display: none;
+}
+
+.hiyaghar-sidebar-backdrop {
+  display: none;
+}
+
+/* ============================================================
+   RESPONSIVE DESIGN (Tablets & Mobile Viewports)
+   ============================================================ */
+
+@media (max-width: 992px) {
+  .hiyaghar-admin-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-admin-topbar {
+    padding: 0 12px;
+    height: 60px;
+    gap: 8px;
+  }
+
+  .hiyaghar-topbar-left {
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .hiyaghar-sidebar-toggle {
+    font-size: 1.5rem;
+    padding: 6px 10px;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .hiyaghar-topbar-brand {
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .hiyaghar-topbar-brand .hiyaghar-topbar-logo {
+    height: 26px;
+    padding: 2px 6px;
+  }
+
+  .hiyaghar-topbar-title {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hiyaghar-topbar-title small {
+    display: none;
+  }
+
+  .hiyaghar-topbar-right {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .hiyaghar-user-details {
+    display: none !important;
+  }
+
+  .hiyaghar-user-badge {
+    padding: 0;
+    border: none;
+  }
+
+  .hiyaghar-user-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.9rem;
+    cursor: default;
+  }
+
+  .hiyaghar-store-btn,
+  .hiyaghar-admin-password-btn,
+  .hiyaghar-admin-logout-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    min-width: 38px !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .hiyaghar-store-btn span,
+  .hiyaghar-admin-password-btn span,
+  .hiyaghar-admin-logout-btn span {
+    display: none !important;
+  }
+
+  .hiyaghar-store-btn svg,
+  .hiyaghar-admin-password-btn svg,
+  .hiyaghar-admin-logout-btn svg {
+    display: block !important;
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0 !important;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  .hiyaghar-admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: -290px;
+    width: 280px !important;
+    height: 100vh;
+    max-height: 100vh;
+    z-index: 1050;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .hiyaghar-admin-sidebar.is-mobile-open {
+    left: 0;
+  }
+
+  .hiyaghar-sidebar-header-mobile {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #e8e2d3;
+    padding: 8px 12px;
+    background: #F7F5EF;
+  }
+
+  .hiyaghar-sidebar-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: #10243E;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  .hiyaghar-sidebar-close-btn:hover {
+    background: rgba(16, 36, 62, 0.1);
+  }
+
+  .hiyaghar-sidebar-backdrop {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(16, 36, 62, 0.45);
+    backdrop-filter: blur(2px);
+    z-index: 1040;
+    animation: fadeIn 0.2s ease;
+  }
+
+  .hiyaghar-admin-content {
+    padding: 14px 10px;
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

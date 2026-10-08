@@ -1,0 +1,447 @@
+/* ==========================================================================
+   TEA MASALA PAGE STYLES (MATCHES MUKHWAS PAGE DESIGN SYSTEM)
+   ========================================================================== */
+
+.hiyaghar-tea-masala-page-layout {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--hiya-cream, #FFFDF8);
+}
+
+.hiyaghar-tea-masala-detail-view {
+  padding: 40px 0 60px;
+}
+
+.hiyaghar-back-to-list-btn {
+  background: #FFFDF4;
+  border: 1.5px solid #E8DFC8;
+  color: var(--hiya-navy, #12243D);
+  padding: 10px 20px;
+  border-radius: 14px;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-back-to-list-btn:hover {
+  border-color: var(--hiya-gold, #D39B27);
+  color: var(--hiya-gold, #D39B27);
+}
+
+/* SINGLE PRODUCT SHOWCASE GRID */
+.hiyaghar-product-showcase-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 992px) {
+  .hiyaghar-product-showcase-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+.hiyaghar-gallery-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hiyaghar-main-image-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 2px solid #E8DFC8;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(18, 36, 61, 0.06);
+}
+
+.hiyaghar-showcase-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.hiyaghar-discount-badge {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  background: #C2410C;
+  color: #ffffff;
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.hiyaghar-product-info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.hiyaghar-category-tag {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--hiya-gold, #D39B27);
+  text-transform: uppercase;
+}
+
+.hiyaghar-product-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--hiya-navy, #12243D);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.hiyaghar-rating-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rating-stars {
+  color: #F59E0B;
+  font-size: 16px;
+}
+
+.rating-score {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--hiya-navy, #12243D);
+}
+
+.rating-reviews-count {
+  font-size: 13px;
+  color: #64748B;
+}
+
+.hiyaghar-product-tagline {
+  font-size: 15px;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* VARIANT SELECTOR CARD */
+.hiyaghar-variant-selector-card {
+  background: #ffffff;
+  border: 1.5px solid #E8DFC8;
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.variant-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.variant-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--hiya-navy, #12243D);
+}
+
+.variant-selected-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--hiya-gold, #D39B27);
+}
+
+.hiyaghar-variants-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.hiyaghar-variant-pill-card {
+  background: #FFFDF8;
+  border: 2px solid #E8DFC8;
+  border-radius: 16px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-variant-pill-card.is-selected {
+  border-color: var(--hiya-navy, #12243D);
+  background: var(--hiya-navy, #12243D);
+  box-shadow: 0 6px 20px rgba(18, 36, 61, 0.15);
+}
+
+.hiyaghar-variant-pill-card.is-selected .pill-weight,
+.hiyaghar-variant-pill-card.is-selected .pill-price {
+  color: #ffffff;
+}
+
+.hiyaghar-variant-pill-card.is-selected .pill-original {
+  color: #CBD5E1;
+}
+
+.pill-weight {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: var(--hiya-navy, #12243D);
+}
+
+.pill-price-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pill-price {
+  font-size: 16px;
+  font-weight: 900;
+  color: var(--hiya-navy, #12243D);
+}
+
+.pill-original {
+  font-size: 11px;
+  text-decoration: line-through;
+  color: #94A3B8;
+}
+
+/* PRICE DISPLAY BOX */
+.hiyaghar-price-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.price-main-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.current-price {
+  font-family: 'Manrope', sans-serif;
+  font-size: 34px;
+  font-weight: 900;
+  color: var(--hiya-navy, #12243D);
+}
+
+.mrp-price {
+  font-size: 18px;
+  text-decoration: line-through;
+  color: #94A3B8;
+}
+
+.save-badge {
+  background: #F0FDF4;
+  color: #15803D;
+  border: 1px solid #BBF7D0;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.tax-inclusive-text {
+  font-size: 12px;
+  color: #64748B;
+}
+
+/* ACTION BUTTONS */
+.hiyaghar-action-buttons-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.hiyaghar-qty-selector {
+  display: flex;
+  align-items: center;
+  border: 2px solid #E8DFC8;
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 4px;
+}
+
+.hiyaghar-qty-selector button {
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--hiya-navy, #12243D);
+  cursor: pointer;
+}
+
+.hiyaghar-qty-selector span {
+  width: 32px;
+  text-align: center;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.hiyaghar-add-to-cart-cta {
+  flex: 1;
+  background: var(--hiya-navy, #12243D);
+  color: #ffffff;
+  border: 2px solid var(--hiya-gold, #D39B27);
+  padding: 16px 24px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(18, 36, 61, 0.2);
+  transition: all 0.2s ease;
+}
+
+.hiyaghar-add-to-cart-cta:hover {
+  background: var(--hiya-gold, #D39B27);
+  box-shadow: 0 12px 30px rgba(211, 155, 39, 0.3);
+}
+
+/* KEY HIGHLIGHTS BOX */
+.hiyaghar-key-highlights-box {
+  background: #FFFDF4;
+  border: 1px solid #E8DFC8;
+  border-radius: 16px;
+  padding: 18px;
+}
+
+.hiyaghar-key-highlights-box h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--hiya-navy, #12243D);
+}
+
+.hiyaghar-key-highlights-box ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+  color: #475569;
+}
+
+/* SECTIONS COMMON */
+.hiyaghar-tea-ingredients-section,
+.hiyaghar-brewing-guide-section {
+  margin-bottom: 60px;
+}
+
+.section-title {
+  font-family: 'Manrope', sans-serif;
+  font-size: 28px;
+  font-weight: 900;
+  color: var(--hiya-navy, #12243D);
+  text-align: center;
+  margin: 0 0 6px 0;
+}
+
+.section-subtitle {
+  font-size: 14px;
+  color: #64748B;
+  text-align: center;
+  margin: 0 0 32px 0;
+}
+
+/* INGREDIENTS GRID */
+.hiyaghar-ingredients-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px;
+}
+
+.ingredient-card {
+  background: #ffffff;
+  border: 1.5px solid #E8DFC8;
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.ingredient-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--hiya-gold, #D39B27);
+  box-shadow: 0 8px 24px rgba(211, 155, 39, 0.12);
+}
+
+.ingredient-card .icon-wrapper {
+  font-size: 36px;
+  margin-bottom: 12px;
+}
+
+.ingredient-card h3 {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--hiya-navy, #12243D);
+  margin: 0 0 8px 0;
+}
+
+.ingredient-card p {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* BREWING GUIDE GRID */
+.brewing-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .brewing-steps-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.step-card {
+  background: #ffffff;
+  border: 1.5px solid #E8DFC8;
+  border-radius: 20px;
+  padding: 24px;
+  position: relative;
+}
+
+.step-num {
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--hiya-gold, #D39B27);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.step-card h4 {
+  font-size: 15px;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  color: var(--hiya-navy, #12243D);
+}
+
+.step-card p {
+  font-size: 13px;
+  color: #64748B;
+  margin: 0;
+  line-height: 1.5;
+}
