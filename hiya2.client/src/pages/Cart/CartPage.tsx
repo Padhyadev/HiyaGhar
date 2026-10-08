@@ -6,8 +6,6 @@ import type { CartItem } from '../../cart';
 import { CouponService } from '../../services/couponService';
 import type { CouponResult } from '../../services/couponService';
 import { SHIPPING_CONFIG } from '../../services/shippingService';
-import { mukhwasProducts } from '../../data/mukhwasData';
-import type { MukhwasProduct } from '../../data/mukhwasData';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { CustomerAuthService } from '../../services/customerAuthService';
@@ -94,31 +92,6 @@ export const CartPage: React.FC<CartPageProps> = ({
     setCouponInput('');
     showToast('Coupon code removed.');
   };
-
-  const handleAddAddonProduct = (e: React.MouseEvent<HTMLButtonElement>, product: MukhwasProduct) => {
-    const buttonEl = e.currentTarget;
-
-    const itemId = CartService.addItem({
-      productId: product.id,
-      name: product.name,
-      image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
-      weight: '250g',
-      quantity: 1,
-    });
-    if (!itemId) return; // blocked (not logged in) - CartService already showed why
-
-    triggerFlyingProductAnimation(buttonEl, itemId, () => {
-      showToast(`Added ${product.name} to your order!`);
-    });
-  };
-
-  // Recommended Products: Filter out items already in cart, pick max 4
-  const cartProductIds = cartItems.map((i) => i.productId);
-  const recommendedProducts = mukhwasProducts
-    .filter((p) => !cartProductIds.includes(p.id))
-    .slice(0, 4);
 
   // Financial Calculations
   const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0;
@@ -351,40 +324,6 @@ export const CartPage: React.FC<CartPageProps> = ({
                   )}
                 </div>
 
-                {/* 9. ADD-ON / RECOMMENDED PRODUCTS */}
-                {recommendedProducts.length > 0 && (
-                  <section className="hiyaghar-addons-section">
-                    <h3 className="hiyaghar-addons-title">Complete Your Order</h3>
-                    <p className="hiyaghar-addons-subtitle">Hand-picked artisanal pairings loved by our community</p>
-
-                    <div className="hiyaghar-addons-grid">
-                      {recommendedProducts.map((prod) => (
-                        <div key={prod.id} className="hiyaghar-addon-card">
-                          <img
-                            src={prod.image}
-                            alt={prod.name}
-                            className="hiyaghar-addon-img"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).src = '/image/HerosectionImage1.webp';
-                            }}
-                          />
-                          <div className="hiyaghar-addon-content">
-                            <h4 className="hiyaghar-addon-name">{prod.name}</h4>
-                            <span className="hiyaghar-addon-price">₹{prod.price}</span>
-                          </div>
-                          <button
-                            type="button"
-                            className="hiyaghar-addon-add-btn"
-                            onClick={(e) => handleAddAddonProduct(e, prod)}
-                            aria-label={`Add ${prod.name} to cart`}
-                          >
-                            + Add
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
-                )}
               </div>
 
               {/* RIGHT COLUMN — Sticky Order Summary Card */}
