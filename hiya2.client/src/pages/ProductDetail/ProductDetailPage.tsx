@@ -909,6 +909,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                           <input
                             type="checkbox"
                             checked={isSelected}
+                            onClick={(e) => e.stopPropagation()}
                             onChange={(e) => {
                               e.stopPropagation();
                               setSelectedFbtIds((prev) => ({
