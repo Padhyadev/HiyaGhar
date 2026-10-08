@@ -202,7 +202,7 @@ export const CategoryManagementPage: React.FC = () => {
               (e.target as HTMLImageElement).src = '/uploads/Noimage.png';
             }}
             alt={c.categoryName}
-            style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+            style={{ width: '44px', height: '44px', objectFit: 'contain', padding: '2px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
           />
           <div style={{ fontWeight: 700, color: '#0f172a' }}>{c.categoryName}</div>
         </div>

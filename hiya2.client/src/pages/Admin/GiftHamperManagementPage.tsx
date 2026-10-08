@@ -258,7 +258,7 @@ export const GiftHamperManagementPage: React.FC = () => {
             src={o.bannerImagePath || '/uploads/Noimage.png'}
             onError={(e) => { (e.target as HTMLImageElement).src = '/uploads/Noimage.png'; }}
             alt={o.name}
-            style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+            style={{ width: '44px', height: '44px', objectFit: 'contain', padding: '2px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
           />
           <div>
             <div style={{ fontWeight: 700, color: '#0f172a' }}>{o.name}</div>

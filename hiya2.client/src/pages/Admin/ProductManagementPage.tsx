@@ -752,7 +752,7 @@ export const ProductManagementPage: React.FC = () => {
               (e.target as HTMLImageElement).src = '/uploads/Noimage.png';
             }}
             alt={p.productName}
-            style={{ width: '44px', height: '44px', objectFit: 'cover', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+            style={{ width: '44px', height: '44px', objectFit: 'contain', padding: '2px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
           />
           <div style={{ fontWeight: 700, color: '#0f172a' }}>{p.productName}</div>
         </div>
@@ -1150,7 +1150,7 @@ export const ProductManagementPage: React.FC = () => {
                       <img
                         src={img.imagePath}
                         alt={`Product Image ${index + 1}`}
-                        style={{ width: '100%', height: '100px', objectFit: 'cover', borderRadius: '6px', marginBottom: '8px' }}
+                        style={{ width: '100%', height: '100px', objectFit: 'contain', padding: '4px', borderRadius: '6px', marginBottom: '8px', background: '#F7F3E9' }}
                       />
 
                       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
@@ -1899,7 +1899,7 @@ export const ProductManagementPage: React.FC = () => {
                           onError={(e) => {
                             (e.target as HTMLImageElement).src = '/uploads/Noimage.png';
                           }}
-                          style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '6px', border: '1px solid #e2e8f0' }}
+                          style={{ width: '40px', height: '40px', objectFit: 'contain', padding: '2px', borderRadius: '6px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
                         />
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ fontSize: '0.86rem', fontWeight: 700, color: '#0f172a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>

@@ -136,9 +136,9 @@
     gap: 10px;
   }
 
-  /* Hide back-to-top on mobile phones to prevent content obstruction */
+  /* Make back-to-top visible on mobile phones */
   .hiyaghar-floating-top-btn {
-    display: none;
+    display: flex;
   }
 
   .hiyaghar-floating-whatsapp-btn {

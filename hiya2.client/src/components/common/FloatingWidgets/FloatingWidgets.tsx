@@ -3,12 +3,14 @@ import { CartService } from '../../../cart';
 import type { CartItem } from '../../../cart';
 import '../../../cart.css';
 import './FloatingWidgets.css';
+import { ShippingService, type ShippingSettings } from '../../../services/shippingService';
 
 export const FloatingWidgets: React.FC = () => {
   const [showBackToTop, setShowBackToTop] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<CartItem[]>(CartService.getItems());
   const [cartCount, setCartCount] = useState<number>(CartService.getTotalCount());
   const [isPillVisible, setIsPillVisible] = useState<boolean>(CartService.isPillVisible());
+  const [storeSettings, setStoreSettings] = useState<ShippingSettings>(ShippingService.getSettings());
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,9 +25,21 @@ export const FloatingWidgets: React.FC = () => {
       setIsPillVisible(CartService.isPillVisible());
     });
 
+    ShippingService.loadSettingsFromApi().then((settings) => {
+      if (settings) {
+        setStoreSettings(settings);
+      }
+    });
+
+    const handleStorageChange = () => {
+      setStoreSettings(ShippingService.getSettings());
+    };
+    window.addEventListener('storage', handleStorageChange);
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       unsubscribeCart();
+      window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
 
@@ -36,7 +50,7 @@ export const FloatingWidgets: React.FC = () => {
     });
   };
 
-  const whatsappNumber = '919274443617';
+  const whatsappNumber = (storeSettings.contactPhone || '919274443617').replace(/[^0-9]/g, '');
   const whatsappMsg = encodeURIComponent('Hello HIYA Team! I have an enquiry.');
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${whatsappMsg}`;
 

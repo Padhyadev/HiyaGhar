@@ -823,7 +823,8 @@
 .hiyaghar-search-item-img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
+  padding: 4px; /* Optional: adds a slight breathing room inside the rounded box */
 }
 
 .hiyaghar-search-item-details {
