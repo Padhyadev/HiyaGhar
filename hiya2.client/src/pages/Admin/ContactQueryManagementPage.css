@@ -32,6 +32,7 @@
   padding: 4px;
   border-radius: 12px;
   gap: 4px;
+  flex-wrap: wrap;
 }
 
 .query-filter-tab {
@@ -44,6 +45,7 @@
   color: #64748B;
   cursor: pointer;
   transition: all 0.2s ease;
+  flex: 1 1 auto;
 }
 
 .query-filter-tab.active {
@@ -390,4 +392,25 @@
 
 .query-btn-primary:hover:not(:disabled) {
   background: #E2AD39;
+}
+
+/* Mobile: balanced 3 + 2 tab grid instead of a lone "Closed" row */
+@media (max-width: 640px) {
+  .contact-queries-filter-tabs {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .query-filter-tab {
+    grid-column: span 2;
+    padding: 9px 6px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+
+  .query-filter-tab:nth-child(n + 4) {
+    grid-column: span 3;
+  }
 }
