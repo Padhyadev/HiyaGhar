@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
-import { CartService, triggerFlyingProductAnimation } from '../../cart';
+import { CartService } from '../../cart';
 import type { CartItem } from '../../cart';
 import { CouponService } from '../../services/couponService';
 import type { CouponResult } from '../../services/couponService';
