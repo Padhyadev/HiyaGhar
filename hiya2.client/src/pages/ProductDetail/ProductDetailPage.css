@@ -939,9 +939,19 @@
     margin-top: 24px;
   }
 
+  /* Wrap tabs into a grid so every tab stays visible (no hidden horizontal scroll) */
+  .hiyaghar-detail-tabs-header {
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+
   .hiyaghar-tab-btn {
-    padding: 14px 18px;
+    flex: 1 1 50%;
+    padding: 13px 10px;
     font-size: 13px;
+    text-align: center;
+    white-space: normal;
+    box-sizing: border-box;
   }
 
   .hiyaghar-detail-tab-content {
