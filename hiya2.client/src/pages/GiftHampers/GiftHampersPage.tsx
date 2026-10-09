@@ -16,11 +16,32 @@ interface GiftHampersPageProps {
   onNavigateToDetail: (productId: string) => void;
 }
 
+function getDescriptiveHamperText(productName: string, shortDesc?: string): string {
+  if (shortDesc && shortDesc.trim() && shortDesc !== 'Curated gift hamper, handcrafted with care.') {
+    return shortDesc;
+  }
+  const name = productName.toLowerCase();
+  if (name.includes('soap')) {
+    return `Artisanal cold-processed soap gift pack, naturally formulated for radiant skin.`;
+  }
+  if (name.includes('tea') || name.includes('chai') || name.includes('masala')) {
+    return `Traditional aromatic tea masala blend packed in an elegant festive gift box.`;
+  }
+  if (name.includes('oil')) {
+    return `Pure Ayurvedic herbal hair nourish oil infused with 14 rare traditional herbs.`;
+  }
+  if (name.includes('mukhwas') || name.includes('paan') || name.includes('pan')) {
+    return `Handcrafted digestive mukhwas jar prepared with authentic royal ingredients.`;
+  }
+  return `Curated ${productName} gift set, thoughtfully handcrafted with festive packaging.`;
+}
+
 function mapApiToMukhwas(p: ApiGiftHamperProduct): MukhwasProduct {
   const defaultVariant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
   const weightOpts = p.variants?.map((v) => formatVariantLabel(v.variantName)) || [];
   const currentPrice = defaultVariant ? defaultVariant.price : p.basePrice;
   const origPrice = defaultVariant?.originalPrice || p.discountPrice || Math.round(currentPrice * 1.15);
+  const hamperDesc = getDescriptiveHamperText(p.productName, p.shortDescription);
 
   return {
     id: p.id.toString(),
@@ -34,8 +55,8 @@ function mapApiToMukhwas(p: ApiGiftHamperProduct): MukhwasProduct {
     reviewsCount: p.reviewCount || 0,
     image: p.mainImagePath || p.images?.[0]?.imagePath || '/image/HerosectionImage1.webp',
     secondaryImage: p.images?.[1]?.imagePath,
-    shortDescription: p.shortDescription || 'Curated gift hamper, handcrafted with care.',
-    longDescription: p.shortDescription || 'A thoughtfully curated hamper for every occasion.',
+    shortDescription: hamperDesc,
+    longDescription: hamperDesc,
     weightOptions: weightOpts.length > 0 ? weightOpts : ['Gift Box'],
     variants: p.variants || [],
     nutritionalInfo: { energy: '', carbs: '', protein: '', fat: '', fiber: '' },
@@ -119,26 +140,26 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
     return list;
   }, [filteredGifts, sortBy]);
 
-  const handleAddToCart = (product: MukhwasProduct, weight: string) => {
+  const handleAddToCart = (product: MukhwasProduct, weight: string, _qty: number = 1, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
       name: product.name,
       image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
+      price: typeof price === 'number' ? price : product.price,
+      originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
       weight: weight,
       quantity: 1,
     });
     showToast(`Added ${product.name} to your cart!`);
   };
 
-  const handleBuyNow = (product: MukhwasProduct, weight: string) => {
+  const handleBuyNow = (product: MukhwasProduct, weight: string, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
       name: product.name,
       image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
+      price: typeof price === 'number' ? price : product.price,
+      originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
       weight: weight,
       quantity: 1,
     });
@@ -159,7 +180,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
         <MukhwasHero
           onNavigateHome={onNavigateHome}
           title="Gift Hampers"
-          breadcrumbCurrent="Gifting"
+          breadcrumbCurrent="Gift Hampers"
           bgImage="/image/gifting_hero_banner.webp"
         />
 

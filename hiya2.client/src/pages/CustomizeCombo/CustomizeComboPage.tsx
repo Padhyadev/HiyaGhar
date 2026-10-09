@@ -319,13 +319,18 @@ export const CustomizeComboPage: React.FC<CustomizeComboPageProps> = ({ onNaviga
       return;
     }
 
+    const discountRatio = selectedPack.discountPercentage > 0 ? (1 - selectedPack.discountPercentage / 100) : 1;
+
     for (const item of selectedProducts) {
+      const discountedItemPrice = Math.max(1, Math.round(item.price * discountRatio));
+      const origPrice = item.originalPrice || item.price;
+
       const itemId = CartService.addItem({
         productId: item.id,
-        name: item.name,
+        name: `${item.name} (${selectedPack.name})`,
         image: item.image,
-        price: item.price,
-        originalPrice: item.originalPrice,
+        price: discountedItemPrice,
+        originalPrice: origPrice,
         weight: item.weight,
         quantity: 1,
       });
@@ -336,8 +341,8 @@ export const CustomizeComboPage: React.FC<CustomizeComboPageProps> = ({ onNaviga
       }
     }
 
-    showToast(`${selectedPack.name} (Total ₹${finalPrice}) added to your cart!`);
-    setTimeout(() => navigateTo('/cart'), 900);
+    showToast(`${selectedPack.name} (Total ₹${finalPrice}) added to your cart with ${selectedPack.discountPercentage}% OFF!`);
+    setTimeout(() => navigateTo('/cart'), 800);
   };
 
   return (
@@ -603,8 +608,8 @@ export const CustomizeComboPage: React.FC<CustomizeComboPageProps> = ({ onNaviga
                       <span className="hiyaghar-page-final-val">₹{finalPrice}</span>
                     </div>
 
-                    <p className="hiyaghar-page-savings-disclaimer">
-                      This is an estimated combo price. Items are added to your cart at their regular price — the discount shown here isn't applied at checkout yet.
+                    <p className="hiyaghar-page-savings-disclaimer" style={{ color: '#16a34a', fontWeight: 600 }}>
+                      ✓ {selectedPack.discountPercentage}% combo savings are automatically applied to your cart & checkout!
                     </p>
                   </div>
 

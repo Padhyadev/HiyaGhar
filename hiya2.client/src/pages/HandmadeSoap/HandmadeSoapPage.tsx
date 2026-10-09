@@ -141,26 +141,26 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
     return result;
   }, [productsList, selectedSort]);
 
-  const handleAddToCartCard = (product: SoapProduct, weight: string) => {
+  const handleAddToCartCard = (product: SoapProduct, weight: string, _qty: number = 1, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
       name: `${product.name} (${weight})`,
       image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
+      price: typeof price === 'number' ? price : product.price,
+      originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
       weight: weight,
       quantity: 1,
     });
     showToast(`Added ${product.name} (${weight}) to your cart!`);
   };
 
-  const handleBuyNowCard = (product: SoapProduct, weight: string) => {
+  const handleBuyNowCard = (product: SoapProduct, weight: string, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
       name: `${product.name} (${weight})`,
       image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
+      price: typeof price === 'number' ? price : product.price,
+      originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
       weight: weight,
       quantity: 1,
     });
@@ -220,8 +220,8 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
                         onNavigateToDetail={(id) => {
                           onNavigateToDetail(id);
                         }}
-                        onAddToCart={(prod, weight) => handleAddToCartCard(prod as any, weight)}
-                        onBuyNow={(prod, weight) => handleBuyNowCard(prod as any, weight)}
+                        onAddToCart={(prod, weight, qty, price, origPrice) => handleAddToCartCard(prod as any, weight, qty, price, origPrice)}
+                        onBuyNow={(prod, weight, price, origPrice) => handleBuyNowCard(prod as any, weight, price, origPrice)}
                       />
                     ))}
                   </div>
@@ -231,9 +231,69 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
             </div>
           </section>
 
-          <MukhwasTrustSection />
+          <MukhwasTrustSection
+            items={[
+              {
+                id: 'pure-oils',
+                title: 'Cold-Pressed Oils',
+                description: 'Crafted with virgin coconut oil, neem extracts & pure aloe vera',
+                icon: (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                    <path d="M9 12l2 2 4-4" />
+                  </svg>
+                ),
+              },
+              {
+                id: 'chemical-free',
+                title: '100% Chemical Free',
+                description: 'Free from parabens, SLS, silicones, and artificial foaming agents',
+                icon: (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                    <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                    <line x1="12" y1="22.08" x2="12" y2="12" />
+                  </svg>
+                ),
+              },
+              {
+                id: 'gentle',
+                title: 'Moisturizing & Gentle',
+                description: 'Retains natural glycerin for soft, nourished and hydrated skin',
+                icon: (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                  </svg>
+                ),
+              },
+              {
+                id: 'delivery',
+                title: 'Fast & Secure Delivery',
+                description: 'Freshly batched soaps delivered safely to your doorstep',
+                icon: (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="1" y="3" width="15" height="13" />
+                    <polygon points="16 8 20 8 23 11 23 16 16 16 8" />
+                    <circle cx="5.5" cy="18.5" r="2.5" />
+                    <circle cx="18.5" cy="18.5" r="2.5" />
+                  </svg>
+                ),
+              },
+            ]}
+          />
           <ExploreCategoriesSection />
-          <MukhwasCTASection onShopNowClick={() => navigateTo('/mukhwas')} />
+          <MukhwasCTASection
+            badge="Pure Ayurvedic Bathing"
+            heading="Explore Natural Handmade Soaps"
+            subtext="Handcrafted cold-process bathing bars enriched with natural plant extracts, herbal goodness, and restorative essential oils."
+            buttonText="Explore Soaps"
+            mainImage="/image/Banner_image/Soap.webp"
+            onShopNowClick={() => {
+              if (productGridRef.current) {
+                productGridRef.current.scrollIntoView({ behavior: 'smooth' });
+              }
+            }}
+          />
         </div>
       </main>
 

@@ -1,8 +1,19 @@
 import React from 'react';
 import './MukhwasTrustSection.css';
 
-export const MukhwasTrustSection: React.FC = () => {
-  const trustItems = [
+interface TrustItem {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+}
+
+interface MukhwasTrustSectionProps {
+  items?: TrustItem[];
+}
+
+export const MukhwasTrustSection: React.FC<MukhwasTrustSectionProps> = ({ items }) => {
+  const defaultTrustItems: TrustItem[] = [
     {
       id: 'ingredients',
       title: 'Fresh & Quality Ingredients',
@@ -50,6 +61,8 @@ export const MukhwasTrustSection: React.FC = () => {
       ),
     },
   ];
+
+  const trustItems = items && items.length > 0 ? items : defaultTrustItems;
 
   return (
     <section className="hiyaghar-mukhwas-trust-section" aria-label="Quality and Trust Guarantee">

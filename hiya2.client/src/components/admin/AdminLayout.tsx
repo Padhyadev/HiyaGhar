@@ -4,6 +4,7 @@ import { usePermission } from '../../context/PermissionContext';
 import { MenuIcon, getMenuIconClass } from '../../utils/iconUtils';
 import { showToast } from '../../utils/alertService';
 import './AdminLayout.css';
+import '../../pages/Admin/RoleManagementPage.css'
 
 interface AdminNavItem {
   key: string;

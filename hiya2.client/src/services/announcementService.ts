@@ -16,7 +16,7 @@ export const DEFAULT_ANNOUNCEMENTS: AnnouncementItem[] = [
   },
   {
     id: 'ann_2',
-    text: 'GET FLAT 10% OFF ON FIRST ORDER • USE CODE: WELCOME10',
+    text: 'FLAT 10% OFF ON ORDERS ABOVE ₹500 • CODE: WELCOME10',
     isActive: true,
     displayOrder: 2,
   },

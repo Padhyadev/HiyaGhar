@@ -33,10 +33,24 @@ export function formatVariantLabel(raw?: string | null): string {
       ) {
         return '';
       }
+      // If the value is a pure number (e.g. "150"), append 'g' for consistent weight formatting
+      if (/^\d+$/.test(val)) {
+        return `${val} g`;
+      }
       return val;
     })
     .filter((v) => v.length > 0)
     .join(' • ');
 
   return formatted;
+}
+
+export function toProductSlug(name?: string | null, id?: string | number): string {
+  if (!name) return id ? String(id) : '';
+  const clean = name
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '') // remove special characters
+    .trim()
+    .replace(/\s+/g, '-'); // replace spaces with hyphens
+  return clean || String(id || '');
 }

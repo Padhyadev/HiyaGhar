@@ -54,11 +54,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
                   </ol>
                 </nav>
 
-                <span className="hiyaghar-story-hero-eyebrow">OUR HERITAGE, HEART & CRAFT</span>
-                <h1 className="hiyaghar-story-hero-title">Every Goodness Has A Heartfelt Story.</h1>
-                <p className="hiyaghar-story-hero-subtitle">
-                  At <strong>HIYA GHAR</strong>, we believe the purest culinary joys and digestive wellness come from authentic family traditions, slow-crafted methods, and 100% natural, honest ingredients.
-                </p>
+                <h1 className="hiyaghar-story-hero-title">Every Good Thing Has a Heartfelt Story.</h1>
               </ScrollReveal>
             </div>
           </div>
@@ -118,7 +114,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
 
             <ScrollReveal variant="fade-left" className="hiyaghar-story-text-wrap">
               <span className="hiyaghar-story-tag">OUR ROOTS</span>
-              <h2 className="hiyaghar-story-heading">Born from an Ahmedabad Home Kitchen</h2>
+              <h2 className="hiyaghar-story-heading">Born in an Ahmedabad Home Kitchen</h2>
               <p className="hiyaghar-story-para">
                 Hiya Ghar was born out of a simple observation and an enduring longing for purity. In modern Indian households, the cherished tradition of having a genuine, wholesome digestive mouth freshener (mukhwas) after meals was slowly being overtaken by factory-made, sugary confectionery and chemically treated commercial alternatives.
               </p>

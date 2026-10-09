@@ -54,7 +54,7 @@ const FAQ_DATA: FaqItem[] = [
     category: 'orders',
     question: 'How long will it take to receive my order?',
     answer:
-      'Orders are usually packed and dispatched within 24–48 hours. Delivery across major metro cities takes 2–4 business days, and 4–7 business days for other locations across India.',
+      'Orders placed before 1:00 PM are dispatched on the same business day (or within 24 hours). Standard delivery takes 3–5 business days, and Express Air delivery takes 1–2 business days across India.',
   },
   {
     id: 'ord-2',
@@ -136,39 +136,65 @@ export const FaqPage: React.FC = () => {
       <Header />
 
       <main id="main-content" tabIndex={-1} className="hiyaghar-faq-main">
-        {/* HERO BANNER */}
-        <section className="hiyaghar-faq-hero">
-          <div className="hiyaghar-faq-hero-inner">
-            <span className="hiyaghar-faq-badge">Help & Support</span>
-            <h1 className="hiyaghar-faq-title">Frequently Asked Questions</h1>
-            <p className="hiyaghar-faq-subtitle">
-              Everything you need to know about our handcrafted products, ingredients, shipping, and custom gifting.
-            </p>
+        {/* HERO BANNER WITH BACKGROUND IMAGE */}
+        <section className="hiyaghar-faq-hero" aria-label="FAQ Hero Banner">
+          <div className="hiyaghar-faq-hero-card">
+            {/* Background Image */}
+            <img
+              className="hiyaghar-faq-hero-bg"
+              src="/image/our_story_heritage_kitchen.webp"
+              alt="HIYAGHAR handcrafted wellness & FAQ support banner"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+            <div className="hiyaghar-faq-hero-overlay" />
 
-            {/* SEARCH BAR */}
-            <div className="hiyaghar-faq-search-box">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              </svg>
-              <input
-                type="text"
-                className="hiyaghar-faq-search-input"
-                aria-label="Search frequently asked questions"
-                placeholder="Search questions (e.g., mukhwas, shipping, gift hamper)..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-              {searchQuery && (
-                <button
-                  type="button"
-                  className="hiyaghar-faq-clear-btn"
-                  onClick={() => setSearchQuery('')}
-                  aria-label="Clear search"
-                >
-                  ✕
-                </button>
-              )}
+            <div className="hiyaghar-faq-hero-inner">
+              {/* Breadcrumb Navigation */}
+              <nav className="hiyaghar-faq-banner-breadcrumb" aria-label="Breadcrumb">
+                <ol className="hiyaghar-faq-breadcrumb-list">
+                  <li>
+                    <a href="#/" onClick={(e) => { e.preventDefault(); navigateTo('/'); }}>
+                      Home
+                    </a>
+                  </li>
+                  <li className="sep">/</li>
+                  <li className="current">FAQs</li>
+                </ol>
+              </nav>
+
+              <span className="hiyaghar-faq-badge">HELP & SUPPORT CENTER</span>
+              <h1 className="hiyaghar-faq-title">Frequently Asked Questions</h1>
+              <p className="hiyaghar-faq-subtitle">
+                Everything you need to know about our handcrafted products, ingredients, shipping, and custom gifting.
+              </p>
+
+              {/* SEARCH BAR */}
+              <div className="hiyaghar-faq-search-box">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="11" cy="11" r="8" />
+                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                </svg>
+                <input
+                  type="text"
+                  className="hiyaghar-faq-search-input"
+                  aria-label="Search frequently asked questions"
+                  placeholder="Search questions (e.g. shipping, mukhwas)..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    className="hiyaghar-faq-clear-btn"
+                    onClick={() => setSearchQuery('')}
+                    aria-label="Clear search"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </section>

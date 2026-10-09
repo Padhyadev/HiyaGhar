@@ -16,6 +16,8 @@
    ========================================================================== */
 .hiyaghar-story-hero-banner {
   width: 100%;
+  margin-top: -88px;
+  margin-bottom: clamp(28px, 4vw, 40px);
   padding: 0;
   position: relative;
   z-index: 1;
@@ -24,17 +26,16 @@
 .hiyaghar-story-hero-banner-card {
   position: relative;
   width: 100%;
-  /* Height follows the banner image ratio (1664x894 ≈ 100/53.7) so the
-     background image fits whole on every screen without awkward cropping.
-     min-height keeps content safe; box still grows if content is taller. */
-  min-height: clamp(420px, 53.7vw, 100vh);
-  padding: 60px 24px 70px;
+  min-height: 430px;
+  padding-top: 96px;
+  padding-bottom: 50px;
   background: linear-gradient(135deg, #11223A 0%, #1A365D 50%, #0F172A 100%);
+  border-radius: 0 0 32px 32px;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 16px 40px rgba(17, 34, 58, 0.12);
+  box-shadow: 0 16px 40px rgba(17, 34, 58, 0.16);
 }
 
 .hiyaghar-story-hero-banner-card::before {
@@ -466,17 +467,14 @@
   }
 
   .hiyaghar-story-hero-banner-card {
+    min-height: 320px;
     padding-top: 80px;
-    padding-bottom: 40px;
+    padding-bottom: 36px;
     border-radius: 0 0 24px 24px;
   }
 
-  /* The banner art is 1664x894 (~1.86:1). On narrow screens the card is far
-     taller than that ratio (content + header clearance), so `cover` slices a
-     large part off the sides of the image. `contain` keeps the complete
-     banner visible; the card's navy gradient fills the space above/below it. */
   .hiyaghar-story-hero-banner-bg {
-    object-fit: contain;
+    object-fit: cover;
     object-position: center;
   }
 
