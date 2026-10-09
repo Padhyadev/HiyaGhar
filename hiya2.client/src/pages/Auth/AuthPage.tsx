@@ -341,7 +341,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
   };
 
   return (
-    <div className={`hiyaghar-auth-split-wrapper ${mode === 'signup' ? 'is-signup-layout' : ''} ${isAnimating ? 'is-animating' : ''}`}>
+    <main id="main-content" tabIndex={-1} className={`hiyaghar-auth-split-wrapper ${mode === 'signup' ? 'is-signup-layout' : ''} ${isAnimating ? 'is-animating' : ''}`}>
       {/* Back to Store Top Button */}
       <button
         type="button"
@@ -826,6 +826,6 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 };

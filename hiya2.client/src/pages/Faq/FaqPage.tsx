@@ -145,7 +145,7 @@ export const FaqPage: React.FC = () => {
 
       <Header />
 
-      <main className="hiyaghar-faq-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-faq-main">
         {/* HERO BANNER */}
         <section className="hiyaghar-faq-hero">
           <div className="hiyaghar-faq-hero-inner">
@@ -164,6 +164,7 @@ export const FaqPage: React.FC = () => {
               <input
                 type="text"
                 className="hiyaghar-faq-search-input"
+                aria-label="Search frequently asked questions"
                 placeholder="Search questions (e.g., mukhwas, shipping, gift hamper)..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

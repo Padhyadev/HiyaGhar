@@ -134,7 +134,7 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
       {/* Global Brand Header */}
       <Header />
 
-      <main className="hiyaghar-mukhwas-page-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-mukhwas-page-main">
         {/* 1. Hero / Page Header */}
         <MukhwasHero
           onNavigateHome={onNavigateHome}

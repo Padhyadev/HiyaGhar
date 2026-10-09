@@ -173,7 +173,7 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
     <div className="hiyaghar-mukhwas-page-layout hiyaghar-tea-masala-page-layout">
       <Header />
 
-      <main className="hiyaghar-mukhwas-page-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-mukhwas-page-main">
         <div className="hiyaghar-tea-masala-listing-view animate-fade-in">
           <MukhwasHero
             onNavigateHome={onNavigateHome}

@@ -27,7 +27,11 @@ const PermissionContext = createContext<PermissionContextType>({
   refreshPermissions: () => {},
 });
 
-export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+// syncEnabled: only the admin area uses menu permissions, so storefront pages skip the API sync.
+export const PermissionProvider: React.FC<{ children: React.ReactNode; syncEnabled?: boolean }> = ({
+  children,
+  syncEnabled = true,
+}) => {
   const [permissions, setPermissions] = useState<PermissionsMap>(AdminAuthService.getPermissions());
 
   const refreshPermissions = () => {
@@ -38,10 +42,10 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const unsub = AdminAuthService.subscribe(refreshPermissions);
 
     const syncPermissionsFromApi = async () => {
-      if (!AdminAuthService.isAuthenticated()) return;
+      if (!syncEnabled || !AdminAuthService.isAuthenticated()) return;
       try {
-        const user = AdminAuthService.getUser();
-        const res = await fetch(`/api/auth/menu-permissions?userId=${user?.userId || 0}`, {
+        // No userId query param: the server resolves the user from the bearer token's claims.
+        const res = await fetch('/api/auth/menu-permissions', {
           headers: AdminAuthService.getAuthHeaders(),
         });
         if (res.ok) {
@@ -84,7 +88,7 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return () => {
       unsub();
     };
-  }, []);
+  }, [syncEnabled]);
 
   const hasPermission = (menuKey: string, action: keyof ActionPermissions = 'canView'): boolean => {
     if (!menuKey) return true;

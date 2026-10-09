@@ -171,7 +171,7 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
     <div className="hiyaghar-mukhwas-page-layout hiyaghar-handmade-soap-page-layout">
       <Header />
 
-      <main className="hiyaghar-mukhwas-page-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-mukhwas-page-main">
         <div className="hiyaghar-handmade-soap-listing-view animate-fade-in">
           <MukhwasHero
             onNavigateHome={onNavigateHome}

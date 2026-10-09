@@ -153,7 +153,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
       {/* Global Header */}
       <Header />
 
-      <main className="hiyaghar-gift-hampers-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-gift-hampers-main">
 
         {/* 1. HERO BANNER */}
         <MukhwasHero

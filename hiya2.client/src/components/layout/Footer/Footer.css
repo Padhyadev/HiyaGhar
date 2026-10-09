@@ -261,6 +261,17 @@
   text-align: center;
 }
 
+/* Email / phone links keep the existing text look */
+.hiyaghar-footer-contact-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hiyaghar-footer-contact-link:hover,
+.hiyaghar-footer-contact-link:focus-visible {
+  text-decoration: underline;
+}
+
 /* Right Copyright Info */
 .hiyaghar-footer-right-info {
   flex: 1;

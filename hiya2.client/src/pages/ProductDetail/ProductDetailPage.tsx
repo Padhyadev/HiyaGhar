@@ -63,6 +63,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const isVariantInStock = (v: any) =>
     v && (typeof v.sellableStock === 'number' ? v.sellableStock > 0 : (typeof v.stockQuantity === 'number' ? v.stockQuantity > 0 : true));
 
+  // Bundle items are added with their default (or first) variant, so that variant must be in stock.
+  const isCrossSellInStock = (p: ApiProduct) => {
+    const v = p.variants?.find((x) => x.isDefault) || p.variants?.[0];
+    return !v || isVariantInStock(v);
+  };
+
   useEffect(() => {
     if (isNumericId) {
       ProductService.getProductById(numericId).then((apiProd: ApiProduct | null) => {
@@ -155,7 +161,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
           if (customIds.length > 0) {
             // Use Admin's exact hand-picked products
-            pickedItems = (liveProducts || []).filter((p) => customIds.includes(p.id) && p.isActive && p.id.toString() !== currentIdStr);
+            pickedItems = (liveProducts || []).filter((p) => customIds.includes(p.id) && p.isActive && isCrossSellInStock(p) && p.id.toString() !== currentIdStr);
           }
 
           // If no admin-picked items (or fewer than 2), fill with smart live recommendation
@@ -164,7 +170,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             const pickedIds = new Set(pickedItems.map((p) => p.id));
             const autoCandidates = (liveProducts || []).filter((p) => {
               const pIdStr = p.id.toString();
-              return p.isActive && pIdStr !== currentIdStr && !pickedIds.has(p.id);
+              return p.isActive && isCrossSellInStock(p) && pIdStr !== currentIdStr && !pickedIds.has(p.id);
             });
             pickedItems = [...pickedItems, ...autoCandidates.slice(0, remainingNeeded)];
           }
@@ -215,7 +221,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
       ProductService.getProducts().then((liveProducts) => {
         const currentIdStr = productId.toString();
-        const autoCandidates = (liveProducts || []).filter((p) => p.isActive && p.id.toString() !== currentIdStr);
+        const autoCandidates = (liveProducts || []).filter((p) => p.isActive && isCrossSellInStock(p) && p.id.toString() !== currentIdStr);
         const picks = autoCandidates.slice(0, 2).map((item) => {
           const defVar = item.variants?.find((v) => v.isDefault) || item.variants?.[0];
           const vPrice = defVar ? defVar.price : (item.discountPrice || item.basePrice || 199);
@@ -563,7 +569,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     <div className="hiyaghar-product-detail-layout">
       <Header />
 
-      <main className="hiyaghar-product-detail-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-product-detail-main">
         {isLoadingProduct ? (
           <div className="hiyaghar-container">
             <div className="hiyaghar-detail-hero-grid">
@@ -791,30 +797,44 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </div>
 
               {/* Action Buttons */}
+              {/* Exactly one state: a single disabled "Out of Stock" button, or Add to Cart + Buy Now */}
               <div className="hiyaghar-detail-actions-row">
-                <button
-                  type="button"
-                  className="hiyaghar-detail-btn-cart"
-                  onClick={handleAddToCart}
-                  disabled={!isCombinationAvailable || isOutOfStock || isAllInCart}
-                  style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="9" cy="21" r="1"></circle>
-                    <circle cx="20" cy="21" r="1"></circle>
-                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                  </svg>
-                  {isOutOfStock ? 'Out of Stock' : isAllInCart ? 'In Cart (Max Limit)' : 'Add to Cart'}
-                </button>
+                {isOutOfStock ? (
+                  <button
+                    type="button"
+                    className="hiyaghar-detail-btn-cart"
+                    disabled
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                  >
+                    Out of Stock
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      type="button"
+                      className="hiyaghar-detail-btn-cart"
+                      onClick={handleAddToCart}
+                      disabled={!isCombinationAvailable || isAllInCart}
+                      style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="9" cy="21" r="1"></circle>
+                        <circle cx="20" cy="21" r="1"></circle>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                      </svg>
+                      {isAllInCart ? 'In Cart (Max Limit)' : 'Add to Cart'}
+                    </button>
 
-                <button
-                  type="button"
-                  className="hiyaghar-detail-btn-buy"
-                  onClick={handleBuyNow}
-                  disabled={!isCombinationAvailable || isOutOfStock}
-                >
-                  {isOutOfStock ? 'Unavailable' : 'Buy Now'}
-                </button>
+                    <button
+                      type="button"
+                      className="hiyaghar-detail-btn-buy"
+                      onClick={handleBuyNow}
+                      disabled={!isCombinationAvailable}
+                    >
+                      Buy Now
+                    </button>
+                  </>
+                )}
               </div>
 
               {/* Trust Micro Badges */}
@@ -853,7 +873,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           </div>
 
           {/* Frequently Bought Together / Cross-Sell Bundle Section */}
-          {fbtCrossSells.length > 0 && (
+          {/* The bundle always includes this item, so hide it (and its "Add N Items to Cart") when out of stock */}
+          {fbtCrossSells.length > 0 && !isOutOfStock && (
             <section className="hiyaghar-fbt-section" aria-label="Frequently Bought Together">
               <div className="hiyaghar-fbt-header">
                 <span className="hiyaghar-fbt-badge">Curated Bundle & Save</span>
@@ -965,7 +986,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     type="button"
                     className="hiyaghar-fbt-add-btn"
                     onClick={handleAddFbtBundleToCart}
-                    disabled={isOutOfStock}
+                    disabled={!isCombinationAvailable || isOutOfStock || isAllInCart}
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="9" cy="21" r="1"></circle>

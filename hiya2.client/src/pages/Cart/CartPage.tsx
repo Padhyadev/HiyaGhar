@@ -114,7 +114,7 @@ export const CartPage: React.FC<CartPageProps> = ({
     <div className="hiyaghar-cart-page-layout">
       <Header />
 
-      <main className="hiyaghar-cart-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-cart-main">
         {/* Subtle Non-Intrusive Toast Banner */}
         {toastMessage && (
           <div className="hiyaghar-cart-toast" role="status" aria-live="polite">

@@ -647,7 +647,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     <div className="hiyaghar-checkout-page-layout">
       <Header />
 
-      <main className="hiyaghar-checkout-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-checkout-main">
         <MukhwasHero
           onNavigateHome={onNavigateHome}
           breadcrumbCurrent="Checkout"

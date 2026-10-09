@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { CustomerAuthService } from '../../services/customerAuthService';
@@ -544,9 +545,13 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
         </div>
       )}
 
+      <Helmet>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
+
       <Header />
 
-      <main className="hiyaghar-profile-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-profile-main">
         <MukhwasHero
           onNavigateHome={onNavigateHome}
           breadcrumbCurrent="My Account"
@@ -680,8 +685,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                   <form onSubmit={handleSaveProfile} className="hiyaghar-profile-form">
                     <div className="hiyaghar-form-grid-2col">
                       <div className="hiyaghar-field-group">
-                        <label>First Name *</label>
+                        <label htmlFor="profile-first-name">First Name *</label>
                         <input
+                          id="profile-first-name"
                           type="text"
                           disabled={!isEditingProfile}
                           value={profileForm.firstName}
@@ -691,8 +697,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                       </div>
 
                       <div className="hiyaghar-field-group">
-                        <label>Last Name *</label>
+                        <label htmlFor="profile-last-name">Last Name *</label>
                         <input
+                          id="profile-last-name"
                           type="text"
                           disabled={!isEditingProfile}
                           value={profileForm.lastName}
@@ -702,8 +709,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                       </div>
 
                       <div className="hiyaghar-field-group">
-                        <label>Email Address *</label>
+                        <label htmlFor="profile-email">Email Address *</label>
                         <input
+                          id="profile-email"
                           type="email"
                           disabled={!isEditingProfile}
                           value={profileForm.email}
@@ -713,8 +721,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                       </div>
 
                       <div className="hiyaghar-field-group">
-                        <label>Mobile Number *</label>
+                        <label htmlFor="profile-phone">Mobile Number *</label>
                         <input
+                          id="profile-phone"
                           type="tel"
                           disabled={!isEditingProfile}
                           value={profileForm.phone}
@@ -724,8 +733,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                       </div>
 
                       <div className="hiyaghar-field-group full-width">
-                        <label>Gender</label>
+                        <label htmlFor="profile-gender">Gender</label>
                         <select
+                          id="profile-gender"
                           disabled={!isEditingProfile}
                           value={profileForm.gender}
                           onChange={(e) => setProfileForm({ ...profileForm, gender: e.target.value as any })}

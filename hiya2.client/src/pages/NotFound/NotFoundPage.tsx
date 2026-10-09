@@ -13,7 +13,7 @@ export const NotFoundPage: React.FC = () => {
         <meta name="description" content="The page you are looking for does not exist or has been moved." />
       </Helmet>
       <Header />
-      <main className="hiyaghar-notfound-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-notfound-main">
         <div className="hiyaghar-notfound-card">
           <div className="hiyaghar-notfound-code">404</div>
           <h1 className="hiyaghar-notfound-title">Oops! Page Not Found</h1>

@@ -42,7 +42,7 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
     <div className="hiyaghar-wishlist-page-layout">
       <Header />
 
-      <main className="hiyaghar-wishlist-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-wishlist-main">
 
         <MukhwasHero
           onNavigateHome={onNavigateHome}

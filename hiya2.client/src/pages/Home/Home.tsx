@@ -15,7 +15,7 @@ export const Home: React.FC = () => {
   return (
     <div className="hiyaghar-home-layout">
       <Header />
-      <main className="hiyaghar-home-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-home-main">
         <Hero />
         {/* 1. Category Section (EXPLORE CATEGORIES / Squeeze in Some Goodness) */}
         <BestSellersSection componentKey="Category" />

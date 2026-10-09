@@ -180,7 +180,7 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
     <div className="hiyaghar-mukhwas-page-layout hiyaghar-hair-oil-page-layout">
       <Header />
 
-      <main className="hiyaghar-mukhwas-page-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-mukhwas-page-main">
         <div className="hiyaghar-hair-oil-listing-view animate-fade-in">
           <MukhwasHero
             onNavigateHome={onNavigateHome}

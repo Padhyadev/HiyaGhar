@@ -189,7 +189,19 @@ export const Header: React.FC = () => {
   return (
     <header className="hiyaghar-header-wrapper">
       {/* Skip to Main Content Link for Accessibility */}
-      <a href="#main-content" className="hiyaghar-skip-link">
+      {/* Focus <main> directly: a plain "#main-content" hash change would trigger the
+          app's hashchange routing (scroll-to-top, profile tab reset) instead. */}
+      <a
+        href="#main-content"
+        className="hiyaghar-skip-link"
+        onClick={(e) => {
+          const main = document.getElementById('main-content');
+          if (!main) return;
+          e.preventDefault();
+          main.focus();
+          main.scrollIntoView({ block: 'start' });
+        }}
+      >
         Skip to main content
       </a>
 

@@ -80,7 +80,7 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({
     <div className="hiyaghar-track-page-layout">
       <Header />
 
-      <main className="hiyaghar-track-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-track-main">
         {/* Subtle Toast Banner */}
         {toastMessage && (
           <div className="hiyaghar-track-toast" role="status">

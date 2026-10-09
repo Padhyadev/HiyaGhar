@@ -4,6 +4,14 @@ import { navigateTo } from '../../../utils/navigation';
 import { ShippingService, type ShippingSettings } from '../../../services/shippingService';
 import './Footer.css';
 
+// "+91 92744 43617" / "9274443617" / "09274443617" -> "+919274443617"
+const toTelHref = (phone: string): string => {
+  const digits = phone.replace(/\D/g, '');
+  if (digits.length === 10) return `+91${digits}`;
+  if (digits.length === 11 && digits.startsWith('0')) return `+91${digits.slice(1)}`;
+  return `+${digits}`;
+};
+
 export const Footer: React.FC = () => {
   const [storeSettings, setStoreSettings] = useState<ShippingSettings>(() => ShippingService.getSettings());
 
@@ -56,6 +64,7 @@ export const Footer: React.FC = () => {
       links: [
         { label: 'Track Order', type: 'route', href: '/track-order' },
         { label: 'Shipping Policy', type: 'route', href: '/shipping-policy' },
+        // NOTE: "Returns & Refunds" and "Cancellation Policy" (below) both point to /refund-policy - pending decision.
         { label: 'Returns & Refunds', type: 'route', href: '/refund-policy' },
         { label: 'My Account', type: 'route', href: '/profile' },
       ],
@@ -129,6 +138,8 @@ export const Footer: React.FC = () => {
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
             </a>
+            {/* TODO(brand): replace with the official HIYAGHAR Facebook page URL (e.g. facebook.com/<brand-handle>).
+                The current link is a generic profile.php?id= personal-profile URL. Do not guess. */}
             <a
               href="https://www.facebook.com/profile.php?id=61593338044762"
               target="_blank"
@@ -140,6 +151,8 @@ export const Footer: React.FC = () => {
                 <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
               </svg>
             </a>
+            {/* TODO(brand): add a YouTube link here once the official HIYAGHAR channel URL is supplied
+                (same markup as the Instagram/Facebook buttons above, aria-label="YouTube"). */}
           </ScrollReveal>
 
           {/* Center Brand Logo & Trust Signals */}
@@ -153,12 +166,20 @@ export const Footer: React.FC = () => {
             )}
             <p className="hiyaghar-footer-contact-brief">
               {[
-                storeSettings.contactEmail,
-                storeSettings.contactPhone,
-                storeSettings.contactAddress,
+                storeSettings.contactEmail && (
+                  <a key="email" href={`mailto:${storeSettings.contactEmail.trim()}`} className="hiyaghar-footer-contact-link">
+                    {storeSettings.contactEmail}
+                  </a>
+                ),
+                storeSettings.contactPhone && (
+                  <a key="phone" href={`tel:${toTelHref(storeSettings.contactPhone)}`} className="hiyaghar-footer-contact-link">
+                    {storeSettings.contactPhone}
+                  </a>
+                ),
+                storeSettings.contactAddress && <span key="address">{storeSettings.contactAddress}</span>,
               ]
                 .filter(Boolean)
-                .join(' | ')}
+                .flatMap((item, i) => (i === 0 ? [item] : [' | ', item]))}
             </p>
           </ScrollReveal>
 

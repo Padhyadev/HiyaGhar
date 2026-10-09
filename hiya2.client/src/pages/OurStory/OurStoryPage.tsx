@@ -22,7 +22,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
   return (
     <div className="hiyaghar-story-page-wrapper">
       <Header />
-      <main className="hiyaghar-story-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-story-main">
         {/* PREMIUM HERO BANNER WITH BACKGROUND PICTURE */}
         <section className="hiyaghar-story-hero-banner" aria-label="Our Story Hero Banner">
           <div className="hiyaghar-story-hero-banner-card">

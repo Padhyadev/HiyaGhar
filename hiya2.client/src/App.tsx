@@ -87,6 +87,18 @@ function getNormalizedRoute(): string {
   return current || '/';
 }
 
+const ACCOUNT_TABS = ['profile', 'orders', 'addresses', 'password', 'account', 'rewards', 'reward', 'coins'];
+
+function isAccountRoute(route: string): boolean {
+  return (
+    ACCOUNT_TABS.includes(route.replace(/^\//, '')) ||
+    route.startsWith('/profile') ||
+    route.startsWith('/orders') ||
+    route.startsWith('/rewards') ||
+    route.startsWith('/reward')
+  );
+}
+
 function App() {
   const [currentRoute, setCurrentRoute] = useState<string>(getNormalizedRoute());
 
@@ -202,6 +214,17 @@ function App() {
       window.removeEventListener('hashchange', handleLocationChange);
     };
   }, []);
+
+  // Signed-out visitors on an account route are sent to the sign-in route, returning here after login.
+  useEffect(() => {
+    const lower = currentRoute.toLowerCase();
+    // The pathname check also skips a repeat run (StrictMode) after the URL was already replaced.
+    if (!isAccountRoute(lower) || !isAccountRoute(window.location.pathname.toLowerCase()) || CustomerAuthService.isLoggedIn()) return;
+    const returnTo = window.location.pathname + window.location.hash;
+    window.history.replaceState(null, '', `/login?redirect=${encodeURIComponent(returnTo)}`);
+    // Re-runs the popstate handler so the route state and page title/meta follow the new URL.
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }, [currentRoute]);
 
   const navigateTo = (target: string) => {
     let clean = target;
@@ -780,15 +803,8 @@ function App() {
     }
 
     // PROFILE / ACCOUNT ROUTES
-    const accountTabs = ['profile', 'orders', 'addresses', 'password', 'account', 'rewards', 'reward', 'coins'];
     const cleanTab = route.replace(/^\//, '');
-    if (
-      accountTabs.includes(cleanTab) ||
-      route.startsWith('/profile') ||
-      route.startsWith('/orders') ||
-      route.startsWith('/rewards') ||
-      route.startsWith('/reward')
-    ) {
+    if (isAccountRoute(route)) {
       const mainTab: 'profile' | 'orders' | 'addresses' | 'password' | 'rewards' =
         cleanTab.startsWith('orders')
           ? 'orders'
@@ -799,6 +815,17 @@ function App() {
           : cleanTab === 'password'
           ? 'password'
           : 'profile';
+
+      // Signed-out visitors go straight to sign-in; ProfilePage is never mounted, so its
+      // authenticated API calls (addresses, LOV, orders) never fire and 401.
+      if (!CustomerAuthService.isLoggedIn()) {
+        return (
+          <AuthPage
+            initialMode="login"
+            onNavigateHome={handleNavigateHome}
+          />
+        );
+      }
 
       return (
         <ProfilePage
@@ -843,7 +870,7 @@ function App() {
   };
 
   return (
-    <PermissionProvider>
+    <PermissionProvider syncEnabled={currentRoute.toLowerCase().startsWith('/admin')}>
       <Preloader />
       <PageTransition currentHash={currentRoute}>
         {renderRouteContent()}

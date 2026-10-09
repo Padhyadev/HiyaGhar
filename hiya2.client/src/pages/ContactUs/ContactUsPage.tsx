@@ -99,7 +99,7 @@ export const ContactUsPage: React.FC = () => {
   return (
     <div className="hiyaghar-contact-page-wrapper">
       <Header />
-      <main className="hiyaghar-contact-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-contact-main">
         {/* PREMIUM HERO BANNER WITH BACKGROUND PICTURE */}
         <section className="hiyaghar-contact-hero-banner" aria-label="Contact Us Hero Banner">
           <div className="hiyaghar-contact-hero-banner-card">

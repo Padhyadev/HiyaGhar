@@ -344,7 +344,7 @@ export const CustomizeComboPage: React.FC<CustomizeComboPageProps> = ({ onNaviga
     <div className="hiyaghar-page-layout">
       <Header />
 
-      <main className="hiyaghar-combo-page-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-combo-page-main">
         {/* Full-Width Edge-to-Edge Hero Banner */}
         <MukhwasHero
           onNavigateHome={onNavigateHome}

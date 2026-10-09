@@ -46,7 +46,7 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
     return (
       <div className="hiyaghar-confirmation-page-layout">
         <Header />
-        <main className="hiyaghar-confirmation-main">
+        <main id="main-content" tabIndex={-1} className="hiyaghar-confirmation-main">
           <div className="hiyaghar-container">
             <div className="hiyaghar-no-order-card">
               <h2>No Recent Order Found</h2>
@@ -66,7 +66,7 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
     <div className="hiyaghar-confirmation-page-layout">
       <Header />
 
-      <main className="hiyaghar-confirmation-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-confirmation-main">
         <div className="hiyaghar-container">
           <div className="hiyaghar-confirmation-card">
             {/* 20. SUBTLE ELEGANT GOLD SUCCESS CHECKMARK ANIMATION */}

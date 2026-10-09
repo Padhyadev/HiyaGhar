@@ -54,7 +54,7 @@ export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
       </Helmet>
       <Header />
 
-      <main className="hiyaghar-legal-main">
+      <main id="main-content" tabIndex={-1} className="hiyaghar-legal-main">
         {/* PREMIUM HERO BANNER WITH BACKGROUND PICTURE */}
         <section className="hiyaghar-legal-hero-banner" aria-label="Legal & Policies Banner">
           <div className="hiyaghar-legal-hero-banner-card">
