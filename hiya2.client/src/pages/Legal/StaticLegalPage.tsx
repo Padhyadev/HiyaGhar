@@ -113,7 +113,7 @@ export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
 
         {/* MAIN LEGAL CONTENT CARD */}
         <div className="hiyaghar-legal-container-outer">
-          <ScrollReveal variant="fade-up">
+          <ScrollReveal variant="fade-up" threshold={0.02}>
             <div className="hiyaghar-legal-card">
               <div className="hiyaghar-legal-header-meta">
                 <div className="hiyaghar-legal-badge">
