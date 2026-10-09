@@ -66,7 +66,7 @@
 }
 
 .hiyaghar-topbar-title {
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.15rem;
   letter-spacing: 0.05em;
 }
@@ -133,7 +133,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 0.95rem;
   border: 2px solid #F7F5EF;
   transition: transform 0.2s ease;
@@ -255,7 +255,7 @@
 
 .hiyaghar-sidebar-section-title {
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #94a3b8;
   padding: 24px 20px 10px;
   letter-spacing: 0.08em;

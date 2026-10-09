@@ -628,7 +628,7 @@
   background: var(--hiya-gold, #CB992C);
   color: #FFFFFF;
   font-size: 0.65rem;
-  font-weight: 800;
+  font-weight: 700;
   border-radius: 999px;
   padding: 1px 6px;
   line-height: 1.2;
@@ -750,7 +750,7 @@
 
 .vertical-option-btn .check-mark {
   font-size: 1rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-gold-text, #855F0F);
 }
 
@@ -900,7 +900,7 @@
 
 .hiyaghar-mobile-filter-drawer-card .drawer-filter-pill .check-icon {
   font-size: 0.95rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-gold-text, #855F0F);
 }
 
@@ -1157,7 +1157,7 @@
   border: 2px solid #98A2B3;
   color: #FFFFFF;
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2925,7 +2925,7 @@
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.72rem;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #ffffff;
@@ -3177,7 +3177,7 @@
 
 .ecom-order-info-col .panel-inner-heading {
   font-size: 1.05rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #11223A);
   margin-bottom: 12px;
 }
@@ -3252,7 +3252,7 @@
 
 .ecom-order-summary-box .total-val {
   font-size: 1.15rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #11223A);
 }
 

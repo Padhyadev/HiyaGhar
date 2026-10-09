@@ -54,7 +54,7 @@
 .hiyaghar-faq-title {
   font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
   font-size: clamp(2rem, 5vw, 3.2rem);
-  font-weight: 800;
+  font-weight: 700;
   color: #FFFFFF;
   margin: 0 0 16px;
   line-height: 1.2;

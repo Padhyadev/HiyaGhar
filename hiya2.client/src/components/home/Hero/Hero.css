@@ -84,7 +84,7 @@
 }
 
 .hiyaghar-amazon-text strong {
-  font-weight: 800;
+  font-weight: 700;
   color: #2a2a2a;
 }
 
@@ -99,7 +99,7 @@
   z-index: 2;
   font-family: var(--font-family-stack);
   font-size: clamp(32px, 4.5vw, 64px);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.05;
   color: #2a2a2a;
   letter-spacing: -0.035em;
@@ -130,7 +130,7 @@
   background-color: #2d6a4f;
   color: #ffffff;
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 700;
   border-radius: var(--radius-full);
   box-shadow: 0 8px 24px rgba(45, 106, 79, 0.22);
   transition: all var(--motion-duration-fast) ease;

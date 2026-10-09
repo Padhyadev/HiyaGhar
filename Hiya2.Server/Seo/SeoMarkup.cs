@@ -123,8 +123,8 @@ namespace Hiya2.Server.Seo
             _ => value,
         };
 
-        public static string BuildJsonLdScript(IEnumerable<object> nodes) =>
-            "<script type=\"application/ld+json\"" + Marker + ">" + SerializeJsonLd(nodes) + "</script>";
+        public static string BuildJsonLdScript(IEnumerable<object> nodes, string? nonce = null) =>
+            "<script type=\"application/ld+json\" nonce=\"" + (nonce ?? "{NONCE}") + "\"" + Marker + ">" + SerializeJsonLd(nodes) + "</script>";
 
         /// <summary>Replaces the marker regions; the markers themselves do not survive.</summary>
         public static string Inject(string indexHtml, string head, string body)

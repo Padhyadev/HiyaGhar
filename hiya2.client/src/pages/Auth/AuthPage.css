@@ -228,7 +228,7 @@
 
 .banner-title {
   font-family: 'Manrope', sans-serif;
-  font-weight: 800;
+  font-weight: 700;
   font-size: clamp(28px, 3.2vw, 42px);
   color: #FFFDF4;
   margin: 0 0 12px 0;
@@ -303,7 +303,7 @@
 
 .hiyaghar-form-title {
   font-size: clamp(26px, 2.5vw, 34px);
-  font-weight: 800;
+  font-weight: 700;
   color: #12243D;
   margin: 0 0 8px 0;
   letter-spacing: -0.5px;
@@ -553,7 +553,7 @@
   background: none;
   border: none;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
   color: #D39B27;
   cursor: pointer;
   padding: 0;

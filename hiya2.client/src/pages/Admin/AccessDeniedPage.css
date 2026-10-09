@@ -25,7 +25,7 @@
 .hiyaghar-denied-code {
   display: inline-block;
   font-size: 0.75rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #dc2626;
   background: #fef2f2;
   padding: 4px 12px;
@@ -36,7 +36,7 @@
 
 .hiyaghar-denied-card h2 {
   font-size: 1.6rem;
-  font-weight: 800;
+  font-weight: 700;
   color: #10243E;
   margin: 0 0 12px 0;
 }

@@ -357,7 +357,7 @@
 
 .hiyaghar-cart-item-subtotal {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #11223A);
 }
 
@@ -623,7 +623,7 @@
 
 .hiyaghar-summary-row.total {
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #11223A);
 }
 

@@ -71,7 +71,7 @@
   color: var(--hiya-navy, #11223A);
   border: 1.5px solid var(--hiya-navy, #11223A);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-radius: var(--radius-full, 9999px);
@@ -82,7 +82,7 @@
 .hiyaghar-athome-title {
   font-family: var(--font-family-stack, inherit);
   font-size: clamp(32px, 4vw, 54px);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.12;
   color: #2a2a2a;
   letter-spacing: -0.025em;
@@ -272,7 +272,7 @@
 .magic-bento-category {
   display: inline-block;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--hiya-navy, #11223A);
@@ -285,7 +285,7 @@
 .magic-bento-card-title {
   font-family: var(--font-family-stack, inherit);
   font-size: clamp(18px, 1.8vw, 25px);
-  font-weight: 800;
+  font-weight: 700;
   color: #ffffff;
   margin: 4px 0 2px 0;
   line-height: 1.25;
@@ -308,7 +308,7 @@
   background-color: #2d6a4f;
   color: #ffffff;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none;
   border-radius: var(--radius-full, 9999px);

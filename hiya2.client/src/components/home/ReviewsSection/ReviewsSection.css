@@ -72,7 +72,7 @@
   color: var(--hiya-navy, #11223A);
   border: 1.5px solid var(--hiya-navy, #11223A);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   border-radius: var(--radius-full, 9999px);
@@ -83,7 +83,7 @@
 .hiyaghar-reviews-title {
   font-family: var(--font-family-stack, inherit);
   font-size: clamp(32px, 4vw, 54px);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.12;
   color: #2a2a2a;
   letter-spacing: -0.025em;
@@ -119,7 +119,7 @@
 
 .hiyaghar-trust-score {
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
   color: #2a2a2a;
 }
 
@@ -207,7 +207,7 @@
 
 .hiyaghar-review-rating-num {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   color: #2a2a2a;
   margin-left: 6px;
 }
@@ -257,7 +257,7 @@
 
 .hiyaghar-review-author-name {
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
   color: #2a2a2a;
 }
 
@@ -414,7 +414,7 @@
   background-color: #2d6a4f;
   color: #ffffff;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none;
   border-radius: var(--radius-full, 9999px);

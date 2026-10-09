@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.ResponseCompression;
 using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(c => c.AddServerHeader = false);
 
 // Add services to the container.
 
@@ -456,6 +457,50 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.Use(async (context, next) =>
+{
+    var nonceBytes = new byte[16];
+    System.Security.Cryptography.RandomNumberGenerator.Fill(nonceBytes);
+    var nonce = Convert.ToBase64String(nonceBytes);
+    context.Items["CSP_Nonce"] = nonce;
+
+    context.Response.OnStarting(() =>
+    {
+        var headers = context.Response.Headers;
+        headers.Remove("X-Powered-By");
+        headers.Remove("Server");
+        headers.Append("X-Content-Type-Options", "nosniff");
+        headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
+        headers.Append("Permissions-Policy", "camera=(), microphone=(), geolocation=(), payment=(self \"https://checkout.razorpay.com\")");
+        headers.Append("X-Frame-Options", "DENY");
+        headers.Append("Cross-Origin-Opener-Policy", "same-origin-allow-popups");
+        
+        if (context.Request.IsHttps && !app.Environment.IsDevelopment())
+        {
+            headers.Append("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+        }
+
+        var csp = $"default-src 'self'; " +
+                  $"script-src 'self' 'nonce-{nonce}' https://checkout.razorpay.com; " +
+                  $"style-src 'self' 'unsafe-inline'; " +
+                  $"img-src 'self' data: https://*.razorpay.com; " +
+                  $"font-src 'self'; " +
+                  $"connect-src 'self' https://api.postalpincode.in https://*.razorpay.com; " +
+                  $"frame-src 'self' https://*.razorpay.com; " +
+                  $"form-action 'self' https://*.razorpay.com; " +
+                  $"object-src 'none'; " +
+                  $"base-uri 'self'; " +
+                  $"frame-ancestors 'none'; " +
+                  $"upgrade-insecure-requests; " +
+                  $"report-uri /api/csp-report;";
+        
+        headers.Append("Content-Security-Policy-Report-Only", csp);
+        return Task.CompletedTask;
+    });
+
+    await next();
+});
+
 app.UseResponseCompression();
 
 // SEO redirects: old alias URLs and trailing slashes get a single 301 to the canonical path
@@ -547,22 +592,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Security Headers Middleware
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Remove("X-Powered-By");
-    context.Response.Headers.Remove("Server");
-    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Append("X-Frame-Options", "SAMEORIGIN");
-    context.Response.Headers.Append("Referrer-Policy", "strict-origin-when-cross-origin");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-    context.Response.Headers.Append("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
-    if (context.Request.IsHttps)
-    {
-        context.Response.Headers.Append("Strict-Transport-Security", "max-age=31536000; includeSubDomains; preload");
-    }
-    await next();
-});
+// Old Security Headers removed and moved above
 
 app.UseOutputCache();
 
@@ -594,8 +624,18 @@ app.MapFallback(async context =>
     context.Response.Headers.CacheControl = "no-cache";
     if (result.Html != null && !HttpMethods.IsHead(context.Request.Method))
     {
-        await context.Response.WriteAsync(result.Html);
+        var nonce = context.Items["CSP_Nonce"]?.ToString() ?? "";
+        var html = result.Html.Replace("{NONCE}", nonce);
+        await context.Response.WriteAsync(html);
     }
+});
+
+app.MapPost("/api/csp-report", async (context) =>
+{
+    using var reader = new System.IO.StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync();
+    context.RequestServices.GetRequiredService<ILogger<Program>>().LogWarning("CSP Violation: {Report}", body);
+    context.Response.StatusCode = StatusCodes.Status204NoContent;
 });
 
 app.Run();

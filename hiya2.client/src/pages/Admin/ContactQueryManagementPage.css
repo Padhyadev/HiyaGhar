@@ -15,7 +15,7 @@
 
 .contact-queries-title-group h1 {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
   margin: 0 0 4px;
 }
@@ -247,7 +247,7 @@
 .query-modal-header h3 {
   margin: 0;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
 }
 
@@ -326,7 +326,7 @@
 .query-status-form h4 {
   margin: 0 0 14px;
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
 }
 
@@ -386,7 +386,7 @@
   padding: 10px 22px;
   border-radius: 10px;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
 }

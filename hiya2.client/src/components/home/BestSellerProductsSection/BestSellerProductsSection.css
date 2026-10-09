@@ -35,7 +35,7 @@
   border: 1.5px solid var(--hiya-navy, #11223A);
   border-radius: var(--radius-full, 9999px);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -45,7 +45,7 @@
 .hiyaghar-bestseller-products-title {
   font-family: var(--font-family-stack);
   font-size: clamp(28px, 4vw, 48px);
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1.1;
   color: #2a2a2a;
   letter-spacing: -0.02em;
@@ -117,7 +117,7 @@
 
 .hiyaghar-product-category-pill {
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   background-color: rgba(17, 34, 58, 0.08);
@@ -128,7 +128,7 @@
 
 .hiyaghar-product-price-badge {
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
   background-color: #11223A;
   color: #ffffff;
   padding: 4px 12px;
@@ -312,7 +312,7 @@
 .hiyaghar-product-card-title {
   font-family: var(--font-family-stack);
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
   margin: 0 0 10px 0;
   line-height: 1.25;
@@ -330,7 +330,7 @@
   border-radius: var(--radius-full);
   border: none;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
   transition: background-color 250ms ease, transform 250ms ease, box-shadow 250ms ease;
   box-shadow: 0 4px 12px rgba(17, 34, 58, 0.15);

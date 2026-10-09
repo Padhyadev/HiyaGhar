@@ -78,7 +78,7 @@
   padding: 6px 14px;
   border-radius: 16px;
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .hiyaghar-product-info-column {
@@ -89,7 +89,7 @@
 
 .hiyaghar-category-tag {
   font-size: 12px;
-  font-weight: 900;
+  font-weight: 700;
   letter-spacing: 2px;
   color: var(--hiya-gold, #D39B27);
   text-transform: uppercase;
@@ -98,7 +98,7 @@
 .hiyaghar-product-title {
   font-family: 'Manrope', sans-serif;
   font-size: 32px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
   margin: 0;
   line-height: 1.25;
@@ -117,7 +117,7 @@
 
 .rating-score {
   font-size: 14px;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
 }
 
@@ -152,13 +152,13 @@
 
 .variant-label {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
 }
 
 .variant-selected-name {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-gold, #D39B27);
 }
 
@@ -198,7 +198,7 @@
 
 .pill-weight {
   font-size: 13.5px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
 }
 
@@ -210,7 +210,7 @@
 
 .pill-price {
   font-size: 16px;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
 }
 
@@ -236,7 +236,7 @@
 .current-price {
   font-family: 'Manrope', sans-serif;
   font-size: 34px;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
 }
 
@@ -253,7 +253,7 @@
   padding: 4px 10px;
   border-radius: 12px;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .tax-inclusive-text {
@@ -283,7 +283,7 @@
   border: none;
   background: transparent;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
   cursor: pointer;
 }
@@ -291,7 +291,7 @@
 .hiyaghar-qty-selector span {
   width: 32px;
   text-align: center;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 15px;
 }
 
@@ -303,7 +303,7 @@
   padding: 16px 24px;
   border-radius: 16px;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   cursor: pointer;
   box-shadow: 0 8px 24px rgba(18, 36, 61, 0.2);
   transition: all 0.2s ease;
@@ -325,7 +325,7 @@
 .hiyaghar-key-highlights-box h4 {
   margin: 0 0 10px 0;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
 }
 
@@ -349,7 +349,7 @@
 .section-title {
   font-family: 'Manrope', sans-serif;
   font-size: 28px;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
   text-align: center;
   margin: 0 0 6px 0;
@@ -391,7 +391,7 @@
 
 .ingredient-card h3 {
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #12243D);
   margin: 0 0 8px 0;
 }
@@ -426,7 +426,7 @@
 
 .step-num {
   font-size: 24px;
-  font-weight: 900;
+  font-weight: 700;
   color: var(--hiya-gold, #D39B27);
   display: block;
   margin-bottom: 8px;
@@ -434,7 +434,7 @@
 
 .step-card h4 {
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
   margin: 0 0 6px 0;
   color: var(--hiya-navy, #12243D);
 }

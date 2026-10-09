@@ -119,7 +119,7 @@
 .hiyaghar-story-hero-eyebrow {
   display: inline-block;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--hiya-gold-text, #855F0F);
   text-transform: uppercase;
@@ -133,7 +133,7 @@
 .hiyaghar-story-hero-title {
   font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
   font-size: clamp(30px, 4.5vw, 48px);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.2;
   color: #ffffff;
   margin: 0 0 16px 0;
@@ -172,7 +172,7 @@
 
 .hiyaghar-story-stat-num {
   font-size: 26px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-gold-text, #855F0F);
   line-height: 1.2;
 }
@@ -279,7 +279,7 @@
 
 .hiyaghar-story-tag {
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--hiya-gold-text, #855F0F);
   text-transform: uppercase;
@@ -288,7 +288,7 @@
 .hiyaghar-story-heading {
   font-family: var(--font-heading, 'Playfair Display', Georgia, serif);
   font-size: clamp(26px, 3.2vw, 36px);
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
   line-height: 1.25;
   margin: 0;
@@ -319,7 +319,7 @@
 
 .hiyaghar-story-values-header h2 {
   font-size: clamp(24px, 3vw, 32px);
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
   margin: 10px 0 12px;
 }
@@ -367,7 +367,7 @@
 
 .hiyaghar-story-value-card h3 {
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
   margin: 0 0 10px;
 }
@@ -392,7 +392,7 @@
 
 .hiyaghar-story-cta-box h2 {
   font-size: clamp(26px, 3.5vw, 36px);
-  font-weight: 800;
+  font-weight: 700;
   margin: 0 0 16px;
   color: #ffffff;
 }
@@ -416,7 +416,7 @@
   background-color: var(--hiya-gold-text, #855F0F);
   color: #11223A;
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
   padding: 14px 32px;
   border-radius: 999px;
   text-decoration: none;

@@ -100,7 +100,7 @@
 .hiyaghar-contact-eyebrow {
   display: inline-block;
   font-size: 12.5px;
-  font-weight: 800;
+  font-weight: 700;
   letter-spacing: 0.16em;
   color: #D39B27;
   text-transform: uppercase;
@@ -113,7 +113,7 @@
 
 .hiyaghar-contact-hero-title {
   font-size: clamp(32px, 5vw, 50px);
-  font-weight: 800;
+  font-weight: 700;
   line-height: 1.15;
   color: #ffffff;
   margin: 0 0 16px 0;
@@ -159,7 +159,7 @@
 
 .hiyaghar-contact-info-card h2 {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
   margin: 0 0 10px;
 }
@@ -271,7 +271,7 @@
 
 .fssai-tag {
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-gold-text, #855F0F);
   letter-spacing: 0.08em;
 }
@@ -293,7 +293,7 @@
 
 .hiyaghar-contact-form-card h2 {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   color: #11223A;
   margin: 0 0 8px;
 }
@@ -324,7 +324,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 16px;
 }
 
@@ -423,7 +423,7 @@
   background: linear-gradient(135deg, #CB992C 0%, #B8831E 100%);
   color: #11223A;
   font-size: 15px;
-  font-weight: 800;
+  font-weight: 700;
   padding: 14px 28px;
   border-radius: 999px;
   border: none;
@@ -458,7 +458,7 @@
 
 .hiyaghar-faq-box h3 {
   font-size: clamp(20px, 2.5vw, 24px);
-  font-weight: 800;
+  font-weight: 700;
   margin: 0 0 10px;
 }
 

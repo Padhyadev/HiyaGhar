@@ -139,7 +139,7 @@
 
 .hiyaghar-track-order-id {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-gold-text, #855F0F);
   margin: 4px 0 0 0;
 }
@@ -199,7 +199,7 @@
   background: #F0EAE1;
   color: #8C8272;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;

@@ -26,7 +26,7 @@
 
 .hiyaghar-notfound-code {
   font-size: 80px;
-  font-weight: 900;
+  font-weight: 700;
   line-height: 1;
   color: var(--hiya-gold-text, #855F0F);
   margin-bottom: 12px;
@@ -35,7 +35,7 @@
 
 .hiyaghar-notfound-title {
   font-size: 24px;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--hiya-navy, #11223A);
   margin-bottom: 12px;
 }

@@ -3,7 +3,8 @@
    ========================================================================== */
 
 /* 1. Global Font Import (Single Source of Truth) */
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap');
+/* Removed Google Fonts CDN */
+/* TODO: Add Noto Sans Gujarati / Devanagari with unicode-range here when bilingual content is planned */
 
 :root {
   --font-family-primary: 'DM Sans', sans-serif;
