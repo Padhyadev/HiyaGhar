@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Home } from './pages/Home/Home';
 import { CustomizeComboPage } from './pages/CustomizeCombo/CustomizeComboPage';
 import { MukhwasPage } from './pages/Mukhwas/MukhwasPage';
@@ -58,6 +58,7 @@ import { PageTransition } from './components/common/PageTransition/PageTransitio
 import { FloatingWidgets } from './components/common/FloatingWidgets/FloatingWidgets';
 import { preloadCriticalImages } from './services/imagePreloaderService';
 import { SEO } from './components/common/SEO/SEO';
+import { findRouteMeta, type RouteMeta } from './seo/routeSeo';
 
 function getNormalizedRoute(): string {
   const hash = window.location.hash;
@@ -123,50 +124,12 @@ const ROUTE_ALIASES: Record<string, string> = {
   '/faqs': '/faq',
 };
 
-interface RouteMeta {
-  title: string;
-  description: string;
-  path: string;
-  noindex?: boolean;
-}
-
-const DEFAULT_TITLE = 'HIYAGHAR - Handcrafted Natural Mukhwas & Wellness';
-const DEFAULT_DESCRIPTION = 'Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.';
-
-// Per-route meta for every route the router renders. Returns null for /product/* (the product page
-// sets its own) and for unknown routes (NotFoundPage sets its own).
+// Per-route meta comes from public/seo/routes.json (shared with the server). Returns null for
+// /product/* (the product page sets its own) and for unknown routes (NotFoundPage sets its own).
+// Account tab routes not listed individually reuse the /account entry.
 function getRouteMeta(route: string): RouteMeta | null {
   const lower = route.toLowerCase().split('?')[0];
-  const meta = (title: string, description: string, noindex = false): RouteMeta => ({ title, description, path: lower, noindex });
-
-  if (lower === '/') return meta(DEFAULT_TITLE, DEFAULT_DESCRIPTION);
-  if (lower === '/mukhwas') return meta('Artisanal Natural Mukhwas Collection | HIYAGHAR', 'Explore our premium selection of traditional handcrafted digestive mukhwas made with 100% natural ingredients.');
-  if (lower === '/tea-masala') return meta('Authentic Traditional Tea Masala | HIYAGHAR', 'Rich aromatic spice blend for the perfect Indian chai experience.');
-  if (lower === '/handmade-soap') return meta('Natural Handmade Cold Process Soaps | HIYAGHAR', 'Pure plant-based, chemical-free artisan soaps crafted for nourished, glowing skin.');
-  if (lower === '/hair-oil') return meta('Ayurvedic Herbal Hair Oil | HIYAGHAR', 'Nourishing herbal hair oil formulated with pure botanical extracts for strong, healthy hair.');
-  if (lower === '/gift-hampers') return meta('Festive & Celebration Gift Hampers | HIYAGHAR', 'Thoughtfully curated luxury gift boxes filled with handcrafted natural wellness treats.');
-  if (lower === '/combos') return meta('Customize Your Combo Pack | HIYAGHAR', 'Save more on our most popular handcrafted mukhwas, tea masala, and personal care combinations.');
-  if (lower === '/our-story') return meta('Our Story & Heritage | HIYAGHAR', 'Learn about HIYAGHAR’s journey, our commitment to natural ingredients, and authentic taste.');
-  if (lower === '/contact-us') return meta('Contact Us | HIYAGHAR', 'Get in touch with HIYAGHAR for inquiries, bulk orders, and customer support.');
-  if (lower === '/faq') return meta('Frequently Asked Questions (FAQ) | HIYAGHAR', 'Find answers to common questions about HIYAGHAR handcrafted natural mukhwas, tea masala, soaps, shipping, and custom gifting.');
-  if (lower === '/privacy-policy') return meta('Privacy Policy | HIYAGHAR', 'Read our privacy policy to understand how HIYAGHAR protects your personal data.');
-  if (lower === '/terms-conditions') return meta('Terms & Conditions | HIYAGHAR', 'Review the official terms and conditions for using the HIYAGHAR website and services.');
-  if (lower === '/refund-policy') return meta('Refund & Cancellation Policy | HIYAGHAR', 'Information about HIYAGHAR cancellation, return, and refund policies.');
-  if (lower === '/shipping-policy') return meta('Shipping Policy | HIYAGHAR', 'Delivery timeframes, shipping charges, and order tracking information.');
-
-  // Private / utility routes: noindex,follow
-  if (lower === '/cart') return meta('Shopping Cart | HIYAGHAR', 'Review your shopping cart items and proceed to fast, secure checkout.', true);
-  if (lower === '/checkout') return meta('Secure Checkout | HIYAGHAR', 'Fast and secure checkout with free shipping on qualifying orders across India.', true);
-  if (lower === '/login' || lower === '/auth') return meta('Sign In to Your Account | HIYAGHAR', 'Log in to track orders, manage your wishlist, and save your delivery addresses.', true);
-  if (lower === '/signup') return meta('Create a New Account | HIYAGHAR', 'Join the HIYAGHAR family to enjoy seamless ordering, exclusive discounts, and easy tracking.', true);
-  if (lower.startsWith('/track-order')) return meta('Track Your Order | HIYAGHAR', 'Track the real-time shipping and delivery status of your HIYAGHAR order.', true);
-  if (lower === '/wishlist') return meta('My Wishlist | HIYAGHAR', 'View and manage your saved favorite items on HIYAGHAR.', true);
-  if (lower.startsWith('/order-confirmation')) return meta(DEFAULT_TITLE, DEFAULT_DESCRIPTION, true);
-  if (lower === '/profile') return meta('My Account Profile | HIYAGHAR', DEFAULT_DESCRIPTION, true);
-  if (isAccountRoute(lower)) return meta(DEFAULT_TITLE, DEFAULT_DESCRIPTION, true);
-  if (lower === '/admin' || lower.startsWith('/admin/')) return meta('HIYAGHAR Admin Portal', DEFAULT_DESCRIPTION, true);
-
-  return null;
+  return findRouteMeta(lower, isAccountRoute(lower) ? '/account' : undefined);
 }
 
 function App() {
@@ -187,6 +150,14 @@ function App() {
       window.removeEventListener('hashchange', handleLocationChange);
     };
   }, []);
+
+  // The server-injected JSON-LD describes the URL that was loaded; keep it for that page
+  // (crawlers read it after rendering) and drop it on the first in-app navigation.
+  const initialRouteRef = useRef(currentRoute);
+  useEffect(() => {
+    if (currentRoute === initialRouteRef.current) return;
+    document.querySelectorAll('script[type="application/ld+json"][data-server-seo]').forEach((el) => el.remove());
+  }, [currentRoute]);
 
   // Client-side fallback for the server's 301s: replace an alias URL with its canonical path.
   useEffect(() => {

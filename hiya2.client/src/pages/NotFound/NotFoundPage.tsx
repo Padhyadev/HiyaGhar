@@ -1,5 +1,6 @@
 import React from 'react';
 import { SEO } from '../../components/common/SEO/SEO';
+import { seoConfig } from '../../seo/routeSeo';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { navigateTo } from '../../utils/navigation';
@@ -9,8 +10,8 @@ export const NotFoundPage: React.FC = () => {
   return (
     <div className="hiyaghar-notfound-layout">
       <SEO
-        title="404 - Page Not Found | HIYAGHAR"
-        description="The page you are looking for does not exist or has been moved."
+        title={seoConfig.notFound.title}
+        description={seoConfig.notFound.description}
         path={window.location.pathname}
         noindex
       />

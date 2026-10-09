@@ -109,6 +109,11 @@ builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddHostedService<Hiya2.Server.Services.ReservationExpiryService>();
 builder.Services.AddScoped<IGiftHamperRepository, GiftHamperRepository>();
+
+// Server-side SEO: per-route head tags, JSON-LD and <noscript> content injected into index.html
+builder.Services.AddMemoryCache();
+builder.Services.AddSingleton<Hiya2.Server.Seo.SeoContentStore>();
+builder.Services.AddScoped<Hiya2.Server.Seo.SeoPageRenderer>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IRewardService, RewardService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
@@ -499,7 +504,7 @@ app.Use(async (context, next) =>
     await next();
 });
 
-app.UseDefaultFiles();
+// No UseDefaultFiles(): "/" must go through the SEO fallback below instead of the raw index.html.
 app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>
@@ -553,22 +558,10 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-// SPA fallback with real status codes: known client routes get index.html with 200, anything else
-// gets index.html with 404 (the React app still renders its 404 view). /product/{id} is 200 only
-// for an existing, active product. Paths that look like files keep the default 404 (":nonfile").
-var spaRoutes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    // Public pages
-    "/", "/mukhwas", "/tea-masala", "/handmade-soap", "/hair-oil", "/gift-hampers", "/combos",
-    "/our-story", "/contact-us", "/faq", "/track-order",
-    "/shipping-policy", "/refund-policy", "/privacy-policy", "/terms-conditions",
-    // Private / utility pages (noindex in the client)
-    "/cart", "/checkout", "/login", "/signup", "/auth", "/wishlist", "/order-confirmation",
-    "/profile", "/orders", "/addresses", "/password", "/account", "/rewards", "/reward", "/coins",
-    "/admin",
-};
-var spaPrefixes = new[] { "/admin/", "/orders/" };
-
+// SPA fallback with real status codes and server-side SEO (Seo/SeoPageRenderer.cs): routes listed in
+// wwwroot/seo/routes.json (the same file the React app uses) and active products get 200, anything
+// else gets 404 with the SPA shell so the React 404 view still renders. Paths that look like files
+// keep the default 404 (":nonfile").
 app.MapFallback(async context =>
 {
     var path = context.Request.Path.Value ?? "/";
@@ -580,24 +573,15 @@ app.MapFallback(async context =>
         return;
     }
 
-    var isKnownRoute = spaRoutes.Contains(path)
-        || spaPrefixes.Any(p => path.StartsWith(p, StringComparison.OrdinalIgnoreCase));
+    var renderer = context.RequestServices.GetRequiredService<Hiya2.Server.Seo.SeoPageRenderer>();
+    var result = await renderer.RenderAsync(path);
 
-    if (!isKnownRoute && path.StartsWith("/product/", StringComparison.OrdinalIgnoreCase)
-        && int.TryParse(path["/product/".Length..], out var productId))
-    {
-        var db = context.RequestServices.GetRequiredService<DataContext>();
-        isKnownRoute = await db.Products.AsNoTracking()
-            .AnyAsync(p => p.Id == productId && p.IsActive && !p.IsDeleted);
-    }
-
-    var indexFile = app.Environment.WebRootFileProvider.GetFileInfo("index.html");
-    context.Response.StatusCode = isKnownRoute ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
+    context.Response.StatusCode = result.StatusCode;
     context.Response.ContentType = "text/html; charset=utf-8";
-    context.Response.Headers.CacheControl = "no-cache,no-store,must-revalidate";
-    if (indexFile.Exists)
+    context.Response.Headers.CacheControl = "no-cache";
+    if (result.Html != null && !HttpMethods.IsHead(context.Request.Method))
     {
-        await context.Response.SendFileAsync(indexFile);
+        await context.Response.WriteAsync(result.Html);
     }
 });
 

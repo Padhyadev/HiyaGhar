@@ -39,6 +39,10 @@ const target = env.ASPNETCORE_URLS ? env.ASPNETCORE_URLS.split(';')[0] : 'http:/
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [plugin()],
+    define: {
+        // Default og:image falls back to the logo until public/image/og-default.jpg is added (see src/seo/routeSeo.ts).
+        __OG_DEFAULT_IMAGE_EXISTS__: JSON.stringify(fs.existsSync(fileURLToPath(new URL('./public/image/og-default.jpg', import.meta.url))))
+    },
     resolve: {
         alias: {
             '@': fileURLToPath(new URL('./src', import.meta.url))

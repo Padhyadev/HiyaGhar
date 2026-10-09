@@ -15,22 +15,9 @@ import { formatVariantLabel } from '../../utils/productFormat';
 import { parseProductFullDescription } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
+import { buildProductSeoDescription, seoConfig } from '../../seo/routeSeo';
 import './ProductDetailPage.css';
 
-// Meta description: shortDescription, else the full description (HIYA_META block and HTML stripped),
-// else a neutral line built from the product's own name/category. Trimmed to 160 chars.
-const buildSeoDescription = (p: ApiProduct): string => {
-  const clean = (t?: string | null) =>
-    (t || '').replace(/<!--HIYA_META[\s\S]*?-->/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
-  const category = p.category?.categoryName || (p as any).categoryName;
-  const text =
-    clean(p.shortDescription) ||
-    clean(p.fullDescription) ||
-    `Buy ${p.productName} from the HIYAGHAR ${category ? `${category} ` : ''}collection. See price, available sizes and stock, and order online.`;
-  if (text.length <= 160) return text;
-  const cut = text.slice(0, 159);
-  return `${cut.slice(0, cut.lastIndexOf(' ') > 120 ? cut.lastIndexOf(' ') : 159)}…`;
-};
 
 interface ProductDetailPageProps {
   productId: string;
@@ -137,7 +124,12 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           categoryLabel: apiProd.category?.categoryName || 'Natural Product',
           shortDescription: apiProd.shortDescription || '100% natural organic product.',
           longDescription: parsed.cleanDescription,
-          seoDescription: buildSeoDescription(apiProd),
+          seoDescription: buildProductSeoDescription(
+            apiProd.productName,
+            apiProd.category?.categoryName || (apiProd as any).categoryName,
+            apiProd.shortDescription,
+            apiProd.fullDescription,
+          ),
           seoImage: apiProd.mainImagePath || finalImgs[0],
           price: curPrice,
           originalPrice: origPrice,
@@ -588,7 +580,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       {!isLoadingProduct && product && !productNotFound ? (
         <SEO
           title={`${product.name} | HIYAGHAR`}
-          description={product.seoDescription || `Buy ${product.name} from the HIYAGHAR collection. See price, available sizes and stock, and order online.`}
+          description={product.seoDescription || buildProductSeoDescription(product.name, undefined)}
           path={`/product/${productId}`}
           image={product.seoImage || product.image}
           type="product"
@@ -596,8 +588,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         />
       ) : !isLoadingProduct ? (
         <SEO
-          title="Product Not Found | HIYAGHAR"
-          description="The product you are looking for does not exist or has been moved."
+          title={seoConfig.productNotFound.title}
+          description={seoConfig.productNotFound.description}
           path={`/product/${productId}`}
           noindex
         />

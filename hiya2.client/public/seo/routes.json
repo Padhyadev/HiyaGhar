@@ -1,0 +1,295 @@
+{
+  "_comment": "Single source of truth for per-route SEO. Read by the React app (App.tsx / SEO.tsx) and by the ASP.NET server (Seo/SeoPageRenderer.cs, SitemapController, the 404 allow-list). h1/intro must match the text the page shows.",
+  "siteUrl": "https://hiyaghar.com",
+  "siteName": "HIYAGHAR",
+  "locale": "en_IN",
+  "defaultImage": "/image/og-default.jpg",
+  "fallbackImage": "/image/HIYA LOGO (1).png",
+  "productDescriptionTemplate": "Buy {name} from the HIYAGHAR {category}collection, handcrafted in small batches. See price, available sizes and stock, and order online.",
+  "organization": {
+    "name": "HIYAGHAR",
+    "logo": "/image/HIYA LOGO (1).png",
+    "email": "support@hiyaghar.com",
+    "telephone": "+91 9274443617",
+    "addressLocality": "Ahmedabad",
+    "addressRegion": "Gujarat",
+    "addressCountry": "IN",
+    "sameAs": [
+      "https://www.instagram.com/hiyaghar_/",
+      "https://www.facebook.com/profile.php?id=61593338044762"
+    ]
+  },
+  "routes": [
+    {
+      "path": "/",
+      "title": "Handcrafted Natural Mukhwas & Wellness | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "h1": "Handcrafted Natural Mukhwas & Wellness",
+      "intro": "Authentic artisan digestives, royal chai spices & natural body care crafted with love.",
+      "sitemap": true,
+      "homeLinks": true
+    },
+    {
+      "path": "/mukhwas",
+      "title": "Premium Natural Mukhwas Collection | HIYAGHAR",
+      "description": "Shop HIYAGHAR premium mukhwas: handcrafted digestive mouth fresheners made from traditional family recipes with natural ingredients. See flavours and prices.",
+      "h1": "Premium Mukhwas",
+      "linkText": "Artisanal Mukhwas",
+      "breadcrumb": "Mukhwas",
+      "schemaType": "CollectionPage",
+      "categoryId": 1,
+      "sitemap": true
+    },
+    {
+      "path": "/tea-masala",
+      "title": "Authentic Traditional Tea Masala | HIYAGHAR",
+      "description": "HIYAGHAR Tea Masala is an aromatic, authentic spice blend for making Indian chai at home. Choose your pack size, check the price and order online across India.",
+      "h1": "Tea Masala",
+      "linkText": "Traditional Tea Masala",
+      "breadcrumb": "Tea Masala",
+      "schemaType": "CollectionPage",
+      "categoryId": 2,
+      "sitemap": true
+    },
+    {
+      "path": "/handmade-soap",
+      "title": "Natural Handmade Cold Process Soaps | HIYAGHAR",
+      "description": "Browse HIYAGHAR handmade cold-process herbal soap bars, crafted in small batches with plant-based ingredients. Compare prices and offers, and order online.",
+      "h1": "Handmade Soap",
+      "linkText": "Handmade Soap",
+      "breadcrumb": "Handmade Soap",
+      "schemaType": "CollectionPage",
+      "categoryId": 3,
+      "sitemap": true
+    },
+    {
+      "path": "/hair-oil",
+      "title": "Ayurvedic Herbal Hair Oil | HIYAGHAR",
+      "description": "Shop HIYAGHAR Ayurvedic herbal hair oil for scalp nourishment, formulated with botanical extracts and handcrafted in small batches. Check price and order.",
+      "h1": "Hair Oil",
+      "linkText": "Ayurvedic Hair Oil",
+      "breadcrumb": "Hair Oil",
+      "schemaType": "CollectionPage",
+      "categoryId": 4,
+      "sitemap": true
+    },
+    {
+      "path": "/gift-hampers",
+      "title": "Festive & Celebration Gift Hampers | HIYAGHAR",
+      "description": "Choose a HIYAGHAR gift by occasion: wedding, birthday, housewarming, festival or corporate. Curated handcrafted mukhwas, soaps and wellness gifts online.",
+      "h1": "Gift Hampers",
+      "linkText": "Gift Hampers",
+      "breadcrumb": "Gifting",
+      "schemaType": "CollectionPage",
+      "collection": "giftHampers",
+      "sitemap": true
+    },
+    {
+      "path": "/combos",
+      "title": "Customize Your Combo Pack | HIYAGHAR",
+      "description": "Build your own HIYAGHAR combo box: pick 3, 4 or 6 products from mukhwas, tea masala, handmade soap and hair oil, and save 10%, 15% or 20% on the bundle.",
+      "h1": "Customize Combo",
+      "linkText": "Wellness Combos",
+      "intro": "Select how many products you want in your bundle. Pick 3 items & save 10%, pick 4 items & save 15%, or pick 6 items & save 20%.",
+      "sitemap": true
+    },
+    {
+      "path": "/our-story",
+      "title": "Our Story & Heritage | HIYAGHAR",
+      "description": "Born in an Ahmedabad home kitchen, HIYAGHAR revives heritage family recipes for mukhwas and wellness products, slow-crafted in micro-batches with care.",
+      "h1": "Every Goodness Has A Heartfelt Story.",
+      "linkText": "Our Story",
+      "intro": "At HIYA GHAR, we believe the purest culinary joys and digestive wellness come from authentic family traditions, slow-crafted methods, and 100% natural, honest ingredients.",
+      "schemaType": "AboutPage",
+      "sitemap": true
+    },
+    {
+      "path": "/contact-us",
+      "title": "Contact Us | HIYAGHAR",
+      "description": "Contact HIYAGHAR by phone or WhatsApp on +91 9274443617 or email support@hiyaghar.com. Ask about orders, custom combo boxes, gift hampers or bulk orders.",
+      "h1": "We’d Love To Hear From You",
+      "linkText": "Contact Us",
+      "intro": "Have questions about our handcrafted natural mukhwas, custom combo boxes, corporate gift hampers, or your delivery? We’re always here to assist you.",
+      "schemaType": "ContactPage",
+      "contactDetails": true,
+      "sitemap": true
+    },
+    {
+      "path": "/faq",
+      "title": "Frequently Asked Questions (FAQ) | HIYAGHAR",
+      "description": "Find answers to common questions about HIYAGHAR handcrafted natural mukhwas, tea masala, soaps, shipping, and custom gifting.",
+      "h1": "Frequently Asked Questions",
+      "linkText": "FAQs & Help",
+      "intro": "Everything you need to know about our handcrafted products, ingredients, shipping, and custom gifting.",
+      "schemaType": "FAQPage",
+      "sitemap": true
+    },
+    {
+      "path": "/privacy-policy",
+      "title": "Privacy Policy | HIYAGHAR",
+      "description": "Read the HIYAGHAR privacy policy: what personal data we collect when you browse, register or order, how it is used and stored, and how we keep it safe.",
+      "h1": "Privacy Policy",
+      "linkText": "Privacy Policy",
+      "intro": "This Privacy Policy describes in comprehensive detail how your personal data is collected, stored, processed, and safeguarded when you visit our website, register an account, or order handcrafted natural foods and wellness products.",
+      "sitemap": true
+    },
+    {
+      "path": "/terms-conditions",
+      "title": "Terms & Conditions | HIYAGHAR",
+      "description": "The terms and conditions for browsing hiyaghar.com, creating an account and ordering HIYAGHAR products, including the natural variations of handcrafted goods.",
+      "h1": "Terms & Conditions",
+      "linkText": "Terms & Conditions",
+      "intro": "By browsing, creating an account, or placing an order on hiyaghar.com, you agree to be bound by the following Terms and Conditions, which represent a binding agreement between you and Hiya Ghar.",
+      "sitemap": true
+    },
+    {
+      "path": "/refund-policy",
+      "title": "Refund & Cancellation Policy | HIYAGHAR",
+      "description": "HIYAGHAR refund and cancellation policy: cancel before dispatch for a full refund, and see how damaged or incorrect deliveries are replaced or refunded.",
+      "h1": "Refund & Cancellation Policy",
+      "linkText": "Returns & Refunds",
+      "intro": "At Hiya Ghar, customer satisfaction and trust are at the heart of our kitchen. Because we craft natural food items, our return and refund policy is designed to be transparent, fair, and prompt.",
+      "sitemap": true
+    },
+    {
+      "path": "/shipping-policy",
+      "title": "Shipping Policy | HIYAGHAR",
+      "description": "HIYAGHAR shipping policy: free standard delivery in India on orders of ₹500 or more, a flat ₹40 fee below that, ₹99 express where available, and timelines.",
+      "h1": "Shipping & Delivery Policy",
+      "linkText": "Shipping Policy",
+      "intro": "At Hiya Ghar, we treat every order like a fresh gift prepared with care. We partner with India’s top logistics providers including Blue Dart, Delhivery, DTDC, and India Post to deliver safe, tamper-evident packages across the nation.",
+      "sitemap": true
+    },
+    {
+      "path": "/track-order",
+      "title": "Track Your Order | HIYAGHAR",
+      "description": "Track your HIYAGHAR order: enter your order number to see its current shipping progress and courier updates, from dispatch through to delivery at your door.",
+      "h1": "Track Your Order",
+      "intro": "Enter your Order Number above to view real-time shipping progress and courier updates.",
+      "noindex": true
+    },
+    {
+      "path": "/cart",
+      "title": "Shopping Cart | HIYAGHAR",
+      "description": "Review the items in your HIYAGHAR shopping cart, update quantities and continue to secure checkout. Sign in to save your cart across devices and earn rewards.",
+      "h1": "Shopping Cart",
+      "noindex": true
+    },
+    {
+      "path": "/checkout",
+      "title": "Secure Checkout | HIYAGHAR",
+      "description": "Fast and secure checkout with free shipping on qualifying orders across India.",
+      "noindex": true
+    },
+    {
+      "path": "/login",
+      "title": "Sign In to Your Account | HIYAGHAR",
+      "description": "Log in to track orders, manage your wishlist, and save your delivery addresses.",
+      "h1": "Welcome Back",
+      "noindex": true
+    },
+    {
+      "path": "/auth",
+      "title": "Sign In to Your Account | HIYAGHAR",
+      "description": "Log in to track orders, manage your wishlist, and save your delivery addresses.",
+      "h1": "Welcome Back",
+      "noindex": true
+    },
+    {
+      "path": "/signup",
+      "title": "Create a New Account | HIYAGHAR",
+      "description": "Join the HIYAGHAR family to enjoy seamless ordering, exclusive discounts, and easy tracking.",
+      "noindex": true
+    },
+    {
+      "path": "/wishlist",
+      "title": "My Wishlist | HIYAGHAR",
+      "description": "View and manage your saved favorite items on HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/order-confirmation",
+      "title": "Order Confirmation | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/profile",
+      "title": "My Account Profile | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/account",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/orders",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/addresses",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/password",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/rewards",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/reward",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/coins",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "path": "/admin",
+      "title": "HIYAGHAR Admin Portal",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    }
+  ],
+  "prefixRoutes": [
+    {
+      "prefix": "/admin/",
+      "title": "HIYAGHAR Admin Portal",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    },
+    {
+      "prefix": "/orders/",
+      "title": "My Account | HIYAGHAR",
+      "description": "Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.",
+      "noindex": true
+    }
+  ],
+  "notFound": {
+    "title": "404 - Page Not Found | HIYAGHAR",
+    "description": "The page you are looking for does not exist or has been moved.",
+    "h1": "Oops! Page Not Found",
+    "intro": "The page you're looking for might have been removed, had its name changed, or is temporarily unavailable."
+  },
+  "productNotFound": {
+    "title": "Product Not Found | HIYAGHAR",
+    "description": "The product you are looking for does not exist or has been moved."
+  }
+}

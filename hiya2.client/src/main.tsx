@@ -43,9 +43,13 @@ if (typeof window !== 'undefined') {
   };
 }
 
-// Static head tags in index.html are for non-JS crawlers; <SEO> (react-helmet-async) takes over
-// once the app runs, so drop them to avoid duplicate <title>/<meta> elements.
-document.querySelectorAll('head [data-static-head]').forEach((el) => el.remove());
+// Head tags from index.html (data-static-head) and from the server's SEO injection (data-server-seo)
+// are for non-JS crawlers and social scrapers; <SEO> (react-helmet-async) recreates the same tags
+// once the app runs, so drop them to avoid duplicates. Server JSON-LD stays until the first
+// in-app navigation (see App.tsx).
+document
+  .querySelectorAll('head [data-static-head], head [data-server-seo]:not(script[type="application/ld+json"])')
+  .forEach((el) => el.remove());
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
