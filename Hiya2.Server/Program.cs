@@ -32,7 +32,13 @@ builder.Services.AddResponseCompression(options =>
     options.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(new[]
     {
         "application/json",
-        "image/svg+xml"
+        "image/svg+xml",
+        "text/html",
+        "text/css",
+        "application/javascript",
+        "application/x-javascript",
+        "font/woff2",
+        "font/woff"
     });
 });
 
@@ -509,18 +515,25 @@ app.UseStaticFiles(new StaticFileOptions
 {
     OnPrepareResponse = ctx =>
     {
-        var path = ctx.File.Name.ToLower();
-        if (ctx.Context.Request.Path.StartsWithSegments("/assets"))
+        var reqPath = ctx.Context.Request.Path;
+        var fileName = ctx.File.Name.ToLower();
+        if (reqPath.StartsWithSegments("/assets"))
         {
+            // Hashed asset names — safe to cache for 1 year
             ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=31536000,immutable");
         }
-        else if (ctx.Context.Request.Path.StartsWithSegments("/image") || ctx.Context.Request.Path.StartsWithSegments("/uploads"))
+        else if (reqPath.StartsWithSegments("/image") || reqPath.StartsWithSegments("/uploads"))
         {
             ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=2592000"); // 30 days
         }
-        else if (path.EndsWith(".html"))
+        else if (fileName.EndsWith(".html"))
         {
             ctx.Context.Response.Headers.Append("Cache-Control", "no-cache,no-store,must-revalidate");
+        }
+        else if (fileName.EndsWith(".woff2") || fileName.EndsWith(".woff") || fileName.EndsWith(".ttf"))
+        {
+            // Fonts at non-hashed paths (e.g. /fonts/) get 7-day cache
+            ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=604800");
         }
     }
 });

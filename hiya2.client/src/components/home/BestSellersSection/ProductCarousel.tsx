@@ -147,12 +147,13 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
     };
   }, [componentKey]);
 
-  // Build infinite 3-set list from dynamic categoriesList
-  const infiniteCategoriesData: (CategoryItem & { uniqueKey: string })[] = [
-    ...categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set1-${item.id}-${idx}` })),
-    ...categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set2-${item.id}-${idx}` })),
-    ...categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set3-${item.id}-${idx}` })),
-  ];
+  // Build infinite 3-set list from dynamic categoriesList.
+  // Only Set 2 (middle) is accessible; Set 1 and Set 3 are decorative clones for
+  // seamless looping — they are hidden from the accessibility tree via aria-hidden+inert.
+  const set1 = categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set1-${item.id}-${idx}`, _clone: true }));
+  const set2 = categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set2-${item.id}-${idx}`, _clone: false }));
+  const set3 = categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set3-${item.id}-${idx}`, _clone: true }));
+  const infiniteCategoriesData = [...set1, ...set2, ...set3];
 
   // Initialize track scroll to middle set (Set 2) and attach seamless bidirectional infinite boundary listener
   useEffect(() => {
@@ -274,11 +275,17 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
         aria-label="Product Showcase Carousel"
       >
         {infiniteCategoriesData.map((category) => (
-          <div key={category.uniqueKey} className="hiyaghar-carousel-item">
+          <div
+            key={category.uniqueKey}
+            className="hiyaghar-carousel-item"
+            aria-hidden={category._clone ? 'true' : undefined}
+            // @ts-expect-error — inert is a valid HTML attribute; React types lag behind the spec
+            inert={category._clone ? '' : undefined}
+          >
             <CategoryCard
               category={category}
-              isActive={activeCategoryId === category.id}
-              onActivate={() => setActiveCategoryId(category.id)}
+              isActive={!category._clone && activeCategoryId === category.id}
+              onActivate={() => !category._clone && setActiveCategoryId(category.id)}
               onDeactivate={() => setActiveCategoryId(null)}
             />
           </div>

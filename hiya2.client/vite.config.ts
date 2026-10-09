@@ -58,10 +58,22 @@ export default defineConfig({
                     if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/gsap/')) {
                         return 'vendor-animation';
                     }
+                    if (id.includes('node_modules/jspdf') || id.includes('node_modules/jspdf-autotable')) {
+                        return 'vendor-pdf';
+                    }
+                    if (id.includes('node_modules/html2canvas')) {
+                        return 'vendor-html2canvas';
+                    }
+                    if (id.includes('node_modules/lottie-react') || id.includes('node_modules/lottie-web')) {
+                        return 'vendor-lottie';
+                    }
+                    if (id.includes('node_modules/@xenova')) {
+                        return 'vendor-ai';
+                    }
                 }
             }
         },
-        chunkSizeWarningLimit: 600
+        chunkSizeWarningLimit: 800
     },
     server: {
         proxy: {

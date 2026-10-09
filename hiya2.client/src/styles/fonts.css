@@ -1,0 +1,23 @@
+/*
+ * DM Sans self-hosted via @fontsource/dm-sans (OFL-1.1 licensed).
+ * Only Latin subset. Weights actually used in the codebase: 400, 500, 600, 700, 800, 900.
+ * font-display: swap so text renders immediately with fallback, replaced when ready.
+ */
+
+/* Weight 400 — body text (preloaded in index.html) */
+@import '@fontsource/dm-sans/400.css';
+
+/* Weight 500 — labels, nav links, product meta */
+@import '@fontsource/dm-sans/500.css';
+
+/* Weight 600 — buttons, section headings, h2/h3 */
+@import '@fontsource/dm-sans/600.css';
+
+/* Weight 700 — h1, hero headings (preloaded in index.html) */
+@import '@fontsource/dm-sans/700.css';
+
+/* Weight 800 — large price display, product highlights on category pages */
+@import '@fontsource/dm-sans/800.css';
+
+/* Weight 900 — hero titles on Tea Masala, product detail hero numbers */
+@import '@fontsource/dm-sans/900.css';

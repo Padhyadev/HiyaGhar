@@ -1,51 +1,7 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Suspense, lazy } from 'react';
 import { Home } from './pages/Home/Home';
-import { CustomizeComboPage } from './pages/CustomizeCombo/CustomizeComboPage';
-import { MukhwasPage } from './pages/Mukhwas/MukhwasPage';
-import { ProductDetailPage } from './pages/ProductDetail/ProductDetailPage';
-import { CartPage } from './pages/Cart/CartPage';
-import { CheckoutPage } from './pages/Checkout/CheckoutPage';
-import { OrderConfirmationPage } from './pages/OrderConfirmation/OrderConfirmationPage';
-import { TrackOrderPage } from './pages/TrackOrder/TrackOrderPage';
-import { ProfilePage } from './pages/Profile/ProfilePage';
-import { WishlistPage } from './pages/Wishlist/WishlistPage';
-import { AuthPage } from './pages/Auth/AuthPage';
-import { TeaMasalaPage } from './pages/TeaMasala/TeaMasalaPage';
-import { HandmadeSoapPage } from './pages/HandmadeSoap/HandmadeSoapPage';
-import { HairOilPage } from './pages/HairOil/HairOilPage';
-import { GiftHampersPage } from './pages/GiftHampers/GiftHampersPage';
-import { OurStoryPage } from './pages/OurStory/OurStoryPage';
-import {
-  PrivacyPolicyPage,
-  TermsConditionsPage,
-  RefundPolicyPage,
-  ShippingPolicyPage,
-} from './pages/Legal/LegalPages';
-import { ContactUsPage } from './pages/ContactUs/ContactUsPage';
-import { FaqPage } from './pages/Faq/FaqPage';
-import { NotFoundPage } from './pages/NotFound/NotFoundPage';
-import { RoleManagementPage } from './pages/Admin/RoleManagementPage';
-import { UserManagementPage } from './pages/Admin/UserManagementPage';
-import { MenuManagementPage } from './pages/Admin/MenuManagementPage';
-import { CategoryManagementPage } from './pages/Admin/CategoryManagementPage';
-import { ProductManagementPage } from './pages/Admin/ProductManagementPage';
-import { CustomerManagementPage } from './pages/Admin/CustomerManagementPage';
-import { AttributeManagementPage } from './pages/Admin/AttributeManagementPage';
-import { AdminDashboardPage } from './pages/Admin/AdminDashboardPage';
-import { HomePageComponentManagementPage } from './pages/Admin/HomePageComponentManagementPage';
-import { GiftHamperManagementPage } from './pages/Admin/GiftHamperManagementPage';
-import { ReviewManagementPage } from './pages/Admin/ReviewManagementPage';
-import { ContactQueryManagementPage } from './pages/Admin/ContactQueryManagementPage';
-import { FaqManagementPage } from './pages/Admin/FaqManagementPage';
-import { StockModulePage } from './pages/Admin/StockModulePage';
-import { RewardModulePage } from './pages/Admin/RewardModulePage';
-import { OrderManagementPage } from './pages/Admin/OrderManagementPage';
-import { ShippingSettingsPage } from './pages/Admin/ShippingSettingsPage';
-import { ComboPackManagementPage } from './pages/Admin/ComboPackManagementPage';
-import { CouponManagementPage } from './pages/Admin/CouponManagementPage';
-import { LovManagementPage } from './pages/Admin/LovManagementPage';
-import { GenericModulePage } from './pages/Admin/GenericModulePage';
-import { AccessDeniedPage } from './pages/Admin/AccessDeniedPage';
+import { ChunkErrorBoundary } from './components/common/ChunkErrorBoundary';
+import { RouteLoader } from './components/common/RouteLoader';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { RequireAdminAuth } from './components/admin/RequireAdminAuth';
 import { PermissionGuard } from './components/common/PermissionGuard';
@@ -60,12 +16,64 @@ import { preloadCriticalImages } from './services/imagePreloaderService';
 import { SEO } from './components/common/SEO/SEO';
 import { findRouteMeta, type RouteMeta } from './seo/routeSeo';
 
+// ─── Lazy-loaded storefront pages ──────────────────────────────────────────
+const CustomizeComboPage = lazy(() => import('./pages/CustomizeCombo/CustomizeComboPage').then(m => ({ default: m.CustomizeComboPage })));
+const MukhwasPage = lazy(() => import('./pages/Mukhwas/MukhwasPage').then(m => ({ default: m.MukhwasPage })));
+const ProductDetailPage = lazy(() => import('./pages/ProductDetail/ProductDetailPage').then(m => ({ default: m.ProductDetailPage })));
+const CartPage = lazy(() => import('./pages/Cart/CartPage').then(m => ({ default: m.CartPage })));
+const CheckoutPage = lazy(() => import('./pages/Checkout/CheckoutPage').then(m => ({ default: m.CheckoutPage })));
+const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmation/OrderConfirmationPage').then(m => ({ default: m.OrderConfirmationPage })));
+const TrackOrderPage = lazy(() => import('./pages/TrackOrder/TrackOrderPage').then(m => ({ default: m.TrackOrderPage })));
+const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage').then(m => ({ default: m.ProfilePage })));
+const WishlistPage = lazy(() => import('./pages/Wishlist/WishlistPage').then(m => ({ default: m.WishlistPage })));
+const AuthPage = lazy(() => import('./pages/Auth/AuthPage').then(m => ({ default: m.AuthPage })));
+const TeaMasalaPage = lazy(() => import('./pages/TeaMasala/TeaMasalaPage').then(m => ({ default: m.TeaMasalaPage })));
+const HandmadeSoapPage = lazy(() => import('./pages/HandmadeSoap/HandmadeSoapPage').then(m => ({ default: m.HandmadeSoapPage })));
+const HairOilPage = lazy(() => import('./pages/HairOil/HairOilPage').then(m => ({ default: m.HairOilPage })));
+const GiftHampersPage = lazy(() => import('./pages/GiftHampers/GiftHampersPage').then(m => ({ default: m.GiftHampersPage })));
+const OurStoryPage = lazy(() => import('./pages/OurStory/OurStoryPage').then(m => ({ default: m.OurStoryPage })));
+const ContactUsPage = lazy(() => import('./pages/ContactUs/ContactUsPage').then(m => ({ default: m.ContactUsPage })));
+const FaqPage = lazy(() => import('./pages/Faq/FaqPage').then(m => ({ default: m.FaqPage })));
+const NotFoundPage = lazy(() => import('./pages/NotFound/NotFoundPage').then(m => ({ default: m.NotFoundPage })));
+
+// Legal pages (one chunk for all 4 — named exports from LegalPages.tsx)
+const PrivacyPolicyPage = lazy(() => import('./pages/Legal/LegalPages').then(m => ({ default: m.PrivacyPolicyPage })));
+const TermsConditionsPage = lazy(() => import('./pages/Legal/LegalPages').then(m => ({ default: m.TermsConditionsPage })));
+const RefundPolicyPage = lazy(() => import('./pages/Legal/LegalPages').then(m => ({ default: m.RefundPolicyPage })));
+const ShippingPolicyPage = lazy(() => import('./pages/Legal/LegalPages').then(m => ({ default: m.ShippingPolicyPage })));
+
+// ─── Lazy-loaded admin pages ────────────────────────────────────────────────
+const RoleManagementPage = lazy(() => import('./pages/Admin/RoleManagementPage').then(m => ({ default: m.RoleManagementPage })));
+const UserManagementPage = lazy(() => import('./pages/Admin/UserManagementPage').then(m => ({ default: m.UserManagementPage })));
+const MenuManagementPage = lazy(() => import('./pages/Admin/MenuManagementPage').then(m => ({ default: m.MenuManagementPage })));
+const CategoryManagementPage = lazy(() => import('./pages/Admin/CategoryManagementPage').then(m => ({ default: m.CategoryManagementPage })));
+const ProductManagementPage = lazy(() => import('./pages/Admin/ProductManagementPage').then(m => ({ default: m.ProductManagementPage })));
+const CustomerManagementPage = lazy(() => import('./pages/Admin/CustomerManagementPage').then(m => ({ default: m.CustomerManagementPage })));
+const AttributeManagementPage = lazy(() => import('./pages/Admin/AttributeManagementPage').then(m => ({ default: m.AttributeManagementPage })));
+const AdminDashboardPage = lazy(() => import('./pages/Admin/AdminDashboardPage').then(m => ({ default: m.AdminDashboardPage })));
+const HomePageComponentManagementPage = lazy(() => import('./pages/Admin/HomePageComponentManagementPage').then(m => ({ default: m.HomePageComponentManagementPage })));
+const GiftHamperManagementPage = lazy(() => import('./pages/Admin/GiftHamperManagementPage').then(m => ({ default: m.GiftHamperManagementPage })));
+const ReviewManagementPage = lazy(() => import('./pages/Admin/ReviewManagementPage').then(m => ({ default: m.ReviewManagementPage })));
+const ContactQueryManagementPage = lazy(() => import('./pages/Admin/ContactQueryManagementPage').then(m => ({ default: m.ContactQueryManagementPage })));
+const FaqManagementPage = lazy(() => import('./pages/Admin/FaqManagementPage').then(m => ({ default: m.FaqManagementPage })));
+const StockModulePage = lazy(() => import('./pages/Admin/StockModulePage').then(m => ({ default: m.StockModulePage })));
+const RewardModulePage = lazy(() => import('./pages/Admin/RewardModulePage').then(m => ({ default: m.RewardModulePage })));
+const OrderManagementPage = lazy(() => import('./pages/Admin/OrderManagementPage').then(m => ({ default: m.OrderManagementPage })));
+const ShippingSettingsPage = lazy(() => import('./pages/Admin/ShippingSettingsPage').then(m => ({ default: m.ShippingSettingsPage })));
+const ComboPackManagementPage = lazy(() => import('./pages/Admin/ComboPackManagementPage').then(m => ({ default: m.ComboPackManagementPage })));
+const CouponManagementPage = lazy(() => import('./pages/Admin/CouponManagementPage').then(m => ({ default: m.CouponManagementPage })));
+const LovManagementPage = lazy(() => import('./pages/Admin/LovManagementPage').then(m => ({ default: m.LovManagementPage })));
+const GenericModulePage = lazy(() => import('./pages/Admin/GenericModulePage').then(m => ({ default: m.GenericModulePage })));
+const AccessDeniedPage = lazy(() => import('./pages/Admin/AccessDeniedPage').then(m => ({ default: m.AccessDeniedPage })));
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
 function getNormalizedRoute(): string {
   const hash = window.location.hash;
   const path = window.location.pathname;
 
   let current = path || '/';
-  
+
   // If hash is a SPA route (e.g. #/mukhwas), use it; if it's an in-page anchor (#bestsellers-section), do not treat as a route path
   if (hash && hash.startsWith('#/')) {
     let clean = hash.replace(/^#\/?/, '/');
@@ -132,6 +140,15 @@ function getRouteMeta(route: string): RouteMeta | null {
   return findRouteMeta(lower, isAccountRoute(lower) ? '/account' : undefined);
 }
 
+// Prefetch a lazy chunk on hover/focus without triggering a download of images.
+function prefetchChunk(importFn: () => Promise<unknown>) {
+  if (typeof requestIdleCallback !== 'undefined') {
+    requestIdleCallback(() => { importFn(); }, { timeout: 2000 });
+  } else {
+    setTimeout(() => { importFn(); }, 200);
+  }
+}
+
 function App() {
   const [currentRoute, setCurrentRoute] = useState<string>(getNormalizedRoute());
 
@@ -191,30 +208,12 @@ function App() {
     window.scrollTo(0, 0);
   };
 
-  const handleNavigateHome = () => {
-    navigateTo('/');
-  };
-
-  const handleNavigateMukhwas = () => {
-    navigateTo('/mukhwas');
-  };
-
-  const handleNavigateToDetail = (productId: string) => {
-    navigateTo(`/product/${productId}`);
-  };
-
-  const handleNavigateCart = () => {
-    navigateTo('/cart');
-  };
-
-  const handleNavigateCheckout = () => {
-    navigateTo('/checkout');
-  };
-
-  const handleNavigateConfirmation = (orderId: string) => {
-    navigateTo(`/order-confirmation?orderId=${orderId}`);
-  };
-
+  const handleNavigateHome = () => { navigateTo('/'); };
+  const handleNavigateMukhwas = () => { navigateTo('/mukhwas'); };
+  const handleNavigateToDetail = (productId: string) => { navigateTo(`/product/${productId}`); };
+  const handleNavigateCart = () => { navigateTo('/cart'); };
+  const handleNavigateCheckout = () => { navigateTo('/checkout'); };
+  const handleNavigateConfirmation = (orderId: string) => { navigateTo(`/order-confirmation?orderId=${orderId}`); };
   const handleNavigateTrackOrder = (orderId?: string) => {
     navigateTo(orderId ? `/track-order?orderId=${orderId}` : '/track-order');
   };
@@ -821,6 +820,13 @@ function App() {
     return <NotFoundPage />;
   };
 
+  // Prefetch on hover helpers
+  const prefetchProductDetail = () => prefetchChunk(() => import('./pages/ProductDetail/ProductDetailPage'));
+  const prefetchMukhwas = () => prefetchChunk(() => import('./pages/Mukhwas/MukhwasPage'));
+
+  void prefetchProductDetail;
+  void prefetchMukhwas;
+
   const routeMeta = getRouteMeta(currentRoute);
 
   return (
@@ -828,7 +834,11 @@ function App() {
       {routeMeta && <SEO {...routeMeta} />}
       <Preloader />
       <PageTransition currentHash={currentRoute}>
-        {renderRouteContent()}
+        <ChunkErrorBoundary>
+          <Suspense fallback={<RouteLoader />}>
+            {renderRouteContent()}
+          </Suspense>
+        </ChunkErrorBoundary>
       </PageTransition>
       {!currentRoute.toLowerCase().startsWith('/admin') && <FloatingWidgets />}
     </PermissionProvider>

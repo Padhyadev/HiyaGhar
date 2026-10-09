@@ -1,5 +1,6 @@
 @import '../tokens/tokens.css';
 @import '../typography.css';
+@import '../fonts.css';
 
 /* Global Reset & Base Typography */
 *,
@@ -10,72 +11,16 @@
   padding: 0;
 }
 
-/* Ensure Font Awesome 6 font-family & pseudo-elements are never overridden by wildcard resets */
-i[class*="fa-"],
-i[class*="fa-"]::before,
-i[class*="fa-"]::after,
-.fa,
-.fa::before,
-.fa::after,
-.fas,
-.fas::before,
-.fas::after,
-.far,
-.far::before,
-.far::after,
-.fab,
-.fab::before,
-.fab::after,
-.fa-solid,
-.fa-solid::before,
-.fa-solid::after,
-.fa-regular,
-.fa-regular::before,
-.fa-regular::after,
-.fa-brands,
-.fa-brands::before,
-.fa-brands::after {
-  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands', sans-serif !important;
-  font-style: normal !important;
-  font-variant: normal !important;
-  text-rendering: auto !important;
-  line-height: 1 !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.fa-solid,
-.fa-solid::before,
-.fas,
-.fas::before {
-  font-weight: 900 !important;
-}
-
-.fa-regular,
-.fa-regular::before,
-.far,
-.far::before {
-  font-weight: 400 !important;
-}
-
-.fa-brands,
-.fa-brands::before,
-.fab,
-.fab::before {
-  font-family: 'Font Awesome 6 Brands' !important;
-  font-weight: 400 !important;
-}
-
 html {
   font-size: 16px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'DM Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
   font-size: 15px;
   font-weight: 400;
   line-height: 1.55;
