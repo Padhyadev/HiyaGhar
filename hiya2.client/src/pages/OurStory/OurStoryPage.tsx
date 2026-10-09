@@ -292,7 +292,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
               <button
                 type="button"
                 className="hiyaghar-story-btn-secondary"
-                onClick={() => navigateTo('/customize-combo')}
+                onClick={() => navigateTo('/combos')}
               >
                 Build Custom Combo Box
               </button>

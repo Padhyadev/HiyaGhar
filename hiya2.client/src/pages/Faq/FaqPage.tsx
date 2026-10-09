@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { ScrollReveal } from '../../components/common/ScrollReveal/ScrollReveal';
@@ -134,15 +133,6 @@ export const FaqPage: React.FC = () => {
 
   return (
     <div className="hiyaghar-faq-page">
-      <Helmet>
-        <title>Frequently Asked Questions (FAQ) | HIYAGHAR</title>
-        <meta
-          name="description"
-          content="Find answers to common questions about HIYAGHAR handcrafted natural mukhwas, traditional tea masala, handmade soaps, shipping, orders, and custom gifting."
-        />
-        <link rel="canonical" href="https://hiyaghar.com/faq" />
-      </Helmet>
-
       <Header />
 
       <main id="main-content" tabIndex={-1} className="hiyaghar-faq-main">

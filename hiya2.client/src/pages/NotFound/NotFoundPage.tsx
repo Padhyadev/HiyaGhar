@@ -1,5 +1,5 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
+import { SEO } from '../../components/common/SEO/SEO';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { navigateTo } from '../../utils/navigation';
@@ -8,10 +8,12 @@ import './NotFoundPage.css';
 export const NotFoundPage: React.FC = () => {
   return (
     <div className="hiyaghar-notfound-layout">
-      <Helmet>
-        <title>404 - Page Not Found | Hiya Ghar</title>
-        <meta name="description" content="The page you are looking for does not exist or has been moved." />
-      </Helmet>
+      <SEO
+        title="404 - Page Not Found | HIYAGHAR"
+        description="The page you are looking for does not exist or has been moved."
+        path={window.location.pathname}
+        noindex
+      />
       <Header />
       <main id="main-content" tabIndex={-1} className="hiyaghar-notfound-main">
         <div className="hiyaghar-notfound-card">

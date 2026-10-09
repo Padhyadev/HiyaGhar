@@ -179,10 +179,7 @@ export class ProductService {
       if (found) return found;
     }
 
-    // Check default static fallback list
-    const fallbackFound = defaultProducts.find((p) => p.id === id);
-    if (fallbackFound) return fallbackFound;
-
+    // Never fall back to defaultProducts here: its demo ids (1-5) collide with real catalog ids.
     try {
       const response = await fetch(`/api/product/${id}`);
       if (response.ok) {
@@ -192,7 +189,6 @@ export class ProductService {
       console.warn(`API fetch error for product ${id}:`, err);
     }
 
-    const list = this.cachedProducts.length > 0 ? this.cachedProducts : defaultProducts;
-    return list.find((p) => p.id === id) || null;
+    return this.cachedProducts.find((p) => p.id === id) || null;
   }
 }

@@ -447,6 +447,58 @@ using (var scope = app.Services.CreateScope())
 
 app.UseResponseCompression();
 
+// SEO redirects: old alias URLs and trailing slashes get a single 301 to the canonical path
+// (canonical URLs have no trailing slash). Runs before static files and the SPA fallback.
+var routeAliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+{
+    ["/combo"] = "/combos",
+    ["/customize-combo"] = "/combos",
+    ["/ourstory"] = "/our-story",
+    ["/about"] = "/our-story",
+    ["/about-us"] = "/our-story",
+    ["/gifting"] = "/gift-hampers",
+    ["/home-made-soap"] = "/handmade-soap",
+    ["/hand-made-soap"] = "/handmade-soap",
+    ["/soap"] = "/handmade-soap",
+    ["/hair-oils"] = "/hair-oil",
+    ["/hairoil"] = "/hair-oil",
+    ["/privacy"] = "/privacy-policy",
+    ["/terms"] = "/terms-conditions",
+    ["/terms-and-conditions"] = "/terms-conditions",
+    ["/refund"] = "/refund-policy",
+    ["/cancellation"] = "/refund-policy",
+    ["/shipping"] = "/shipping-policy",
+    ["/contact"] = "/contact-us",
+    ["/faqs"] = "/faq",
+};
+
+app.Use(async (context, next) =>
+{
+    var request = context.Request;
+    var path = request.Path.Value ?? "/";
+    var isApiOrSwagger = path.StartsWith("/api", StringComparison.OrdinalIgnoreCase)
+        || path.StartsWith("/swagger", StringComparison.OrdinalIgnoreCase);
+
+    if ((HttpMethods.IsGet(request.Method) || HttpMethods.IsHead(request.Method)) && !isApiOrSwagger)
+    {
+        var trimmed = path.Length > 1 ? path.TrimEnd('/') : path;
+        if (trimmed.Length == 0) trimmed = "/";
+
+        string? target = routeAliases.TryGetValue(trimmed, out var alias) ? alias
+            : trimmed != path ? trimmed
+            : null;
+
+        if (target != null)
+        {
+            context.Response.StatusCode = StatusCodes.Status301MovedPermanently;
+            context.Response.Headers.Location = target + request.QueryString;
+            return;
+        }
+    }
+
+    await next();
+});
+
 app.UseDefaultFiles();
 app.UseStaticFiles(new StaticFileOptions
 {
@@ -500,7 +552,54 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-app.MapFallbackToFile("index.html");
+
+// SPA fallback with real status codes: known client routes get index.html with 200, anything else
+// gets index.html with 404 (the React app still renders its 404 view). /product/{id} is 200 only
+// for an existing, active product. Paths that look like files keep the default 404 (":nonfile").
+var spaRoutes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+{
+    // Public pages
+    "/", "/mukhwas", "/tea-masala", "/handmade-soap", "/hair-oil", "/gift-hampers", "/combos",
+    "/our-story", "/contact-us", "/faq", "/track-order",
+    "/shipping-policy", "/refund-policy", "/privacy-policy", "/terms-conditions",
+    // Private / utility pages (noindex in the client)
+    "/cart", "/checkout", "/login", "/signup", "/auth", "/wishlist", "/order-confirmation",
+    "/profile", "/orders", "/addresses", "/password", "/account", "/rewards", "/reward", "/coins",
+    "/admin",
+};
+var spaPrefixes = new[] { "/admin/", "/orders/" };
+
+app.MapFallback(async context =>
+{
+    var path = context.Request.Path.Value ?? "/";
+
+    // Unknown API paths: plain 404, not the SPA shell.
+    if (path.StartsWith("/api/", StringComparison.OrdinalIgnoreCase))
+    {
+        context.Response.StatusCode = StatusCodes.Status404NotFound;
+        return;
+    }
+
+    var isKnownRoute = spaRoutes.Contains(path)
+        || spaPrefixes.Any(p => path.StartsWith(p, StringComparison.OrdinalIgnoreCase));
+
+    if (!isKnownRoute && path.StartsWith("/product/", StringComparison.OrdinalIgnoreCase)
+        && int.TryParse(path["/product/".Length..], out var productId))
+    {
+        var db = context.RequestServices.GetRequiredService<DataContext>();
+        isKnownRoute = await db.Products.AsNoTracking()
+            .AnyAsync(p => p.Id == productId && p.IsActive && !p.IsDeleted);
+    }
+
+    var indexFile = app.Environment.WebRootFileProvider.GetFileInfo("index.html");
+    context.Response.StatusCode = isKnownRoute ? StatusCodes.Status200OK : StatusCodes.Status404NotFound;
+    context.Response.ContentType = "text/html; charset=utf-8";
+    context.Response.Headers.CacheControl = "no-cache,no-store,must-revalidate";
+    if (indexFile.Exists)
+    {
+        await context.Response.SendFileAsync(indexFile);
+    }
+});
 
 app.Run();
 

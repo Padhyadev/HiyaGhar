@@ -57,6 +57,7 @@ import { Preloader } from './components/common/Preloader/Preloader';
 import { PageTransition } from './components/common/PageTransition/PageTransition';
 import { FloatingWidgets } from './components/common/FloatingWidgets/FloatingWidgets';
 import { preloadCriticalImages } from './services/imagePreloaderService';
+import { SEO } from './components/common/SEO/SEO';
 
 function getNormalizedRoute(): string {
   const hash = window.location.hash;
@@ -99,114 +100,86 @@ function isAccountRoute(route: string): boolean {
   );
 }
 
+// Old alias URLs -> canonical path. The server answers these with a 301; this covers client-side navigation.
+const ROUTE_ALIASES: Record<string, string> = {
+  '/combo': '/combos',
+  '/customize-combo': '/combos',
+  '/ourstory': '/our-story',
+  '/about': '/our-story',
+  '/about-us': '/our-story',
+  '/gifting': '/gift-hampers',
+  '/home-made-soap': '/handmade-soap',
+  '/hand-made-soap': '/handmade-soap',
+  '/soap': '/handmade-soap',
+  '/hair-oils': '/hair-oil',
+  '/hairoil': '/hair-oil',
+  '/privacy': '/privacy-policy',
+  '/terms': '/terms-conditions',
+  '/terms-and-conditions': '/terms-conditions',
+  '/refund': '/refund-policy',
+  '/cancellation': '/refund-policy',
+  '/shipping': '/shipping-policy',
+  '/contact': '/contact-us',
+  '/faqs': '/faq',
+};
+
+interface RouteMeta {
+  title: string;
+  description: string;
+  path: string;
+  noindex?: boolean;
+}
+
+const DEFAULT_TITLE = 'HIYAGHAR - Handcrafted Natural Mukhwas & Wellness';
+const DEFAULT_DESCRIPTION = 'Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.';
+
+// Per-route meta for every route the router renders. Returns null for /product/* (the product page
+// sets its own) and for unknown routes (NotFoundPage sets its own).
+function getRouteMeta(route: string): RouteMeta | null {
+  const lower = route.toLowerCase().split('?')[0];
+  const meta = (title: string, description: string, noindex = false): RouteMeta => ({ title, description, path: lower, noindex });
+
+  if (lower === '/') return meta(DEFAULT_TITLE, DEFAULT_DESCRIPTION);
+  if (lower === '/mukhwas') return meta('Artisanal Natural Mukhwas Collection | HIYAGHAR', 'Explore our premium selection of traditional handcrafted digestive mukhwas made with 100% natural ingredients.');
+  if (lower === '/tea-masala') return meta('Authentic Traditional Tea Masala | HIYAGHAR', 'Rich aromatic spice blend for the perfect Indian chai experience.');
+  if (lower === '/handmade-soap') return meta('Natural Handmade Cold Process Soaps | HIYAGHAR', 'Pure plant-based, chemical-free artisan soaps crafted for nourished, glowing skin.');
+  if (lower === '/hair-oil') return meta('Ayurvedic Herbal Hair Oil | HIYAGHAR', 'Nourishing herbal hair oil formulated with pure botanical extracts for strong, healthy hair.');
+  if (lower === '/gift-hampers') return meta('Festive & Celebration Gift Hampers | HIYAGHAR', 'Thoughtfully curated luxury gift boxes filled with handcrafted natural wellness treats.');
+  if (lower === '/combos') return meta('Customize Your Combo Pack | HIYAGHAR', 'Save more on our most popular handcrafted mukhwas, tea masala, and personal care combinations.');
+  if (lower === '/our-story') return meta('Our Story & Heritage | HIYAGHAR', 'Learn about HIYAGHAR’s journey, our commitment to natural ingredients, and authentic taste.');
+  if (lower === '/contact-us') return meta('Contact Us | HIYAGHAR', 'Get in touch with HIYAGHAR for inquiries, bulk orders, and customer support.');
+  if (lower === '/faq') return meta('Frequently Asked Questions (FAQ) | HIYAGHAR', 'Find answers to common questions about HIYAGHAR handcrafted natural mukhwas, tea masala, soaps, shipping, and custom gifting.');
+  if (lower === '/privacy-policy') return meta('Privacy Policy | HIYAGHAR', 'Read our privacy policy to understand how HIYAGHAR protects your personal data.');
+  if (lower === '/terms-conditions') return meta('Terms & Conditions | HIYAGHAR', 'Review the official terms and conditions for using the HIYAGHAR website and services.');
+  if (lower === '/refund-policy') return meta('Refund & Cancellation Policy | HIYAGHAR', 'Information about HIYAGHAR cancellation, return, and refund policies.');
+  if (lower === '/shipping-policy') return meta('Shipping Policy | HIYAGHAR', 'Delivery timeframes, shipping charges, and order tracking information.');
+
+  // Private / utility routes: noindex,follow
+  if (lower === '/cart') return meta('Shopping Cart | HIYAGHAR', 'Review your shopping cart items and proceed to fast, secure checkout.', true);
+  if (lower === '/checkout') return meta('Secure Checkout | HIYAGHAR', 'Fast and secure checkout with free shipping on qualifying orders across India.', true);
+  if (lower === '/login' || lower === '/auth') return meta('Sign In to Your Account | HIYAGHAR', 'Log in to track orders, manage your wishlist, and save your delivery addresses.', true);
+  if (lower === '/signup') return meta('Create a New Account | HIYAGHAR', 'Join the HIYAGHAR family to enjoy seamless ordering, exclusive discounts, and easy tracking.', true);
+  if (lower.startsWith('/track-order')) return meta('Track Your Order | HIYAGHAR', 'Track the real-time shipping and delivery status of your HIYAGHAR order.', true);
+  if (lower === '/wishlist') return meta('My Wishlist | HIYAGHAR', 'View and manage your saved favorite items on HIYAGHAR.', true);
+  if (lower.startsWith('/order-confirmation')) return meta(DEFAULT_TITLE, DEFAULT_DESCRIPTION, true);
+  if (lower === '/profile') return meta('My Account Profile | HIYAGHAR', DEFAULT_DESCRIPTION, true);
+  if (isAccountRoute(lower)) return meta(DEFAULT_TITLE, DEFAULT_DESCRIPTION, true);
+  if (lower === '/admin' || lower.startsWith('/admin/')) return meta('HIYAGHAR Admin Portal', DEFAULT_DESCRIPTION, true);
+
+  return null;
+}
+
 function App() {
   const [currentRoute, setCurrentRoute] = useState<string>(getNormalizedRoute());
 
   useEffect(() => {
     preloadCriticalImages();
 
-    const updateRouteMeta = (route: string) => {
-      const lower = route.toLowerCase();
-      let title = 'HIYAGHAR - Handcrafted Natural Mukhwas & Wellness';
-      let description = 'Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR.';
-
-      if (lower === '/mukhwas' || lower.startsWith('/mukhwas/')) {
-        title = 'Artisanal Natural Mukhwas Collection | HIYAGHAR';
-        description = 'Explore our premium selection of traditional handcrafted digestive mukhwas made with 100% natural ingredients.';
-      } else if (lower === '/tea-masala' || lower.startsWith('/tea-masala/')) {
-        title = 'Authentic Traditional Tea Masala | HIYAGHAR';
-        description = 'Rich aromatic spice blend for the perfect Indian chai experience.';
-      } else if (lower === '/handmade-soap' || lower.startsWith('/handmade-soap/')) {
-        title = 'Natural Handmade Cold Process Soaps | HIYAGHAR';
-        description = 'Pure plant-based, chemical-free artisan soaps crafted for nourished, glowing skin.';
-      } else if (lower === '/hair-oil' || lower.startsWith('/hair-oil/')) {
-        title = 'Ayurvedic Herbal Hair Oil | HIYAGHAR';
-        description = 'Nourishing herbal hair oil formulated with pure botanical extracts for strong, healthy hair.';
-      } else if (lower === '/gift-hampers' || lower.startsWith('/gift-hampers/')) {
-        title = 'Festive & Celebration Gift Hampers | HIYAGHAR';
-        description = 'Thoughtfully curated luxury gift boxes filled with handcrafted natural wellness treats.';
-      } else if (lower === '/combos' || lower.startsWith('/combos/')) {
-        title = 'Value Wellness Combo Packs | HIYAGHAR';
-        description = 'Save more on our most popular handcrafted mukhwas, tea masala, and personal care combinations.';
-      } else if (lower === '/cart') {
-        title = 'Shopping Cart | HIYAGHAR';
-        description = 'Review your shopping cart items and proceed to fast, secure checkout.';
-      } else if (lower === '/checkout') {
-        title = 'Secure Checkout | HIYAGHAR';
-        description = 'Fast and secure checkout with free shipping on qualifying orders across India.';
-      } else if (lower === '/login') {
-        title = 'Sign In to Your Account | HIYAGHAR';
-        description = 'Log in to track orders, manage your wishlist, and save your delivery addresses.';
-      } else if (lower === '/signup') {
-        title = 'Create a New Account | HIYAGHAR';
-        description = 'Join the HIYAGHAR family to enjoy seamless ordering, exclusive discounts, and easy tracking.';
-      } else if (lower.startsWith('/track-order')) {
-        title = 'Track Your Order | HIYAGHAR';
-        description = 'Track the real-time shipping and delivery status of your HIYAGHAR order.';
-      } else if (lower === '/wishlist') {
-        title = 'My Wishlist | HIYAGHAR';
-        description = 'View and manage your saved favorite items on HIYAGHAR.';
-      } else if (lower === '/privacy-policy') {
-        title = 'Privacy Policy | HIYAGHAR';
-        description = 'Read our privacy policy to understand how HIYAGHAR protects your personal data.';
-      } else if (lower === '/terms-conditions') {
-        title = 'Terms & Conditions | HIYAGHAR';
-        description = 'Review the official terms and conditions for using the HIYAGHAR website and services.';
-      } else if (lower === '/refund-policy') {
-        title = 'Refund & Cancellation Policy | HIYAGHAR';
-        description = 'Information about HIYAGHAR cancellation, return, and refund policies.';
-      } else if (lower === '/shipping-policy') {
-        title = 'Shipping Policy | HIYAGHAR';
-        description = 'Delivery timeframes, shipping charges, and order tracking information.';
-      } else if (lower === '/contact-us') {
-        title = 'Contact Us | HIYAGHAR';
-        description = 'Get in touch with HIYAGHAR for inquiries, bulk orders, and customer support.';
-      } else if (lower === '/faq' || lower === '/faqs') {
-        title = 'Frequently Asked Questions (FAQ) | HIYAGHAR';
-        description = 'Find answers to common questions about HIYAGHAR handcrafted natural mukhwas, tea masala, soaps, shipping, and custom gifting.';
-      } else if (lower === '/our-story') {
-        title = 'Our Story & Heritage | HIYAGHAR';
-        description = 'Learn about HIYAGHAR’s journey, our commitment to natural ingredients, and authentic taste.';
-      } else if (lower === '/profile') {
-        title = 'My Account Profile | HIYAGHAR';
-      } else if (lower.startsWith('/admin')) {
-        title = 'HIYAGHAR Admin Portal';
-      }
-
-      document.title = title;
-      let metaDesc = document.querySelector('meta[name="description"]');
-      if (!metaDesc) {
-        metaDesc = document.createElement('meta');
-        metaDesc.setAttribute('name', 'description');
-        document.head.appendChild(metaDesc);
-      }
-      metaDesc.setAttribute('content', description);
-
-      // BUG-006: Canonical URL tag to prevent split canonical on duplicate alias routes
-      let canonicalLink = document.querySelector('link[rel="canonical"]');
-      if (!canonicalLink) {
-        canonicalLink = document.createElement('link');
-        canonicalLink.setAttribute('rel', 'canonical');
-        document.head.appendChild(canonicalLink);
-      }
-      const canonicalPath = lower === '/ourstory' || lower === '/about' || lower === '/about-us'
-        ? '/our-story'
-        : lower === '/combo' || lower === '/customize-combo'
-        ? '/combos'
-        : lower === '/gifting'
-        ? '/gift-hampers'
-        : lower;
-      canonicalLink.setAttribute('href', `https://hiyaghar.com${canonicalPath}`);
-    };
-
     const handleLocationChange = () => {
-      const route = getNormalizedRoute();
-      setCurrentRoute(route);
-      updateRouteMeta(route);
+      setCurrentRoute(getNormalizedRoute());
       window.scrollTo(0, 0);
     };
 
-    updateRouteMeta(getNormalizedRoute());
     window.addEventListener('popstate', handleLocationChange);
     window.addEventListener('hashchange', handleLocationChange);
     return () => {
@@ -214,6 +187,14 @@ function App() {
       window.removeEventListener('hashchange', handleLocationChange);
     };
   }, []);
+
+  // Client-side fallback for the server's 301s: replace an alias URL with its canonical path.
+  useEffect(() => {
+    const target = ROUTE_ALIASES[currentRoute.toLowerCase().split('?')[0]];
+    if (!target) return;
+    window.history.replaceState(null, '', target + window.location.search);
+    setCurrentRoute(target);
+  }, [currentRoute]);
 
   // Signed-out visitors on an account route are sent to the sign-in route, returning here after login.
   useEffect(() => {
@@ -869,8 +850,11 @@ function App() {
     return <NotFoundPage />;
   };
 
+  const routeMeta = getRouteMeta(currentRoute);
+
   return (
     <PermissionProvider syncEnabled={currentRoute.toLowerCase().startsWith('/admin')}>
+      {routeMeta && <SEO {...routeMeta} />}
       <Preloader />
       <PageTransition currentHash={currentRoute}>
         {renderRouteContent()}

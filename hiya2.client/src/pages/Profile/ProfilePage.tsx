@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { CustomerAuthService } from '../../services/customerAuthService';
@@ -544,10 +543,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           </div>
         </div>
       )}
-
-      <Helmet>
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
 
       <Header />
 

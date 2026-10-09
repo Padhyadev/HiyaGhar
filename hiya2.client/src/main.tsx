@@ -43,6 +43,10 @@ if (typeof window !== 'undefined') {
   };
 }
 
+// Static head tags in index.html are for non-JS crawlers; <SEO> (react-helmet-async) takes over
+// once the app runs, so drop them to avoid duplicate <title>/<meta> elements.
+document.querySelectorAll('head [data-static-head]').forEach((el) => el.remove());
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>

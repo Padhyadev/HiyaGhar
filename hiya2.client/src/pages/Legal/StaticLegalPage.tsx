@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { ScrollReveal } from '../../components/common/ScrollReveal/ScrollReveal';
@@ -9,6 +8,7 @@ import './LegalPage.css';
 
 interface StaticLegalPageProps {
   title: string;
+  /** Unused since Phase 3: page meta comes from <SEO> in App.tsx. Kept for Phase 4 copy review. */
   metaDescription: string;
   children: React.ReactNode | ((settings: ShippingSettings) => React.ReactNode);
   activeSlug?: string;
@@ -16,16 +16,12 @@ interface StaticLegalPageProps {
 
 export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
   title,
-  metaDescription,
   children,
   activeSlug,
 }) => {
   const [storeSettings, setStoreSettings] = useState<ShippingSettings>(() => ShippingService.getSettings());
 
   useEffect(() => {
-    if (title) {
-      document.title = `${title} | HIYAGHAR`;
-    }
     ShippingService.loadSettingsFromApi().then((settings) => {
       if (settings) setStoreSettings(settings);
     });
@@ -48,10 +44,6 @@ export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
 
   return (
     <div className="hiyaghar-legal-layout">
-      <Helmet>
-        <title>{title} | HIYAGHAR</title>
-        <meta name="description" content={metaDescription} />
-      </Helmet>
       <Header />
 
       <main id="main-content" tabIndex={-1} className="hiyaghar-legal-main">
