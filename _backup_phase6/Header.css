@@ -13,9 +13,6 @@
   text-decoration: none;
   transition: top 0.2s ease;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
-  min-height: 44px;
-  display: flex;
-  align-items: center;
 }
 
 .hiyaghar-skip-link:focus,
@@ -47,7 +44,7 @@
 .hiyaghar-ticker-bar {
   background-color: var(--hiya-navy, #11223A);
   color: #ffffff;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.08em;
   padding: 8px 0;
@@ -117,13 +114,10 @@
   text-decoration: none;
   cursor: pointer;
   transition: color var(--motion-duration-fast) ease;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
 }
 
 .hiyaghar-header-link:hover {
-  color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold, #CB992C);
 }
 
 /* Header Dropdowns */
@@ -144,12 +138,11 @@
   color: var(--hiya-navy, #11223A);
   cursor: pointer;
   padding: 8px 0;
-  min-height: 44px;
   transition: color var(--motion-duration-fast) ease;
 }
 
 .hiyaghar-header-dropdown-btn:hover {
-  color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold, #CB992C);
 }
 
 .hiyaghar-dropdown-chevron {
@@ -210,12 +203,11 @@
   text-align: left;
   white-space: nowrap;
   box-sizing: border-box;
-  min-height: 44px;
 }
 
 .hiyaghar-dropdown-item:hover {
   background-color: var(--hiya-soft-cream, #FFFDF0);
-  color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold, #CB992C);
 }
 
 .hiyaghar-dropdown-item.btn-style {
@@ -248,7 +240,7 @@
   padding: 10px 14px;
   font-size: 13px;
   font-weight: 700;
-  color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold, #CB992C);
   border-bottom: 1px solid #E8E2C9;
   margin-bottom: 4px;
   text-align: left;
@@ -271,8 +263,6 @@
   align-items: center;
   justify-content: center;
   text-decoration: none;
-  min-height: 44px;
-  min-width: 44px;
 }
 
 .hiyaghar-logo-img {
@@ -375,9 +365,9 @@
   position: absolute;
   top: -5px;
   right: -5px;
-  background-color: var(--hiya-gold-text, #855F0F);
+  background-color: var(--hiya-gold, #CB992C);
   color: #ffffff;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   min-width: 19px;
   height: 19px;
@@ -403,8 +393,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   padding: 0;
   background-color: var(--hiya-soft-cream, #FFFDF0);
   color: var(--hiya-navy, #11223A);
@@ -428,7 +418,7 @@
   right: -5px;
   background-color: var(--hiya-navy, #11223A);
   color: #ffffff;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   min-width: 19px;
   height: 19px;
@@ -445,7 +435,7 @@
 }
 
 .hiyaghar-cart-cyan-pill:hover .hiyaghar-cart-badge-count {
-  background-color: var(--hiya-gold-text, #855F0F);
+  background-color: var(--hiya-gold, #CB992C);
   color: var(--hiya-navy, #11223A);
 }
 
@@ -543,9 +533,6 @@
   color: #2a2a2a;
   text-decoration: none;
   padding: 8px 0;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
 }
 
 .hiyaghar-mobile-group {
@@ -574,17 +561,16 @@
   padding: 8px 0;
   cursor: pointer;
   text-align: left;
-  min-height: 44px;
 }
 
 .hiyaghar-mobile-group-header .hiyaghar-dropdown-chevron {
   transition: transform 200ms ease;
-  color: var(--hiya-muted, #475467)888;
+  color: #888888;
 }
 
 .hiyaghar-mobile-group-header .hiyaghar-dropdown-chevron.is-open {
   transform: rotate(180deg);
-  color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold, #CB992C);
 }
 
 .hiyaghar-mobile-sublinks-container {
@@ -603,9 +589,6 @@
   padding: 6px 12px;
   border-radius: 8px;
   background-color: #f8fafc;
-  min-height: 44px;
-  display: flex;
-  align-items: center;
 }
 
 .hiyaghar-mobile-sublink.btn-style {
@@ -674,7 +657,7 @@
 }
 
 .hiyaghar-search-input-wrapper:focus-within {
-  border-color: var(--hiya-gold-text, #855F0F);
+  border-color: var(--hiya-gold, #CB992C);
   box-shadow: 0 0 0 3px rgba(203, 153, 44, 0.15);
 }
 
@@ -795,7 +778,7 @@
 .hiyaghar-search-pill-btn:hover {
   background: #CB992C;
   color: #ffffff;
-  border-color: var(--hiya-gold-text, #855F0F);
+  border-color: #CB992C;
   transform: translateY(-1px);
 }
 
@@ -856,11 +839,11 @@
 }
 
 .hiyaghar-search-item-cat {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--hiya-gold-text, #855F0F);
+  color: #CB992C;
   display: block;
 }
 
@@ -897,7 +880,7 @@
 }
 
 .hiyaghar-search-item-arrow {
-  color: var(--hiya-gold-text, #855F0F);
+  color: #CB992C;
   font-size: 16px;
   font-weight: 700;
 }

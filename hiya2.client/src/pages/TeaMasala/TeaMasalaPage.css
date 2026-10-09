@@ -88,7 +88,7 @@
 }
 
 .hiyaghar-category-tag {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
   letter-spacing: 2px;
   color: var(--hiya-gold, #D39B27);
@@ -215,7 +215,7 @@
 }
 
 .pill-original {
-  font-size: 11px;
+  font-size: 12px;
   text-decoration: line-through;
   color: #94A3B8;
 }
@@ -278,8 +278,8 @@
 }
 
 .hiyaghar-qty-selector button {
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: none;
   background: transparent;
   font-size: 18px;

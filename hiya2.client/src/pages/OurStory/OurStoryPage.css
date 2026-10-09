@@ -112,7 +112,7 @@
 }
 
 .hiyaghar-story-breadcrumb-list .current {
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   font-weight: 700;
 }
 
@@ -121,7 +121,7 @@
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.14em;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   text-transform: uppercase;
   background: rgba(203, 153, 44, 0.18);
   border: 1px solid rgba(203, 153, 44, 0.4);
@@ -173,7 +173,7 @@
 .hiyaghar-story-stat-num {
   font-size: 26px;
   font-weight: 800;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   line-height: 1.2;
 }
 
@@ -281,7 +281,7 @@
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.1em;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   text-transform: uppercase;
 }
 
@@ -348,7 +348,7 @@
 
 .hiyaghar-story-value-card:hover {
   transform: translateY(-4px);
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 12px 24px rgba(203, 153, 44, 0.12);
 }
 
@@ -357,7 +357,7 @@
   height: 48px;
   border-radius: 12px;
   background: #FFF5E0;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -413,7 +413,7 @@
 }
 
 .hiyaghar-story-btn-primary {
-  background-color: #CB992C;
+  background-color: var(--hiya-gold-text, #855F0F);
   color: #11223A;
   font-size: 15px;
   font-weight: 800;

@@ -281,7 +281,7 @@ export const LovManagementPage: React.FC = () => {
             </div>
 
             {!editingItem && !selectedColumn && (
-              <p style={{ fontSize: '0.85rem', color: '#667085', margin: '0 0 14px 0' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--hiya-muted, #475467)', margin: '0 0 14px 0' }}>
                 A category is created the moment it has its first code — fill in both below to create
                 {newColumnName ? ` ${newColumnName}` : ''} as a brand-new category.
               </p>
@@ -345,7 +345,7 @@ export const LovManagementPage: React.FC = () => {
             )}
 
             {editingItem && (
-              <p style={{ fontSize: '0.85rem', color: '#667085', margin: '0 0 14px 0' }}>
+              <p style={{ fontSize: '0.85rem', color: 'var(--hiya-muted, #475467)', margin: '0 0 14px 0' }}>
                 Category: <strong>{editingItem.lovColumn}</strong> &middot; Code:{' '}
                 <strong>{editingItem.lovCode}</strong>
               </p>

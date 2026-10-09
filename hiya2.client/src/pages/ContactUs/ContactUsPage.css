@@ -193,7 +193,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   flex-shrink: 0;
 }
 
@@ -226,7 +226,7 @@
 }
 
 .hiyaghar-contact-val:hover {
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-contact-text {
@@ -270,9 +270,9 @@
 }
 
 .fssai-tag {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   letter-spacing: 0.08em;
 }
 
@@ -392,7 +392,7 @@
 .hiyaghar-form-group select:focus,
 .hiyaghar-form-group textarea:focus {
   outline: none;
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
   background-color: #ffffff;
   box-shadow: 0 0 0 4px rgba(203, 153, 44, 0.12);
 }
@@ -477,7 +477,7 @@
 }
 
 .hiyaghar-faq-btn {
-  background-color: #CB992C;
+  background-color: var(--hiya-gold-text, #855F0F);
   color: #11223A;
   padding: 10px 22px;
   border-radius: 999px;

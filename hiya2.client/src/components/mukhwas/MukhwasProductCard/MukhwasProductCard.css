@@ -306,7 +306,7 @@
   border-radius: var(--radius-xs);
   border: 1px solid transparent;
   background: none;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--font-weight-medium);
   color: var(--hiya-navy);
   text-align: center;
@@ -323,7 +323,7 @@
 }
 
 .hiyaghar-weight-static-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--font-weight-medium);
   color: var(--hiya-navy);
 }
@@ -350,9 +350,9 @@
 }
 
 .hiyaghar-card-weight-tag {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  color: var(--hiya-gold-dark, #A97818);
+  color: var(--hiya-gold-text, #855F0F);
   background-color: var(--hiya-soft-cream, #FFFDF0);
   border: 1px solid rgba(203, 153, 44, 0.4);
   padding: 1px 7px;
@@ -369,7 +369,7 @@
 }
 
 .hiyaghar-discount-pill {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: var(--font-weight-bold);
   color: #b42318;
   background-color: #fef3f2;
@@ -458,7 +458,7 @@
 
   .hiyaghar-card-badge {
     padding: 2px 6px;
-    font-size: 9.5px;
+    font-size: 12px;
     letter-spacing: 0.2px;
   }
 
@@ -481,12 +481,12 @@
   }
 
   .hiyaghar-mukhwas-card-rating {
-    font-size: 11px;
+    font-size: 12px;
     gap: 2px;
   }
 
   .hiyaghar-star {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .hiyaghar-mukhwas-card-title {
@@ -517,7 +517,7 @@
 
   .hiyaghar-weight-pill {
     padding: 3px 2px;
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .hiyaghar-mukhwas-card-price-row {
@@ -532,11 +532,11 @@
   }
 
   .hiyaghar-original-price {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .hiyaghar-discount-pill {
-    font-size: 9.5px;
+    font-size: 12px;
     padding: 1px 4px;
   }
 
@@ -551,7 +551,7 @@
   .hiyaghar-btn-add-cart,
   .hiyaghar-btn-buy-now {
     padding: 8px 4px;
-    font-size: 11px;
+    font-size: 12px;
     width: 100%;
     border-radius: var(--radius-xs);
     box-sizing: border-box;

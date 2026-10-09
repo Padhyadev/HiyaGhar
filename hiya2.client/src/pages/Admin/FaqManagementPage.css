@@ -285,7 +285,7 @@
 .faq-form-group input:focus,
 .faq-form-group select:focus,
 .faq-form-group textarea:focus {
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 .faq-form-row {

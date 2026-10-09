@@ -83,8 +83,7 @@ export const Footer: React.FC = () => {
     <footer className="hiyaghar-footer-section" aria-label="Page Footer">
       <div className="hiyaghar-footer-inner-container">
         {/* Top White Card with Navigation */}
-        <nav className="hiyaghar-footer-white-card" aria-label="Footer">
-          <h2 className="sr-only" style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', border: 0 }}>Site links</h2>
+        <div className="hiyaghar-footer-white-card">
           {/* Links Navigation Columns */}
           <ScrollReveal variant="fade-up" delay={100} className="hiyaghar-footer-nav-grid">
             {navColumns.map((col) => (
@@ -120,7 +119,7 @@ export const Footer: React.FC = () => {
               </div>
             ))}
           </ScrollReveal>
-        </nav>
+        </div>
 
         {/* Bottom Bar Below White Card on Cyan Background */}
         <div className="hiyaghar-footer-bottom-bar">

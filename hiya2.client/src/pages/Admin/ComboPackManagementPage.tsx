@@ -185,7 +185,7 @@ export const ComboPackManagementPage: React.FC = () => {
           <div style={{ fontWeight: 700, fontSize: '14.5px', color: 'var(--hiya-navy, #11223A)', display: 'flex', alignItems: 'center', gap: '8px' }}>
             <span>{item.name}</span>
             {item.badge && (
-              <span style={{ fontSize: '11px', padding: '2px 8px', background: '#FDF3E3', color: '#B37D14', borderRadius: '12px', border: '1px solid #E8CD96', fontWeight: 800 }}>
+              <span style={{ fontSize: '12px', padding: '2px 8px', background: '#FDF3E3', color: '#B37D14', borderRadius: '12px', border: '1px solid #E8CD96', fontWeight: 800 }}>
                 {item.badge}
               </span>
             )}

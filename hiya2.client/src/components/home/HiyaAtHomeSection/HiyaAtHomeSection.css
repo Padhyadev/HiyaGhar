@@ -271,12 +271,12 @@
 
 .magic-bento-category {
   display: inline-block;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--hiya-navy, #11223A);
-  background-color: var(--hiya-gold, #CB992C);
+  background-color: var(--hiya-gold-text, #855F0F);
   padding: 4px 12px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);

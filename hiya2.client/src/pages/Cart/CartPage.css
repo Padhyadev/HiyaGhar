@@ -69,7 +69,7 @@
 }
 
 .hiyaghar-cart-breadcrumb-list a:hover {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-cart-breadcrumb-list .sep {
@@ -225,7 +225,7 @@
 }
 
 .hiyaghar-cart-item-cat {
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
   color: #928777;
@@ -242,7 +242,7 @@
 }
 
 .hiyaghar-cart-item-name:hover {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-cart-item-weight {
@@ -331,6 +331,17 @@
   justify-content: center;
   transition: background 0.15s ease;
   border-radius: 50%;
+  position: relative;
+}
+
+.hiyaghar-qty-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
 }
 
 .hiyaghar-qty-btn:hover {
@@ -406,7 +417,7 @@
 }
 
 .hiyaghar-coupon-input:focus {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-coupon-btn {
@@ -528,7 +539,7 @@
 .hiyaghar-addon-price {
   font-size: 13px;
   font-weight: 600;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-addon-add-btn {

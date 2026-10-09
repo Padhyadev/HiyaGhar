@@ -216,7 +216,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #2d6a4f;
   background-color: #e8f5e9;
@@ -264,7 +264,7 @@
 .hiyaghar-review-author-loc {
   font-size: 12px;
   font-weight: 600;
-  color: #888888;
+  color: var(--hiya-muted, #475467)888;
 }
 
 .hiyaghar-review-product-tag {
@@ -275,7 +275,7 @@
 }
 
 .hiyaghar-review-product-label {
-  color: #888888;
+  color: var(--hiya-muted, #475467)888;
   font-weight: 500;
 }
 
@@ -287,7 +287,7 @@
 .hiyaghar-review-date {
   font-size: 12px;
   font-weight: 600;
-  color: #9ca3af;
+  color: var(--hiya-muted, #475467);
 }
 
 /* Controls: Arrow Buttons & Dots */
@@ -374,6 +374,17 @@
   outline: none;
   min-width: 10px;
   min-height: 10px;
+  position: relative;
+}
+
+.hiyaghar-reviews-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
 }
 
 .hiyaghar-reviews-dot.active {

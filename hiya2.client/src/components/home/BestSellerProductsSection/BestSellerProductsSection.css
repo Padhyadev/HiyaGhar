@@ -102,7 +102,7 @@
 .hiyaghar-product-card.is-active {
   transform: translateY(-8px) scale(1.015);
   box-shadow: 0 16px 36px rgba(17, 34, 58, 0.12);
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 /* Top Header in Product Card */
@@ -116,7 +116,7 @@
 }
 
 .hiyaghar-product-category-pill {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -388,6 +388,6 @@
 
   .hiyaghar-add-to-cart-btn {
     padding: 8px 8px;
-    font-size: 11px;
+    font-size: 12px;
   }
 }

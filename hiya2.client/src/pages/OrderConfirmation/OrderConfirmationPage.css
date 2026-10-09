@@ -105,7 +105,7 @@
 }
 
 .hiyaghar-meta-item .value.order-id {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 /* Details Grid */
@@ -326,7 +326,7 @@
 
 .bill-total-value {
   font-size: 19px;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   font-weight: 800;
 }
 

@@ -14,8 +14,7 @@
 
   /* Typography */
   --hiya-text: #344054;
-  --hiya-muted: #475467;
-  --hiya-gold-text: #855F0F; /* High-contrast gold for text */
+  --hiya-muted: #667085;
 
   /* UI */
   --hiya-white: #FFFFFF;
@@ -27,7 +26,7 @@
   --color-text-secondary: var(--hiya-muted);
   --color-text-tertiary: var(--hiya-muted);
   --color-text-inverted: var(--hiya-white);
-  --color-text-accent: var(--hiya-gold-text);
+  --color-text-accent: var(--hiya-gold);
 
   --color-surface-base: var(--hiya-cream);
   --color-surface-soft: var(--hiya-soft-cream);

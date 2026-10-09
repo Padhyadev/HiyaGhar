@@ -52,14 +52,14 @@
 }
 
 .hiyaghar-profile-breadcrumb-list a {
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   font-weight: 500;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .hiyaghar-profile-breadcrumb-list a:hover {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-profile-breadcrumb-list .sep {
@@ -115,7 +115,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   background: rgba(203, 153, 44, 0.12);
-  color: #A97818;
+  color: var(--hiya-gold-text, #855F0F);
   padding: 4px 10px;
   border-radius: 999px;
   border: 1px solid rgba(203, 153, 44, 0.3);
@@ -136,7 +136,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -187,7 +187,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.72rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin-top: 4px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
@@ -241,7 +241,7 @@
 }
 
 .hiyaghar-nav-pill.is-active .hiyaghar-pill-icon {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   opacity: 1;
 }
 
@@ -253,7 +253,7 @@
 .hiyaghar-nav-pill.is-active {
   background: var(--hiya-navy, #11223A);
   color: #FFFFFF;
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   font-weight: 600;
   box-shadow: 0 4px 14px rgba(17, 34, 58, 0.15);
 }
@@ -366,7 +366,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.9rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -427,7 +427,7 @@
 
 .hiyaghar-cancel-order-modal-card p {
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0 0 14px 0;
 }
 
@@ -515,14 +515,14 @@
 .hiyaghar-field-group input:disabled,
 .hiyaghar-field-group select:disabled {
   background: #F9F6EE;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   border-color: #E8E2C9;
   cursor: not-allowed;
 }
 
 .hiyaghar-field-group input:focus,
 .hiyaghar-field-group select:focus {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 0 0 3px rgba(203, 153, 44, 0.15);
   background: #FFFFFF;
 }
@@ -579,7 +579,7 @@
 }
 
 .hiyaghar-search-box input:focus {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #FFFFFF;
 }
 
@@ -751,7 +751,7 @@
 .vertical-option-btn .check-mark {
   font-size: 1rem;
   font-weight: 800;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .vertical-option-btn.is-selected .check-mark {
@@ -830,7 +830,7 @@
   height: 36px;
   border-radius: 50%;
   font-size: 18px;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -901,7 +901,7 @@
 .hiyaghar-mobile-filter-drawer-card .drawer-filter-pill .check-icon {
   font-size: 0.95rem;
   font-weight: 800;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-mobile-filter-drawer-card .drawer-filter-pill.is-active .check-icon {
@@ -963,7 +963,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.78rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   background: #FFFDF0;
   border: 1px solid #E8E2C9;
   border-radius: 999px;
@@ -1044,14 +1044,14 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.8rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .hiyaghar-order-card .order-date-line {
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.78rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 /* SINGLE-LINE 4-STATUS STEPPER STYLING */
@@ -1083,7 +1083,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.8rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -1156,7 +1156,7 @@
   background: #FFFFFF;
   border: 2px solid #98A2B3;
   color: #FFFFFF;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -1170,7 +1170,7 @@
 }
 
 .stepper-node .chk-mark {
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1;
 }
 
@@ -1185,7 +1185,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.68rem; /* Small compact size so all 5 order-status labels fit on one line */
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   letter-spacing: -0.01em;
   max-width: 68px;
 }
@@ -1200,7 +1200,7 @@
 }
 
 .hiyaghar-order-card:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #FFFFFF;
   box-shadow: 0 4px 16px rgba(17, 34, 58, 0.06);
 }
@@ -1235,7 +1235,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.78rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   display: flex;
   align-items: center;
   gap: 6px;
@@ -1411,7 +1411,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -1500,7 +1500,7 @@
   border-radius: 50%;
   background: #FFFFFF;
   border: 2px solid #D0D5DD;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   font-size: 0.75rem;
   font-weight: 700;
   display: flex;
@@ -1516,7 +1516,7 @@
 
 .timeline-step.is-current .step-icon-dot {
   background: var(--hiya-gold, #CB992C);
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   color: #FFFFFF;
 }
 
@@ -1524,7 +1524,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.78rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .timeline-step.is-completed .step-label,
@@ -1563,10 +1563,10 @@
 .courier-item .lbl {
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .courier-item .val {
@@ -1592,7 +1592,7 @@
 .val-with-copy .copy-btn {
   font-family: 'DM Sans', sans-serif;
   font-weight: 600;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   color: var(--hiya-navy, #11223A);
   background: #FFFDF0;
   border: 1px solid #E8E2C9;
@@ -1694,7 +1694,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.8rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .item-details-left .item-price-tag .price-val {
@@ -1758,7 +1758,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.78rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .item-price-col .price-val {
@@ -1810,7 +1810,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.78rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .activity-content .act-time {
@@ -1836,7 +1836,7 @@
 }
 
 .summary-row .lbl {
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .summary-row .val {
@@ -1873,7 +1873,7 @@
   gap: 6px;
   font-family: 'DM Sans', sans-serif;
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .addressee-name {
@@ -1913,7 +1913,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.78rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -1941,7 +1941,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.8rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -1970,7 +1970,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0 0 20px 0;
 }
 
@@ -1993,7 +1993,7 @@
 }
 
 .hiyaghar-buy-again-card:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #FFFFFF;
   box-shadow: 0 4px 14px rgba(17, 34, 58, 0.06);
 }
@@ -2062,7 +2062,7 @@
 }
 
 .hiyaghar-address-card.is-default {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #FFFFFF;
   box-shadow: 0 4px 16px rgba(203, 153, 44, 0.08);
 }
@@ -2094,7 +2094,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   background: rgba(203, 153, 44, 0.12);
-  color: #A97818;
+  color: var(--hiya-gold-text, #855F0F);
   padding: 3px 8px;
   border-radius: 4px;
 }
@@ -2111,7 +2111,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
   line-height: 1.5;
 }
@@ -2120,7 +2120,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.82rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .hiyaghar-address-card .card-actions-row {
@@ -2168,7 +2168,7 @@
 }
 
 .hiyaghar-wishlist-card:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #FFFFFF;
 }
 
@@ -2207,7 +2207,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.75rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   background: none;
   border: none;
   cursor: pointer;
@@ -2236,7 +2236,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.9rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0 0 20px 0;
 }
 
@@ -2310,7 +2310,7 @@
 }
 
 .hiyaghar-rec-card .rec-add-btn:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: var(--hiya-gold, #CB992C);
   color: #FFFFFF;
 }
@@ -2373,7 +2373,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -2459,7 +2459,7 @@
   background: none;
   border: none;
   font-size: 18px;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   cursor: pointer;
 }
 
@@ -2499,7 +2499,7 @@
 
 .hiyaghar-field-group input:focus,
 .hiyaghar-field-group select:focus {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #FFFFFF;
   box-shadow: 0 0 0 3px rgba(203, 153, 44, 0.12);
 }
@@ -3124,7 +3124,7 @@
 
 .ecom-selected-item-card .item-card-details .item-info {
   font-size: 0.88rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin-bottom: 4px;
 }
 
@@ -3144,7 +3144,7 @@
   align-items: center;
   padding: 10px 0;
   font-size: 0.95rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .ecom-financial-totals-block .totals-row .val {
@@ -3353,7 +3353,7 @@
   justify-content: center;
   border-radius: 50%;
   background: rgba(203, 153, 44, 0.12);
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   border: 1px solid rgba(203, 153, 44, 0.25);
 }
 
@@ -3366,7 +3366,7 @@
   justify-content: center;
   border-radius: 50%;
   background: rgba(203, 153, 44, 0.12);
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   font-size: 0.8rem;
 }
 
@@ -3412,7 +3412,7 @@
 
 .refund-status-notice p {
   font-size: 0.88rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -3445,7 +3445,7 @@
 }
 
 .pass-toggle-btn:hover {
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   transform: scale(1.08);
 }
 
@@ -3481,8 +3481,8 @@
 
 .addr-action-btn.set-default-btn:hover {
   background: #FFFDF0;
-  border-color: var(--hiya-gold, #CB992C);
-  color: var(--hiya-gold-dark, #A97818);
+  border-color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .addr-icon-action-btn {
@@ -3504,8 +3504,8 @@
 
 .addr-icon-action-btn.edit-btn:hover {
   background: rgba(209, 154, 39, 0.12);
-  border-color: var(--hiya-gold, #CB992C);
-  color: var(--hiya-gold-dark, #A97818);
+  border-color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold-text, #855F0F);
   transform: translateY(-1px);
 }
 

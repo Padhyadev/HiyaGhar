@@ -410,7 +410,7 @@ export class OrderService {
             <div style="font-size: 12px; color: #666; margin-top: 2px;">Premium Authentic Delicacies & Traditional Products</div>
           </div>
           <div style="text-align: right;">
-            <div style="font-size: 18px; font-weight: bold; color: #CB992C;">TAX INVOICE</div>
+            <div style="font-size: 18px; font-weight: bold; color: var(--hiya-gold-text, #855F0F);">TAX INVOICE</div>
             <div style="font-size: 13px; margin-top: 2px;">Order #${order.orderNumber || order.id}</div>
             <div style="font-size: 12px; color: #666; margin-top: 2px;">Date: ${new Date(order.createdAt || Date.now()).toLocaleDateString('en-IN')}</div>
           </div>
@@ -466,7 +466,7 @@ export class OrderService {
 
         <div style="clear: both;"></div>
 
-        <div style="margin-top: 40px; text-align: center; font-size: 11px; color: #888; border-top: 1px solid #eee; padding-top: 15px; line-height: 1.5;">
+        <div style="margin-top: 40px; text-align: center; font-size: 12px; color: var(--hiya-muted, #475467); border-top: 1px solid #eee; padding-top: 15px; line-height: 1.5;">
           Thank you for choosing HIYAGHAR. For customer care, email support@hiyaghar.com or call +91 98765 43210.<br/>
           This is a computer-generated tax invoice and requires no signature.
         </div>

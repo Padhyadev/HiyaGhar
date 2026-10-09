@@ -204,7 +204,7 @@ export const RewardSettingsPage: React.FC = () => {
                 value={form.coinToRupeeRate}
                 onChange={(e) => handleChange('coinToRupeeRate', e.target.value)}
               />
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '11px', color: '#475467', marginTop: '6px', background: '#F8FAFC', padding: '8px 10px', borderRadius: '6px', border: '1px solid #E2E8F0', lineHeight: 1.4 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: '#475467', marginTop: '6px', background: '#F8FAFC', padding: '8px 10px', borderRadius: '6px', border: '1px solid #E2E8F0', lineHeight: 1.4 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
                   <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                 </svg>
@@ -230,7 +230,7 @@ export const RewardSettingsPage: React.FC = () => {
                 value={form.maxCoinUsagePercent}
                 onChange={(e) => handleChange('maxCoinUsagePercent', e.target.value)}
               />
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '11px', color: '#475467', marginTop: '6px', background: '#FEFDF8', padding: '8px 10px', borderRadius: '6px', border: '1px solid #FEF08A', lineHeight: 1.45 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: '#475467', marginTop: '6px', background: '#FEFDF8', padding: '8px 10px', borderRadius: '6px', border: '1px solid #FEF08A', lineHeight: 1.45 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
                   <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                 </svg>

@@ -42,7 +42,7 @@
   font-size: 0.76rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   background: rgba(203, 153, 44, 0.08);
   border: 1px solid rgba(203, 153, 44, 0.25);
   padding: 4px 16px;
@@ -124,7 +124,7 @@
   z-index: 4;
   background: var(--hiya-gold, #CB992C);
   color: #11223A;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.5px;
   text-transform: uppercase;
@@ -162,13 +162,13 @@
 .hiyaghar-5card-item .card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(17, 34, 58, 0.05) 30%, rgba(17, 34, 58, 0.85) 100%);
+  background: linear-gradient(180deg, rgba(17, 34, 58, 0.2) 0%, rgba(17, 34, 58, 0.85) 60%, rgba(17, 34, 58, 0.95) 100%);
   z-index: 2;
   transition: background 0.3s ease;
 }
 
 .hiyaghar-5card-item:hover .card-overlay {
-  background: linear-gradient(180deg, rgba(17, 34, 58, 0.02) 20%, rgba(17, 34, 58, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(17, 34, 58, 0.3) 0%, rgba(17, 34, 58, 0.9) 60%, rgba(17, 34, 58, 0.98) 100%);
 }
 
 .hiyaghar-5card-item .card-content {
@@ -242,7 +242,7 @@
 
 /* ACTIVE STATE FOR ALL CARDS */
 .hiyaghar-5card-item.is-active {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 6px 20px rgba(203, 153, 44, 0.25);
 }
 
@@ -279,7 +279,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 400;
   font-size: 0.88rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   margin: 0;
 }
 
@@ -311,7 +311,7 @@
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
   font-size: 0.85rem;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .hiyaghar-gh-sort-select {
@@ -330,7 +330,7 @@
 
 .hiyaghar-gh-sort-select:focus,
 .hiyaghar-gh-sort-select:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 /* RESPONSIVE DESIGN */
@@ -386,6 +386,6 @@
     top: 8px;
     right: 8px;
     padding: 3px 8px;
-    font-size: 9px;
+    font-size: 12px;
   }
 }

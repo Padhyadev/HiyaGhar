@@ -28,7 +28,7 @@
   font-size: 80px;
   font-weight: 900;
   line-height: 1;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   margin-bottom: 12px;
   letter-spacing: -0.04em;
 }

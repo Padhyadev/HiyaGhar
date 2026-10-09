@@ -23,7 +23,7 @@ export const RouteLoader: React.FC = () => (
       height="36"
       viewBox="0 0 24 24"
       fill="none"
-      stroke="#CB992C"
+      stroke="var(--hiya-gold-text, #855F0F)"
       strokeWidth="2.5"
       strokeLinecap="round"
       style={{ animation: 'spin 0.9s linear infinite' }}

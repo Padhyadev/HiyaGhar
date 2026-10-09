@@ -68,7 +68,7 @@
 .query-id-tag {
   font-family: monospace;
   font-weight: 700;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   font-size: 13px;
 }
 
@@ -358,7 +358,7 @@
 .query-form-group select:focus,
 .query-form-group textarea:focus {
   outline: none;
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 .query-modal-footer {

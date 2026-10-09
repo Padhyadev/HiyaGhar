@@ -169,7 +169,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                     type="button"
                     className="hiyaghar-btn-primary"
                     onClick={() => navigateTo('/auth')}
-                    style={{ background: '#CB992C', borderColor: '#CB992C' }}
+                    style={{ background: '#CB992C', borderColor: 'var(--hiya-gold-text, #855F0F)' }}
                   >
                     Sign In / Register
                   </button>
@@ -192,7 +192,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                 {/* 8. FREE SHIPPING PROGRESS BAR */}
                 <div className="hiyaghar-shipping-progress-card">
                   <div className="hiyaghar-shipping-progress-header">
-                    <span className="hiyaghar-shipping-icon" style={{ color: 'var(--hiya-gold, #CB992C)' }}>
+                    <span className="hiyaghar-shipping-icon" style={{ color: 'var(--hiya-gold-text, #855F0F)' }}>
                       <i className="fa-solid fa-truck-fast" aria-hidden="true"></i>
                     </span>
                     <span className="hiyaghar-shipping-text">
@@ -287,7 +287,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                 {/* 7. COUPON SECTION */}
                 <div className="hiyaghar-coupon-card">
                   <div className="hiyaghar-coupon-header">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2">
                       <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
                       <line x1="7" y1="7" x2="7.01" y2="7" />
                     </svg>
@@ -387,13 +387,13 @@ export const CartPage: React.FC<CartPageProps> = ({
                   {/* Trust Badges */}
                   <div className="hiyaghar-summary-trust-badges">
                     <div className="hiyaghar-trust-item">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                       </svg>
                       <span>100% Safe & Secure Checkout</span>
                     </div>
                     <div className="hiyaghar-trust-item">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2">
                         <polyline points="20 6 9 17 4 12" />
                       </svg>
                       <span>Authentic Fresh Gourmet Quality</span>

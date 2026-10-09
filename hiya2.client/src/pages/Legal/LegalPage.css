@@ -90,7 +90,7 @@
 }
 
 .hiyaghar-legal-breadcrumb-list li a:hover {
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-legal-breadcrumb-list .sep {
@@ -102,7 +102,7 @@
 }
 
 .hiyaghar-legal-breadcrumb-list .current-sub {
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   font-weight: 700;
 }
 
@@ -112,7 +112,7 @@
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   background: rgba(203, 153, 44, 0.18);
   border: 1px solid rgba(203, 153, 44, 0.35);
   padding: 5px 14px;

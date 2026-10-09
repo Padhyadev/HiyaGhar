@@ -40,7 +40,7 @@
 .hiyaghar-faq-badge {
   display: inline-block;
   background: rgba(203, 153, 44, 0.2);
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   border: 1px solid rgba(203, 153, 44, 0.4);
   font-size: 13px;
   font-weight: 700;
@@ -83,7 +83,7 @@
 
 .hiyaghar-faq-search-box svg {
   flex-shrink: 0;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   margin-right: 12px;
 }
 
@@ -193,12 +193,12 @@
 }
 
 .hiyaghar-faq-item:hover {
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 6px 20px rgba(203, 153, 44, 0.08);
 }
 
 .hiyaghar-faq-item.open {
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 8px 24px rgba(17, 34, 58, 0.08);
 }
 
@@ -220,7 +220,7 @@
 }
 
 .hiyaghar-faq-item.open .hiyaghar-faq-question {
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-faq-icon {
@@ -239,7 +239,7 @@
 
 .hiyaghar-faq-item.open .hiyaghar-faq-icon {
   background: #CB992C;
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
   color: #FFFFFF;
   transform: rotate(180deg);
 }

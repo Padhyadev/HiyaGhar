@@ -75,12 +75,12 @@
 }
 
 .hiyaghar-sidebar-link:hover {
-  color: var(--hiya-gold-dark, #A97818);
+  color: var(--hiya-gold-text, #855F0F);
   padding-left: 10px;
 }
 
 .hiyaghar-sidebar-link:hover .hiyaghar-sidebar-bullet {
-  background-color: var(--hiya-gold, #CB992C);
+  background-color: var(--hiya-gold-text, #855F0F);
   transform: scale(1.3);
 }
 
@@ -92,7 +92,7 @@
 }
 
 .hiyaghar-sidebar-link.active .hiyaghar-sidebar-bullet {
-  background-color: var(--hiya-gold, #CB992C);
+  background-color: var(--hiya-gold-text, #855F0F);
   transform: scale(1.3);
 }
 

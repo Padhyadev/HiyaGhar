@@ -76,7 +76,7 @@
 .hiyaghar-cta-badge {
   font-size: var(--font-size-xs, 12px);
   font-weight: var(--font-weight-bold, 700);
-  color: var(--hiya-gold, #CB992C) !important;
+  color: var(--hiya-gold-text, #855F0F) !important;
   text-transform: uppercase;
   letter-spacing: 2px;
   background: rgba(203, 153, 44, 0.1);

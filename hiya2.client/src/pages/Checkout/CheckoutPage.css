@@ -36,7 +36,7 @@
 }
 
 .hiyaghar-checkout-breadcrumb-list a:hover {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-checkout-breadcrumb-list .sep {
@@ -221,7 +221,7 @@
 
 .hiyaghar-form-group input:focus,
 .hiyaghar-form-group textarea:focus {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-form-group input.has-error,
@@ -277,7 +277,7 @@
 }
 
 .hiyaghar-delivery-option-card.is-selected {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #ffffff;
   box-shadow: 0 4px 16px rgba(203, 153, 44, 0.12);
 }
@@ -375,7 +375,7 @@
 }
 
 .hiyaghar-payment-method-item.is-selected {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #ffffff;
 }
 
@@ -443,7 +443,7 @@
 .hiyaghar-edit-step-btn {
   background: none;
   border: none;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -632,7 +632,7 @@
 }
 
 .hiyaghar-summary-item-preview .meta {
-  font-size: 11px;
+  font-size: 12px;
   color: #7A7265;
 }
 
@@ -690,7 +690,7 @@
 }
 
 .hiyaghar-address-select-control:focus {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 0 0 3px rgba(203, 153, 44, 0.15);
 }
 
@@ -715,13 +715,13 @@
 }
 
 .hiyaghar-checkout-addr-card:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   transform: translateY(-2px);
 }
 
 .hiyaghar-checkout-addr-card.is-selected {
   background: #ffffff;
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 4px 16px rgba(203, 153, 44, 0.15);
 }
 
@@ -738,7 +738,7 @@
   color: #D19A27;
   padding: 2px 8px;
   border-radius: 6px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   display: inline-flex;
@@ -752,7 +752,7 @@
 }
 
 .selected-badge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 800;
   color: #15803D;
   background: #F0FDF4;
@@ -770,11 +770,11 @@
 }
 
 .summary-title {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   display: block;
   margin-bottom: 4px;
 }

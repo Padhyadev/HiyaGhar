@@ -425,7 +425,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                   {user?.firstName ? `${user.firstName} ${user.lastName}` : 'Administrator'}
                 </div>
                 <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: '#D19A27', color: '#ffffff', fontSize: '0.72rem', fontWeight: 700, padding: '2px 8px', borderRadius: '12px', marginTop: '4px' }}>
-                  <i className="fa-solid fa-shield-halved" style={{ fontSize: '10px' }}></i>
+                  <i className="fa-solid fa-shield-halved" style={{ fontSize: '12px' }}></i>
                   {user?.roles && user.roles.length > 0 ? user.roles[0].roleName : 'Super Admin'}
                 </div>
               </div>

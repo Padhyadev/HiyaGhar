@@ -117,7 +117,7 @@
 }
 
 .hiyaghar-detail-breadcrumb-list a:hover {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-detail-breadcrumb-list .sep {
@@ -227,9 +227,9 @@
   left: 18px;
   z-index: 10;
   background-color: var(--hiya-navy, #11223A);
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   border: 1px solid var(--hiya-gold, #CB992C);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -258,7 +258,7 @@
 }
 
 .hiyaghar-thumbnail-btn:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   transform: translateY(-2px);
 }
 
@@ -281,8 +281,8 @@
 }
 
 .hiyaghar-detail-cat {
-  font-size: 11px;
-  color: var(--hiya-gold-dark, #A97818);
+  font-size: 12px;
+  color: var(--hiya-gold-text, #855F0F);
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -316,7 +316,7 @@
 }
 
 .hiyaghar-detail-rating .star {
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   font-size: 17px;
 }
 
@@ -326,7 +326,7 @@
 }
 
 .hiyaghar-detail-rating .count {
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   font-weight: 500;
   margin-left: 2px;
 }
@@ -339,14 +339,14 @@
   border: none;
   font-size: 13px;
   font-weight: 700;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   cursor: pointer;
   transition: color 0.2s ease;
 }
 
 .hiyaghar-detail-wishlist-toggle:hover,
 .hiyaghar-detail-wishlist-toggle.is-active {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 /* Price Section */
@@ -384,7 +384,7 @@
 
 .hiyaghar-tax-note {
   font-size: 12px;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   width: 100%;
   margin-top: -4px;
 }
@@ -429,7 +429,7 @@
 }
 
 .hiyaghar-detail-weight-card:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   transform: translateY(-1px);
 }
 
@@ -447,7 +447,7 @@
 
 .hiyaghar-detail-weight-card .wt-price {
   font-size: 12px;
-  color: var(--hiya-gold-dark, #A97818);
+  color: var(--hiya-gold-text, #855F0F);
   font-weight: 700;
   margin-top: 3px;
 }
@@ -481,7 +481,7 @@
 }
 
 .hiyaghar-attr-pill:hover {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-attr-pill.is-selected {
@@ -504,7 +504,7 @@
 }
 
 .hiyaghar-pill-stock-tag {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   color: #b91c1c;
   margin-left: 2px;
@@ -572,8 +572,8 @@
 }
 
 .qty-btn {
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border: none;
   background: none;
   font-size: 18px;
@@ -628,7 +628,7 @@
 
 .hiyaghar-detail-btn-cart:hover {
   background-color: #1a3356;
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   transform: translateY(-2px);
   box-shadow: 0 12px 28px rgba(17, 34, 58, 0.3);
 }
@@ -698,7 +698,7 @@
   background: none;
   font-size: 15px;
   font-weight: 700;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   cursor: pointer;
   border-bottom: 3px solid transparent;
   white-space: nowrap;
@@ -711,7 +711,7 @@
 
 .hiyaghar-tab-btn.is-active {
   color: var(--hiya-navy, #11223A);
-  border-bottom-color: var(--hiya-gold, #CB992C);
+  border-bottom-color: var(--hiya-gold-text, #855F0F);
   background-color: #ffffff;
   font-weight: 800;
 }
@@ -808,7 +808,7 @@
 }
 
 .benefits-checklist .check-icon {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   font-weight: bold;
   font-size: 16px;
 }
@@ -862,7 +862,7 @@
   border: none;
   font-size: 14px;
   font-weight: 800;
-  color: var(--hiya-gold-dark, #A97818);
+  color: var(--hiya-gold-text, #855F0F);
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -999,8 +999,8 @@
 .hiyaghar-fbt-badge {
   display: inline-block;
   background: rgba(203, 153, 44, 0.12);
-  color: #CB992C;
-  font-size: 11px;
+  color: var(--hiya-gold-text, #855F0F);
+  font-size: 12px;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -1049,7 +1049,7 @@
 }
 
 .hiyaghar-fbt-item-card.is-active {
-  border-color: #CB992C;
+  border-color: var(--hiya-gold-text, #855F0F);
   background: #FFFDF9;
   box-shadow: 0 4px 14px rgba(203, 153, 44, 0.1);
 }
@@ -1057,7 +1057,7 @@
 .hiyaghar-fbt-item-checkbox {
   width: 18px;
   height: 18px;
-  accent-color: #CB992C;
+  accent-color: var(--hiya-gold-text, #855F0F);
   cursor: pointer;
   flex-shrink: 0;
   position: absolute;
@@ -1131,7 +1131,7 @@
   border-radius: 50%;
   background: #FAF8F2;
   border: 1.5px solid #EAE4D5;
-  color: #CB992C;
+  color: var(--hiya-gold-text, #855F0F);
   display: flex;
   align-items: center;
   justify-content: center;

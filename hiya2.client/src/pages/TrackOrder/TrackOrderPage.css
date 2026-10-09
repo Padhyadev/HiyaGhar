@@ -53,7 +53,7 @@
 }
 
 .hiyaghar-track-breadcrumb-list a:hover {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-track-breadcrumb-list .sep {
@@ -140,7 +140,7 @@
 .hiyaghar-track-order-id {
   font-size: 24px;
   font-weight: 800;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   margin: 4px 0 0 0;
 }
 
@@ -215,7 +215,7 @@
 
 .hiyaghar-timeline-step.is-current .hiyaghar-timeline-node {
   background: var(--hiya-navy, #11223A);
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   border: 2px solid var(--hiya-gold, #CB992C);
   box-shadow: 0 4px 16px rgba(17, 34, 58, 0.25);
 }
@@ -254,7 +254,7 @@
 }
 
 .hiyaghar-timeline-step.is-current .hiyaghar-step-title {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-step-time {

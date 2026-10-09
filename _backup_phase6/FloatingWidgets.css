@@ -28,7 +28,7 @@
   height: 44px;
   border-radius: 50%;
   background-color: var(--hiya-navy, #11223A);
-  color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold, #CB992C);
   border: 1.5px solid var(--hiya-gold, #CB992C);
   display: flex;
   align-items: center;
@@ -52,7 +52,7 @@
 }
 
 .hiyaghar-floating-top-btn:hover {
-  background-color: var(--hiya-gold-text, #855F0F);
+  background-color: var(--hiya-gold, #CB992C);
   color: #ffffff;
   transform: translateY(-3px) scale(1.05);
   box-shadow: 0 8px 24px rgba(203, 153, 44, 0.35);

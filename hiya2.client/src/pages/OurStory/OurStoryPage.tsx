@@ -139,7 +139,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
                 />
               </div>
               <div className="hiyaghar-story-image-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                 </svg>
                 <span>✦ Chapter 02: Artisan Craftsmanship</span>
@@ -196,7 +196,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
                 />
               </div>
               <div className="hiyaghar-story-image-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
                   <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
                   <line x1="6" y1="1" x2="6" y2="4" />
@@ -230,7 +230,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
             <div className="hiyaghar-story-values-grid">
               <div className="hiyaghar-story-value-card">
                 <div className="hiyaghar-story-value-icon">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
                     <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
                   </svg>
@@ -241,7 +241,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
 
               <div className="hiyaghar-story-value-card">
                 <div className="hiyaghar-story-value-icon">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
                   </svg>
                 </div>
@@ -251,7 +251,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
 
               <div className="hiyaghar-story-value-card">
                 <div className="hiyaghar-story-value-icon">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="20 12 20 22 4 22 4 12" />
                     <rect x="2" y="7" width="20" height="5" />
                     <line x1="12" y1="22" x2="12" y2="7" />
@@ -265,7 +265,7 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = ({ onNavigateHome }) =>
 
               <div className="hiyaghar-story-value-card">
                 <div className="hiyaghar-story-value-icon">
-                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                   </svg>
                 </div>

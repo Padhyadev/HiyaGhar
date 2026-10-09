@@ -768,7 +768,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                               {addr.city}, {addr.state} - {addr.postalCode}
                             </p>
                             <span className="addr-mobile">
-                              <i className="fa-solid fa-phone" aria-hidden="true" style={{ marginRight: '6px', color: 'var(--hiya-gold, #CB992C)' }}></i>
+                              <i className="fa-solid fa-phone" aria-hidden="true" style={{ marginRight: '6px', color: 'var(--hiya-gold-text, #855F0F)' }}></i>
                               {addr.mobileNo}
                             </span>
                           </div>
@@ -946,7 +946,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                             type="checkbox"
                             checked={newAddressForm.isDefault}
                             onChange={(e) => setNewAddressForm({ ...newAddressForm, isDefault: e.target.checked })}
-                            style={{ width: '16px', height: '16px', accentColor: 'var(--hiya-gold, #CB992C)', cursor: 'pointer' }}
+                            style={{ width: '16px', height: '16px', accentColor: 'var(--hiya-gold-text, #855F0F)', cursor: 'pointer' }}
                           />
                           Make this my default shipping address
                         </label>
@@ -968,7 +968,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                             {addressForm.mobile && (
                               <>
                                 {' • '}
-                                <i className="fa-solid fa-phone" aria-hidden="true" style={{ color: 'var(--hiya-gold, #CB992C)', fontSize: '12px' }}></i>{' '}
+                                <i className="fa-solid fa-phone" aria-hidden="true" style={{ color: 'var(--hiya-gold-text, #855F0F)', fontSize: '12px' }}></i>{' '}
                                 {addressForm.mobile}
                               </>
                             )}
@@ -1041,7 +1041,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   <div className="hiyaghar-checkout-card-header">
                     <h2 className="hiyaghar-card-title">03. Select Payment Method</h2>
                     <span className="hiyaghar-secure-badge">
-                      <i className="fa-solid fa-lock" aria-hidden="true" style={{ color: 'var(--hiya-gold, #CB992C)', marginRight: '6px' }}></i>
+                      <i className="fa-solid fa-lock" aria-hidden="true" style={{ color: 'var(--hiya-gold-text, #855F0F)', marginRight: '6px' }}></i>
                       256-Bit Razorpay Encrypted
                     </span>
                   </div>
@@ -1059,7 +1059,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                         <div className="hiyaghar-pm-content" style={{ width: '100%' }}>
                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
                             <span className="hiyaghar-pm-title">Pay Online (Instant & Secure)</span>
-                            <span style={{ fontSize: '11px', background: '#E8F8F5', color: '#117A65', padding: '2px 8px', borderRadius: '6px', fontWeight: 700 }}>
+                            <span style={{ fontSize: '12px', background: '#E8F8F5', color: '#117A65', padding: '2px 8px', borderRadius: '6px', fontWeight: 700 }}>
                               RECOMMENDED
                             </span>
                           </div>
@@ -1067,11 +1067,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                             UPI (Google Pay, PhonePe, Paytm), Credit/Debit Cards, Net Banking & Wallets
                           </span>
                           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', flexWrap: 'wrap' }}>
-                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '11px', fontWeight: 700, color: '#0c2340', background: '#eef2f6', padding: '3px 8px', borderRadius: '4px', border: '1px solid #d5dfea' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: 700, color: '#0c2340', background: '#eef2f6', padding: '3px 8px', borderRadius: '4px', border: '1px solid #d5dfea' }}>
                               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0c2340" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                               Razorpay Trusted Business
                             </span>
-                            <span style={{ fontSize: '11px', color: '#556987', fontWeight: 600, background: '#f8fafc', padding: '3px 8px', borderRadius: '4px', border: '1px solid #e2e8f0' }}>
+                            <span style={{ fontSize: '12px', color: '#556987', fontWeight: 600, background: '#f8fafc', padding: '3px 8px', borderRadius: '4px', border: '1px solid #e2e8f0' }}>
                               UPI • Cards • NetBanking
                             </span>
                           </div>
@@ -1207,7 +1207,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       )}
                     </button>
                     <span className="hiyaghar-checkout-security-subtext">
-                      <i className="fa-solid fa-shield-halved" aria-hidden="true" style={{ color: 'var(--hiya-gold, #CB992C)', marginRight: '6px' }}></i>
+                      <i className="fa-solid fa-shield-halved" aria-hidden="true" style={{ color: 'var(--hiya-gold-text, #855F0F)', marginRight: '6px' }}></i>
                       Guaranteed Secure Checkout • Easy Returns • 100% Authentic Quality
                     </span>
                   </div>

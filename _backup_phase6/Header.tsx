@@ -72,50 +72,7 @@ export const Header: React.FC = () => {
   useEffect(() => {
     if (isMobileMenuOpen && mobileDrawerRef.current) {
       mobileDrawerRef.current.scrollTop = 0;
-      mobileDrawerRef.current.focus();
     }
-  }, [isMobileMenuOpen]);
-
-  // Mobile Drawer Focus Trap
-  useEffect(() => {
-    if (!isMobileMenuOpen) return;
-    
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        setIsMobileMenuOpen(false);
-        // Focus the hamburger button on close
-        const hamburgerBtn = document.querySelector('.hiyaghar-mobile-hamburger-btn') as HTMLElement;
-        if (hamburgerBtn) hamburgerBtn.focus();
-        return;
-      }
-      if (e.key === 'Tab') {
-        const focusableElements = mobileDrawerRef.current?.querySelectorAll(
-          'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select'
-        ) as NodeListOf<HTMLElement>;
-        
-        if (focusableElements && focusableElements.length > 0) {
-          const firstElement = focusableElements[0];
-          const lastElement = focusableElements[focusableElements.length - 1];
-
-          if (e.shiftKey) {
-            if (document.activeElement === firstElement || document.activeElement === mobileDrawerRef.current) {
-              lastElement.focus();
-              e.preventDefault();
-            }
-          } else {
-            if (document.activeElement === lastElement) {
-              firstElement.focus();
-              e.preventDefault();
-            }
-          }
-        }
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyDown);
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown);
-    };
   }, [isMobileMenuOpen]);
 
   // Click outside listener to close any active user / nav dropdowns
@@ -203,8 +160,6 @@ export const Header: React.FC = () => {
     return AnnouncementService.getActiveAnnouncementTexts(freeShippingLimit);
   });
 
-  const [isTickerPaused, setIsTickerPaused] = useState(false);
-
   useEffect(() => {
     const updateMarquee = () => {
       const shippingSettings = ShippingService.getSettings();
@@ -252,14 +207,7 @@ export const Header: React.FC = () => {
 
       {/* 1. Magenta Ticker Marquee */}
       <div className="hiyaghar-ticker-bar" role="region" aria-label="Announcement Marquee">
-        <button
-          className="sr-only hiyaghar-ticker-pause-btn"
-          onClick={() => setIsTickerPaused(!isTickerPaused)}
-          aria-label={isTickerPaused ? "Play announcements" : "Pause announcements"}
-        >
-          {isTickerPaused ? "Play" : "Pause"}
-        </button>
-        <div className="hiyaghar-ticker-track" style={{ animationPlayState: isTickerPaused ? 'paused' : 'running' }}>
+        <div className="hiyaghar-ticker-track">
           {marqueeItems.concat(marqueeItems).map((item, index) => (
             <div key={index} className="hiyaghar-ticker-item">
               <span>{item}</span>
@@ -641,10 +589,6 @@ export const Header: React.FC = () => {
           <div
             ref={mobileDrawerRef}
             className="hiyaghar-mobile-menu-drawer"
-            role="dialog"
-            aria-modal="true"
-            aria-label="Mobile Navigation Menu"
-            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="hiyaghar-mobile-menu-header">
@@ -926,7 +870,7 @@ export const Header: React.FC = () => {
           >
             <div className="hiyaghar-search-modal-header">
               <div className="hiyaghar-search-input-wrapper">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="11" cy="11" r="8" />
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                 </svg>
@@ -1120,7 +1064,7 @@ export const Header: React.FC = () => {
                       </div>
                       <button
                         type="button"
-                        style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: '12px', cursor: 'pointer', marginTop: '2px' }}
+                        style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.7)', fontSize: '10px', cursor: 'pointer', marginTop: '2px' }}
                         onClick={() => handleRemoveItem(item.id)}
                       >
                         Remove
@@ -1146,7 +1090,7 @@ export const Header: React.FC = () => {
             {/* Shipping Progress Bar */}
             {cartItems.length > 0 && (
               <div className="hiyaghar-side-cart-shipping-bar">
-                <span className="hiyaghar-shipping-icon" style={{ color: 'var(--hiya-gold-text, #855F0F)', display: 'inline-flex', alignItems: 'center' }}>
+                <span className="hiyaghar-shipping-icon" style={{ color: 'var(--hiya-gold, #CB992C)', display: 'inline-flex', alignItems: 'center' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <rect x="1" y="3" width="15" height="13"></rect>
                     <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>

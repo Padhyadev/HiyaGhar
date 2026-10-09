@@ -81,7 +81,7 @@ export const CustomizeComboSection: React.FC = () => {
                   />
                 </div>
                 <div className="hiyaghar-combo-marquee-info">
-                  <h4 className="hiyaghar-combo-marquee-name">{item.name}</h4>
+                  <h3 className="hiyaghar-combo-marquee-name">{item.name}</h3>
                   <span className="hiyaghar-combo-marquee-price">{item.priceFormatted}</span>
                 </div>
               </div>
@@ -95,7 +95,7 @@ export const CustomizeComboSection: React.FC = () => {
             <div className="hiyaghar-step-icon-wrap">
               <span className="hiyaghar-step-num">1</span>
             </div>
-            <h4 className="hiyaghar-step-card-title">Step 1</h4>
+            <h3 className="hiyaghar-step-card-title">Step 1</h3>
             <p className="hiyaghar-step-card-desc">Choose a combo size / budget</p>
           </div>
 
@@ -103,7 +103,7 @@ export const CustomizeComboSection: React.FC = () => {
             <div className="hiyaghar-step-icon-wrap">
               <span className="hiyaghar-step-num">2</span>
             </div>
-            <h4 className="hiyaghar-step-card-title">Step 2</h4>
+            <h3 className="hiyaghar-step-card-title">Step 2</h3>
             <p className="hiyaghar-step-card-desc">Select products</p>
           </div>
 
@@ -111,7 +111,7 @@ export const CustomizeComboSection: React.FC = () => {
             <div className="hiyaghar-step-icon-wrap">
               <span className="hiyaghar-step-num">3</span>
             </div>
-            <h4 className="hiyaghar-step-card-title">Step 3</h4>
+            <h3 className="hiyaghar-step-card-title">Step 3</h3>
             <p className="hiyaghar-step-card-desc">Review your combo + savings</p>
           </div>
         </div>

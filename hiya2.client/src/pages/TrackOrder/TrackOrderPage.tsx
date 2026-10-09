@@ -147,7 +147,7 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({
                 <div className="hiyaghar-track-est-box">
                   <span className="hiyaghar-track-sub">Expected Delivery</span>
                   <span className="hiyaghar-track-est-date">
-                    <i className="fa-solid fa-calendar-days" aria-hidden="true" style={{ color: 'var(--hiya-gold, #CB992C)', marginRight: '6px' }}></i>
+                    <i className="fa-solid fa-calendar-days" aria-hidden="true" style={{ color: 'var(--hiya-gold-text, #855F0F)', marginRight: '6px' }}></i>
                     {order.estimatedDeliveryDate}
                   </span>
                 </div>
@@ -246,7 +246,7 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({
                     className="hiyaghar-support-btn"
                     onClick={() => setIsSupportOpen(true)}
                   >
-                    <i className="fa-solid fa-headset" style={{ color: 'var(--hiya-gold, #CB992C)' }}></i> Contact Support
+                    <i className="fa-solid fa-headset" style={{ color: 'var(--hiya-gold-text, #855F0F)' }}></i> Contact Support
                   </button>
                 </div>
               </div>
@@ -312,7 +312,7 @@ export const TrackOrderPage: React.FC<TrackOrderPageProps> = ({
                   }}
                 >
                   <span className="icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: '#CB992C' }}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--hiya-gold-text, #855F0F)' }}>
                       <rect x="2" y="4" width="20" height="16" rx="2" />
                       <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
                     </svg>

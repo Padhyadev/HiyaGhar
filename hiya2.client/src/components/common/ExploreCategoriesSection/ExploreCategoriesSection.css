@@ -107,7 +107,7 @@
 }
 
 .hiyaghar-explore-card-count {
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
@@ -137,7 +137,7 @@
   transform: translateX(0);
   opacity: 1;
   background: var(--hiya-gold, #CB992C);
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 @media (max-width: 1199px) {

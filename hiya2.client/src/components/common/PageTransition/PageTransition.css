@@ -87,7 +87,7 @@
   inset: 0;
   border-radius: 30px;
   border: 2px solid transparent;
-  border-top-color: #cb992c;
+  border-top-color: var(--hiya-gold-text, #855F0F);
   border-right-color: rgba(203, 153, 44, 0.3);
   animation: spinOuter 0.9s linear infinite;
 }
@@ -148,7 +148,7 @@
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background-color: #cb992c;
+  background-color: var(--hiya-gold-text, #855F0F);
   animation: dotBlink 0.8s ease-in-out infinite;
 }
 

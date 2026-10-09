@@ -363,7 +363,7 @@ export const CouponManagementPage: React.FC = () => {
               </div>
             )}
             {item.documentName && (
-              <div style={{ fontSize: '11px', color: '#0369a1', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              <div style={{ fontSize: '12px', color: '#0369a1', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '4px' }}>
                 <i className="fa-solid fa-file-pdf" style={{ color: '#ef4444' }} />
                 <span>{item.documentName}</span>
               </div>
@@ -401,9 +401,9 @@ export const CouponManagementPage: React.FC = () => {
           <div style={{ fontSize: '12.5px' }}>
             <div>{new Date(item.startDate).toLocaleDateString()} to {end.toLocaleDateString()}</div>
             {isExpired ? (
-              <span style={{ color: '#dc2626', fontWeight: 700, fontSize: '11px' }}>⚠️ Expired</span>
+              <span style={{ color: '#dc2626', fontWeight: 700, fontSize: '12px' }}>⚠️ Expired</span>
             ) : (
-              <span style={{ color: '#16a34a', fontWeight: 700, fontSize: '11px' }}>✓ Active Period</span>
+              <span style={{ color: '#16a34a', fontWeight: 700, fontSize: '12px' }}>✓ Active Period</span>
             )}
           </div>
         );
@@ -531,7 +531,7 @@ export const CouponManagementPage: React.FC = () => {
                     onChange={(e) => handleFormChange('maxDiscountAmount', e.target.value)}
                     style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px' }}
                   />
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '11px', color: '#475467', marginTop: '6px', background: '#F8FAFC', padding: '6px 10px', borderRadius: '6px', border: '1px solid #E2E8F0', lineHeight: 1.4 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: '#475467', marginTop: '6px', background: '#F8FAFC', padding: '6px 10px', borderRadius: '6px', border: '1px solid #E2E8F0', lineHeight: 1.4 }}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
                       <circle cx="12" cy="12" r="10" /><line x1="12" y1="16" x2="12" y2="12" /><line x1="12" y1="8" x2="12.01" y2="8" />
                     </svg>
@@ -553,7 +553,7 @@ export const CouponManagementPage: React.FC = () => {
                     className={`hiyaghar-search-input ${errors.minOrderAmount ? 'input-error' : ''}`}
                     style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px' }}
                   />
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '11px', color: '#475467', marginTop: '6px', background: '#F8FAFC', padding: '6px 10px', borderRadius: '6px', border: '1px solid #E2E8F0', lineHeight: 1.4 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', fontSize: '12px', color: '#475467', marginTop: '6px', background: '#F8FAFC', padding: '6px 10px', borderRadius: '6px', border: '1px solid #E2E8F0', lineHeight: 1.4 }}>
                     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#b45309" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, marginTop: '2px' }}>
                       <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                     </svg>
@@ -637,13 +637,13 @@ export const CouponManagementPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={handleRemoveImage}
-                        style={{ background: '#FEE2E2', color: '#DC2626', border: 'none', borderRadius: '6px', padding: '6px 10px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+                        style={{ background: '#FEE2E2', color: '#DC2626', border: 'none', borderRadius: '6px', padding: '6px 10px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
                       >
                         Remove
                       </button>
                     </div>
                   ) : (
-                    <span style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', display: 'block' }}>
+                    <span style={{ fontSize: '12px', color: '#64748b', marginTop: '4px', display: 'block' }}>
                       Supported formats: PNG, JPG, WebP for marketing banners.
                     </span>
                   )}
@@ -674,7 +674,7 @@ export const CouponManagementPage: React.FC = () => {
                           <a
                             href={formData.documentData}
                             download={formData.documentName}
-                            style={{ color: '#0284C7', textDecoration: 'underline', fontSize: '11px', fontWeight: 600 }}
+                            style={{ color: '#0284C7', textDecoration: 'underline', fontSize: '12px', fontWeight: 600 }}
                           >
                             Download / View ↗
                           </a>
@@ -683,13 +683,13 @@ export const CouponManagementPage: React.FC = () => {
                       <button
                         type="button"
                         onClick={handleRemoveDocument}
-                        style={{ background: '#FEE2E2', color: '#DC2626', border: 'none', borderRadius: '6px', padding: '6px 10px', fontSize: '11px', fontWeight: 700, cursor: 'pointer' }}
+                        style={{ background: '#FEE2E2', color: '#DC2626', border: 'none', borderRadius: '6px', padding: '6px 10px', fontSize: '12px', fontWeight: 700, cursor: 'pointer' }}
                       >
                         Remove
                       </button>
                     </div>
                   ) : (
-                    <span style={{ fontSize: '11px', color: '#64748b', marginTop: '4px', display: 'block' }}>
+                    <span style={{ fontSize: '12px', color: '#64748b', marginTop: '4px', display: 'block' }}>
                       Supported formats: PDF, DOC for offer guidelines.
                     </span>
                   )}

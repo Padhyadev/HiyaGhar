@@ -89,7 +89,7 @@
 
 .hiyaghar-combo-marquee-card:hover {
   transform: translateY(-4px);
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 10px 25px rgba(17, 34, 58, 0.1);
 }
 
@@ -152,7 +152,7 @@
 .hiyaghar-combo-marquee-price {
   font-size: 15px;
   font-weight: 900;
-  color: var(--hiya-gold-dark, #A97818);
+  color: var(--hiya-gold-text, #855F0F);
   margin-top: 2px;
 }
 
@@ -181,7 +181,7 @@
 
 .hiyaghar-combo-step-card:hover {
   transform: translateY(-2px);
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
   box-shadow: 0 6px 16px rgba(17, 34, 58, 0.07);
 }
 
@@ -243,8 +243,8 @@
 }
 
 .hiyaghar-combo-hero-cta-btn:hover {
-  background-color: var(--hiya-gold, #CB992C);
-  border-color: var(--hiya-gold, #CB992C);
+  background-color: var(--hiya-gold-text, #855F0F);
+  border-color: var(--hiya-gold-text, #855F0F);
   color: var(--hiya-navy, #11223A);
   transform: translateY(-3px) scale(1.02);
   box-shadow: 0 10px 30px rgba(203, 153, 44, 0.35);

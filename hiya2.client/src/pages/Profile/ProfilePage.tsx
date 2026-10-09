@@ -1319,7 +1319,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                         {addr.city}, {addr.state} - {addr.postalCode}
                       </p>
                       <span className="phone-line">
-                        <i className="fa-solid fa-phone" aria-hidden="true" style={{ marginRight: '6px', color: 'var(--hiya-gold, #CB992C)' }}></i>
+                        <i className="fa-solid fa-phone" aria-hidden="true" style={{ marginRight: '6px', color: 'var(--hiya-gold-text, #855F0F)' }}></i>
                         {addr.mobileNo}
                       </span>
 
@@ -1458,7 +1458,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                   </button>
 
                   <div className="hiyaghar-security-info-badge">
-                    <span className="lock-icon" style={{ color: 'var(--hiya-gold, #CB992C)' }}>
+                    <span className="lock-icon" style={{ color: 'var(--hiya-gold-text, #855F0F)' }}>
                       <i className="fa-solid fa-lock" aria-hidden="true"></i>
                     </span>
                     <div>
@@ -1492,7 +1492,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                           Available Reward Balance
                         </div>
                         <div style={{ fontSize: '2.2rem', fontWeight: 800, display: 'flex', alignItems: 'center', gap: '10px', margin: '8px 0 4px' }}>
-                          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#CB992C" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                             <circle cx="12" cy="12" r="9" fill="rgba(203, 153, 44, 0.25)" />
                             <path d="M12 7v10M15 9.5a3.5 3.5 0 0 0-5 0c0 2 5 2 5 4a3.5 3.5 0 0 1-5 0" />
                           </svg>
@@ -1508,7 +1508,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                       {customer?.referralCode && (
                         <div style={{ padding: '22px 24px', borderRadius: '16px', background: '#FFFDF5', border: '1.5px solid #F0E6C8', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', boxShadow: '0 4px 16px rgba(0,0,0,0.03)' }}>
                           <div>
-                            <div style={{ fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#667085', fontWeight: 700 }}>
+                            <div style={{ fontSize: '0.82rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--hiya-muted, #475467)', fontWeight: 700 }}>
                               Invite Friends & Earn
                             </div>
                             <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#11223A', letterSpacing: '1px', marginTop: '6px' }}>
@@ -1544,7 +1544,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
                         {/* Step 1: Earn */}
                         <div style={{ background: '#FAF8F2', padding: '16px', borderRadius: '12px', border: '1px solid #EFEAE0' }}>
-                          <div style={{ fontSize: '13px', fontWeight: 800, color: '#CB992C', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--hiya-gold-text, #855F0F)', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span>Step 1: Earn Coins</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <polyline points="20 12 20 22 4 22 4 12" />
@@ -1561,7 +1561,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
 
                         {/* Step 2: Rate */}
                         <div style={{ background: '#FAF8F2', padding: '16px', borderRadius: '12px', border: '1px solid #EFEAE0' }}>
-                          <div style={{ fontSize: '13px', fontWeight: 800, color: '#CB992C', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--hiya-gold-text, #855F0F)', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span>Step 2: Conversion Rate</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <circle cx="12" cy="12" r="9" />
@@ -1578,7 +1578,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
 
                         {/* Step 3: Checkout */}
                         <div style={{ background: '#FAF8F2', padding: '16px', borderRadius: '12px', border: '1px solid #EFEAE0' }}>
-                          <div style={{ fontSize: '13px', fontWeight: 800, color: '#CB992C', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                          <div style={{ fontSize: '13px', fontWeight: 800, color: 'var(--hiya-gold-text, #855F0F)', textTransform: 'uppercase', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: '6px' }}>
                             <span>Step 3: Pay Less at Checkout</span>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                               <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
@@ -1607,7 +1607,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
 
                     <h3 className="hiyaghar-panel-heading" style={{ fontSize: '1.1rem' }}>Coin History</h3>
                     {rewardLedger.length === 0 ? (
-                      <p style={{ color: '#667085' }}>No reward coin activity yet.</p>
+                      <p style={{ color: 'var(--hiya-muted, #475467)' }}>No reward coin activity yet.</p>
                     ) : (
                       <div style={{ overflowX: 'auto' }}>
                         <table className="hiyaghar-datatable" style={{ width: '100%' }}>

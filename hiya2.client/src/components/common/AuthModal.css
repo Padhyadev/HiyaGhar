@@ -143,7 +143,7 @@
 }
 
 .hiyaghar-auth-group input:focus {
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-auth-submit-btn {
@@ -218,7 +218,7 @@
   height: 50px;
   border-radius: 50%;
   background: var(--hiya-navy, #11223A);
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
   font-size: 22px;
   font-weight: 800;
   display: flex;
@@ -269,8 +269,8 @@
 
 .hiyaghar-profile-link-btn:hover {
   background: #FDFBF7;
-  border-color: var(--hiya-gold, #CB992C);
-  color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-logout-row {
@@ -358,14 +358,14 @@
 }
 
 .hiyaghar-wishlist-item-card .weight {
-  font-size: 11px;
+  font-size: 12px;
   color: #7A7265;
 }
 
 .hiyaghar-wishlist-item-card .price {
   font-size: 13px;
   font-weight: 700;
-  color: var(--hiya-gold, #CB992C);
+  color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-wishlist-item-card .actions {

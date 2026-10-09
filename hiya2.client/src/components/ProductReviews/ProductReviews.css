@@ -29,7 +29,7 @@
 
 .hiyaghar-pr-summary-count {
   font-size: 13px;
-  color: #667085;
+  color: var(--hiya-muted, #475467);
 }
 
 .hiyaghar-pr-stars {
@@ -83,7 +83,7 @@
 
 .hiyaghar-pr-textarea:focus {
   outline: none;
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 .hiyaghar-pr-form-message {
@@ -142,7 +142,7 @@
 }
 
 .hiyaghar-pr-empty {
-  color: #667085;
+  color: var(--hiya-muted, #475467);
   font-size: 14px;
   text-align: center;
   padding: 24px 0;

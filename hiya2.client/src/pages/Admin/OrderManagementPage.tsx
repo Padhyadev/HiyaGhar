@@ -672,7 +672,7 @@ export const OrderManagementPage: React.FC = () => {
           .summary-table td { padding: 6px 10px; }
           .total-row td { border-top: 2px solid #10243E; font-size: 16px; font-weight: 800; color: #10243E; padding-top: 10px; }
           .footer { margin-top: 40px; padding-top: 15px; border-top: 1px dashed #cbd5e1; text-align: center; font-size: 12px; color: #94a3b8; }
-          .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
+          .badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 700; background: #e0f2fe; color: #0369a1; }
           @media print {
             body { padding: 0; }
             .invoice-box { border: none; padding: 0; }
@@ -1175,7 +1175,7 @@ export const OrderManagementPage: React.FC = () => {
               </button>
             </div>
 
-            <p style={{ fontSize: '0.85rem', color: '#667085', margin: '0 0 16px 0' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--hiya-muted, #475467)', margin: '0 0 16px 0' }}>
               {shippingModalMode === 'edit_tracking'
                 ? `Update the courier partner and tracking details for Order #${selectedOrder.orderNumber}.`
                 : `Mark Order #${selectedOrder.orderNumber} as Shipped by providing tracking details.`}
@@ -1269,7 +1269,7 @@ export const OrderManagementPage: React.FC = () => {
               </button>
             </div>
 
-            <p style={{ fontSize: '0.85rem', color: '#667085', margin: '0 0 14px 0' }}>
+            <p style={{ fontSize: '0.85rem', color: 'var(--hiya-muted, #475467)', margin: '0 0 14px 0' }}>
               Please provide a reason for cancelling this order. This can't be undone.
             </p>
 

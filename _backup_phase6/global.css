@@ -100,7 +100,7 @@ input, select, textarea {
 .status-badge, .badge, .small-label, .hero-label, .courier-item .lbl {
   font-family: 'DM Sans', sans-serif;
   font-weight: 500;
-  font-size: 12px;
+  font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
@@ -206,13 +206,5 @@ svg {
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 10px !important;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
   }
 }

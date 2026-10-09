@@ -145,7 +145,7 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
               {/* Detailed Bill Breakdown */}
               <div className="hiyaghar-conf-bill-breakdown">
                 <h4 className="bill-breakdown-title">
-                  <i className="fa-solid fa-file-invoice-dollar" style={{ color: 'var(--hiya-gold, #CB992C)', marginRight: '8px' }}></i>
+                  <i className="fa-solid fa-file-invoice-dollar" style={{ color: 'var(--hiya-gold-text, #855F0F)', marginRight: '8px' }}></i>
                   Bill Summary
                 </h4>
                 

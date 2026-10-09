@@ -148,7 +148,7 @@
 .hiyaghar-category-card.is-active {
   transform: translateY(-8px) scale(1.015);
   box-shadow: 0 16px 36px rgba(17, 34, 58, 0.12);
-  border-color: var(--hiya-gold, #CB992C);
+  border-color: var(--hiya-gold-text, #855F0F);
 }
 
 /* Category Card Header */
@@ -565,7 +565,7 @@
   }
 
   .hiyaghar-category-card-tagline {
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .hiyaghar-category-main-image-box {
@@ -587,7 +587,7 @@
 
   .hiyaghar-category-explore-badge {
     padding: 6px 12px;
-    font-size: 11px;
+    font-size: 12px;
   }
 
   .hiyaghar-carousel-btn {
@@ -617,7 +617,7 @@
   }
 
   .hiyaghar-category-card-tagline {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .hiyaghar-category-main-image-box {
@@ -630,7 +630,7 @@
 
   .hiyaghar-category-explore-badge {
     padding: 5px 10px;
-    font-size: 10px;
+    font-size: 12px;
     gap: 4px;
   }
 }

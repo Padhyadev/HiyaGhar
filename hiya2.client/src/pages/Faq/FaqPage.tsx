@@ -231,7 +231,7 @@ export const FaqPage: React.FC = () => {
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                   <line x1="8" y1="11" x2="14" y2="11" />
                 </svg>
-                <h3>No answers found</h3>
+                <h2>No answers found</h2>
                 <p>We couldn't find any questions matching "{searchQuery}".</p>
                 <button
                   type="button"
@@ -247,7 +247,7 @@ export const FaqPage: React.FC = () => {
           {/* CONTACT CTA */}
           <ScrollReveal variant="fade-up" delay={200}>
             <div className="hiyaghar-faq-cta">
-              <h3>Still have questions?</h3>
+              <h2>Still have questions?</h2>
               <p>
                 Can't find the answer you're looking for? Our dedicated team is here to assist you with any inquiries.
               </p>

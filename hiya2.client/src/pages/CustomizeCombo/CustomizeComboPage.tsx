@@ -458,7 +458,7 @@ export const CustomizeComboPage: React.FC<CustomizeComboPageProps> = ({ onNaviga
                                 ₹{activeVariant ? activeVariant.price : product.price}
                               </span>
                               {(activeVariant ? activeVariant.originalPrice : product.originalPrice) && (activeVariant ? activeVariant.originalPrice! > activeVariant.price : product.originalPrice! > product.price) && (
-                                <span style={{ fontSize: '12px', color: '#888', textDecoration: 'line-through' }}>
+                                <span style={{ fontSize: '12px', color: 'var(--hiya-muted, #475467)', textDecoration: 'line-through' }}>
                                   ₹{activeVariant ? activeVariant.originalPrice : product.originalPrice}
                                 </span>
                               )}
