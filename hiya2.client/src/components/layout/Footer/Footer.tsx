@@ -64,8 +64,7 @@ export const Footer: React.FC = () => {
       links: [
         { label: 'Track Order', type: 'route', href: '/track-order' },
         { label: 'Shipping Policy', type: 'route', href: '/shipping-policy' },
-        // NOTE: "Returns & Refunds" and "Cancellation Policy" (below) both point to /refund-policy - pending decision.
-        { label: 'Returns & Refunds', type: 'route', href: '/refund-policy' },
+        { label: 'Return & Refund Policy', type: 'route', href: '/refund-policy' },
         { label: 'My Account', type: 'route', href: '/profile' },
       ],
     },
@@ -74,7 +73,7 @@ export const Footer: React.FC = () => {
       links: [
         { label: 'Privacy Policy', type: 'route', href: '/privacy-policy' },
         { label: 'Terms & Conditions', type: 'route', href: '/terms-conditions' },
-        { label: 'Cancellation Policy', type: 'route', href: '/refund-policy' },
+        { label: 'Return & Refund Policy', type: 'route', href: '/refund-policy' },
       ],
     },
   ];
@@ -158,7 +157,7 @@ export const Footer: React.FC = () => {
 
           {/* Center Brand Logo & Trust Signals */}
           <ScrollReveal variant="fade-up" delay={100} className="hiyaghar-footer-center-logo">
-            <img src="/image/HIYA LOGO (1).png" alt="HIYA" className="hiyaghar-footer-logo-img" />
+            <img src="/image/HIYA LOGO (1).png" alt="HIYA" width={140} height={42} loading="lazy" decoding="async" className="hiyaghar-footer-logo-img" />
             {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
               <div className="hiyaghar-footer-fssai-pill">
                 <span className="hiyaghar-fssai-label">FSSAI Lic. No.</span>

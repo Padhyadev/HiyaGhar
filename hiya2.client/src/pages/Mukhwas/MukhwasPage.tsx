@@ -97,26 +97,26 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
     return result;
   }, [productsList, selectedSort]);
 
-  const handleAddToCart = (product: MukhwasProduct, weight: string) => {
+  const handleAddToCart = (product: MukhwasProduct, weight: string, _qty: number = 1, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
       name: product.name,
       image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
+      price: typeof price === 'number' ? price : product.price,
+      originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
       weight: weight,
       quantity: 1,
     });
     showToast(`Added ${product.name} (${weight}) to your cart!`, 'success');
   };
 
-  const handleBuyNow = (product: MukhwasProduct, weight: string) => {
+  const handleBuyNow = (product: MukhwasProduct, weight: string, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
       name: product.name,
       image: product.image,
-      price: product.price,
-      originalPrice: product.originalPrice,
+      price: typeof price === 'number' ? price : product.price,
+      originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
       weight: weight,
       quantity: 1,
     });

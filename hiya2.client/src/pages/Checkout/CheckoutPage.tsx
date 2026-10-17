@@ -105,9 +105,19 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       city: addr.city,
       state: addr.state,
     });
-    // Check pincode serviceability
+    // Check pincode serviceability without modifying city/state
     if (addr.postalCode && addr.postalCode.length === 6) {
-      handlePincodeBlur(addr.postalCode);
+      if (!ShippingService.isAhmedabadPincode(addr.postalCode.trim())) {
+        setAddressErrors((prev) => ({
+          ...prev,
+          postalCode: 'Order place only in Ahmedabad. We currently deliver only to Ahmedabad addresses.',
+        }));
+      } else {
+        setAddressErrors((prev) => ({
+          ...prev,
+          postalCode: '',
+        }));
+      }
     }
   };
 

@@ -3,7 +3,7 @@ import type { MukhwasProduct } from '../../../data/mukhwasData';
 import { CartService, triggerFlyingProductAnimation } from '../../../cart';
 import { WishlistService } from '../../../services/wishlistService';
 import { AnimatedNumber } from '../../common/AnimatedNumber';
-import { formatVariantLabel } from '../../../utils/productFormat';
+import { formatVariantLabel, toProductSlug } from '../../../utils/productFormat';
 import { showToast } from '../../../utils/alertService';
 import './MukhwasProductCard.css';
 
@@ -11,8 +11,8 @@ interface MukhwasProductCardProps {
   product: MukhwasProduct;
   index?: number;
   onNavigateToDetail: (productId: string) => void;
-  onAddToCart: (product: MukhwasProduct, weight: string, quantity: number) => void;
-  onBuyNow: (product: MukhwasProduct, weight: string) => void;
+  onAddToCart: (product: MukhwasProduct, weight: string, quantity: number, price?: number, originalPrice?: number) => void;
+  onBuyNow: (product: MukhwasProduct, weight: string, price?: number, originalPrice?: number) => void;
 }
 
 export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
@@ -112,7 +112,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
   const discountPct = product.discountPercentage || (calculatedOriginalPrice > calculatedPrice ? Math.round(((calculatedOriginalPrice - calculatedPrice) / calculatedOriginalPrice) * 100) : 0);
 
   const handleCardClick = () => {
-    onNavigateToDetail(product.id);
+    onNavigateToDetail(toProductSlug(product.name, product.id));
   };
 
   const handleWishlistToggle = (e: React.MouseEvent) => {
@@ -145,7 +145,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
       showToast(`All available stock of ${product.name} (${defaultLabel || 'Standard'}) is in your cart.`, 'error');
       return;
     }
-    onAddToCart(product, defaultLabel, 1);
+    onAddToCart(product, defaultLabel, 1, calculatedPrice, calculatedOriginalPrice);
     triggerFlyingProductAnimation(cardImgRef.current);
   };
 
@@ -159,7 +159,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
       showToast(`All available stock of ${product.name} (${defaultLabel || 'Standard'}) is in your cart.`, 'error');
       return;
     }
-    onBuyNow(product, defaultLabel);
+    onBuyNow(product, defaultLabel, calculatedPrice, calculatedOriginalPrice);
   };
 
   return (
@@ -210,7 +210,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
 
       {/* Main Image Area with Image Hover Swap */}
       <a
-        href={`/product/${product.id}`}
+        href={`/product/${toProductSlug(product.name, product.id)}`}
         className="hiyaghar-mukhwas-card-image-box product-card-link"
         onClick={(e) => {
           e.preventDefault();
@@ -222,6 +222,9 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
           ref={cardImgRef}
           src={isHovered && product.secondaryImage ? product.secondaryImage : product.image}
           alt={product.name}
+          width={300}
+          height={270}
+          decoding="async"
           className="hiyaghar-mukhwas-card-img"
           loading="lazy"
           onError={(e) => {
@@ -247,7 +250,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
         {/* Title */}
         <h3 className="hiyaghar-mukhwas-card-title">
           <a
-            href={`/product/${product.id}`}
+            href={`/product/${toProductSlug(product.name, product.id)}`}
             className="product-card-title-link"
             onClick={(e) => {
               e.preventDefault();

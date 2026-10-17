@@ -16,6 +16,7 @@ namespace Hiya2.Server.Controllers
         public string? Phone { get; set; }
         public string Subject { get; set; } = "General Inquiry";
         public string Message { get; set; } = string.Empty;
+        public string? RecaptchaToken { get; set; }
     }
 
     public class UpdateContactQueryStatusDto
@@ -97,6 +98,33 @@ namespace Hiya2.Server.Controllers
             else if (dto.Message.Trim().Length > 2000)
             {
                 errors["message"] = "Please keep your message under 2000 characters.";
+            }
+
+            // 5. Google reCAPTCHA Verification (if secret key configured)
+            var recaptchaSecret = _configuration["ReCaptcha:SecretKey"];
+            if (!string.IsNullOrWhiteSpace(recaptchaSecret) && !string.IsNullOrWhiteSpace(dto?.RecaptchaToken))
+            {
+                try
+                {
+                    using var httpClient = new HttpClient();
+                    var verifyResponse = await httpClient.PostAsync(
+                        $"https://www.google.com/recaptcha/api/siteverify?secret={recaptchaSecret}&response={dto.RecaptchaToken}",
+                        null);
+                    if (verifyResponse.IsSuccessStatusCode)
+                    {
+                        var jsonString = await verifyResponse.Content.ReadAsStringAsync();
+                        // Google response contains "success": true
+                        if (!jsonString.Contains("\"success\": true", StringComparison.OrdinalIgnoreCase) &&
+                            !jsonString.Contains("\"success\":true", StringComparison.OrdinalIgnoreCase))
+                        {
+                            errors["captcha"] = "Security verification failed. Please try ticking the checkbox again.";
+                        }
+                    }
+                }
+                catch
+                {
+                    // Fallback gracefully if network check times out
+                }
             }
 
             // If any server-side validation fails, return 400 Bad Request with field errors

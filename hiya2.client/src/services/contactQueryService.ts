@@ -27,6 +27,7 @@ export class ContactQueryService {
     phone?: string;
     subject?: string;
     message: string;
+    recaptchaToken?: string;
   }): Promise<SubmitQueryResult> {
     try {
       const res = await fetch('/api/contactquery/submit', {

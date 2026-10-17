@@ -550,16 +550,17 @@
 
   .hiyaghar-btn-add-cart,
   .hiyaghar-btn-buy-now {
-    padding: 8px 4px;
-    font-size: 12px;
+    padding: 11px 6px;
+    min-height: 44px;
+    font-size: 12.5px;
     width: 100%;
     border-radius: var(--radius-xs);
     box-sizing: border-box;
   }
 
   .hiyaghar-btn-add-cart svg {
-    width: 13px;
-    height: 13px;
+    width: 15px;
+    height: 15px;
   }
 }
 
@@ -578,7 +579,8 @@
 
   .hiyaghar-btn-add-cart,
   .hiyaghar-btn-buy-now {
-    padding: 6px 2px;
-    font-size: 10.5px;
+    padding: 10px 4px;
+    min-height: 44px;
+    font-size: 11.5px;
   }
 }

@@ -131,27 +131,17 @@ export const CartPage: React.FC<CartPageProps> = ({
         />
 
         <div className="hiyaghar-container">
-          {/* Breadcrumb Navigation */}
-          <nav className="hiyaghar-cart-breadcrumb" aria-label="Breadcrumb">
-            <ol className="hiyaghar-cart-breadcrumb-list">
-              <li>
-                <a href="#/" onClick={(e) => { e.preventDefault(); onNavigateHome(); }}>
-                  Home
-                </a>
-              </li>
-              <li className="sep">/</li>
-              <li className="current">Cart</li>
-            </ol>
-          </nav>
-
           {/* Page Heading */}
           <div className="hiyaghar-cart-header-section">
             <h2 className="hiyaghar-cart-title">Your Shopping Cart</h2>
-            {cartItems.length > 0 && (
-              <span className="hiyaghar-cart-item-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                <AnimatedNumber value={cartItems.reduce((acc, i) => acc + i.quantity, 0)} /> Items
-              </span>
-            )}
+            {cartItems.length > 0 && (() => {
+              const totalCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
+              return (
+                <span className="hiyaghar-cart-item-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                  <AnimatedNumber value={totalCount} /> {totalCount === 1 ? 'item' : 'items'}
+                </span>
+              );
+            })()}
           </div>
 
           {cartItems.length === 0 ? (

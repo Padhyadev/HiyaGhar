@@ -16,12 +16,40 @@ export const ContactUsPage: React.FC = () => {
     phone: '',
     subject: 'General Inquiry',
     message: '',
+    honeypot: '',
   });
+  const [recaptchaToken, setRecaptchaToken] = useState<string>('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
+  const RECAPTCHA_SITE_KEY = '6Le31eYtAAAAAIbf_dNHlxiuSmirpPh0bm8uox1D';
+
   useEffect(() => {
+    // Dynamically inject Google reCAPTCHA script
+    if (!document.getElementById('google-recaptcha-script')) {
+      const script = document.createElement('script');
+      script.id = 'google-recaptcha-script';
+      script.src = 'https://www.google.com/recaptcha/api.js';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
+    // Define global callback for reCAPTCHA
+    (window as any).onContactRecaptchaSuccess = (token: string) => {
+      setRecaptchaToken(token);
+      setErrors((prev) => {
+        const copy = { ...prev };
+        delete copy.captcha;
+        return copy;
+      });
+    };
+
+    (window as any).onContactRecaptchaExpired = () => {
+      setRecaptchaToken('');
+    };
+
     // Load store details dynamically from backend/settings
     ShippingService.loadSettingsFromApi().then((settings) => {
       if (settings) {
@@ -61,6 +89,17 @@ export const ContactUsPage: React.FC = () => {
     e.preventDefault();
     setErrors({});
 
+    // Honeypot spam check
+    if (formData.honeypot) {
+      return;
+    }
+
+    // Google reCAPTCHA verification check
+    if (!recaptchaToken) {
+      setErrors({ captcha: 'Please verify that you are not a robot.' });
+      return;
+    }
+
     setIsSubmitting(true);
     const res = await ContactQueryService.submitQuery({
       fullName: formData.fullName,
@@ -68,12 +107,17 @@ export const ContactUsPage: React.FC = () => {
       phone: formData.phone || undefined,
       subject: formData.subject,
       message: formData.message,
+      recaptchaToken: recaptchaToken,
     });
     setIsSubmitting(false);
 
     if (res.success) {
       setSubmitted(true);
       setErrors({});
+      setRecaptchaToken('');
+      if ((window as any).grecaptcha) {
+        try { (window as any).grecaptcha.reset(); } catch {}
+      }
       showToast(res.message || 'Thank you! Your message has been sent.', 'success');
       setFormData({
         fullName: '',
@@ -81,6 +125,7 @@ export const ContactUsPage: React.FC = () => {
         phone: '',
         subject: 'General Inquiry',
         message: '',
+        honeypot: '',
       });
 
       // Auto dismiss success alert after 5 seconds
@@ -88,6 +133,10 @@ export const ContactUsPage: React.FC = () => {
         setSubmitted(false);
       }, 5000);
     } else {
+      if ((window as any).grecaptcha) {
+        try { (window as any).grecaptcha.reset(); } catch {}
+      }
+      setRecaptchaToken('');
       if (res.errors && Object.keys(res.errors).length > 0) {
         setErrors(res.errors);
       } else {
@@ -143,28 +192,17 @@ export const ContactUsPage: React.FC = () => {
                 </p>
 
                 <div className="hiyaghar-contact-details-list">
-                  {/* WhatsApp & Phone */}
+                  {/* Phone Support */}
                   <div className="hiyaghar-contact-item">
-                    <div className="hiyaghar-contact-icon whatsapp-icon">
+                    <div className="hiyaghar-contact-icon phone-icon">
                       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                       </svg>
                     </div>
                     <div className="hiyaghar-contact-item-content">
-                      <span className="hiyaghar-contact-label">Customer Support & WhatsApp</span>
+                      <span className="hiyaghar-contact-label">Customer Phone Support</span>
                       <a href={`tel:${storeSettings.contactPhone || '+91 92744 43617'}`} className="hiyaghar-contact-val">
                         {storeSettings.contactPhone || '+91 92744 43617'}
-                      </a>
-                      <a
-                        href={`https://wa.me/${(storeSettings.contactPhone || '919274443617').replace(/[^0-9]/g, '')}?text=Hello%20HiyaGhar,%20I%20have%20an%20inquiry.`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hiyaghar-whatsapp-badge"
-                      >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                          <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.541 1.761.817 2.796.818h.005c3.179 0 5.767-2.587 5.768-5.766.001-3.187-2.578-5.805-5.773-5.805zm0 10.457c-.896 0-1.637-.247-2.397-.704l-.171-.103-1.776.465.474-1.732-.113-.179c-.508-.813-.807-1.625-.807-2.438 0-2.544 2.072-4.615 4.622-4.615 2.546 0 4.618 2.071 4.618 4.618 0 2.546-2.072 4.688-4.449 4.688z"/>
-                        </svg>
-                        <span>Chat on WhatsApp</span>
                       </a>
                     </div>
                   </div>
@@ -248,6 +286,18 @@ export const ContactUsPage: React.FC = () => {
 
                 {/* noValidate disables default browser tooltip popup */}
                 <form onSubmit={handleSubmit} className="hiyaghar-contact-form" noValidate>
+                  {/* Honeypot hidden input to block bot submissions */}
+                  <input
+                    type="text"
+                    name="honeypot"
+                    value={formData.honeypot}
+                    onChange={handleChange}
+                    style={{ display: 'none', position: 'absolute', left: '-9999px' }}
+                    tabIndex={-1}
+                    autoComplete="off"
+                    aria-hidden="true"
+                  />
+
                   <div className="hiyaghar-form-row">
                     <div className={`hiyaghar-form-group ${errors.fullName ? 'has-error' : ''}`}>
                       <label htmlFor="fullName">Your Full Name <span className="req">*</span></label>
@@ -255,6 +305,7 @@ export const ContactUsPage: React.FC = () => {
                         type="text"
                         id="fullName"
                         name="fullName"
+                        autoComplete="name"
                         placeholder="e.g. Rahul Sharma"
                         minLength={2}
                         maxLength={100}
@@ -270,6 +321,7 @@ export const ContactUsPage: React.FC = () => {
                         type="email"
                         id="email"
                         name="email"
+                        autoComplete="email"
                         placeholder="e.g. rahul@example.com"
                         minLength={5}
                         maxLength={100}
@@ -283,11 +335,12 @@ export const ContactUsPage: React.FC = () => {
 
                   <div className="hiyaghar-form-row">
                     <div className={`hiyaghar-form-group ${errors.phone ? 'has-error' : ''}`}>
-                      <label htmlFor="phone">Phone / WhatsApp Number</label>
+                      <label htmlFor="phone">Phone Number</label>
                       <input
                         type="tel"
                         id="phone"
                         name="phone"
+                        autoComplete="tel"
                         placeholder="e.g. +91 98765 43210"
                         minLength={10}
                         maxLength={15}
@@ -322,7 +375,6 @@ export const ContactUsPage: React.FC = () => {
                       rows={5}
                       minLength={5}
                       maxLength={2000}
-                      placeholder="Please let us know how we can help you..."
                       value={formData.message}
                       onChange={handleChange}
                       required
@@ -335,6 +387,17 @@ export const ContactUsPage: React.FC = () => {
                         {formData.message.length}/2000
                       </span>
                     </div>
+                  </div>
+
+                  {/* GOOGLE reCAPTCHA v2 VERIFICATION */}
+                  <div className={`hiyaghar-form-group full-width ${errors.captcha ? 'has-error' : ''}`} style={{ marginBottom: '18px' }}>
+                    <div
+                      className="g-recaptcha"
+                      data-sitekey={RECAPTCHA_SITE_KEY}
+                      data-callback="onContactRecaptchaSuccess"
+                      data-expired-callback="onContactRecaptchaExpired"
+                    />
+                    {errors.captcha && <span className="field-error-msg" style={{ marginTop: '6px' }}>{errors.captcha}</span>}
                   </div>
 
                   <button
@@ -368,7 +431,7 @@ export const ContactUsPage: React.FC = () => {
                     <circle cx="11" cy="11" r="8" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                   </svg>
-                  <span>Live Order Tracking</span>
+                  <span>Track Order</span>
                 </a>
                 <a href="/shipping-policy" className="hiyaghar-faq-btn secondary">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

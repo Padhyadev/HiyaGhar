@@ -223,6 +223,10 @@
   color: #11223A;
   text-decoration: none;
   transition: color 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 4px 0;
 }
 
 .hiyaghar-contact-val:hover {
@@ -240,12 +244,13 @@
 .hiyaghar-whatsapp-badge {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background: #10B981;
   color: #ffffff;
-  padding: 4px 12px;
+  padding: 8px 18px;
+  min-height: 44px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   margin-top: 4px;

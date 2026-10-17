@@ -551,7 +551,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
           onNavigateHome={onNavigateHome}
           breadcrumbCurrent="My Account"
           title="My Account"
-          bgImage="/image/Banner_image/accountimage.jfif"
+          bgImage="/image/hero_natural_wellness_banner.webp"
         />
 
         <div className="hiyaghar-container">

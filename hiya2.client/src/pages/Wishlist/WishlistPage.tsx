@@ -111,13 +111,13 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                     onNavigateToDetail={(productId) => {
                       window.location.hash = `#product/${productId}`;
                     }}
-                    onAddToCart={(prod, weight, qty) => {
+                    onAddToCart={(prod, weight, qty, price, originalPrice) => {
                       const itemId = CartService.addItem({
                         productId: prod.id,
                         name: prod.name,
                         image: prod.image,
-                        price: prod.price,
-                        originalPrice: prod.originalPrice,
+                        price: typeof price === 'number' ? price : prod.price,
+                        originalPrice: typeof originalPrice === 'number' ? originalPrice : prod.originalPrice,
                         weight: weight,
                         quantity: qty,
                       });
@@ -125,13 +125,13 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                         showToast(`Added ${prod.name} (${weight}) to cart!`);
                       }
                     }}
-                    onBuyNow={(prod, weight) => {
+                    onBuyNow={(prod, weight, price, originalPrice) => {
                       const itemId = CartService.addItem({
                         productId: prod.id,
                         name: prod.name,
                         image: prod.image,
-                        price: prod.price,
-                        originalPrice: prod.originalPrice,
+                        price: typeof price === 'number' ? price : prod.price,
+                        originalPrice: typeof originalPrice === 'number' ? originalPrice : prod.originalPrice,
                         weight: weight,
                         quantity: 1,
                       });

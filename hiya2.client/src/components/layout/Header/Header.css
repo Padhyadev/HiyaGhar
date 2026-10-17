@@ -293,8 +293,10 @@
 }
 
 .hiyaghar-account-icon-btn {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background-color: var(--hiya-soft-cream, #FFFDF0);
   color: var(--hiya-navy, #11223A);
@@ -320,8 +322,10 @@
 }
 
 .hiyaghar-search-icon-btn {
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   border-radius: 50%;
   background-color: var(--hiya-soft-cream, #FFFDF0);
   color: var(--hiya-navy, #11223A);
@@ -352,8 +356,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
   background-color: var(--hiya-soft-cream, #FFFDF0);
   color: var(--hiya-navy, #11223A);
@@ -968,12 +974,13 @@
 
 @media (max-width: 991px) {
   .hiyaghar-header-nav-container {
-    padding: 8px 16px;
+    padding: 8px 12px;
   }
 
   .hiyaghar-header-main-bar {
-    padding: 0 12px;
-    height: 58px;
+    padding: 0 10px;
+    height: 56px;
+    gap: 6px;
   }
 
   .hiyaghar-header-left {
@@ -984,59 +991,151 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
     background: none;
     border: none;
     cursor: pointer;
     color: #2a2a2a;
     padding: 0;
+    flex-shrink: 0;
   }
 
   .hiyaghar-header-center {
-    padding: 0;
+    padding: 0 4px;
+    flex: 0 1 auto;
+    min-width: 0;
   }
 
   .hiyaghar-logo-img {
-    height: 34px;
-    max-width: 95px;
+    height: 32px;
+    max-width: 80px;
+    object-fit: contain;
   }
 
   .hiyaghar-header-right {
-    gap: 6px;
+    gap: 4px;
+    flex: 0 0 auto;
+    justify-content: flex-end;
   }
 
   .hiyaghar-search-icon-btn,
   .hiyaghar-account-icon-btn,
-  .hiyaghar-wishlist-icon-btn {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
+  .hiyaghar-wishlist-icon-btn,
+  .hiyaghar-cart-cyan-pill {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    padding: 0;
+    flex-shrink: 0;
   }
 
-  .hiyaghar-cart-cyan-pill {
-    width: 44px;
-    height: 44px;
-    min-width: 44px;
-    min-height: 44px;
-    padding: 0;
+  .hiyaghar-search-icon-btn svg,
+  .hiyaghar-account-icon-btn svg,
+  .hiyaghar-wishlist-icon-btn svg,
+  .hiyaghar-cart-cyan-pill svg {
+    width: 18px;
+    height: 18px;
   }
 }
 
 @media (max-width: 420px) {
+  .hiyaghar-header-nav-container {
+    padding: 6px 8px;
+  }
+
   .hiyaghar-header-main-bar {
-    padding: 0 8px;
+    padding: 0 6px;
+    height: 52px;
+    gap: 4px;
+    border-radius: 26px;
+  }
+
+  .hiyaghar-mobile-hamburger-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .hiyaghar-mobile-hamburger-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .hiyaghar-logo-img {
+    max-width: 68px;
+    height: 26px;
+  }
+
+  .hiyaghar-header-right {
+    gap: 3px;
+  }
+
+  .hiyaghar-search-icon-btn,
+  .hiyaghar-account-icon-btn,
+  .hiyaghar-wishlist-icon-btn,
+  .hiyaghar-cart-cyan-pill {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .hiyaghar-search-icon-btn svg,
+  .hiyaghar-account-icon-btn svg,
+  .hiyaghar-wishlist-icon-btn svg,
+  .hiyaghar-cart-cyan-pill svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hiyaghar-wishlist-badge-count,
+  .hiyaghar-cart-badge-count {
+    min-width: 16px;
+    height: 16px;
+    font-size: 10px;
+    top: -4px;
+    right: -4px;
+    padding: 0 3px;
+  }
+}
+
+@media (max-width: 340px) {
+  .hiyaghar-header-nav-container {
+    padding: 4px;
+  }
+
+  .hiyaghar-header-main-bar {
+    padding: 0 4px;
+    gap: 2px;
+  }
+
+  .hiyaghar-mobile-hamburger-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  .hiyaghar-logo-img {
+    max-width: 58px;
+    height: 22px;
   }
 
   .hiyaghar-header-right {
     gap: 2px;
   }
 
-  .hiyaghar-logo-img {
-    max-width: 85px;
-    height: 30px;
+  .hiyaghar-search-icon-btn,
+  .hiyaghar-account-icon-btn,
+  .hiyaghar-wishlist-icon-btn,
+  .hiyaghar-cart-cyan-pill {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    min-height: 32px;
   }
 }

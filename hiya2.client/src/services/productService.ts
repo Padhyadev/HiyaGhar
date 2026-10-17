@@ -191,4 +191,25 @@ export class ProductService {
 
     return this.cachedProducts.find((p) => p.id === id) || null;
   }
+
+  public static async getProductByIdOrSlug(identifier: string): Promise<Product | null> {
+    if (!identifier) return null;
+    const num = Number(identifier);
+    if (!isNaN(num) && num > 0) {
+      return this.getProductById(num);
+    }
+
+    const cleanSlug = identifier.toLowerCase().trim();
+    const allProds = await this.getProducts();
+    const match = allProds.find((p) => {
+      const slug = p.productName
+        .toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+      return slug === cleanSlug || p.productName.toLowerCase() === cleanSlug;
+    });
+
+    return match || null;
+  }
 }

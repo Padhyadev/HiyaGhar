@@ -1,7 +1,7 @@
 // Shared SEO route data. public/seo/routes.json is the single source of truth: the server
 // (Hiya2.Server/Seo/SeoPageRenderer.cs) reads the published copy for its injected tags,
 // 404 allow-list and sitemap, so the client and the server always emit the same meta.
-import config from '../../public/seo/routes.json';
+import config from './routes.json';
 
 // Set in vite.config.ts: true when public/image/og-default.jpg exists at build time
 // (the server applies the same check against wwwroot).

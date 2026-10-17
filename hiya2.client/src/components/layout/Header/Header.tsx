@@ -445,7 +445,7 @@ export const Header: React.FC = () => {
           {/* Center Brand Logo */}
           <div className="hiyaghar-header-center">
             <a href="/" className="hiyaghar-ref-logo" aria-label="Home" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '/'); window.dispatchEvent(new Event('popstate')); }}>
-              <img src="/image/HIYA LOGO (1).png" alt="HIYA" className="hiyaghar-logo-img" />
+              <img src="/image/HIYA LOGO (1).png" alt="HIYA" width={160} height={48} fetchPriority="high" className="hiyaghar-logo-img" />
             </a>
           </div>
 

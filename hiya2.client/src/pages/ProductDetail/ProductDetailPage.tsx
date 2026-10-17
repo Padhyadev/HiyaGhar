@@ -73,19 +73,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   useEffect(() => {
-    if (isNumericId) {
-      ProductService.getProductById(numericId).then((apiProd: ApiProduct | null) => {
-        if (!apiProd) {
-          if (staticMatch) {
-            setProductData(staticMatch);
-            setProductNotFound(false);
-          } else {
-            setProductData(null);
-            setProductNotFound(true);
-          }
-          setIsLoadingProduct(false);
-          return;
-        }
+    setIsLoadingProduct(true);
+    ProductService.getProductByIdOrSlug(productId).then((apiProd: ApiProduct | null) => {
+      if (apiProd) {
         setProductNotFound(false);
         const inStockVar = apiProd.variants?.find(isVariantInStock);
         const defaultVar = (apiProd.variants?.find((v) => v.isDefault && isVariantInStock(v)))
@@ -160,21 +150,18 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             setSelectedAttrs({});
           }
         }
+        setIsLoadingProduct(false);
+
         // Load real cross-sell items from Database/API for Frequently Bought Together bundle
         ProductService.getProducts().then((liveProducts) => {
           const currentIdStr = apiProd.id.toString();
-
-          // Check if Admin configured specific custom cross-sell product IDs
           const customIds: number[] = Array.isArray(parsed?.crossSellProductIds) ? parsed.crossSellProductIds : [];
-
           let pickedItems: ApiProduct[] = [];
 
           if (customIds.length > 0) {
-            // Use Admin's exact hand-picked products
             pickedItems = (liveProducts || []).filter((p) => customIds.includes(p.id) && p.isActive && isCrossSellInStock(p) && p.id.toString() !== currentIdStr);
           }
 
-          // If no admin-picked items (or fewer than 2), fill with smart live recommendation
           if (pickedItems.length < 2) {
             const remainingNeeded = 2 - pickedItems.length;
             const pickedIds = new Set(pickedItems.map((p) => p.id));
@@ -212,59 +199,57 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           setFbtCrossSells([]);
           setSelectedFbtIds({});
         });
+      } else if (staticMatch) {
+        setProductData(staticMatch);
+        setProductNotFound(false);
+        const defaultImg = staticMatch.image || '/image/ImageforMukhwash/Kalkatti-Pan 1.webp';
+        const secondImg = staticMatch.secondaryImage || '/image/ImageforMukhwash/Shahi Pan.webp';
+        const imgs = defaultImg === secondImg ? [defaultImg] : [defaultImg, secondImg];
+        setSelectedImage(defaultImg);
+        setGalleryImages(imgs);
+
+        const initialWt = staticMatch.weightOptions && staticMatch.weightOptions.length > 0
+          ? (staticMatch.weightOptions.includes('250g') ? '250g' : staticMatch.weightOptions[0])
+          : '100g';
+        setSelectedAttrs({ Weight: initialWt });
+
+        ProductService.getProducts().then((liveProducts) => {
+          const currentIdStr = productId.toString();
+          const autoCandidates = (liveProducts || []).filter((p) => p.isActive && isCrossSellInStock(p) && p.id.toString() !== currentIdStr);
+          const picks = autoCandidates.slice(0, 2).map((item) => {
+            const defVar = item.variants?.find((v) => v.isDefault) || item.variants?.[0];
+            const vPrice = defVar ? defVar.price : (item.discountPrice || item.basePrice || 199);
+            const vOrigPrice = defVar ? (defVar.originalPrice || defVar.price) : (item.basePrice || vPrice);
+            const img = item.images?.[0]?.imagePath || item.mainImagePath || '/image/ImageforMukhwash/Shahi Pan.webp';
+            const vWeight = defVar?.variantName ? formatVariantLabel(defVar.variantName) : 'Standard';
+
+            return {
+              id: item.id.toString(),
+              name: item.productName,
+              price: vPrice,
+              originalPrice: vOrigPrice,
+              image: img,
+              weight: vWeight,
+            };
+          });
+
+          setFbtCrossSells(picks);
+          const initialFbtSelection: Record<string, boolean> = {};
+          picks.forEach((p) => {
+            initialFbtSelection[p.id] = true;
+          });
+          setSelectedFbtIds(initialFbtSelection);
+        });
 
         setIsLoadingProduct(false);
-      });
-    } else if (staticMatch) {
-      setProductData(staticMatch);
-      setProductNotFound(false);
-      const defaultImg = staticMatch.image || '/image/ImageforMukhwash/Kalkatti-Pan 1.webp';
-      const secondImg = staticMatch.secondaryImage || '/image/ImageforMukhwash/Shahi Pan.webp';
-      const imgs = defaultImg === secondImg ? [defaultImg] : [defaultImg, secondImg];
-      setSelectedImage(defaultImg);
-      setGalleryImages(imgs);
-
-      const initialWt = staticMatch.weightOptions && staticMatch.weightOptions.length > 0
-        ? (staticMatch.weightOptions.includes('250g') ? '250g' : staticMatch.weightOptions[0])
-        : '100g';
-      setSelectedAttrs({ Weight: initialWt });
-
-      ProductService.getProducts().then((liveProducts) => {
-        const currentIdStr = productId.toString();
-        const autoCandidates = (liveProducts || []).filter((p) => p.isActive && isCrossSellInStock(p) && p.id.toString() !== currentIdStr);
-        const picks = autoCandidates.slice(0, 2).map((item) => {
-          const defVar = item.variants?.find((v) => v.isDefault) || item.variants?.[0];
-          const vPrice = defVar ? defVar.price : (item.discountPrice || item.basePrice || 199);
-          const vOrigPrice = defVar ? (defVar.originalPrice || defVar.price) : (item.basePrice || vPrice);
-          const img = item.images?.[0]?.imagePath || item.mainImagePath || '/image/ImageforMukhwash/Shahi Pan.webp';
-          const vWeight = defVar?.variantName ? formatVariantLabel(defVar.variantName) : 'Standard';
-
-          return {
-            id: item.id.toString(),
-            name: item.productName,
-            price: vPrice,
-            originalPrice: vOrigPrice,
-            image: img,
-            weight: vWeight,
-          };
-        });
-
-        setFbtCrossSells(picks);
-        const initialFbtSelection: Record<string, boolean> = {};
-        picks.forEach((p) => {
-          initialFbtSelection[p.id] = true;
-        });
-        setSelectedFbtIds(initialFbtSelection);
-      });
-
-      setIsLoadingProduct(false);
-    } else {
-      setProductData(null);
-      setProductNotFound(true);
-      setFbtCrossSells([]);
-      setSelectedFbtIds({});
-      setIsLoadingProduct(false);
-    }
+      } else {
+        setProductData(null);
+        setProductNotFound(true);
+        setFbtCrossSells([]);
+        setSelectedFbtIds({});
+        setIsLoadingProduct(false);
+      }
+    });
   }, [productId]);
 
   // `product` is null while the real fetch for a numeric id is still in flight
@@ -656,7 +641,27 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </li>
               <li className="sep">/</li>
               <li>
-                <a href="/mukhwas" onClick={(e) => { e.preventDefault(); onNavigateMukhwas(); }}>Mukhwas</a>
+                {(() => {
+                  const catName = product.categoryLabel || 'Mukhwas';
+                  const catLower = catName.toLowerCase();
+                  let catPath = '/mukhwas';
+                  if (catLower.includes('soap')) catPath = '/handmade-soap';
+                  else if (catLower.includes('tea') || catLower.includes('masala')) catPath = '/tea-masala';
+                  else if (catLower.includes('hair') || catLower.includes('oil')) catPath = '/hair-oil';
+                  else if (catLower.includes('hamper') || catLower.includes('gift')) catPath = '/gift-hampers';
+
+                  return (
+                    <a
+                      href={catPath}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        navigateTo(catPath);
+                      }}
+                    >
+                      {catName}
+                    </a>
+                  );
+                })()}
               </li>
               <li className="sep">/</li>
               <li className="current">{product.name}</li>
@@ -708,7 +713,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
             {/* Info Column */}
             <div className="hiyaghar-detail-info-col">
-              <span className="hiyaghar-detail-cat">{product.categoryLabel || 'Mukhwas'}</span>
+              <span className="hiyaghar-detail-cat">{product.categoryLabel || 'Natural Product'}</span>
               <h1 className="hiyaghar-detail-title">{product.name}</h1>
 
               {/* Price Box */}
@@ -875,25 +880,32 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </span>
                   <span>100% Natural</span>
                 </div>
-                <div className="trust-pill">
-                  <span className="icon" style={{ color: '#d97706', display: 'flex', alignItems: 'center' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
-                  </span>
-                  <span>Airtight Moisture Seal</span>
-                </div>
+                {(() => {
+                  const catL = (product.categoryLabel || '').toLowerCase();
+                  const isSoap = catL.includes('soap');
+                  const isOil = catL.includes('oil');
+                  return (
+                    <div className="trust-pill">
+                      <span className="icon" style={{ color: '#d97706', display: 'flex', alignItems: 'center' }}>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                        </svg>
+                      </span>
+                      <span>{isSoap ? 'Gentle On Skin' : isOil ? 'Root Nourishing' : 'Airtight Moisture Seal'}</span>
+                    </div>
+                  );
+                })()}
                 <div className="trust-pill">
                   <span className="icon" style={{ color: '#2563eb', display: 'flex', alignItems: 'center' }}>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                       <rect x="1" y="3" width="15" height="13"></rect>
-                      <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                      <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
                       <circle cx="5.5" cy="18.5" r="2.5"></circle>
                       <circle cx="18.5" cy="18.5" r="2.5"></circle>
                     </svg>
                   </span>
-                  <span>Dispatched in 24 Hrs</span>
+                  <span>{isOutOfStock ? 'Made in Small Batches' : 'Dispatched in 24 Hrs'}</span>
                 </div>
               </div>
             </div>
