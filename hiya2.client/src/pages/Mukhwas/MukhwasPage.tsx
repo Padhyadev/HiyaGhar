@@ -54,13 +54,17 @@ function mapApiToMukhwas(p: ApiProduct): MukhwasProduct {
   };
 }
 
+let cachedMukhwasList: MukhwasProduct[] = [];
+
 export const MukhwasPage: React.FC<MukhwasPageProps> = ({
   onNavigateHome,
   onNavigateToDetail,
 }) => {
   const [selectedSort, setSelectedSort] = useState<string>('featured');
-  const [productsList, setProductsList] = useState<MukhwasProduct[]>([]);
-  const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(true);
+  const [productsList, setProductsList] = useState<MukhwasProduct[]>(() => {
+    return cachedMukhwasList.length > 0 ? cachedMukhwasList : fallbackProducts;
+  });
+  const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(cachedMukhwasList.length === 0);
 
   const productGridRef = useRef<HTMLDivElement>(null);
 
@@ -69,9 +73,9 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
     let isMounted = true;
     ProductService.getProducts(1).then((apiProducts: ApiProduct[]) => {
       if (!isMounted) return;
-      // The static fallback is now only used if the live fetch genuinely came back
-      // empty (e.g. backend unreachable) — a last resort, not the initial render.
-      setProductsList(apiProducts && apiProducts.length > 0 ? apiProducts.map(mapApiToMukhwas) : fallbackProducts);
+      const mapped = apiProducts && apiProducts.length > 0 ? apiProducts.map(mapApiToMukhwas) : fallbackProducts;
+      cachedMukhwasList = mapped;
+      setProductsList(mapped);
       setIsLoadingProducts(false);
     });
 

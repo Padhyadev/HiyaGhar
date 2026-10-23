@@ -39,11 +39,15 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
     // Trigger Frosted Glass & Minimal Brand Spinner
     setIsTransitioning(true);
     setIsExiting(false);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     // Smooth timing: 280ms reveal swap, then fade out frosted glass
     const swapTimer = setTimeout(() => {
       setDisplayChildren(children);
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      });
       setIsExiting(true);
 
       const finishTimer = setTimeout(() => {

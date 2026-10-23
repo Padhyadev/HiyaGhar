@@ -93,9 +93,50 @@
   }
 }
 
-/* Breadcrumbs */
+/* Breadcrumbs & Back Navigation Bar */
+.hiyaghar-detail-nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 16px;
+  padding: clamp(14px, 2.5vw, 24px) 0 14px 0;
+  flex-wrap: wrap;
+}
+
+.hiyaghar-detail-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(17, 34, 58, 0.12);
+  background: #ffffff;
+  color: var(--hiya-navy, #11223A);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.hiyaghar-detail-back-button:hover {
+  background: #F7F3E9;
+  border-color: var(--hiya-primary, #6F0024);
+  color: var(--hiya-primary, #6F0024);
+  transform: translateX(-3px);
+  box-shadow: 0 4px 14px rgba(111, 0, 36, 0.12);
+}
+
+.hiyaghar-detail-back-button svg {
+  transition: transform 0.22s ease;
+}
+
+.hiyaghar-detail-back-button:hover svg {
+  transform: translateX(-3px);
+}
+
 .hiyaghar-detail-breadcrumb {
-  padding: clamp(16px, 3vw, 28px) 0 16px 0;
+  padding: 0;
 }
 
 .hiyaghar-detail-breadcrumb-list {

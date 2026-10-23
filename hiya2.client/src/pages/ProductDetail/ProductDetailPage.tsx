@@ -103,7 +103,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         const parsed = parseProductFullDescription(
           apiProd.fullDescription,
           apiProd.id,
-          apiProd.category?.categoryName,
+          (apiProd as any).categoryName || apiProd.category?.categoryName || 'Mukhwas',
           apiProd.productName
         );
 
@@ -111,7 +111,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           id: apiProd.id.toString(),
           name: apiProd.productName,
           category: 'special',
-          categoryLabel: apiProd.category?.categoryName || 'Natural Product',
+          categoryLabel: (apiProd as any).categoryName || apiProd.category?.categoryName || 'Mukhwas',
           shortDescription: apiProd.shortDescription || '100% natural organic product.',
           longDescription: parsed.cleanDescription,
           seoDescription: buildProductSeoDescription(
@@ -633,40 +633,59 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           </div>
         ) : (
         <div className="hiyaghar-container">
-          {/* Breadcrumbs */}
-          <nav className="hiyaghar-detail-breadcrumb" aria-label="Breadcrumb navigation">
-            <ul className="hiyaghar-detail-breadcrumb-list">
-              <li>
-                <a href="/" onClick={(e) => { e.preventDefault(); onNavigateHome(); }}>Home</a>
-              </li>
-              <li className="sep">/</li>
-              <li>
-                {(() => {
-                  const catName = product.categoryLabel || 'Mukhwas';
-                  const catLower = catName.toLowerCase();
-                  let catPath = '/mukhwas';
-                  if (catLower.includes('soap')) catPath = '/handmade-soap';
-                  else if (catLower.includes('tea') || catLower.includes('masala')) catPath = '/tea-masala';
-                  else if (catLower.includes('hair') || catLower.includes('oil')) catPath = '/hair-oil';
-                  else if (catLower.includes('hamper') || catLower.includes('gift')) catPath = '/gift-hampers';
+          {/* Back Button & Breadcrumbs Navigation Bar */}
+          {(() => {
+            const catName = product.categoryLabel || 'Mukhwas';
+            const catLower = catName.toLowerCase();
+            let catPath = '/mukhwas';
+            if (catLower.includes('soap')) catPath = '/handmade-soap';
+            else if (catLower.includes('tea') || catLower.includes('masala')) catPath = '/tea-masala';
+            else if (catLower.includes('hair') || catLower.includes('oil')) catPath = '/hair-oil';
+            else if (catLower.includes('hamper') || catLower.includes('gift')) catPath = '/gift-hampers';
+            else if (catLower.includes('mukhwas') || catLower.includes('natural')) catPath = '/mukhwas';
 
-                  return (
-                    <a
-                      href={catPath}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        navigateTo(catPath);
-                      }}
-                    >
-                      {catName}
-                    </a>
-                  );
-                })()}
-              </li>
-              <li className="sep">/</li>
-              <li className="current">{product.name}</li>
-            </ul>
-          </nav>
+            return (
+              <div className="hiyaghar-detail-nav-bar">
+                <button
+                  type="button"
+                  className="hiyaghar-detail-back-button"
+                  onClick={() => {
+                    navigateTo(catPath);
+                  }}
+                  aria-label={`Back to ${catName}`}
+                  title={`Back to ${catName}`}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                  </svg>
+                  <span>Back to {catName}</span>
+                </button>
+
+                <nav className="hiyaghar-detail-breadcrumb" aria-label="Breadcrumb navigation">
+                  <ul className="hiyaghar-detail-breadcrumb-list">
+                    <li>
+                      <a href="/" onClick={(e) => { e.preventDefault(); onNavigateHome(); }}>Home</a>
+                    </li>
+                    <li className="sep">/</li>
+                    <li>
+                      <a
+                        href={catPath}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          navigateTo(catPath);
+                        }}
+                      >
+                        {catName}
+                      </a>
+                    </li>
+                    <li className="sep">/</li>
+                    <li className="current">{product.name}</li>
+                  </ul>
+                </nav>
+              </div>
+            );
+          })()}
 
           {/* Hero Two-Column Container */}
           <div className="hiyaghar-detail-hero-grid">

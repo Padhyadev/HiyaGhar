@@ -155,9 +155,13 @@ function App() {
   useEffect(() => {
     preloadCriticalImages();
 
+    if (typeof window !== 'undefined' && 'scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+
     const handleLocationChange = () => {
       setCurrentRoute(getNormalizedRoute());
-      window.scrollTo(0, 0);
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     };
 
     window.addEventListener('popstate', handleLocationChange);
@@ -203,9 +207,14 @@ function App() {
     if (!clean.startsWith('/')) {
       clean = '/' + clean;
     }
+    // Prevent duplicate consecutive history entries
+    if (window.location.pathname === clean && currentRoute === clean) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      return;
+    }
     window.history.pushState(null, '', clean);
     setCurrentRoute(clean);
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
   };
 
   const handleNavigateHome = () => { navigateTo('/'); };

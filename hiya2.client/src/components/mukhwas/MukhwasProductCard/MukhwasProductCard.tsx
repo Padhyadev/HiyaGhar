@@ -115,6 +115,14 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
     onNavigateToDetail(toProductSlug(product.name, product.id));
   };
 
+  const handleOuterCardClick = (e: React.MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('button') || target.closest('a')) {
+      return;
+    }
+    handleCardClick();
+  };
+
   const handleWishlistToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
     const wishlistItem = {
@@ -165,7 +173,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
   return (
     <div
       className={`hiyaghar-mukhwas-card ${index % 2 === 0 ? 'hiyaghar-tone-cream' : 'hiyaghar-tone-mint'}`}
-      onClick={handleCardClick}
+      onClick={handleOuterCardClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
       role="article"
@@ -214,6 +222,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
         className="hiyaghar-mukhwas-card-image-box product-card-link"
         onClick={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           handleCardClick();
         }}
         aria-label={`View ${product.name} details`}
@@ -254,6 +263,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
             className="product-card-title-link"
             onClick={(e) => {
               e.preventDefault();
+              e.stopPropagation();
               handleCardClick();
             }}
           >

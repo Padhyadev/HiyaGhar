@@ -13,6 +13,10 @@ export const navigateTo = (path: string) => {
   }
 
   const isSamePath = window.location.pathname === clean;
+  if (isSamePath && !targetElementId) {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    return;
+  }
   window.history.pushState(null, '', targetElementId ? `${clean}#${targetElementId}` : clean);
   window.dispatchEvent(new Event('popstate'));
 
