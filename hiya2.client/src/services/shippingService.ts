@@ -37,7 +37,7 @@ export const DEFAULT_SHIPPING_SETTINGS: ShippingSettings = {
   enableFssaiDisplay: true,
   contactEmail: 'support@hiyaghar.com',
   contactPhone: '+91 92744 43617',
-  contactAddress: 'Ahmedabad, Gujarat, India',
+  contactAddress: '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India',
 };
 
 export const SHIPPING_CONFIG = {

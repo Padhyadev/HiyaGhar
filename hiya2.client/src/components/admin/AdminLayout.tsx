@@ -273,7 +273,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             ☰
           </button>
           <div className="hiyaghar-topbar-brand" onClick={() => onNavigate('/admin/dashboard')}>
-            <img src="/image/HIYA LOGO (1).png" alt="HIYA" className="hiyaghar-topbar-logo" />
+            <img src="/image/HiyaGhar.webp" alt="HIYA" className="hiyaghar-topbar-logo" />
           </div>
         </div>
 

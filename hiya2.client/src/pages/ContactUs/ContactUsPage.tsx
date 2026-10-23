@@ -234,7 +234,7 @@ export const ContactUsPage: React.FC = () => {
                     <div className="hiyaghar-contact-item-content">
                       <span className="hiyaghar-contact-label">Origin & Operating Address</span>
                       <p className="hiyaghar-contact-text">
-                        {storeSettings.contactAddress || 'Ahmedabad, Gujarat, India - 380015'}
+                        {storeSettings.contactAddress || '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India'}
                       </p>
                     </div>
                   </div>

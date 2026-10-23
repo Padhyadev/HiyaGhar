@@ -54,7 +54,7 @@ namespace Hiya2.Server.Models
         public string ContactPhone { get; set; } = "+91 92744 43617";
 
         [MaxLength(200)]
-        public string ContactAddress { get; set; } = "Ahmedabad, Gujarat, India";
+        public string ContactAddress { get; set; } = "303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India";
 
         public bool IsActive { get; set; } = true;
         public long? LastModifiedBy { get; set; }

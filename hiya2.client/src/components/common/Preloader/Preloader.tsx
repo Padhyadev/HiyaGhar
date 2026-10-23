@@ -7,7 +7,7 @@ interface PreloaderProps {
 }
 
 export const Preloader: React.FC<PreloaderProps> = ({
-  logoSrc = '/image/HIYA LOGO (1).png',
+  logoSrc = '/image/HiyaGhar.webp',
   onComplete
 }) => {
   const hasLoadedBefore = sessionStorage.getItem('hiyaghar_initial_loaded') === 'true';

@@ -16,7 +16,7 @@ public class SeoMarkupTests
         SiteName = "HIYAGHAR",
         Locale = "en_IN",
         ProductDescriptionTemplate = "Buy {name} from the HIYAGHAR {category}collection, handcrafted in small batches. See price, available sizes and stock, and order online.",
-        Organization = new SeoOrganization { Name = "HIYAGHAR", Logo = "/image/HIYA LOGO (1).png", SameAs = new() { "https://www.instagram.com/hiyaghar_/" } },
+        Organization = new SeoOrganization { Name = "HIYAGHAR", Logo = "/image/HiyaGhar.webp", SameAs = new() { "https://www.instagram.com/hiyaghar_/" } },
     };
 
     private static Product NastyProduct() => new()
@@ -42,7 +42,7 @@ public class SeoMarkupTests
         var c = Config();
         var p = NastyProduct();
         var description = SeoMarkup.ProductDescription(p, c.ProductDescriptionTemplate);
-        var images = SeoMarkup.ProductImages(c, p, "/image/HIYA LOGO (1).png");
+        var images = SeoMarkup.ProductImages(c, p, "/image/HiyaGhar.webp");
         var page = new SeoPage
         {
             Title = $"{p.ProductName} | HIYAGHAR",
@@ -123,6 +123,6 @@ public class SeoMarkupTests
 
         Assert.Equal("https://hiyaghar.com/mukhwas", SeoMarkup.CanonicalUrl("https://hiyaghar.com", "/Mukhwas/?x=1"));
         Assert.Equal("https://hiyaghar.com/", SeoMarkup.CanonicalUrl("https://hiyaghar.com", "/"));
-        Assert.Equal("https://hiyaghar.com/image/HIYA%20LOGO%20(1).png", SeoMarkup.AbsoluteUrl("https://hiyaghar.com", "/image/HIYA LOGO (1).png"));
+        Assert.Equal("https://hiyaghar.com/image/HiyaGhar.webp", SeoMarkup.AbsoluteUrl("https://hiyaghar.com", "/image/HiyaGhar.webp"));
     }
 }

@@ -211,7 +211,7 @@ using (var scope = app.Services.CreateScope())
                     [EnableFssaiDisplay] BIT NOT NULL DEFAULT 1,
                     [ContactEmail] NVARCHAR(150) NOT NULL DEFAULT N'support@hiyaghar.com',
                     [ContactPhone] NVARCHAR(50) NOT NULL DEFAULT N'+91 92744 43617',
-                    [ContactAddress] NVARCHAR(200) NOT NULL DEFAULT N'Ahmedabad, Gujarat, India',
+                    [ContactAddress] NVARCHAR(200) NOT NULL DEFAULT N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India',
                     [IsActive] BIT NOT NULL DEFAULT 1,
                     [LastModifiedBy] BIGINT NULL,
                     [LastModifiedDate] DATETIME2 NULL
@@ -224,7 +224,7 @@ using (var scope = app.Services.CreateScope())
                      [EnableGstDisplay],[GstPercent],[GstLabel],[FssaiLicenseNumber],[EnableFssaiDisplay],[ContactEmail],[ContactPhone],[ContactAddress],[IsActive])
                 VALUES (500, 49, 99, 1, 1, 1,
                         N'3–5 business days', N'1–2 business days',
-                        1, 5, N'Estimated GST (5% Included)', N'10723026001148', 1, N'support@hiyaghar.com', N'+91 92744 43617', N'Ahmedabad, Gujarat, India', 1);
+                        1, 5, N'Estimated GST (5% Included)', N'10723026001148', 1, N'support@hiyaghar.com', N'+91 92744 43617', N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India', 1);
             END
 
             IF OBJECT_ID('dbo.[ShippingSetting]', 'U') IS NOT NULL
@@ -242,7 +242,7 @@ using (var scope = app.Services.CreateScope())
                     EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactPhone] NVARCHAR(50) NOT NULL DEFAULT N''+91 92744 43617''');
 
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'ContactAddress')
-                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactAddress] NVARCHAR(200) NOT NULL DEFAULT N''Ahmedabad, Gujarat, India''');
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactAddress] NVARCHAR(200) NOT NULL DEFAULT N''303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India''');
             END
 
             IF OBJECT_ID('dbo.[Coupon]', 'U') IS NOT NULL

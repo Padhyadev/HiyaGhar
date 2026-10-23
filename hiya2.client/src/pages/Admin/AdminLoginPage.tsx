@@ -123,7 +123,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
       <div className="hiyaghar-admin-login-card">
         <div className="hiyaghar-admin-login-header">
           <div className="hiyaghar-admin-brand" onClick={onNavigateHome}>
-            <img src="/image/HIYA LOGO (1).png" alt="HIYA" className="hiyaghar-brand-icon" />
+            <img src="/image/HiyaGhar.webp" alt="HIYA" className="hiyaghar-brand-icon" />
           </div>
           <p className="hiyaghar-admin-login-subtitle">Admin & Staff Portal Access</p>
         </div>

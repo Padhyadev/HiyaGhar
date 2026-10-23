@@ -76,7 +76,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
             {/* HIYAGHAR Clean Brand Emblem & Logo */}
             <div className="hiyaghar-frosted-logo-box">
               <img
-                src="/image/HIYA LOGO (1).png"
+                src="/image/HiyaGhar.webp"
                 alt="HIYAGHAR"
                 className="hiyaghar-frosted-logo"
               />

@@ -113,7 +113,7 @@ namespace Hiya2.Server.Controllers
             setting.EnableFssaiDisplay = dto.EnableFssaiDisplay;
             setting.ContactEmail = dto.ContactEmail ?? "support@hiyaghar.com";
             setting.ContactPhone = dto.ContactPhone ?? "+91 92744 43617";
-            setting.ContactAddress = dto.ContactAddress ?? "Ahmedabad, Gujarat, India";
+            setting.ContactAddress = dto.ContactAddress ?? "303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India";
             setting.LastModifiedBy = GetCurrentUserId();
             setting.LastModifiedDate = DateTime.Now;
 

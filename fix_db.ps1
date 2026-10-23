@@ -19,7 +19,7 @@ IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.Shippi
     ALTER TABLE dbo.ShippingSetting ADD ContactPhone NVARCHAR(50) NOT NULL DEFAULT N'+91 95102 12154';
 
 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.ShippingSetting') AND name = 'ContactAddress')
-    ALTER TABLE dbo.ShippingSetting ADD ContactAddress NVARCHAR(200) NOT NULL DEFAULT N'Ahmedabad, Gujarat, India';
+    ALTER TABLE dbo.ShippingSetting ADD ContactAddress NVARCHAR(200) NOT NULL DEFAULT N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India';
 "@
 $res = $cmd.ExecuteNonQuery()
 Write-Host "Columns added successfully! Result: $res"

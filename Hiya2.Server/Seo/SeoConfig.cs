@@ -10,7 +10,7 @@ namespace Hiya2.Server.Seo
         public string SiteName { get; set; } = "HIYAGHAR";
         public string Locale { get; set; } = "en_IN";
         public string DefaultImage { get; set; } = "/image/og-default.jpg";
-        public string FallbackImage { get; set; } = "/image/HIYA LOGO (1).png";
+        public string FallbackImage { get; set; } = "/image/HiyaGhar.webp";
         public string ProductDescriptionTemplate { get; set; } = string.Empty;
         public SeoOrganization Organization { get; set; } = new();
         public List<SeoRoute> Routes { get; set; } = new();

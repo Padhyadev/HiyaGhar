@@ -56,7 +56,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             <p><strong>Hiya Ghar (Padhya Software Technologies / Hiya Enterprises)</strong></p>
             <p>Email: <a href={`mailto:${storeSettings.contactEmail || 'support@hiyaghar.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactEmail || 'support@hiyaghar.com'}</a></p>
             <p>Phone / WhatsApp: <a href={`tel:${storeSettings.contactPhone || '+91 92744 43617'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactPhone || '+91 92744 43617'}</a></p>
-            <p>Operating Address: {storeSettings.contactAddress || 'Ahmedabad, Gujarat, India - 380015'}</p>
+            <p>Operating Address: {storeSettings.contactAddress || '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India'}</p>
             {storeSettings.enableFssaiDisplay && Boolean(storeSettings.fssaiLicenseNumber?.trim()) && (
               <p>FSSAI Registration / Lic No: <strong>{storeSettings.fssaiLicenseNumber}</strong></p>
             )}
@@ -261,7 +261,7 @@ export const ContactUsPage: React.FC = () => (
         </a>
       </p>
       <p><strong>Operating Hours:</strong> Monday – Saturday (10:00 AM – 7:00 PM IST)</p>
-      <p><strong>Operating Address:</strong> Ahmedabad, Gujarat, India - 380015</p>
+      <p><strong>Operating Address:</strong> 303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India</p>
       <p><strong>FSSAI Registration / Lic No:</strong> 10723026001148</p>
     </div>
   </StaticLegalPage>

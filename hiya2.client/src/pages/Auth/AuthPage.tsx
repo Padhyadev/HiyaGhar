@@ -387,7 +387,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           <div className="hiyaghar-form-logo-row">
             <a href="#/" onClick={(e) => { e.preventDefault(); onNavigateHome(); }}>
               <img
-                src="/image/HIYA LOGO (1).png"
+                src="/image/HiyaGhar.webp"
                 alt="HIYA"
                 className="hiyaghar-form-panel-logo"
               />
