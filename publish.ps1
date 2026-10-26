@@ -72,7 +72,30 @@ try {
 
 # 2. CLIENT DEPENDENCY CHECK & BUILD
 Write-Step "Building React + Vite Client (hiya2.client)..."
+# 2. CLEAN OLD PUBLISH OUTPUT
+Write-Step "Cleaning previous publish directory ($OutputDir)..."
+if (Test-Path $OutputDir) {
+    Get-ChildItem -Path $OutputDir -Recurse | Remove-Item -Force -Recurse -ErrorAction SilentlyContinue
+    Write-Success "Previous publish directory wiped clean."
+} else {
+    New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
+}
+
+# Also clean old publish.zip in root if present
+$rootZip = Join-Path $scriptRoot "publish.zip"
+if (Test-Path $rootZip) {
+    Remove-Item $rootZip -Force -ErrorAction SilentlyContinue
+}
+
+# 3. CLIENT DEPENDENCY CHECK & FRESH BUILD
+Write-Step "Building React + Vite Client (hiya2.client)..."
 $clientDir = Join-Path $scriptRoot "hiya2.client"
+
+# Clean old client dist folder
+$clientDist = Join-Path $clientDir "dist"
+if (Test-Path $clientDist) {
+    Remove-Item $clientDist -Recurse -Force -ErrorAction SilentlyContinue
+}
 
 if (-not (Test-Path (Join-Path $clientDir "node_modules"))) {
     Write-Host "node_modules not found. Running npm install..." -ForegroundColor Yellow
@@ -96,13 +119,9 @@ try {
     Pop-Location
 }
 
-# 3. DOTNET PUBLISH (Release Configuration)
+# 4. DOTNET PUBLISH (Release Configuration)
 Write-Step "Publishing ASP.NET Core Backend (Hiya2.Server) in Release mode..."
 $serverProj = Join-Path $scriptRoot "Hiya2.Server\Hiya2.Server.csproj"
-
-if (-not (Test-Path $OutputDir)) {
-    New-Item -ItemType Directory -Path $OutputDir -Force | Out-Null
-}
 
 & dotnet publish $serverProj -c Release -o $OutputDir
 if ($LASTEXITCODE -ne 0) {
@@ -111,7 +130,7 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Success "ASP.NET Core publish complete to $OutputDir"
 
-# 4. VERIFY CRITICAL FILES
+# 5. VERIFY CRITICAL FILES
 Write-Step "Verifying publish artifacts..."
 $criticalFiles = @(
     "Hiya2.Server.dll",
@@ -131,9 +150,9 @@ foreach ($file in $criticalFiles) {
     }
 }
 
-# 5. CREATE DEPLOYMENT ZIP ARCHIVE
+# 6. CREATE DEPLOYMENT ZIP ARCHIVE
 if (-not $SkipZip) {
-    Write-Step "Creating deployment ZIP package..."
+    Write-Step "Creating fresh deployment ZIP package..."
     $zipPath = Join-Path $OutputDir "publish.zip"
     
     # Remove existing zip if present
@@ -146,9 +165,13 @@ if (-not $SkipZip) {
     
     Compress-Archive -Path $itemsToZip.FullName -DestinationPath $zipPath -CompressionLevel Optimal -Force
     
+    # Also copy to root for quick access
+    Copy-Item -Path $zipPath -Destination $rootZip -Force
+    
     $zipItem = Get-Item $zipPath
     $zipSizeMb = [math]::Round($zipItem.Length / 1MB, 2)
     Write-Success "Deployment zip created: $zipPath ($zipSizeMb MB)"
+    Write-Success "Root deployment zip copied: $rootZip"
 }
 
 $duration = (Get-Date) - $startTime
