@@ -489,7 +489,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     if (!itemId) return; // blocked (not logged in) - CartService already showed why
 
     if (mainImgRef.current) {
-      triggerFlyingProductAnimation(mainImgRef.current, product.id.toString());
+      triggerFlyingProductAnimation(mainImgRef.current, itemId);
     }
 
     handleToast(`Added ${quantity} x ${product.name} (${selectedWeight}) to Cart!`);
@@ -554,7 +554,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     });
 
     if (mainImgRef.current) {
-      triggerFlyingProductAnimation(mainImgRef.current, product.id.toString());
+      triggerFlyingProductAnimation(mainImgRef.current, `${product.id}-${selectedWeight}`);
     }
 
     showToast(`Added ${1 + activeFbtItems.length} items to your cart!`, 'success');

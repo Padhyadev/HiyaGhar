@@ -65,9 +65,25 @@ async function postDelta(productIdRaw: string | number, weight: string, quantity
       }),
     });
 
+    if (res.status === 401) {
+      // Expired/invalid token — not a stock problem. Keep the item in the
+      // local cart; it merges back to the server after the next login.
+      CustomerAuthService.expireSession();
+      import('../utils/alertService').then(({ showToast }) => {
+        showToast('Your session has expired. Please log in again.', 'info');
+      });
+      return;
+    }
+
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
-      const msg = errData.message || 'Product is out of stock or unavailable.';
+      if (!errData.message) {
+        // Server/proxy failure with no business reason — don't blame stock
+        // or drop the item; the next mutation will resync.
+        console.warn(`Cart server sync failed (HTTP ${res.status}).`);
+        return;
+      }
+      const msg = errData.message;
       if (quantityDelta > 0) {
         import('../cart').then(({ CartService }) => {
           CartService.removeItem(`${productIdRaw}-${weight}`);

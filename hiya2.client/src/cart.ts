@@ -220,7 +220,7 @@ export function triggerFlyingProductAnimation(
     }
 
     const startRect = sourceImageEl.getBoundingClientRect();
-    const endRect = destinationEl.getBoundingClientRect();
+    const destEl: HTMLElement = destinationEl;
 
     // Create flying image clone container
     const flyingContainer = document.createElement('div');
@@ -240,11 +240,14 @@ export function triggerFlyingProductAnimation(
     imgClone.src = imgSrc || '/image/mukhwas_hero_bg.webp';
     flyingContainer.appendChild(imgClone);
 
-    const startX = startRect.left + window.scrollX;
-    const startY = startRect.top + window.scrollY;
+    // Viewport coordinates + position: fixed, because the cart pill itself is
+    // fixed — page scrolling mid-flight then doesn't shift the landing point.
+    const startX = startRect.left;
+    const startY = startRect.top;
     const startWidth = Math.max(40, startRect.width || 100);
     const startHeight = Math.max(40, startRect.height || 100);
 
+    flyingContainer.style.position = 'fixed';
     flyingContainer.style.width = `${startWidth}px`;
     flyingContainer.style.height = `${startHeight}px`;
     flyingContainer.style.left = `0px`;
@@ -253,17 +256,17 @@ export function triggerFlyingProductAnimation(
 
     document.body.appendChild(flyingContainer);
 
-    // Target position: exact center of avatar circle inside the pill button
-    const targetCenterX = endRect.left + window.scrollX + (endRect.width < 80 ? endRect.width / 2 : 30);
-    const targetCenterY = endRect.top + window.scrollY + endRect.height / 2;
-
-    const finalX = targetCenterX - startWidth / 2;
-    const finalY = targetCenterY - startHeight / 2;
+    // Target position: exact center of avatar circle inside the pill button.
+    // Re-measured every frame, since the pill is usually still running its
+    // slide-in animation (translateY + scale) when the flight starts.
+    const getFinal = () => {
+      const endRect = destEl.getBoundingClientRect();
+      const targetCenterX = endRect.left + (endRect.width < 80 ? endRect.width / 2 : 30);
+      const targetCenterY = endRect.top + endRect.height / 2;
+      return { x: targetCenterX - startWidth / 2, y: targetCenterY - startHeight / 2 };
+    };
 
     const P1 = { x: startX, y: startY };
-    const P2 = { x: startX + (finalX - startX) * 0.35, y: Math.min(startY, finalY) - 90 };
-    const P3 = { x: startX + (finalX - startX) * 0.75, y: finalY - 40 };
-    const P4 = { x: finalX, y: finalY };
 
     const bezier = (t: number, p0: { x: number; y: number }, p1: { x: number; y: number }, p2: { x: number; y: number }, p3: { x: number; y: number }) => {
       const cX = 3 * (p1.x - p0.x);
@@ -287,6 +290,9 @@ export function triggerFlyingProductAnimation(
       const elapsed = currentTime - startTime;
       const progress = Math.min(elapsed / duration, 1);
 
+      const P4 = getFinal();
+      const P2 = { x: startX + (P4.x - startX) * 0.35, y: Math.min(startY, P4.y) - 90 };
+      const P3 = { x: startX + (P4.x - startX) * 0.75, y: P4.y - 40 };
       const curpos = bezier(progress, P1, P2, P3, P4);
 
       let scale = 1;
@@ -316,7 +322,7 @@ export function triggerFlyingProductAnimation(
         }
 
         // Pulse bounce effect on floating cart pill
-        const pillBtn = document.querySelector('.hiyaghar-floating-cart-pill') || destinationEl;
+        const pillBtn = document.querySelector('.hiyaghar-floating-cart-pill') || destEl;
         pillBtn?.classList.add('quickbeam-cart-bounce');
         setTimeout(() => {
           pillBtn?.classList.remove('quickbeam-cart-bounce');

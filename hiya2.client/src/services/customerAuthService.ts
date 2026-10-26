@@ -35,7 +35,36 @@ export class CustomerAuthService {
   }
 
   public static isLoggedIn(): boolean {
-    return !!this.getToken() && !!this.getCustomer();
+    const token = this.getToken();
+    if (!token || !this.getCustomer()) return false;
+    if (this.isTokenExpired(token)) {
+      this.expireSession();
+      return false;
+    }
+    return true;
+  }
+
+  // Reads the JWT `exp` claim (seconds since epoch). Unparseable tokens are
+  // left for the server to judge rather than silently logging the user out.
+  private static isTokenExpired(token: string): boolean {
+    try {
+      const payload = token.split('.')[1];
+      if (!payload) return false;
+      const json = JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+      return typeof json.exp === 'number' && json.exp * 1000 <= Date.now();
+    } catch {
+      return false;
+    }
+  }
+
+  // Drops the auth token/profile when the server no longer accepts it, but
+  // (unlike logout) keeps the local cart and wishlist so they become the guest
+  // cart and merge back on the next login.
+  public static expireSession(): void {
+    if (!localStorage.getItem(CUSTOMER_TOKEN_KEY) && !localStorage.getItem(CUSTOMER_AUTH_KEY)) return;
+    localStorage.removeItem(CUSTOMER_TOKEN_KEY);
+    localStorage.removeItem(CUSTOMER_AUTH_KEY);
+    queueMicrotask(() => this.notifyListeners());
   }
 
   public static getAuthHeaders(): HeadersInit {

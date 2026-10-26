@@ -154,7 +154,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
       return;
     }
     onAddToCart(product, defaultLabel, 1, calculatedPrice, calculatedOriginalPrice);
-    triggerFlyingProductAnimation(cardImgRef.current);
+    triggerFlyingProductAnimation(cardImgRef.current, `${product.id}-${defaultLabel}`);
   };
 
   const handleBuyNowClick = (e: React.MouseEvent) => {
