@@ -192,7 +192,7 @@ export const ShippingPolicyPage: React.FC = () => {
 
           <h2>1. Shipping Rates & Free Delivery Threshold</h2>
           <ul>
-            <li><strong>Free Standard Delivery:</strong> All orders with a cart subtotal of <strong>₹{storeSettings.freeShippingThreshold || 500}</strong> or above qualify for 100% Free Standard Shipping across India.</li>
+            <li><strong>Free Standard Delivery:</strong> All orders with a final price (after coupon discount) of <strong>₹{storeSettings.freeShippingThreshold || 500}</strong> or above qualify for 100% Free Standard Shipping across India.</li>
             <li><strong>Standard Shipping Fee:</strong> Flat <strong>₹{storeSettings.standardShippingPrice ?? 40}</strong> on orders below ₹{storeSettings.freeShippingThreshold || 500}.</li>
             {storeSettings.enableExpressDelivery && (
               <li><strong>Express Delivery Option:</strong> Flat <strong>₹{storeSettings.expressShippingPrice ?? 99}</strong> for expedited priority air transit where serviceable.</li>

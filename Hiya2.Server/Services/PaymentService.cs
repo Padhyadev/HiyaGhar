@@ -75,12 +75,13 @@ namespace Hiya2.Server.Services
             var expressShippingFee = shippingSetting?.ExpressShippingPrice ?? 99m;
             var enableFreeShipping = shippingSetting?.EnableFreeShipping ?? true;
             var isExpress = string.Equals(deliveryType, "express", StringComparison.OrdinalIgnoreCase);
-            // Express delivery is never free
+            // Express delivery is never free. Free-shipping threshold is judged on
+            // the price after coupon discount - must match OrderService.
             decimal deliveryFee;
             if (isExpress)
                 deliveryFee = expressShippingFee;
             else
-                deliveryFee = (subtotal >= freeShippingThreshold && enableFreeShipping) ? 0m : standardShippingFee;
+                deliveryFee = ((subtotal - discountAmount) >= freeShippingThreshold && enableFreeShipping) ? 0m : standardShippingFee;
             var amountAfterDiscount = subtotal - discountAmount + deliveryFee;
 
             decimal coinDiscount = 0;

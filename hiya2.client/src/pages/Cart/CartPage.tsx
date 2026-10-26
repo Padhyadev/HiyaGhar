@@ -96,10 +96,13 @@ export const CartPage: React.FC<CartPageProps> = ({
   // Financial Calculations
   const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0;
   const freeShippingThreshold = SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD;
-  const isFreeShippingUnlocked = subtotal >= freeShippingThreshold || appliedCoupon?.coupon?.type === 'free_shipping';
+  // Free shipping is judged on the price after coupon discount
+  // (e.g. ₹500 − ₹50 = ₹450 → not free; ₹600 − ₹60 = ₹540 → free).
+  const amountAfterDiscount = Math.max(0, subtotal - discountAmount);
+  const isFreeShippingUnlocked = amountAfterDiscount >= freeShippingThreshold || appliedCoupon?.coupon?.type === 'free_shipping';
   const shippingFee = subtotal === 0 ? 0 : isFreeShippingUnlocked ? 0 : SHIPPING_CONFIG.STANDARD_SHIPPING_PRICE;
-  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
-  const progressPercentage = Math.min(100, Math.round((subtotal / freeShippingThreshold) * 100));
+  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - amountAfterDiscount);
+  const progressPercentage = Math.min(100, Math.round((amountAfterDiscount / freeShippingThreshold) * 100));
 
   // Dynamic Estimated Tax (GST settings from Admin)
   const gstPercent = SHIPPING_CONFIG.GST_PERCENT ?? 5;
@@ -285,18 +288,41 @@ export const CartPage: React.FC<CartPageProps> = ({
                   </div>
 
                   {!appliedCoupon ? (
-                    <form className="hiyaghar-coupon-form" onSubmit={handleApplyCoupon}>
-                      <input
-                        type="text"
-                        className="hiyaghar-coupon-input"
-                        placeholder="Enter coupon code"
-                        value={couponInput}
-                        onChange={(e) => setCouponInput(e.target.value)}
-                      />
-                      <button type="submit" className="hiyaghar-coupon-btn">
-                        Apply
-                      </button>
-                    </form>
+                    <div>
+                      <form className="hiyaghar-coupon-form" onSubmit={handleApplyCoupon}>
+                        <input
+                          type="text"
+                          className="hiyaghar-coupon-input"
+                          placeholder="Enter coupon code"
+                          value={couponInput}
+                          onChange={(e) => setCouponInput(e.target.value)}
+                        />
+                        <button type="submit" className="hiyaghar-coupon-btn">
+                          Apply
+                        </button>
+                      </form>
+                      <div style={{ marginTop: '8px', fontSize: '12px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                        <span>💡 Available Offer:</span>
+                        <button
+                          type="button"
+                          onClick={(e) => handleApplyCoupon(e, 'WELCOME10')}
+                          title="Click to apply WELCOME10"
+                          style={{
+                            background: '#FFF9E6',
+                            border: '1px dashed #D19A27',
+                            color: '#855F0F',
+                            padding: '2px 8px',
+                            borderRadius: '4px',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            fontSize: '11.5px',
+                          }}
+                        >
+                          WELCOME10
+                        </button>
+                        <span>(10% OFF on orders above ₹300)</span>
+                      </div>
+                    </div>
                   ) : (
                     <div className="hiyaghar-coupon-applied-box">
                       <div className="hiyaghar-coupon-info">

@@ -236,6 +236,16 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   };
 
   const discountAmount = appliedCoupon?.discountAmount || 0;
+
+  // Free shipping is judged on the price after coupon discount, so re-evaluate
+  // the delivery options whenever the subtotal, coupon or settings change.
+  useEffect(() => {
+    if (subtotal <= 0) return;
+    const options = ShippingService.getDeliveryOptions(Math.max(0, subtotal - discountAmount), appliedCoupon?.code);
+    setDeliveryOptions(options);
+    setSelectedDelivery((prev) => (prev ? options.find((o) => o.id === prev.id) || options[0] || null : options[0] || null));
+  }, [subtotal, discountAmount, appliedCoupon?.code, shippingSettings]);
+
   const maxRedeemableCoins = Math.min(
     rewardBalance,
     Math.floor(Math.max(0, subtotal - discountAmount) * (maxCoinUsagePercent / 100) / Math.max(coinToRupeeRate, 0.01))
@@ -1274,6 +1284,29 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                     </button>
                   )}
                 </div>
+                {!appliedCoupon && (
+                  <div style={{ marginTop: '6px', fontSize: '11.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                    <span>💡 Offer:</span>
+                    <button
+                      type="button"
+                      onClick={() => { setCouponCode('WELCOME10'); }}
+                      title="Use WELCOME10"
+                      style={{
+                        background: '#FFF9E6',
+                        border: '1px dashed #D19A27',
+                        color: '#855F0F',
+                        padding: '1px 6px',
+                        borderRadius: '4px',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        fontSize: '11px',
+                      }}
+                    >
+                      WELCOME10
+                    </button>
+                    <span>(10% OFF on orders above ₹300)</span>
+                  </div>
+                )}
                 {couponMessage && (
                   <div className="hiyaghar-summary-row subtle" style={{ color: appliedCoupon ? '#1a7f37' : '#b42318' }}>
                     {couponMessage}

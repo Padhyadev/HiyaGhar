@@ -172,7 +172,9 @@ namespace Hiya2.Server.Services
                 appliedCoupon = couponResult.Coupon;
             }
 
-            var deliveryFee = await CalculateDeliveryFeeAsync(subtotal, deliveryType);
+            // Free-shipping threshold is judged on the price after coupon discount
+            // (e.g. ₹500 cart − ₹50 coupon = ₹450 → not free).
+            var deliveryFee = await CalculateDeliveryFeeAsync(subtotal - discountAmount, deliveryType);
             var amountAfterDiscount = subtotal - discountAmount + deliveryFee;
 
             decimal coinDiscount = 0;

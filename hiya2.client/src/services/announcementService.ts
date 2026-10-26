@@ -16,15 +16,21 @@ export const DEFAULT_ANNOUNCEMENTS: AnnouncementItem[] = [
   },
   {
     id: 'ann_2',
-    text: 'FLAT 10% OFF ON ORDERS ABOVE ₹500 • CODE: WELCOME10',
+    text: 'FLAT 10% OFF ON ORDERS ABOVE ₹300 • CODE: WELCOME10',
     isActive: true,
     displayOrder: 2,
   },
   {
     id: 'ann_3',
-    text: '100% NATURAL & HOMEMADE WITH LOVE',
+    text: 'OFFICE & STORE: 303, APM MALL COMPLEX, GHATLODIYA, AHMEDABAD',
     isActive: true,
     displayOrder: 3,
+  },
+  {
+    id: 'ann_4',
+    text: '100% NATURAL & HOMEMADE WITH LOVE',
+    isActive: true,
+    displayOrder: 4,
   },
 ];
 
@@ -37,8 +43,35 @@ export class AnnouncementService {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        const parsed = JSON.parse(stored);
+        let parsed: AnnouncementItem[] = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
+          let modified = false;
+
+          // Auto-migrate any existing announcements from ₹500 to ₹300 for WELCOME10
+          parsed = parsed.map((item) => {
+            if (item.text.includes('ORDERS ABOVE ₹500 • CODE: WELCOME10')) {
+              modified = true;
+              return { ...item, text: item.text.replace('ORDERS ABOVE ₹500', 'ORDERS ABOVE ₹300') };
+            }
+            return item;
+          });
+
+          // Ensure office announcement is present if not already added
+          const hasOffice = parsed.some((item) => item.text.toLowerCase().includes('office') || item.text.toLowerCase().includes('apm mall'));
+          if (!hasOffice) {
+            modified = true;
+            parsed.push({
+              id: 'ann_office',
+              text: 'OFFICE & STORE: 303, APM MALL COMPLEX, GHATLODIYA, AHMEDABAD',
+              isActive: true,
+              displayOrder: (parsed.length + 1),
+            });
+          }
+
+          if (modified) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(parsed));
+          }
+
           return parsed.sort((a, b) => (a.displayOrder || 0) - (b.displayOrder || 0));
         }
       }

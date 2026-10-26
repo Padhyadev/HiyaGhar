@@ -369,7 +369,9 @@ export class ShippingService {
   }
 
   /**
-   * Available delivery options based on subtotal & applied coupon
+   * Available delivery options based on subtotal & applied coupon.
+   * Pass the amount AFTER coupon discount - the free-shipping threshold is
+   * judged on the discounted price (server does the same).
    */
   public static getDeliveryOptions(subtotal: number, couponCode?: string): DeliveryOption[] {
     const settings = this.getSettings();
