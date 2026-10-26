@@ -54,7 +54,7 @@ export const sortOptions = [
 export const mukhwasProducts: MukhwasProduct[] = [
   {
     id: 'kalkatti-pan',
-    name: 'Kalkatti Pan Mukhwas',
+    name: 'Kalkatti Pan',
     category: 'special',
     categoryLabel: 'Special / Premium',
     price: 349,
@@ -82,7 +82,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'amla-madhur',
-    name: 'Amla Madhur Mukhwas',
+    name: 'Amla Madhur',
     category: 'sweet',
     categoryLabel: 'Sweet Mukhwas',
     price: 249,
@@ -110,7 +110,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'shahi-kharek',
-    name: 'Shahi Kharek Mukhwas',
+    name: 'Shahi Kharek',
     category: 'masala',
     categoryLabel: 'Masala Mukhwas',
     price: 279,
@@ -138,7 +138,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'jamun-pop',
-    name: 'Jamun Pop Mukhwas',
+    name: 'Jamun Pop',
     category: 'special',
     categoryLabel: 'Special / Premium',
     price: 319,
@@ -166,7 +166,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'dil-raja',
-    name: 'Dil Raja Mukhwas',
+    name: 'Dil Rajan',
     category: 'special',
     categoryLabel: 'Special / Premium',
     price: 299,
@@ -193,7 +193,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'choco-masti',
-    name: 'Choco Masti Mukhwas',
+    name: 'Choco Masti',
     category: 'sweet',
     categoryLabel: 'Sweet Mukhwas',
     price: 269,
@@ -220,7 +220,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'digest-ease',
-    name: 'Digest Ease Mukhwas',
+    name: 'Digestive Mix',
     category: 'masala',
     categoryLabel: 'Masala Mukhwas',
     price: 229,
@@ -247,7 +247,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'dil-bahaar',
-    name: 'Dil Bahaar Mukhwas',
+    name: 'Dil Bahaar',
     category: 'sweet',
     categoryLabel: 'Sweet Mukhwas',
     price: 259,
@@ -274,7 +274,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'hing-hajma',
-    name: 'Hing Hajma Mukhwas',
+    name: 'Hing Hajma',
     category: 'masala',
     categoryLabel: 'Masala Mukhwas',
     price: 219,
@@ -301,7 +301,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'mango-slice',
-    name: 'Mango Slice Mukhwas',
+    name: 'Mango Slice',
     category: 'sweet',
     categoryLabel: 'Sweet Mukhwas',
     price: 239,
@@ -328,7 +328,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'paan-pop',
-    name: 'Paan Pop Mukhwas',
+    name: 'Paan Pop',
     category: 'special',
     categoryLabel: 'Special / Premium',
     price: 289,
@@ -355,7 +355,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'seed-mix',
-    name: 'Seed Mix Mukhwas',
+    name: 'Til Alsi Mix',
     category: 'masala',
     categoryLabel: 'Masala Mukhwas',
     price: 249,
@@ -382,7 +382,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'shahi-pan',
-    name: 'Shahi Pan Mukhwas',
+    name: 'Shahi Paan',
     category: 'special',
     categoryLabel: 'Special / Premium',
     price: 329,
@@ -409,7 +409,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'spice-ambodia',
-    name: 'Spice Ambodia Mukhwas',
+    name: 'Ambodia Tadka',
     category: 'masala',
     categoryLabel: 'Masala Mukhwas',
     price: 239,
@@ -436,7 +436,7 @@ export const mukhwasProducts: MukhwasProduct[] = [
   },
   {
     id: 'til-crunch',
-    name: 'Til Crunch Mukhwas',
+    name: 'Til Crunch',
     category: 'masala',
     categoryLabel: 'Masala Mukhwas',
     price: 219,
