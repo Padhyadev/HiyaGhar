@@ -6,7 +6,7 @@ import { ProductService, type Product as ApiProduct, type ProductVariant, type P
 import { HomePageService } from '../../../services/homePageService';
 import { CartService } from '../../../cart';
 import { navigateTo } from '../../../utils/navigation';
-import { formatVariantLabel, getDefaultVariant, getVariantImages } from '../../../utils/productFormat';
+import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE } from '../../../utils/productFormat';
 import { showToast } from '../../../utils/alertService';
 import './BestSellerProductsSection.css';
 
@@ -26,7 +26,7 @@ function mapApiToMukhwas(p: ApiProduct): MukhwasProduct {
     discountPercentage: origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 12,
     rating: p.rating || 4.9,
     reviewsCount: p.reviewCount || 120,
-    image: p.mainImagePath || p.images?.find((img: ProductImage) => img.isPrimary)?.imagePath || '/image/ImageforMukhwash/Shahi Pan.webp',
+    image: p.mainImagePath || p.images?.find((img: ProductImage) => img.isPrimary)?.imagePath || NO_IMAGE,
     secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     shortDescription: p.shortDescription || 'Handcrafted pure organic product.',
     longDescription: p.fullDescription || '100% natural organic product.',

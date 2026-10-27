@@ -42,7 +42,7 @@ namespace Hiya2.Server.Controllers
             displayOrder = o.DisplayOrder,
             isActive = o.IsActive,
             products = o.Products
-                .Where(p => p.Product != null)
+                .Where(p => p.Product != null && p.Product.IsActive && !p.Product.IsDeleted)
                 .OrderBy(p => p.DisplayOrder)
                 .Select(p => new
                 {

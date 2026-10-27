@@ -7,7 +7,7 @@ import { ProductService, type Product as ApiProduct } from '../../services/produ
 import { CategoryService, type ApiCategory } from '../../services/categoryService';
 import { ComboSettingsService, type ComboPackConfig, DEFAULT_COMBO_PACKS } from '../../services/comboSettingsService';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel } from '../../utils/productFormat';
+import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
 import './CustomizeComboPage.css';
 
 // One real, pickable variant of a product (e.g. "100 g" vs "200 g").
@@ -58,7 +58,7 @@ function mapApiToComboProduct(p: ApiProduct): ComboProduct {
   const defaultVariant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
   const currentPrice = defaultVariant ? defaultVariant.price : (p.discountPrice ?? p.basePrice);
   const originalPrice = defaultVariant?.originalPrice ?? p.basePrice;
-  const primaryImage = p.images?.find((i) => i.isPrimary)?.imagePath || p.mainImagePath || '/uploads/Noimage.png';
+  const primaryImage = p.images?.find((i) => i.isPrimary)?.imagePath || p.mainImagePath || NO_IMAGE;
 
   return {
     id: p.id.toString(),

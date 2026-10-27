@@ -10,7 +10,7 @@ import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { ProductReviews } from '../../components/ProductReviews/ProductReviews';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel, getVariantImages } from '../../utils/productFormat';
+import { formatVariantLabel, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { parseProductFullDescription } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
@@ -73,7 +73,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   useEffect(() => {
     setIsLoadingProduct(true);
     ProductService.getProductByIdOrSlug(productId).then((apiProd: ApiProduct | null) => {
-      if (apiProd) {
+      // Inactive products are hidden from customers, including direct links to them.
+      if (apiProd && apiProd.isActive !== false) {
         setProductNotFound(false);
         const inStockVar = apiProd.variants?.find(isVariantInStock);
         const defaultVar = (apiProd.variants?.find((v) => v.isDefault && isVariantInStock(v)))
@@ -87,7 +88,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
         // Start on the default variant's own gallery (falls back to the common images).
         const imgs = Array.from(new Set(getVariantImages(apiProd, defaultVar)));
-        const finalImgs = imgs.length > 0 ? imgs : ['/image/ImageforMukhwash/Shahi Pan.webp'];
+        const finalImgs = imgs.length > 0 ? imgs : [NO_IMAGE];
 
         const parsed = parseProductFullDescription(
           apiProd.fullDescription,
@@ -167,7 +168,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             const defVar = item.variants?.find((v) => v.isDefault) || item.variants?.[0];
             const vPrice = defVar ? defVar.price : (item.discountPrice || item.basePrice || 199);
             const vOrigPrice = defVar ? (defVar.originalPrice || defVar.price) : (item.basePrice || vPrice);
-            const img = item.images?.[0]?.imagePath || item.mainImagePath || '/image/ImageforMukhwash/Shahi Pan.webp';
+            const img = item.images?.[0]?.imagePath || item.mainImagePath || NO_IMAGE;
             const vWeight = defVar?.variantName ? formatVariantLabel(defVar.variantName) : 'Standard';
 
             return {
@@ -211,7 +212,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             const defVar = item.variants?.find((v) => v.isDefault) || item.variants?.[0];
             const vPrice = defVar ? defVar.price : (item.discountPrice || item.basePrice || 199);
             const vOrigPrice = defVar ? (defVar.originalPrice || defVar.price) : (item.basePrice || vPrice);
-            const img = item.images?.[0]?.imagePath || item.mainImagePath || '/image/ImageforMukhwash/Shahi Pan.webp';
+            const img = item.images?.[0]?.imagePath || item.mainImagePath || NO_IMAGE;
             const vWeight = defVar?.variantName ? formatVariantLabel(defVar.variantName) : 'Standard';
 
             return {
@@ -300,14 +301,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const activeVariant = matchedVariant
     || (product?.variants || []).find((v: any) => formatVariantLabel(v.variantName) === selectedWeight);
 
-  // Switch the gallery to the picked variant's own images (or the common images when it has
+  // Switch the gallery to the picked variant's own images (or the placeholder when it has
   // none). Skipped for static products, which have no variants or commonImages.
   useEffect(() => {
     if (!product?.commonImages) return;
-    const imgs = Array.from(new Set(
-      getVariantImages({ images: product.commonImages, mainImagePath: product.mainImagePath }, activeVariant)
+    const found = Array.from(new Set(
+      getVariantImages({ images: product.commonImages, mainImagePath: product.mainImagePath, variants: product.variants }, activeVariant)
     ));
-    if (imgs.length === 0) return;
+    const imgs = found.length > 0 ? found : [NO_IMAGE];
     setGalleryImages(imgs);
     setSelectedImage(imgs[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps

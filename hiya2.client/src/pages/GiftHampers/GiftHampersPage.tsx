@@ -7,7 +7,7 @@ import type { MukhwasProduct } from '../../types/mukhwas';
 import { CartService } from '../../cart';
 import { navigateTo } from '../../utils/navigation';
 import { GiftHamperService, type GiftHamperOccasion, type GiftHamperProduct as ApiGiftHamperProduct } from '../../services/giftHamperService';
-import { formatVariantLabel } from '../../utils/productFormat';
+import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
 import './GiftHampersPage.css';
 
@@ -53,7 +53,7 @@ function mapApiToMukhwas(p: ApiGiftHamperProduct): MukhwasProduct {
     discountPercentage: origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 12,
     rating: p.rating || 4.9,
     reviewsCount: p.reviewCount || 0,
-    image: p.mainImagePath || p.images?.[0]?.imagePath || '/image/HerosectionImage1.webp',
+    image: p.mainImagePath || p.images?.[0]?.imagePath || NO_IMAGE,
     secondaryImage: p.images?.[1]?.imagePath,
     shortDescription: hamperDesc,
     longDescription: hamperDesc,

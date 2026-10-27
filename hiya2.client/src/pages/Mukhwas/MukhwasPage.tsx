@@ -13,7 +13,7 @@ import { CartService } from '../../cart';
 import type { MukhwasProduct } from '../../types/mukhwas';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel, getVariantImages } from '../../utils/productFormat';
+import { formatVariantLabel, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
 import './MukhwasPage.css';
 
@@ -39,7 +39,7 @@ function mapApiToMukhwas(p: ApiProduct): MukhwasProduct {
     discountPercentage: discountPercentage,
     rating: p.rating || 4.9,
     reviewsCount: p.reviewCount || 120,
-    image: p.mainImagePath ? p.mainImagePath + "?v=2" : '/image/ImageforMukhwash/Shahi Pan.webp',
+    image: p.mainImagePath ? p.mainImagePath + "?v=2" : NO_IMAGE,
     secondaryImage: getVariantImages(p, defaultVariant)[1],
     shortDescription: p.shortDescription || 'Authentic handcrafted natural mukhwas.',
     longDescription: p.fullDescription || '100% natural, tobacco-free, digestive mouth freshener.',

@@ -1,4 +1,5 @@
 import { CartApiService } from './services/cartApiService';
+import { NO_IMAGE } from './utils/productFormat';
 
 export interface CartItem {
   id: string; // Unique composite ID: productId + weight (e.g., 'royal-rose-paan-250g')
@@ -237,7 +238,7 @@ export function triggerFlyingProductAnimation(
     if (!imgSrc) {
       imgSrc = sourceImageEl.getAttribute('data-img-src') || '';
     }
-    imgClone.src = imgSrc || '/image/mukhwas_hero_bg.webp';
+    imgClone.src = imgSrc || NO_IMAGE;
     flyingContainer.appendChild(imgClone);
 
     // Viewport coordinates + position: fixed, because the cart pill itself is

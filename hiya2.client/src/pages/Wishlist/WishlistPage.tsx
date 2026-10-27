@@ -9,7 +9,7 @@ import { ProductService, type Product as ApiProduct } from '../../services/produ
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
 import { showToast } from '../../utils/alertService';
-import { formatVariantLabel } from '../../utils/productFormat';
+import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
 import './WishlistPage.css';
 
 interface WishlistPageProps {
@@ -85,7 +85,7 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                   weightOptions: weightOpts.length > 0 ? weightOpts : [item.weight || '100g'],
                   variants: liveApiMatch?.variants || [],
                   selectedWeight: item.weight || undefined,
-                  image: item.image || liveApiMatch?.mainImagePath || '/uploads/Noimage.png',
+                  image: item.image || liveApiMatch?.mainImagePath || NO_IMAGE,
                   rating: liveApiMatch?.rating || 4.9,
                   reviewsCount: liveApiMatch?.reviewCount || 50,
                   isBestSeller: liveApiMatch?.isFeatured || false,

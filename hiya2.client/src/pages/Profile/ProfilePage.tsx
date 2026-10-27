@@ -18,6 +18,7 @@ import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { allowOnlyDigits, sanitizeDigits } from '../../utils/validationUtils';
 import { showToast } from '../../utils/alertService';
 import './ProfilePage.css';
+import { showNoImageOnError, NO_IMAGE } from '../../utils/productFormat';
 
 interface ProfilePageProps {
   initialTab?: 'profile' | 'orders' | 'addresses' | 'password' | 'rewards';
@@ -1007,11 +1008,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                                   onClick={() => setSelectedItemIndex(idx)}
                                 >
                                   <img
-                                    src={item.image || '/image/ImageforMukhwash/Shahi Pan.webp'}
+                                    src={item.image || NO_IMAGE}
                                     alt={item.name}
-                                    onError={(e) => {
-                                      e.currentTarget.src = '/image/ImageforMukhwash/Shahi Pan.webp';
-                                    }}
+                                    onError={showNoImageOnError}
                                   />
                                 </button>
                               ))}
@@ -1024,11 +1023,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                                 <div className="ecom-selected-item-card">
                                   <div className="item-card-media">
                                     <img
-                                      src={currentItem.image || '/image/ImageforMukhwash/Shahi Pan.webp'}
+                                      src={currentItem.image || NO_IMAGE}
                                       alt={currentItem.name}
-                                      onError={(e) => {
-                                        e.currentTarget.src = '/image/ImageforMukhwash/Shahi Pan.webp';
-                                      }}
+                                      onError={showNoImageOnError}
                                     />
                                   </div>
                                   <div className="item-card-details">
@@ -1201,12 +1198,10 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                             <div key={ord.id} className="hiyaghar-order-card" onClick={() => handleSelectOrder(ord)}>
                               <div className="card-top-header-row">
                                 <img
-                                  src={firstItem?.image || '/image/ImageforMukhwash/Shahi Pan.webp'}
+                                  src={firstItem?.image || NO_IMAGE}
                                   alt={firstItem?.name || 'Order'}
                                   className="card-thumb"
-                                  onError={(e) => {
-                                    e.currentTarget.src = '/image/ImageforMukhwash/Shahi Pan.webp';
-                                  }}
+                                  onError={showNoImageOnError}
                                 />
                                 <div className="card-info">
                                   <h4 className="order-title">{summaryText}</h4>

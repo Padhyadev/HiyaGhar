@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { navigateTo } from '../../../utils/navigation';
 import { ProductService, type Product as ApiProduct } from '../../../services/productService';
 import './CustomizeComboSection.css';
+import { NO_IMAGE } from '../../../utils/productFormat';
 
 interface ComboShowcaseItem {
   id: string;
@@ -13,7 +14,7 @@ interface ComboShowcaseItem {
 function mapToShowcaseItem(p: ApiProduct): ComboShowcaseItem {
   const defaultVariant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
   const price = defaultVariant ? defaultVariant.price : (p.discountPrice ?? p.basePrice);
-  const image = p.images?.find((i) => i.isPrimary)?.imagePath || p.mainImagePath || '/uploads/Noimage.png';
+  const image = p.images?.find((i) => i.isPrimary)?.imagePath || p.mainImagePath || NO_IMAGE;
   return {
     id: p.id.toString(),
     name: p.productName,

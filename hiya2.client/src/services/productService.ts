@@ -50,26 +50,32 @@ export interface Product {
 
 export class ProductService {
   private static cachedProducts: Product[] = [];
+  // True when the last getProducts() call could not reach the API (as opposed to an empty result,
+  // e.g. every product in a category is inactive). Pages use it to decide on static fallbacks.
+  public static lastFetchFailed = false;
 
   public static async getProducts(categoryId?: number, isFeatured?: boolean): Promise<Product[]> {
+    this.lastFetchFailed = false;
     try {
       let url = '/api/product';
-      const params: string[] = [];
+      // Storefront only ever lists active products (admin pages call the API directly).
+      const params: string[] = ['onlyActive=true'];
       if (categoryId && categoryId > 0) params.push(`categoryId=${categoryId}`);
       if (isFeatured !== undefined) params.push(`isFeatured=${isFeatured}`);
-      if (params.length > 0) url += `?${params.join('&')}`;
+      url += `?${params.join('&')}`;
 
       const response = await fetch(url);
       if (response.ok) {
         const data: Product[] = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
-          this.cachedProducts = data;
+        if (Array.isArray(data)) {
+          if (data.length > 0) this.cachedProducts = data;
           return data;
         }
       }
     } catch (err) {
       console.warn('API fetch error for products, using cached:', err);
     }
+    this.lastFetchFailed = true;
     const list = this.cachedProducts;
     if (categoryId && categoryId > 0) {
       return list.filter((p) => p.categoryId === categoryId);

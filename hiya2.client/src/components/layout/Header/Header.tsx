@@ -13,6 +13,7 @@ import { showToast } from '../../../utils/alertService';
 import { AnimatedNumber } from '../../common/AnimatedNumber';
 import '../../../cart.css';
 import './Header.css';
+import { showNoImageOnError, NO_IMAGE } from '../../../utils/productFormat';
 
 export const Header: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(CartService.isCartOpen());
@@ -987,7 +988,7 @@ export const Header: React.FC = () => {
                     Found {filteredProducts.length} matching {filteredProducts.length === 1 ? 'product' : 'products'}
                   </div>
                   {filteredProducts.map((p) => {
-                    const primaryImg = p.images?.find((i) => i.isPrimary)?.imagePath || p.mainImagePath || '/image/ImageforMukhwash/Shahi Pan.webp';
+                    const primaryImg = p.images?.find((i) => i.isPrimary)?.imagePath || p.mainImagePath || NO_IMAGE;
                     const defaultVariant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
                     const price = defaultVariant ? defaultVariant.price : (p.discountPrice ?? p.basePrice);
 
@@ -1005,9 +1006,7 @@ export const Header: React.FC = () => {
                             src={primaryImg}
                             alt={p.productName}
                             className="hiyaghar-search-item-img"
-                            onError={(e) => {
-                              e.currentTarget.src = '/image/ImageforMukhwash/Shahi Pan.webp';
-                            }}
+                            onError={showNoImageOnError}
                           />
                         </div>
                         <div className="hiyaghar-search-item-details">
@@ -1085,12 +1084,10 @@ export const Header: React.FC = () => {
                   <div key={item.id} className="hiyaghar-side-cart-item">
                     <div className="hiyaghar-side-cart-item-img-wrap">
                       <img
-                        src={item.image || '/image/ImageforMukhwash/Shahi Pan.webp'}
+                        src={item.image || NO_IMAGE}
                         alt={item.name}
                         className="hiyaghar-side-cart-item-img"
-                        onError={(e) => {
-                          e.currentTarget.src = '/image/ImageforMukhwash/Shahi Pan.webp';
-                        }}
+                        onError={showNoImageOnError}
                       />
                     </div>
                     <div className="hiyaghar-side-cart-item-info">

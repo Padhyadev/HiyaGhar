@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
@@ -41,13 +42,19 @@ namespace Hiya2.Server.Controllers
         private readonly IProductRepository _productRepository;
         private readonly IWebHostEnvironment _environment;
         private readonly DataContext _context;
+        private readonly IOutputCacheStore _outputCacheStore;
 
-        public ProductController(IProductRepository productRepository, IWebHostEnvironment environment, DataContext context)
+        public ProductController(IProductRepository productRepository, IWebHostEnvironment environment, DataContext context, IOutputCacheStore outputCacheStore)
         {
             _productRepository = productRepository;
             _environment = environment;
             _context = context;
+            _outputCacheStore = outputCacheStore;
         }
+
+        // The storefront product list is output-cached ("CatalogCache"); drop it after any admin change
+        // so a deactivated product disappears right away instead of after the cache expires.
+        private Task EvictCatalogCacheAsync() => _outputCacheStore.EvictByTagAsync("catalog", default).AsTask();
 
         private int GetCurrentUserId()
         {
@@ -325,6 +332,7 @@ namespace Hiya2.Server.Controllers
                 await SyncMainImagePathAsync(created.Id);
 
                 await transaction.CommitAsync();
+                await EvictCatalogCacheAsync();
 
                 return Ok(new
                 {
@@ -419,6 +427,7 @@ namespace Hiya2.Server.Controllers
                 await SyncMainImagePathAsync(id);
 
                 await transaction.CommitAsync();
+                await EvictCatalogCacheAsync();
 
                 return Ok(new { message = "Product updated successfully." });
             }
@@ -628,7 +637,8 @@ namespace Hiya2.Server.Controllers
 
         // Product.MainImagePath is what listing cards, cart/wishlist fallbacks, gift hampers and
         // SEO read, so keep it pointing at the image a shopper sees first: the default variant's
-        // primary image, else the primary common image. Left unchanged if neither exists.
+        // primary image, else the primary common image, else another variant's primary image.
+        // Left unchanged if the product has no images at all.
         private async Task SyncMainImagePathAsync(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
@@ -652,6 +662,11 @@ namespace Hiya2.Server.Controllers
                 ?? images
                 .Where(i => i.VariantId == null)
                 .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
+                .Select(i => i.ImagePath)
+                .FirstOrDefault()
+                ?? images
+                .Where(i => i.VariantId != null)
+                .OrderBy(i => i.VariantId).ThenByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
                 .Select(i => i.ImagePath)
                 .FirstOrDefault();
 
@@ -746,6 +761,7 @@ namespace Hiya2.Server.Controllers
                 return NotFound(new { message = $"Product with Id {id} not found." });
             }
 
+            await EvictCatalogCacheAsync();
             return NoContent();
         }
 
@@ -759,6 +775,7 @@ namespace Hiya2.Server.Controllers
             {
                 return BadRequest(new { message = "Failed to add product variant." });
             }
+            await EvictCatalogCacheAsync();
             return Ok(variant);
         }
 
@@ -771,6 +788,7 @@ namespace Hiya2.Server.Controllers
             {
                 return NotFound(new { message = $"Variant with Id {variantId} not found." });
             }
+            await EvictCatalogCacheAsync();
             return NoContent();
         }
 
@@ -830,6 +848,7 @@ namespace Hiya2.Server.Controllers
                 }
             }
 
+            await EvictCatalogCacheAsync();
             return Ok(productImage);
         }
 
@@ -842,6 +861,7 @@ namespace Hiya2.Server.Controllers
             {
                 return NotFound(new { message = $"Image with Id {imageId} not found." });
             }
+            await EvictCatalogCacheAsync();
             return NoContent();
         }
 

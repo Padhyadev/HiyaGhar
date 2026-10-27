@@ -1,3 +1,13 @@
+// The one placeholder shown wherever a product has no photo (or its photo fails to load).
+export const NO_IMAGE = '/image/Noimage.png';
+
+// <img onError> handler: swap to the placeholder once (no loop if the placeholder itself fails).
+export function showNoImageOnError(e: { currentTarget: HTMLImageElement }): void {
+  if (!e.currentTarget.src.endsWith(NO_IMAGE)) {
+    e.currentTarget.src = NO_IMAGE;
+  }
+}
+
 // Product variant names are stored as one or more comma-separated "AttributeName: Value"
 // segments (e.g. "Weight: 100 g" or "Weight: 200 g, Packing: Pouch"). Card/selector UIs
 // don't repeat the attribute name, so this strips each segment's prefix and joins the
@@ -69,14 +79,19 @@ const orderImages = (imgs?: ImageLike[] | null): string[] =>
 
 // The gallery a shopper should see for a variant, primary first: the variant's own images
 // if it has any, otherwise the product's common images, otherwise the product's main image.
+// Once a product's photos are managed per variant (any variant has its own), a variant
+// without photos really has none - it returns [] (callers show NO_IMAGE) instead of
+// borrowing the main image, which is just a copy of another variant's photo.
 export function getVariantImages(
-  product: { images?: ImageLike[] | null; mainImagePath?: string | null } | null | undefined,
+  product: { images?: ImageLike[] | null; mainImagePath?: string | null; variants?: { images?: ImageLike[] | null }[] | null } | null | undefined,
   variant?: { images?: ImageLike[] | null } | null
 ): string[] {
   const own = orderImages(variant?.images);
   if (own.length > 0) return own;
   const common = orderImages(product?.images);
   if (common.length > 0) return common;
+  const hasPerVariantPhotos = (product?.variants || []).some((v) => orderImages(v.images).length > 0);
+  if (variant && hasPerVariantPhotos) return [];
   return product?.mainImagePath ? [product.mainImagePath] : [];
 }
 

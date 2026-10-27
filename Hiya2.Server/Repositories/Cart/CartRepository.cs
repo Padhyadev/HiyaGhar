@@ -38,9 +38,10 @@ namespace Hiya2.Server.Repositories.Cart
             var lines = new List<CartLine>();
             foreach (var item in items)
             {
-                // Skip lines whose variant has since been removed by an admin - they must not
-                // be shown or checked out at the removed variant's old price.
-                if (item.Product == null || (item.VariantId.HasValue && (item.Variant == null || item.Variant.IsDeleted)))
+                // Skip lines whose product has since been deactivated/removed, or whose variant has been
+                // removed by an admin - they must not be shown or checked out.
+                if (item.Product == null || !item.Product.IsActive || item.Product.IsDeleted
+                    || (item.VariantId.HasValue && (item.Variant == null || item.Variant.IsDeleted)))
                 {
                     continue;
                 }
@@ -59,6 +60,11 @@ namespace Hiya2.Server.Repositories.Cart
 
         public async Task<CartOperationResult> AddOrUpdateItemAsync(long customerId, int productId, int? variantId, string? packingType, int quantity)
         {
+            if (quantity > 0 && !await _context.Products.AnyAsync(p => p.Id == productId && p.IsActive && !p.IsDeleted))
+            {
+                return new CartOperationResult { IsSuccess = false, Message = "This product is no longer available." };
+            }
+
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {

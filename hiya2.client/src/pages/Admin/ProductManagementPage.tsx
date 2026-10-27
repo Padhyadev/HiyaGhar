@@ -314,6 +314,14 @@ export const ProductManagementPage: React.FC = () => {
       loadedImages[0].isPrimary = true;
     }
 
+    // Older products kept photos on the product itself (shared photos, or only MainImagePath).
+    // Those are carried into variants that have none, so saving moves them over. Once any
+    // variant has its own photos, MainImagePath is just a copy of one of them - an empty
+    // variant then really is empty and must not be refilled with it.
+    const hasSharedPhotos = !!(item.images && item.images.length > 0);
+    const anyVariantHasPhotos = (item.variants || []).some((v: any) => Array.isArray(v.images) && v.images.length > 0);
+    const carriedOverImages = hasSharedPhotos || !anyVariantHasPhotos ? loadedImages : [];
+
     const loadedVariants: ProductVariantItem[] = item.variants && item.variants.length > 0
       ? item.variants.map((v: any) => {
         const attrs: VariantAttributePair[] = Array.isArray(v.attributes) && v.attributes.length > 0
@@ -329,10 +337,10 @@ export const ProductManagementPage: React.FC = () => {
           price: v.price ?? item.discountPrice ?? item.basePrice ?? 0,
           isDefault: v.isDefault,
           // Photos are managed per variant only. A variant with none of its own starts with
-          // the product's older shared photos, so saving moves them into the variant.
+          // the product's older photos (if any, see carriedOverImages), so saving moves them into it.
           images: Array.isArray(v.images) && v.images.length > 0
             ? v.images.map((img: any) => ({ id: img.id, imagePath: img.imagePath, isPrimary: !!img.isPrimary }))
-            : loadedImages.map((img) => ({ imagePath: img.imagePath, isPrimary: img.isPrimary })),
+            : carriedOverImages.map((img) => ({ imagePath: img.imagePath, isPrimary: img.isPrimary })),
         };
       })
       : [
@@ -753,6 +761,10 @@ export const ProductManagementPage: React.FC = () => {
 
     if (formData.variants && formData.variants.length > 0) {
       bodyFormData.append('VariantsJson', JSON.stringify(formData.variants));
+      // Photos live on the variants only (older shared photos were copied into empty variants
+      // when the form opened), so clear the shared list - otherwise a photo removed from a
+      // variant reappears through the shared fallback.
+      bodyFormData.append('ImagesJson', '[]');
     }
 
 

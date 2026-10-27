@@ -12,7 +12,7 @@ import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/
 import { CartService } from '../../cart';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel, getDefaultVariant, getVariantImages } from '../../utils/productFormat';
+import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
 import './TeaMasalaPage.css';
 
@@ -88,7 +88,7 @@ function mapApiToTeaMasala(p: ApiProduct): TeaMasalaProduct {
     discountTag: discountPercentage > 0 ? `${discountPercentage}% OFF` : '',
     rating: p.rating || 4.9,
     reviewsCount: p.reviewCount || 90,
-    image: p.mainImagePath || '/image/Tea Masala/TEA MASALA.webp',
+    image: p.mainImagePath || NO_IMAGE,
     secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     badge: p.isFeatured ? 'Best Seller' : undefined,
     isBestSeller: p.isFeatured,
@@ -115,9 +115,10 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
     let isMounted = true;
     ProductService.getProducts(2).then((apiProducts: ApiProduct[]) => {
       if (!isMounted) return;
-      // The static fallback is now only used if the live fetch genuinely came back
-      // empty (e.g. backend unreachable) — a last resort, not the initial render.
-      setProductsList(apiProducts && apiProducts.length > 0 ? apiProducts.map(mapApiToTeaMasala) : fallbackTeaMasalaProductsData);
+      // The static fallback is only used when the backend is unreachable — an empty list
+      // (e.g. every product inactive) must stay empty.
+      const useFallback = ProductService.lastFetchFailed && !(apiProducts && apiProducts.length > 0);
+      setProductsList(useFallback ? fallbackTeaMasalaProductsData : (apiProducts || []).map(mapApiToTeaMasala));
       setIsLoadingProducts(false);
     });
 
