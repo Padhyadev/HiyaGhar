@@ -11,7 +11,7 @@ export const Hero: React.FC = () => {
 
       {/* Organic Noise Structure Overlay */}
       <div className="hiyaghar-hero-noise-overlay" aria-hidden="true" />
-
+        
       <div className="hiyaghar-container">
         <div className="hiyaghar-ref-hero-grid">
           {/* Left Column: Headlines, Rating & CTA */}

@@ -1,0 +1,74 @@
+.hg-cta-section {
+  padding: clamp(56px, 8vw, 96px) 0 clamp(72px, 10vw, 110px) 0;
+  background-color: var(--cream, #FBF6EC);
+}
+
+.hg-cta-box {
+  background: linear-gradient(145deg, #FFFFFF 0%, #FAF4E7 100%);
+  border: 1.5px solid rgba(201, 152, 46, 0.35);
+  border-radius: 28px;
+  padding: clamp(40px, 6vw, 64px) clamp(24px, 5vw, 48px);
+  text-align: center;
+  box-shadow: 0 18px 45px rgba(20, 35, 60, 0.08);
+}
+
+.hg-cta-logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.hg-cta-logo-img {
+  max-width: 140px;
+  height: auto;
+  object-fit: contain;
+}
+
+.hg-cta-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(1.85rem, 3.2vw, 2.4rem);
+  font-weight: 600;
+  color: var(--navy, #14233C);
+  margin: 0 0 12px 0;
+}
+
+.hg-cta-body {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.08rem;
+  line-height: 1.7;
+  color: #4A5568;
+  max-width: 540px;
+  margin: 0 auto 32px auto;
+}
+
+.hg-cta-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.hg-cta-footer-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: #8C6A1E;
+}
+
+@media (max-width: 600px) {
+  .hg-cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hg-cta-buttons .hg-btn-navy,
+  .hg-cta-buttons .hg-btn-outline {
+    width: 100%;
+  }
+}

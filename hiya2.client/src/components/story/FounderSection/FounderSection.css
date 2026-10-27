@@ -1,0 +1,86 @@
+.hg-founder-section {
+  padding: clamp(56px, 8vw, 84px) 0;
+  background-color: var(--cream, #FBF6EC);
+}
+
+.hg-founder-grid {
+  display: grid;
+  grid-template-columns: 400px 1fr;
+  align-items: center;
+  gap: clamp(40px, 6vw, 72px);
+}
+
+.hg-founder-photo-col {
+  display: flex;
+  justify-content: center;
+}
+
+.hg-founder-title {
+  display: block;
+  font-family: 'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #8C5F05;
+  margin-top: -8px;
+  margin-bottom: 22px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hg-founder-quote-card {
+  position: relative;
+  background-color: #FFFFFF;
+  border-left: 4px solid var(--purple, #5E2A84);
+  border-radius: 0 16px 16px 0;
+  padding: 24px 28px 20px 32px;
+  margin-top: 28px;
+  box-shadow: 0 10px 25px -8px rgba(94, 42, 132, 0.1);
+}
+
+.hg-quote-symbol {
+  position: absolute;
+  top: 6px;
+  left: 12px;
+  font-family: 'Lora', Georgia, serif;
+  font-size: 3rem;
+  line-height: 1;
+  color: rgba(94, 42, 132, 0.2);
+  pointer-events: none;
+}
+
+.hg-founder-quote-text {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 1.15rem;
+  line-height: 1.65;
+  color: var(--purple, #5E2A84);
+  margin: 0 0 10px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.hg-founder-signature {
+  display: block;
+  font-family: 'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-style: normal;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--navy, #14233C);
+  letter-spacing: 0.04em;
+}
+
+@media (max-width: 992px) {
+  .hg-founder-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .hg-founder-title {
+    margin-bottom: 18px;
+  }
+
+  .hg-founder-quote-card {
+    text-align: left;
+  }
+}

@@ -88,7 +88,7 @@ export const FloatingWidgets: React.FC = () => {
             {/* Left: Overlapping Circular Product Thumbnails */}
             <div className="hiyaghar-pill-avatars-group">
               {/* Latest 3 items, so a just-added product always has an avatar to land on */}
-              {cartItems.slice(-3).map((item) => (
+              {cartItems.slice(-3).map((item) => (  
                 <div
                   key={item.id}
                   id={`hiyaghar-pill-avatar-${item.id}`}

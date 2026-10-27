@@ -16,8 +16,8 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
   variant = 'fade-up',
   delay = 0,
   duration,
-  threshold = 0.12,
-  once = false,
+  threshold = 0.02,
+  once = true,
   className = '',
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -39,10 +39,17 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
       });
     };
 
+    // Safety fallback: Guarantee elements become visible even if preloader or observer stalls
+    const safetyTimer = setTimeout(() => {
+      reveal();
+    }, 1800);
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          const preloaderActive = document.querySelector('.hiyaghar-preloader-overlay:not(.hiyaghar-preloader-exiting)');
+          const preloaderActive = document.querySelector(
+            '.hiyaghar-preloader-overlay:not(.hiyaghar-preloader-exiting)'
+          );
           if (preloaderActive && !document.body.classList.contains('preloader-done')) {
             const handlePreloaderDone = () => {
               window.removeEventListener('preloaderComplete', handlePreloaderDone);
@@ -60,12 +67,13 @@ export const ScrollReveal: React.FC<ScrollRevealProps> = ({
           node.classList.remove('is-revealed');
         }
       },
-      { threshold }
+      { threshold, rootMargin: '60px 0px 60px 0px' }
     );
 
     observer.observe(node);
 
     return () => {
+      clearTimeout(safetyTimer);
       cancelAnimationFrame(rafId1);
       cancelAnimationFrame(rafId2);
       if (node) observer.unobserve(node);
