@@ -10,6 +10,7 @@ import type { ShippingAddress } from '../../services/orderService';
 import { AddressService } from '../../services/addressService';
 import type { UserAddress } from '../../services/addressService';
 import { CustomerAuthService } from '../../services/customerAuthService';
+import { CouponService } from '../../services/couponService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { allowOnlyDigits, sanitizeDigits } from '../../utils/validationUtils';
@@ -122,10 +123,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   };
 
   // Helper: reload delivery options fresh from current localStorage settings
-  const reloadDeliveryOptions = useCallback((currentSubtotal: number, couponCode?: string) => {
+  const reloadDeliveryOptions = useCallback((currentSubtotal: number) => {
     const freshSettings = ShippingService.getSettings();
     setShippingSettings(freshSettings);
-    const options = ShippingService.getDeliveryOptions(currentSubtotal, couponCode);
+    const options = ShippingService.getDeliveryOptions(currentSubtotal);
     setDeliveryOptions(options);
     return options;
   }, []);
@@ -193,6 +194,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       onNavigateCart();
     }
 
+    // Bring over the coupon the shopper applied on the cart. The server re-validates it against
+    // the real cart, so an expired or no-longer-eligible code shows its reason instead.
+    const savedCoupon = CouponService.getSavedCode();
+    if (customer && savedCoupon && items.length > 0) {
+      setCouponCode(savedCoupon);
+      handleApplyCoupon(savedCoupon);
+    }
+
     window.scrollTo(0, 0);
 
     // Listen for shipping settings changes (e.g. admin updates in another tab)
@@ -210,23 +219,27 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  const handleApplyCoupon = async () => {
-    if (!couponCode.trim()) return;
+  // codeOverride is the code carried over from the cart; otherwise the one typed here.
+  const handleApplyCoupon = async (codeOverride?: string) => {
+    const code = (codeOverride ?? couponCode).trim();
+    if (!code) return;
     setIsApplyingCoupon(true);
     setCouponMessage(null);
     try {
       const res = await fetch('/api/cart/coupon/preview', {
         method: 'POST',
         headers: CustomerAuthService.getAuthHeaders(),
-        body: JSON.stringify({ code: couponCode.trim() }),
+        body: JSON.stringify({ code }),
       });
       const data = await res.json();
       if (data.isSuccess) {
-        setAppliedCoupon({ code: couponCode.trim().toUpperCase(), discountAmount: data.discountAmount });
+        setAppliedCoupon({ code: code.toUpperCase(), discountAmount: data.discountAmount });
         setCouponMessage(`Coupon applied! You saved ₹${data.discountAmount.toFixed(2)}.`);
+        CouponService.saveCode(code);
       } else {
         setAppliedCoupon(null);
         setCouponMessage(data.message || 'This coupon could not be applied.');
+        CouponService.clearSavedCode();
       }
     } catch {
       setCouponMessage('Could not validate coupon right now. Please try again.');
@@ -241,10 +254,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   // the delivery options whenever the subtotal, coupon or settings change.
   useEffect(() => {
     if (subtotal <= 0) return;
-    const options = ShippingService.getDeliveryOptions(Math.max(0, subtotal - discountAmount), appliedCoupon?.code);
+    const options = ShippingService.getDeliveryOptions(Math.max(0, subtotal - discountAmount));
     setDeliveryOptions(options);
     setSelectedDelivery((prev) => (prev ? options.find((o) => o.id === prev.id) || options[0] || null : options[0] || null));
-  }, [subtotal, discountAmount, appliedCoupon?.code, shippingSettings]);
+  }, [subtotal, discountAmount, shippingSettings]);
 
   const maxRedeemableCoins = Math.min(
     rewardBalance,
@@ -534,6 +547,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
               });
 
               CartService.clearCart();
+              CouponService.clearSavedCode();
               showToast('Payment successful! Your order has been placed.', 'success');
               onNavigateConfirmation(verifyData.orderNumber);
             } else {
@@ -613,6 +627,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       });
 
       CartService.clearCart();
+      CouponService.clearSavedCode();
       showToast('Order placed successfully!', 'success');
       onNavigateConfirmation(data.orderNumber);
     } catch (err: any) {
@@ -1268,7 +1283,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   {appliedCoupon ? (
                     <button
                       type="button"
-                      onClick={() => { setAppliedCoupon(null); setCouponCode(''); setCouponMessage(null); }}
+                      onClick={() => { setAppliedCoupon(null); setCouponCode(''); setCouponMessage(null); CouponService.clearSavedCode(); }}
                       className="hiyaghar-back-btn"
                     >
                       Remove
@@ -1276,7 +1291,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   ) : (
                     <button
                       type="button"
-                      onClick={handleApplyCoupon}
+                      onClick={() => handleApplyCoupon()}
                       disabled={isApplyingCoupon || !couponCode.trim()}
                       className="hiyaghar-step-continue-btn"
                     >

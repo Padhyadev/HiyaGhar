@@ -1,6 +1,8 @@
+import { CustomerAuthService } from './customerAuthService';
+
 export interface Coupon {
   code: string;
-  type: 'percentage' | 'fixed' | 'free_shipping';
+  type: 'percentage' | 'fixed';
   value: number; // e.g. 10 for 10%, 50 for ₹50
   minOrderValue: number;
   description: string;
@@ -14,7 +16,35 @@ export interface CouponResult {
   coupon?: Coupon;
 }
 
+// The code a shopper applied on the cart, carried over to checkout (where the server validates it
+// again against the real cart). Per browser tab; storage can be unavailable, so every access is guarded.
+const APPLIED_COUPON_KEY = 'hiya_applied_coupon';
+
 export class CouponService {
+  public static getSavedCode(): string | null {
+    try {
+      return sessionStorage.getItem(APPLIED_COUPON_KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  public static saveCode(code: string): void {
+    try {
+      sessionStorage.setItem(APPLIED_COUPON_KEY, code.trim().toUpperCase());
+    } catch {
+      // ignore - the shopper can still type the code at checkout
+    }
+  }
+
+  public static clearSavedCode(): void {
+    try {
+      sessionStorage.removeItem(APPLIED_COUPON_KEY);
+    } catch {
+      // ignore
+    }
+  }
+
   /**
    * Validates a coupon code dynamically against the Admin database coupons via /api/coupon/validate.
    */
@@ -32,10 +62,9 @@ export class CouponService {
     try {
       const res = await fetch('/api/coupon/validate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(localStorage.getItem('customer_token') ? { Authorization: `Bearer ${localStorage.getItem('customer_token')}` } : {})
-        },
+        // Send the real customer token so the server can apply per-customer rules
+        // (first-order-only, per-customer limit) exactly as it does at checkout.
+        headers: CustomerAuthService.getAuthHeaders(),
         body: JSON.stringify({ code: cleanCode, subtotal }),
       });
 

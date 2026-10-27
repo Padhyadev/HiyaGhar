@@ -5,7 +5,7 @@ import { CartService } from '../../cart';
 import type { CartItem } from '../../cart';
 import { CouponService } from '../../services/couponService';
 import type { CouponResult } from '../../services/couponService';
-import { SHIPPING_CONFIG } from '../../services/shippingService';
+import { SHIPPING_CONFIG, ShippingService } from '../../services/shippingService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { CustomerAuthService } from '../../services/customerAuthService';
@@ -46,6 +46,7 @@ export const CartPage: React.FC<CartPageProps> = ({
             setAppliedCoupon(reval);
           } else {
             setAppliedCoupon(null);
+            CouponService.clearSavedCode();
             showToast('Coupon removed: Cart total no longer satisfies minimum requirement.');
           }
         });
@@ -54,6 +55,20 @@ export const CartPage: React.FC<CartPageProps> = ({
     window.scrollTo(0, 0);
     return () => unsubscribe();
   }, [appliedCoupon]);
+
+  // Restore a coupon applied earlier in this tab (e.g. when coming back from checkout).
+  useEffect(() => {
+    const saved = CouponService.getSavedCode();
+    if (!saved || CartService.getSubtotal() <= 0) return;
+    CouponService.validateCoupon(saved, CartService.getSubtotal()).then((result) => {
+      if (result.success) {
+        setAppliedCoupon(result);
+        setCouponInput(result.code || saved);
+      } else {
+        CouponService.clearSavedCode();
+      }
+    });
+  }, []);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -81,6 +96,7 @@ export const CartPage: React.FC<CartPageProps> = ({
     if (result.success) {
       setAppliedCoupon(result);
       setCouponInput(result.code || codeToApply.toUpperCase());
+      CouponService.saveCode(result.code || codeToApply);
       showToast(result.message);
     } else {
       showToast(result.message);
@@ -90,6 +106,7 @@ export const CartPage: React.FC<CartPageProps> = ({
   const handleRemoveCoupon = () => {
     setAppliedCoupon(null);
     setCouponInput('');
+    CouponService.clearSavedCode();
     showToast('Coupon code removed.');
   };
 
@@ -99,7 +116,9 @@ export const CartPage: React.FC<CartPageProps> = ({
   // Free shipping is judged on the price after coupon discount
   // (e.g. ₹500 − ₹50 = ₹450 → not free; ₹600 − ₹60 = ₹540 → free).
   const amountAfterDiscount = Math.max(0, subtotal - discountAmount);
-  const isFreeShippingUnlocked = amountAfterDiscount >= freeShippingThreshold || appliedCoupon?.coupon?.type === 'free_shipping';
+  // Same rule as checkout and the server: the admin switch + threshold, on the discounted amount.
+  const freeShippingEnabled = ShippingService.getSettings().enableFreeShipping;
+  const isFreeShippingUnlocked = ShippingService.qualifiesForFreeShipping(amountAfterDiscount);
   const shippingFee = subtotal === 0 ? 0 : isFreeShippingUnlocked ? 0 : SHIPPING_CONFIG.STANDARD_SHIPPING_PRICE;
   const remainingForFreeShipping = Math.max(0, freeShippingThreshold - amountAfterDiscount);
   const progressPercentage = Math.min(100, Math.round((amountAfterDiscount / freeShippingThreshold) * 100));
@@ -182,7 +201,8 @@ export const CartPage: React.FC<CartPageProps> = ({
             <div className="hiyaghar-cart-grid">
               {/* LEFT COLUMN — Cart Items, Free Shipping, Addons */}
               <div className="hiyaghar-cart-left-col">
-                {/* 8. FREE SHIPPING PROGRESS BAR */}
+                {/* 8. FREE SHIPPING PROGRESS BAR (hidden when the admin has switched free shipping off) */}
+                {freeShippingEnabled && (
                 <div className="hiyaghar-shipping-progress-card">
                   <div className="hiyaghar-shipping-progress-header">
                     <span className="hiyaghar-shipping-icon" style={{ color: 'var(--hiya-gold-text, #855F0F)' }}>
@@ -208,6 +228,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                     />
                   </div>
                 </div>
+                )}
 
                 {/* 3. CART ITEMS LIST */}
                 <div className="hiyaghar-cart-items-list">

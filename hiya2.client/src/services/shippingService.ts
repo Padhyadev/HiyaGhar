@@ -369,13 +369,22 @@ export class ShippingService {
   }
 
   /**
-   * Available delivery options based on subtotal & applied coupon.
-   * Pass the amount AFTER coupon discount - the free-shipping threshold is
-   * judged on the discounted price (server does the same).
+   * Whether standard delivery is free. Pass the amount AFTER coupon discount: the threshold is
+   * judged on the discounted price, exactly like the server's CalculateDeliveryFeeAsync
+   * (e.g. ₹550 − ₹60 coupon = ₹490 → not free at a ₹500 threshold). Coupons never grant free
+   * shipping on their own - the server has no such coupon type.
    */
-  public static getDeliveryOptions(subtotal: number, couponCode?: string): DeliveryOption[] {
+  public static qualifiesForFreeShipping(amountAfterDiscount: number): boolean {
     const settings = this.getSettings();
-    const isFreeShipping = (settings.enableFreeShipping && subtotal >= settings.freeShippingThreshold) || couponCode === 'FREESHIP';
+    return settings.enableFreeShipping && amountAfterDiscount >= settings.freeShippingThreshold;
+  }
+
+  /**
+   * Available delivery options. Pass the amount AFTER coupon discount (see qualifiesForFreeShipping).
+   */
+  public static getDeliveryOptions(subtotal: number): DeliveryOption[] {
+    const settings = this.getSettings();
+    const isFreeShipping = this.qualifiesForFreeShipping(subtotal);
     const standardPrice = isFreeShipping ? 0 : settings.standardShippingPrice;
 
     const options: DeliveryOption[] = [
