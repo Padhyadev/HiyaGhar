@@ -122,12 +122,12 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
   // Fetch Hair Oil products dynamically from API (CategoryId = 4)
   useEffect(() => {
     let isMounted = true;
-    ProductService.getProducts(4).then((apiProducts: ApiProduct[]) => {
+    ProductService.getProductsWithStatus(4).then(({ products: apiProducts, failed }) => {
       if (!isMounted) return;
       // The static fallback is only used when the backend is unreachable — an empty list
       // (e.g. every product inactive) must stay empty.
-      const useFallback = ProductService.lastFetchFailed && !(apiProducts && apiProducts.length > 0);
-      setProductsList(useFallback ? fallbackHairOilProductsData : (apiProducts || []).map(mapApiToHairOil));
+      const useFallback = failed && apiProducts.length === 0;
+      setProductsList(useFallback ? fallbackHairOilProductsData : apiProducts.map(mapApiToHairOil));
       setIsLoadingProducts(false);
     });
 

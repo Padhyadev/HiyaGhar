@@ -60,11 +60,6 @@ namespace Hiya2.Server.Repositories.Cart
 
         public async Task<CartOperationResult> AddOrUpdateItemAsync(long customerId, int productId, int? variantId, string? packingType, int quantity)
         {
-            if (quantity > 0 && !await _context.Products.AnyAsync(p => p.Id == productId && p.IsActive && !p.IsDeleted))
-            {
-                return new CartOperationResult { IsSuccess = false, Message = "This product is no longer available." };
-            }
-
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
@@ -74,6 +69,15 @@ namespace Hiya2.Server.Repositories.Cart
                     c.VariantId == variantId &&
                     c.PackingType == packingType &&
                     !c.IsDeleted);
+
+                // Inactive/deleted products can't be added. Only reducing an existing line is allowed
+                // (a non-positive quantity with no line still creates one, see below).
+                if ((quantity > 0 || existing == null)
+                    && !await _context.Products.AnyAsync(p => p.Id == productId && p.IsActive && !p.IsDeleted))
+                {
+                    await transaction.RollbackAsync();
+                    return new CartOperationResult { IsSuccess = false, Message = "This product is no longer available." };
+                }
 
                 var previousQuantity = existing?.Quantity ?? 0;
                 var newQuantity = previousQuantity + quantity;

@@ -50,12 +50,15 @@ export interface Product {
 
 export class ProductService {
   private static cachedProducts: Product[] = [];
-  // True when the last getProducts() call could not reach the API (as opposed to an empty result,
-  // e.g. every product in a category is inactive). Pages use it to decide on static fallbacks.
-  public static lastFetchFailed = false;
 
   public static async getProducts(categoryId?: number, isFeatured?: boolean): Promise<Product[]> {
-    this.lastFetchFailed = false;
+    return (await this.getProductsWithStatus(categoryId, isFeatured)).products;
+  }
+
+  // Same as getProducts, plus whether the API could not be reached ("failed") - as opposed to an
+  // empty result, e.g. every product in a category is inactive. Pages use it to decide on static
+  // fallbacks; it's per call, so concurrent requests from other components can't affect it.
+  public static async getProductsWithStatus(categoryId?: number, isFeatured?: boolean): Promise<{ products: Product[]; failed: boolean }> {
     try {
       let url = '/api/product';
       // Storefront only ever lists active products (admin pages call the API directly).
@@ -69,21 +72,19 @@ export class ProductService {
         const data: Product[] = await response.json();
         if (Array.isArray(data)) {
           if (data.length > 0) this.cachedProducts = data;
-          return data;
+          return { products: data, failed: false };
         }
       }
     } catch (err) {
       console.warn('API fetch error for products, using cached:', err);
     }
-    this.lastFetchFailed = true;
-    const list = this.cachedProducts;
+    let list = this.cachedProducts;
     if (categoryId && categoryId > 0) {
-      return list.filter((p) => p.categoryId === categoryId);
+      list = list.filter((p) => p.categoryId === categoryId);
+    } else if (isFeatured !== undefined) {
+      list = list.filter((p) => p.isFeatured === isFeatured);
     }
-    if (isFeatured !== undefined) {
-      return list.filter((p) => p.isFeatured === isFeatured);
-    }
-    return list;
+    return { products: list, failed: true };
   }
 
   public static async getProductById(id: number): Promise<Product | null> {

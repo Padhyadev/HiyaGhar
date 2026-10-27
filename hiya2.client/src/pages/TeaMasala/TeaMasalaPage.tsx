@@ -113,12 +113,12 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
   // Fetch Tea Masala products dynamically from API (CategoryId = 2)
   useEffect(() => {
     let isMounted = true;
-    ProductService.getProducts(2).then((apiProducts: ApiProduct[]) => {
+    ProductService.getProductsWithStatus(2).then(({ products: apiProducts, failed }) => {
       if (!isMounted) return;
       // The static fallback is only used when the backend is unreachable — an empty list
       // (e.g. every product inactive) must stay empty.
-      const useFallback = ProductService.lastFetchFailed && !(apiProducts && apiProducts.length > 0);
-      setProductsList(useFallback ? fallbackTeaMasalaProductsData : (apiProducts || []).map(mapApiToTeaMasala));
+      const useFallback = failed && apiProducts.length === 0;
+      setProductsList(useFallback ? fallbackTeaMasalaProductsData : apiProducts.map(mapApiToTeaMasala));
       setIsLoadingProducts(false);
     });
 

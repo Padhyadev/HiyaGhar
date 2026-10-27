@@ -113,12 +113,12 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
   // Fetch Handmade Soap products dynamically from API (CategoryId = 3)
   useEffect(() => {
     let isMounted = true;
-    ProductService.getProducts(3).then((apiProducts: ApiProduct[]) => {
+    ProductService.getProductsWithStatus(3).then(({ products: apiProducts, failed }) => {
       if (!isMounted) return;
       // The static fallback is only used when the backend is unreachable — an empty list
       // (e.g. every product inactive) must stay empty.
-      const useFallback = ProductService.lastFetchFailed && !(apiProducts && apiProducts.length > 0);
-      setProductsList(useFallback ? fallbackHandmadeSoapProducts : (apiProducts || []).map(mapApiToSoap));
+      const useFallback = failed && apiProducts.length === 0;
+      setProductsList(useFallback ? fallbackHandmadeSoapProducts : apiProducts.map(mapApiToSoap));
       setIsLoadingProducts(false);
     });
 

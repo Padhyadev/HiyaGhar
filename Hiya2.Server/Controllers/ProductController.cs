@@ -54,7 +54,19 @@ namespace Hiya2.Server.Controllers
 
         // The storefront product list is output-cached ("CatalogCache"); drop it after any admin change
         // so a deactivated product disappears right away instead of after the cache expires.
-        private Task EvictCatalogCacheAsync() => _outputCacheStore.EvictByTagAsync("catalog", default).AsTask();
+        // Runs after the save is committed, so a failure here must not turn into an error response.
+        private async Task EvictCatalogCacheAsync()
+        {
+            try
+            {
+                await _outputCacheStore.EvictByTagAsync("catalog", default);
+            }
+            catch (Exception ex)
+            {
+                HttpContext.RequestServices.GetRequiredService<ILogger<ProductController>>()
+                    .LogWarning(ex, "Catalog cache eviction failed; it will expire on its own.");
+            }
+        }
 
         private int GetCurrentUserId()
         {

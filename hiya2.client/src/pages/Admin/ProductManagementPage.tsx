@@ -304,9 +304,10 @@ export const ProductManagementPage: React.FC = () => {
     setImageError(null);
     setFormErrors({});
 
+    // MainImagePath can be the "No photo" placeholder - that's not a real photo, never load it as one.
     const loadedImages: ProductImageItem[] = item.images && item.images.length > 0
       ? [...item.images]
-      : (item.mainImagePath && !item.mainImagePath.includes('unsplash')
+      : (item.mainImagePath && !item.mainImagePath.includes('unsplash') && !/\/noimage\.png$/i.test(item.mainImagePath)
         ? [{ imagePath: item.mainImagePath, isPrimary: true }]
         : []);
 
