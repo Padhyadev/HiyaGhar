@@ -10,7 +10,7 @@ import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { ProductReviews } from '../../components/ProductReviews/ProductReviews';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel } from '../../utils/productFormat';
+import { formatVariantLabel, getVariantImages } from '../../utils/productFormat';
 import { parseProductFullDescription } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
@@ -85,17 +85,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         const curPrice = defaultVar ? defaultVar.price : (apiProd.discountPrice || apiProd.basePrice);
         const origPrice = defaultVar?.originalPrice || (apiProd.basePrice > curPrice ? apiProd.basePrice : Math.round(curPrice * 1.25));
 
-        const imgs: string[] = [];
-        if (apiProd.images && apiProd.images.length > 0) {
-          apiProd.images.forEach((img) => {
-            if (img.imagePath && !imgs.includes(img.imagePath)) {
-              imgs.push(img.imagePath);
-            }
-          });
-        }
-        if (imgs.length === 0 && apiProd.mainImagePath) {
-          imgs.push(apiProd.mainImagePath);
-        }
+        // Start on the default variant's own gallery (falls back to the common images).
+        const imgs = Array.from(new Set(getVariantImages(apiProd, defaultVar)));
         const finalImgs = imgs.length > 0 ? imgs : ['/image/ImageforMukhwash/Shahi Pan.webp'];
 
         const parsed = parseProductFullDescription(
@@ -125,6 +116,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           reviewsCount: apiProd.reviewCount || 0,
           image: finalImgs[0],
           gallery: finalImgs,
+          commonImages: apiProd.images || [],
+          mainImagePath: apiProd.mainImagePath,
           weightOptions: weightOpts,
           variants: apiProd.variants || [],
           badge: apiProd.isFeatured ? 'Best Seller' : undefined,
@@ -301,6 +294,24 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const selectedWeight = hasStructuredAttributes
     ? (matchedVariant ? formatVariantLabel(matchedVariant.variantName) : Object.values(selectedAttrs).join(' • '))
     : (selectedAttrs['Weight'] || (product?.weightOptions && product.weightOptions[0]) || '100g');
+
+  // The variant currently on screen, for both structured (multi-attribute) and flat
+  // (weight-only) products - drives which gallery is shown.
+  const activeVariant = matchedVariant
+    || (product?.variants || []).find((v: any) => formatVariantLabel(v.variantName) === selectedWeight);
+
+  // Switch the gallery to the picked variant's own images (or the common images when it has
+  // none). Skipped for static products, which have no variants or commonImages.
+  useEffect(() => {
+    if (!product?.commonImages) return;
+    const imgs = Array.from(new Set(
+      getVariantImages({ images: product.commonImages, mainImagePath: product.mainImagePath }, activeVariant)
+    ));
+    if (imgs.length === 0) return;
+    setGalleryImages(imgs);
+    setSelectedImage(imgs[0]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product?.id, activeVariant?.id]);
 
   const isAttrPillInStock = (groupName: string, val: string) => {
     if (!product?.variants || product.variants.length === 0) return true;

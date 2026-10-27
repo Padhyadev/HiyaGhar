@@ -12,7 +12,7 @@ import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/
 import { CartService } from '../../cart';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel } from '../../utils/productFormat';
+import { formatVariantLabel, getDefaultVariant, getVariantImages } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
 import './HairOilPage.css';
 
@@ -98,6 +98,7 @@ function mapApiToHairOil(p: ApiProduct): HairOilProduct {
     rating: p.rating || 4.9,
     reviewsCount: p.reviewCount || 150,
     image: p.mainImagePath || '/image/Hair Oil/hair oil.webp',
+    secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     badge: p.isFeatured ? 'Best Seller' : undefined,
     isBestSeller: p.isFeatured,
     weightOptions: weightOpts.length > 0 ? weightOpts : ['100ml', '200ml'],

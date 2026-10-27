@@ -54,3 +54,33 @@ export function toProductSlug(name?: string | null, id?: string | number): strin
     .replace(/\s+/g, '-'); // replace spaces with hyphens
   return clean || String(id || '');
 }
+
+interface ImageLike {
+  imagePath: string;
+  isPrimary?: boolean;
+  displayOrder?: number;
+}
+
+const orderImages = (imgs?: ImageLike[] | null): string[] =>
+  [...(imgs || [])]
+    .filter((i) => i && i.imagePath)
+    .sort((a, b) => Number(!!b.isPrimary) - Number(!!a.isPrimary) || (a.displayOrder ?? 0) - (b.displayOrder ?? 0))
+    .map((i) => i.imagePath);
+
+// The gallery a shopper should see for a variant, primary first: the variant's own images
+// if it has any, otherwise the product's common images, otherwise the product's main image.
+export function getVariantImages(
+  product: { images?: ImageLike[] | null; mainImagePath?: string | null } | null | undefined,
+  variant?: { images?: ImageLike[] | null } | null
+): string[] {
+  const own = orderImages(variant?.images);
+  if (own.length > 0) return own;
+  const common = orderImages(product?.images);
+  if (common.length > 0) return common;
+  return product?.mainImagePath ? [product.mainImagePath] : [];
+}
+
+// The variant a listing card represents: the default variant, else the first one.
+export function getDefaultVariant<T extends { isDefault?: boolean }>(variants?: T[] | null): T | undefined {
+  return variants?.find((v) => v.isDefault) || variants?.[0];
+}

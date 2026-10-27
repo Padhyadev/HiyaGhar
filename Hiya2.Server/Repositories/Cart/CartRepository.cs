@@ -31,6 +31,7 @@ namespace Hiya2.Server.Repositories.Cart
                 .Where(c => c.CustomerId == customerId && !c.IsDeleted && c.IsActive)
                 .Include(c => c.Product)
                 .Include(c => c.Variant)
+                    .ThenInclude(v => v!.Images.Where(i => !i.IsDeleted))
                 .OrderByDescending(c => c.Id)
                 .ToListAsync();
 

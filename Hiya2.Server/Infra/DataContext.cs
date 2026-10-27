@@ -145,6 +145,17 @@ namespace HIyaghar.Infra
                 .HasForeignKey(r => r.ProductId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // Same multiple-cascade-paths issue: Product already cascades into both
+            // ProductImage and ProductVariant, so the variant link must not cascade too.
+            modelBuilder.Entity<ProductImage>()
+                .HasOne(i => i.Variant)
+                .WithMany(v => v.Images)
+                .HasForeignKey(i => i.VariantId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ProductImage>()
+                .HasIndex(i => new { i.ProductId, i.VariantId });
+
             modelBuilder.Entity<ProductStockHistory>()
                 .HasIndex(h => new { h.ProductId, h.VariantId, h.ChangedDate });
 

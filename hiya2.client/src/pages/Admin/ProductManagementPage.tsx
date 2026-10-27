@@ -9,6 +9,8 @@ import {
   saveStoredProductMeta,
   type ProductCustomMeta,
 } from '../../utils/productMetaStore';
+// Shared admin modal styles (overlay/card/header), same as LovManagementPage.
+import './OrderManagementPage.css';
 
 export interface ProductImageItem {
   id?: number;
@@ -35,7 +37,54 @@ export interface ProductVariantItem {
   originalPrice: number;  // Price (MRP)
   price: number;          // SellPrice
   isDefault: boolean;
+  images?: ProductImageItem[]; // this variant's own gallery (empty = website falls back to the product's older shared photos)
 }
+
+const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 MB Limit
+const MAX_VARIANT_IMAGES = 6;
+
+// Reads an image file and downscales it to max 1200px client-side (HTML5 Canvas) to keep the
+// Base64 payload small. PNG/WebP stay PNG so transparency survives; everything else becomes JPEG.
+// Falls back to the raw data URL if the canvas isn't available.
+const compressImageFile = (file: File): Promise<string> =>
+  new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const rawDataUrl = event.target?.result as string;
+      if (!rawDataUrl) return;
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const MAX_DIM = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height && width > MAX_DIM) {
+          height = Math.round((height * MAX_DIM) / width);
+          width = MAX_DIM;
+        } else if (height > MAX_DIM) {
+          width = Math.round((width * MAX_DIM) / height);
+          height = MAX_DIM;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(rawDataUrl);
+          return;
+        }
+        ctx.drawImage(img, 0, 0, width, height);
+        const isPngOrWebp = file.type === 'image/png' || file.type === 'image/webp' || file.name.endsWith('.png') || file.name.endsWith('.webp');
+        resolve(isPngOrWebp ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.85));
+      };
+      img.src = rawDataUrl;
+    };
+    reader.readAsDataURL(file);
+  });
+
+const variantDisplayLabel = (v: ProductVariantItem, index: number) =>
+  v.isNoVariant ? 'Product' : (v.attributes.map((a) => a.attributeValue).join(' • ') || `Variant ${index + 1}`);
 
 export interface ProductItem {
   id: number;
@@ -101,6 +150,7 @@ export const ProductManagementPage: React.FC = () => {
   const [attributeMasters, setAttributeMasters] = useState<AttributeMaster[]>(DEFAULT_ATTRIBUTE_MASTERS);
   const [imageError, setImageError] = useState<string | null>(null);
   const [openAttributePickerIndex, setOpenAttributePickerIndex] = useState<number | null>(null);
+  const [variantImageEditorIndex, setVariantImageEditorIndex] = useState<number | null>(null);
 
   const [selectedCategoryFilter, setSelectedCategoryFilter] = useState<string>('ALL');
   const [viewMode, setViewMode] = useState<'list' | 'form'>('list');
@@ -121,7 +171,6 @@ export const ProductManagementPage: React.FC = () => {
     isBestseller: true,
     isActive: true,
     hasVariantsMode: true,
-    images: [] as ProductImageItem[],
     newImageUrl: '',
     variants: [] as ProductVariantItem[],
   });
@@ -235,7 +284,6 @@ export const ProductManagementPage: React.FC = () => {
       isBestseller: false,
       isActive: true,
       hasVariantsMode: false,
-      images: [],
       newImageUrl: '',
       variants: [
         {
@@ -280,6 +328,11 @@ export const ProductManagementPage: React.FC = () => {
           originalPrice: v.originalPrice ?? item.basePrice ?? 0,
           price: v.price ?? item.discountPrice ?? item.basePrice ?? 0,
           isDefault: v.isDefault,
+          // Photos are managed per variant only. A variant with none of its own starts with
+          // the product's older shared photos, so saving moves them into the variant.
+          images: Array.isArray(v.images) && v.images.length > 0
+            ? v.images.map((img: any) => ({ id: img.id, imagePath: img.imagePath, isPrimary: !!img.isPrimary }))
+            : loadedImages.map((img) => ({ imagePath: img.imagePath, isPrimary: img.isPrimary })),
         };
       })
       : [
@@ -290,6 +343,7 @@ export const ProductManagementPage: React.FC = () => {
             originalPrice: item.basePrice || 0,
             price: item.discountPrice || item.basePrice || 0,
             isDefault: true,
+            images: loadedImages.map((img) => ({ imagePath: img.imagePath, isPrimary: img.isPrimary })),
           },
         ];
 
@@ -301,6 +355,7 @@ export const ProductManagementPage: React.FC = () => {
         originalPrice: item.basePrice || 0,
         price: item.discountPrice || item.basePrice || 0,
         isDefault: true,
+        images: loadedImages.map((img) => ({ imagePath: img.imagePath, isPrimary: img.isPrimary })),
       });
     }
 
@@ -332,7 +387,6 @@ export const ProductManagementPage: React.FC = () => {
       isBestseller: item.isBestseller,
       isActive: item.isActive !== false,
       hasVariantsMode: hasVars,
-      images: loadedImages,
       newImageUrl: '',
       variants: loadedVariants,
     });
@@ -356,14 +410,8 @@ export const ProductManagementPage: React.FC = () => {
   };
 
   // --- IMAGE MANAGEMENT ---
-  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 MB Limit
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files || files.length === 0) return;
-
-    setImageError(null);
-
+  // Splits a file selection into uploadable files and an error for the ones over 2 MB.
+  const splitBySize = (files: FileList) => {
     const validFiles: File[] = [];
     const oversizedFiles: string[] = [];
 
@@ -377,95 +425,100 @@ export const ProductManagementPage: React.FC = () => {
     });
 
     if (oversizedFiles.length > 0) {
-      const errMsg = `❌ Upload Error: Photo size exceeds maximum allowed limit of 2 MB! ${oversizedFiles.join(', ')} cannot be uploaded. Please upload photos under 2 MB.`;
-      setImageError(errMsg);
+      setImageError(`❌ Upload Error: Photo size exceeds maximum allowed limit of 2 MB! ${oversizedFiles.join(', ')} cannot be uploaded. Please upload photos under 2 MB.`);
     }
+    return { validFiles, oversizedFiles };
+  };
 
-    if (validFiles.length > 0) {
-      validFiles.forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const rawDataUrl = event.target?.result as string;
-          if (rawDataUrl) {
-            // Compress Image client-side using HTML5 Canvas to optimize Base64 size and improve browser/server speed
-            const img = new Image();
-            img.onload = () => {
-              const canvas = document.createElement('canvas');
-              const MAX_DIM = 1200;
-              let width = img.width;
-              let height = img.height;
-
-              if (width > height && width > MAX_DIM) {
-                height = Math.round((height * MAX_DIM) / width);
-                width = MAX_DIM;
-              } else if (height > MAX_DIM) {
-                width = Math.round((width * MAX_DIM) / height);
-                height = MAX_DIM;
-              }
-
-              canvas.width = width;
-              canvas.height = height;
-              const ctx = canvas.getContext('2d');
-              if (ctx) {
-                ctx.drawImage(img, 0, 0, width, height);
-                // Keep PNG/WebP transparency intact, only use JPEG for standard jpeg/jpg uploads
-                const isPngOrWebp = file.type === 'image/png' || file.type === 'image/webp' || file.name.endsWith('.png') || file.name.endsWith('.webp');
-                const compressedDataUrl = isPngOrWebp ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.85);
-                setFormData((prev) => {
-                  const isFirst = prev.images.length === 0;
-                  return {
-                    ...prev,
-                    images: [...prev.images, { imagePath: compressedDataUrl, isPrimary: isFirst }],
-                  };
-                });
-              } else {
-                setFormData((prev) => {
-                  const isFirst = prev.images.length === 0;
-                  return {
-                    ...prev,
-                    images: [...prev.images, { imagePath: rawDataUrl, isPrimary: isFirst }],
-                  };
-                });
-              }
-            };
-            img.src = rawDataUrl;
-          }
-        };
-        reader.readAsDataURL(file);
-      });
-      if (oversizedFiles.length === 0) {
-        showToastMsg(`Uploaded & optimized ${validFiles.length} photo(s) to product gallery!`);
-      } else {
-        showToastMsg(`Uploaded ${validFiles.length} valid photo(s). ${oversizedFiles.length} photo(s) rejected (> 2 MB).`);
+  // --- VARIANT IMAGE MANAGEMENT ---
+  // Applies a change to one variant's gallery and keeps exactly one primary in it.
+  const updateVariantImages = (index: number, update: (imgs: ProductImageItem[]) => ProductImageItem[]) => {
+    setFormData((prev) => {
+      const newVariants = [...prev.variants];
+      const imgs = update(newVariants[index]?.images || []);
+      if (imgs.length > 0 && !imgs.some((img) => img.isPrimary)) {
+        imgs[0] = { ...imgs[0], isPrimary: true };
       }
+      newVariants[index] = { ...newVariants[index], images: imgs };
+      return { ...prev, variants: newVariants };
+    });
+  };
+
+  const handleVariantImageUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setImageError(null);
+    const { validFiles } = splitBySize(files);
+    const room = MAX_VARIANT_IMAGES - (formData.variants[index]?.images?.length || 0);
+    if (validFiles.length > room) {
+      showToastMsg(`A variant can have at most ${MAX_VARIANT_IMAGES} photos. Only ${Math.max(0, room)} more can be added.`, 'error');
     }
+
+    validFiles.slice(0, Math.max(0, room)).forEach((file) => {
+      compressImageFile(file).then((dataUrl) => {
+        updateVariantImages(index, (imgs) =>
+          imgs.length >= MAX_VARIANT_IMAGES ? imgs : [...imgs, { imagePath: dataUrl, isPrimary: false }]
+        );
+      });
+    });
 
     e.target.value = '';
   };
 
-
-
-  const handleSetPrimaryImage = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      images: prev.images.map((img, i) => ({
-        ...img,
-        isPrimary: i === index,
-      })),
-    }));
+  const handleSetVariantPrimaryImage = (index: number, imgIndex: number) => {
+    updateVariantImages(index, (imgs) => imgs.map((img, i) => ({ ...img, isPrimary: i === imgIndex })));
   };
 
-  const handleRemoveImage = (index: number) => {
-    setFormData((prev) => {
-      const filtered = prev.images.filter((_, i) => i !== index);
-      if (filtered.length > 0 && !filtered.some((img) => img.isPrimary)) {
-        filtered[0].isPrimary = true;
-      }
-      return { ...prev, images: filtered };
-    });
+  const handleRemoveVariantImage = (index: number, imgIndex: number) => {
+    updateVariantImages(index, (imgs) => imgs.filter((_, i) => i !== imgIndex));
   };
 
+  // Copies another variant's photos into this one (as new rows, so the two stay independent).
+  const handleCopyVariantImages = (toIndex: number, fromIndex: number) => {
+    const source = formData.variants[fromIndex]?.images || [];
+    updateVariantImages(toIndex, () => source.map((img) => ({ imagePath: img.imagePath, isPrimary: img.isPrimary })));
+    showToastMsg(`Copied ${source.length} photo(s) from ${variantDisplayLabel(formData.variants[fromIndex], fromIndex)}.`);
+  };
 
+  // Thumbnail + count button that opens a variant's photo editor (used in the variants table and the
+  // single-product section).
+  const renderVariantPhotosButton = (variant: ProductVariantItem, index: number) => {
+    const imgs = variant.images || [];
+    const primary = imgs.find((img) => img.isPrimary) || imgs[0];
+    return (
+      <button
+        type="button"
+        onClick={() => setVariantImageEditorIndex(index)}
+        title="Manage photos for this variant"
+        style={{
+          marginTop: '6px',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+          padding: '3px 8px 3px 3px',
+          borderRadius: '6px',
+          border: '1px dashed #cbd5e1',
+          background: '#f8fafc',
+          cursor: 'pointer',
+          fontSize: '0.72rem',
+          fontWeight: 700,
+          color: imgs.length > 0 ? '#2d6a4f' : '#64748b',
+        }}
+      >
+        {primary ? (
+          <img
+            src={primary.imagePath}
+            alt="Variant primary"
+            style={{ width: '26px', height: '26px', objectFit: 'contain', borderRadius: '4px', background: '#F7F3E9' }}
+          />
+        ) : (
+          <i className="fa-solid fa-image" style={{ fontSize: '0.95rem', color: '#94a3b8', padding: '4px' }}></i>
+        )}
+        {imgs.length > 0 ? `${imgs.length} photo${imgs.length > 1 ? 's' : ''} · Manage` : 'Add photos'}
+      </button>
+    );
+  };
 
   const isLastVariantRowValid = () => {
     if (!formData.hasVariantsMode) return false;
@@ -540,6 +593,7 @@ export const ProductManagementPage: React.FC = () => {
           originalPrice: existing.originalPrice || 0,
           price: existing.price || 0,
           isDefault: true,
+          images: existing.images || [],
         };
         return { ...prev, variants: [updatedRow] };
       }
@@ -645,9 +699,8 @@ export const ProductManagementPage: React.FC = () => {
     }
     setFormErrors({});
 
-    const primaryImg = formData.images.find((img) => img.isPrimary)?.imagePath || formData.images[0]?.imagePath || '';
-
     const defaultVar = formData.variants.find((v) => v.isDefault) || formData.variants[0];
+    const primaryImg = defaultVar?.images?.find((img) => img.isPrimary)?.imagePath || defaultVar?.images?.[0]?.imagePath || '';
     const defaultBasePrice = defaultVar ? (defaultVar.originalPrice || defaultVar.price || 0) : 0;
     const defaultDiscountPrice = defaultVar ? (defaultVar.price || defaultVar.originalPrice || 0) : 0;
 
@@ -702,11 +755,6 @@ export const ProductManagementPage: React.FC = () => {
       bodyFormData.append('VariantsJson', JSON.stringify(formData.variants));
     }
 
-    if (formData.images.length > 0) {
-      bodyFormData.append('ImagesJson', JSON.stringify(
-        formData.images.map((img) => ({ id: img.id, imagePath: img.imagePath, isPrimary: img.isPrimary }))
-      ));
-    }
 
     try {
       const url = editingItem ? `/api/product/${editingItem.id}` : '/api/product';
@@ -1025,186 +1073,6 @@ export const ProductManagementPage: React.FC = () => {
               </div>
             </div>
 
-            {/* MULTIPLE IMAGES GALLERY SECTION */}
-            <div style={{ marginTop: '24px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px' }}>
-              <h3 style={{ margin: '0 0 4px', fontSize: '1.1rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <i className="fa-solid fa-images" style={{ color: '#D19A27' }}></i>
-                Product Images Gallery (Multiple Images)
-              </h3>
-              <p style={{ margin: '0 0 16px', fontSize: '0.85rem', color: '#64748b' }}>
-                Select and upload multiple photos for this product gallery (<strong>Max allowed size: 2 MB per photo</strong>). Select <strong>Primary</strong> for the cover image.
-              </p>
-
-              {imageError && (
-                <div
-                  style={{
-                    background: '#fef2f2',
-                    border: '1px solid #fca5a5',
-                    borderRadius: '8px',
-                    padding: '12px 16px',
-                    marginBottom: '16px',
-                    color: '#991b1b',
-                    fontSize: '0.88rem',
-                    fontWeight: 600,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 1px 3px rgba(239, 68, 68, 0.1)',
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0 }}>
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="12" y1="8" x2="12" y2="12" />
-                      <line x1="12" y1="16" x2="12.01" y2="16" />
-                    </svg>
-                    <span>{imageError}</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setImageError(null)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      color: '#991b1b',
-                      cursor: 'pointer',
-                      fontWeight: 800,
-                      fontSize: '1rem',
-                      marginLeft: '12px',
-                    }}
-                    title="Dismiss Error"
-                  >
-                    ✕
-                  </button>
-                </div>
-              )}
-
-              <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', alignItems: 'center' }}>
-                {/* File Upload Button */}
-                <label
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    background: '#2d6a4f',
-                    color: '#ffffff',
-                    padding: '10px 20px',
-                    borderRadius: '8px',
-                    fontWeight: 700,
-                    fontSize: '0.88rem',
-                    cursor: 'pointer',
-                    boxShadow: '0 2px 4px rgba(45, 106, 79, 0.2)',
-                  }}
-                >
-                  <i className="fa-solid fa-cloud-arrow-up"></i>
-                  Select & Upload Multiple Photos (Max 2 MB)
-                  <input
-                    type="file"
-                    multiple
-                    accept="image/*"
-                    onChange={handleFileUpload}
-                    style={{ display: 'none' }}
-                  />
-                </label>
-              </div>
-
-              {formData.images.length === 0 ? (
-                <div
-                  style={{
-                    padding: '24px',
-                    textAlign: 'center',
-                    background: '#f8fafc',
-                    border: '2px dashed #cbd5e1',
-                    borderRadius: '12px',
-                    color: '#64748b',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                  }}
-                >
-                  <img
-                    src="/uploads/Noimage.png"
-                    alt="No Photo Selected"
-                    style={{ width: '90px', height: '90px', objectFit: 'contain', opacity: 0.8, borderRadius: '8px' }}
-                  />
-                  <div style={{ fontWeight: 700, fontSize: '0.95rem', color: '#334155' }}>No Photo Selected</div>
-                  <div style={{ fontSize: '0.82rem', color: '#94a3b8' }}>
-                    Click <strong>Select & Upload Multiple Photos</strong> above to add images for this product.
-                  </div>
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '16px' }}>
-                  {formData.images.map((img, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        border: img.isPrimary ? '2px solid #2d6a4f' : '1px solid #cbd5e1',
-                        borderRadius: '10px',
-                        padding: '10px',
-                        background: img.isPrimary ? '#f0fdf4' : '#ffffff',
-                        position: 'relative',
-                        textAlign: 'center',
-                      }}
-                    >
-                      <img
-                        src={img.imagePath}
-                        alt={`Product Image ${index + 1}`}
-                        style={{ width: '100%', height: '100px', objectFit: 'contain', padding: '4px', borderRadius: '6px', marginBottom: '8px', background: '#F7F3E9' }}
-                      />
-
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
-                        <input
-                          type="radio"
-                          name="primaryImageRadio"
-                          id={`primaryImg_${index}`}
-                          checked={img.isPrimary}
-                          onChange={() => handleSetPrimaryImage(index)}
-                          style={{ cursor: 'pointer' }}
-                        />
-                        <label htmlFor={`primaryImg_${index}`} style={{ fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer', color: img.isPrimary ? '#2d6a4f' : '#475569', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                          {img.isPrimary ? (
-                            <>
-                              <i className="fa-solid fa-star" style={{ color: '#eab308' }}></i>
-                              <span>Primary</span>
-                            </>
-                          ) : (
-                            'Set Primary'
-                          )}
-                        </label>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(index)}
-                        style={{
-                          position: 'absolute',
-                          top: '4px',
-                          right: '4px',
-                          background: '#ef4444',
-                          color: '#ffffff',
-                          border: 'none',
-                          borderRadius: '50%',
-                          width: '22px',
-                          height: '22px',
-                          fontSize: '0.75rem',
-                          fontWeight: 800,
-                          cursor: 'pointer',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                        title="Remove Image"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
             {/* PRODUCT VARIANT MAPPING SECTION (SKU, MRP, SellPrice, Discount Savings per Variant) */}
             <div style={{ marginTop: '24px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
@@ -1341,6 +1209,7 @@ export const ProductManagementPage: React.FC = () => {
                       </div>
                     );
                   })()}
+                  {formData.variants[0] && renderVariantPhotosButton(formData.variants[0], 0)}
                 </div>
               ) : (
                 <div className="hiyaghar-table-responsive">
@@ -1351,8 +1220,13 @@ export const ProductManagementPage: React.FC = () => {
                         <th style={{ width: '14%' }}>SKU Code</th>
                         <th style={{ width: '12%' }}>MRP Price (₹)</th>
                         <th style={{ width: '14%' }}>SellPrice (₹)</th>
-                        <th style={{ width: '18%' }}>Discount Savings</th>
-                        <th style={{ textAlign: 'center', width: '4%' }}>Def</th>
+                        <th style={{ width: '15%' }}>Discount Savings</th>
+                        <th
+                          style={{ textAlign: 'center', width: '7%', padding: '14px 6px', fontSize: '0.8rem' }}
+                          title="The primary variant is shown on product listing cards (its photo and price) and is pre-selected on the product page."
+                        >
+                          Primary
+                        </th>
                         <th style={{ textAlign: 'center', width: '4%' }}>Del</th>
                       </tr>
                     </thead>
@@ -1484,6 +1358,7 @@ export const ProductManagementPage: React.FC = () => {
                                     </div>
                                   </div>
                                 )}
+                                {renderVariantPhotosButton(variant, index)}
                                 {formData.variants.length <= 1 && (
                                   <button
                                     type="button"
@@ -1536,11 +1411,12 @@ export const ProductManagementPage: React.FC = () => {
                                 </div>
                               </td>
 
-                              {/* Default Radio */}
+                              {/* Primary (default) variant radio - this variant is shown on listing cards */}
                               <td style={{ textAlign: 'center' }}>
                                 <input
                                   type="radio"
                                   name="defaultVariant"
+                                  title="Show this variant on product listing cards"
                                   checked={variant.isDefault}
                                   onChange={() => handleUpdateVariantField(index, 'isDefault', true)}
                                 />
@@ -1915,6 +1791,162 @@ export const ProductManagementPage: React.FC = () => {
                   })}
               </div>
             </div>
+
+            {/* VARIANT PHOTOS EDITOR (opened from the Photos column of the variants table) */}
+            {variantImageEditorIndex !== null && formData.variants[variantImageEditorIndex] && (() => {
+              const vIndex = variantImageEditorIndex;
+              const editingVariant = formData.variants[vIndex];
+              const imgs = editingVariant.images || [];
+              const copySources = formData.variants
+                .map((v, i) => ({ v, i }))
+                .filter(({ v, i }) => i !== vIndex && (v.images || []).length > 0);
+              return (
+                <div className="hiyaghar-modal-overlay" onClick={() => setVariantImageEditorIndex(null)}>
+                  <div className="hiyaghar-modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '720px', width: '100%' }}>
+                    <div className="hiyaghar-modal-header">
+                      <h3>Photos — {variantDisplayLabel(editingVariant, vIndex)}</h3>
+                      <button type="button" className="close-btn" onClick={() => setVariantImageEditorIndex(null)}>
+                        ✕
+                      </button>
+                    </div>
+
+                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0 0 16px 0' }}>
+                      Up to <strong>{MAX_VARIANT_IMAGES} photos</strong> for this variant (max 2 MB each). The <strong>Primary</strong> photo is shown
+                      on listing cards and in the cart; the second photo appears on hover.
+                    </p>
+
+                    {imageError && (
+                      <div style={{ background: '#fef2f2', border: '1px solid #fca5a5', borderRadius: '8px', padding: '10px 14px', marginBottom: '12px', color: '#991b1b', fontSize: '0.85rem', fontWeight: 600 }}>
+                        {imageError}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', gap: '12px', marginBottom: '16px', alignItems: 'center', flexWrap: 'wrap' }}>
+                      <label
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          background: imgs.length >= MAX_VARIANT_IMAGES ? '#94a3b8' : '#2d6a4f',
+                          color: '#ffffff',
+                          padding: '9px 16px',
+                          borderRadius: '8px',
+                          fontWeight: 700,
+                          fontSize: '0.85rem',
+                          cursor: imgs.length >= MAX_VARIANT_IMAGES ? 'not-allowed' : 'pointer',
+                        }}
+                      >
+                        <i className="fa-solid fa-cloud-arrow-up"></i>
+                        Upload Photos ({imgs.length}/{MAX_VARIANT_IMAGES})
+                        <input
+                          type="file"
+                          multiple
+                          accept="image/*"
+                          disabled={imgs.length >= MAX_VARIANT_IMAGES}
+                          onChange={(e) => handleVariantImageUpload(vIndex, e)}
+                          style={{ display: 'none' }}
+                        />
+                      </label>
+
+                      {copySources.length > 0 && (
+                        <select
+                          value=""
+                          onChange={(e) => {
+                            if (e.target.value !== '') handleCopyVariantImages(vIndex, Number(e.target.value));
+                          }}
+                          style={{ padding: '8px 10px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.85rem' }}
+                        >
+                          <option value="">Copy photos from another variant…</option>
+                          {copySources.map(({ v, i }) => (
+                            <option key={i} value={i}>
+                              {variantDisplayLabel(v, i)} ({(v.images || []).length} photos)
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                    </div>
+
+                    {imgs.length === 0 ? (
+                      <div style={{ padding: '24px', textAlign: 'center', background: '#f8fafc', border: '2px dashed #cbd5e1', borderRadius: '12px', color: '#64748b', fontSize: '0.85rem' }}>
+                        No photos for this variant yet. Upload photos or copy them from another variant.
+                      </div>
+                    ) : (
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: '14px' }}>
+                        {imgs.map((img, imgIndex) => (
+                          <div
+                            key={imgIndex}
+                            style={{
+                              border: img.isPrimary ? '2px solid #2d6a4f' : '1px solid #cbd5e1',
+                              borderRadius: '10px',
+                              padding: '10px',
+                              background: img.isPrimary ? '#f0fdf4' : '#ffffff',
+                              position: 'relative',
+                              textAlign: 'center',
+                            }}
+                          >
+                            <img
+                              src={img.imagePath}
+                              alt={`Variant photo ${imgIndex + 1}`}
+                              style={{ width: '100%', height: '90px', objectFit: 'contain', padding: '4px', borderRadius: '6px', marginBottom: '8px', background: '#F7F3E9' }}
+                            />
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+                              <input
+                                type="radio"
+                                name={`variantPrimary_${vIndex}`}
+                                id={`variantPrimary_${vIndex}_${imgIndex}`}
+                                checked={img.isPrimary}
+                                onChange={() => handleSetVariantPrimaryImage(vIndex, imgIndex)}
+                                style={{ cursor: 'pointer' }}
+                              />
+                              <label htmlFor={`variantPrimary_${vIndex}_${imgIndex}`} style={{ fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer', color: img.isPrimary ? '#2d6a4f' : '#475569', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                                {img.isPrimary ? (
+                                  <>
+                                    <i className="fa-solid fa-star" style={{ color: '#eab308' }}></i>
+                                    <span>Primary</span>
+                                  </>
+                                ) : (
+                                  'Set Primary'
+                                )}
+                              </label>
+                            </div>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveVariantImage(vIndex, imgIndex)}
+                              style={{
+                                position: 'absolute',
+                                top: '4px',
+                                right: '4px',
+                                background: '#ef4444',
+                                color: '#ffffff',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '22px',
+                                height: '22px',
+                                fontSize: '0.75rem',
+                                fontWeight: 800,
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              }}
+                              title="Remove Photo"
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="hiyaghar-modal-footer" style={{ marginTop: '20px' }}>
+                      <button type="button" className="hiyaghar-btn-submit" onClick={() => setVariantImageEditorIndex(null)}>
+                        Done
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* Footer buttons */}
             <div className="hiyaghar-modal-footer" style={{ marginTop: '24px' }}>

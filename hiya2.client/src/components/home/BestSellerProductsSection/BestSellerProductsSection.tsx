@@ -6,7 +6,7 @@ import { ProductService, type Product as ApiProduct, type ProductVariant, type P
 import { HomePageService } from '../../../services/homePageService';
 import { CartService } from '../../../cart';
 import { navigateTo } from '../../../utils/navigation';
-import { formatVariantLabel } from '../../../utils/productFormat';
+import { formatVariantLabel, getDefaultVariant, getVariantImages } from '../../../utils/productFormat';
 import { showToast } from '../../../utils/alertService';
 import './BestSellerProductsSection.css';
 
@@ -27,6 +27,7 @@ function mapApiToMukhwas(p: ApiProduct): MukhwasProduct {
     rating: p.rating || 4.9,
     reviewsCount: p.reviewCount || 120,
     image: p.mainImagePath || p.images?.find((img: ProductImage) => img.isPrimary)?.imagePath || '/image/ImageforMukhwash/Shahi Pan.webp',
+    secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     shortDescription: p.shortDescription || 'Handcrafted pure organic product.',
     longDescription: p.fullDescription || '100% natural organic product.',
     weightOptions: weightOpts.length > 0 ? weightOpts : ['100g', '250g'],

@@ -22,6 +22,8 @@ namespace Hiya2.Server.Models
 
         public string? VariantName { get; set; }
 
+        public string? ImagePath { get; set; }
+
         public decimal UnitPrice { get; set; }
 
         public int Quantity { get; set; }

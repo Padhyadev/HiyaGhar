@@ -45,5 +45,16 @@ namespace Hiya2.Server.Models
         [JsonIgnore]
         [ForeignKey("ProductId")]
         public virtual Product? Product { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<ProductImage> Images { get; set; } = new List<ProductImage>();
+
+        // Primary image of this variant's own gallery, or null if it has none (callers then
+        // fall back to Product.MainImagePath). Requires Images to be loaded.
+        public string? GetPrimaryImagePath() => Images
+            .Where(i => !i.IsDeleted)
+            .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
+            .Select(i => i.ImagePath)
+            .FirstOrDefault();
     }
 }

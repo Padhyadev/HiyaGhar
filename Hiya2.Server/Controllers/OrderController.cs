@@ -107,6 +107,7 @@ namespace Hiya2.Server.Controllers
                 i.VariantId,
                 i.ProductName,
                 i.VariantName,
+                i.ImagePath,
                 i.UnitPrice,
                 i.Quantity,
                 i.TotalPrice

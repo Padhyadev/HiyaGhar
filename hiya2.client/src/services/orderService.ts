@@ -161,7 +161,7 @@ async function mapApiOrderToLocal(api: any, labels: Record<string, string>): Pro
       id: `${item.productId}-${item.variantName || item.id}`,
       productId: String(item.productId),
       name: item.productName,
-      image: await resolveProductImage(item.productId),
+      image: item.imagePath || await resolveProductImage(item.productId),
       price: item.unitPrice,
       weight: item.variantName || '',
       quantity: item.quantity,

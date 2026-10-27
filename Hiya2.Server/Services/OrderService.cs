@@ -238,6 +238,7 @@ namespace Hiya2.Server.Services
                         VariantId = line.Variant?.Id,
                         ProductName = line.Product.ProductName,
                         VariantName = line.Variant?.VariantName,
+                        ImagePath = line.Variant?.GetPrimaryImagePath() ?? line.Product.MainImagePath,
                         UnitPrice = line.UnitPrice,
                         Quantity = line.Item.Quantity,
                         TotalPrice = line.LineTotal

@@ -23,6 +23,8 @@ namespace Hiya2.Server.Controllers
         public decimal OriginalPrice { get; set; }
         public decimal Price { get; set; }
         public bool IsDefault { get; set; }
+        // null = leave this variant's images untouched; empty list = remove them all.
+        public List<IncomingImageDto>? Images { get; set; }
     }
 
     public class IncomingImageDto
@@ -113,8 +115,8 @@ namespace Hiya2.Server.Controllers
                     reviewCount = p.ReviewCount,
                     isBestseller = p.IsFeatured,
                     isActive = p.IsActive,
-                    variants = p.Variants.Where(v => !v.IsDeleted).Select(v => BuildVariantResponse(v)),
-                    images = p.Images.Where(i => !i.IsDeleted)
+                    variants = p.Variants.Where(v => !v.IsDeleted).Select(v => BuildVariantResponse(v, p.Images)),
+                    images = p.Images.Where(i => !i.IsDeleted && i.VariantId == null)
                         .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
                         .Select(i => new
                         {
@@ -166,10 +168,14 @@ namespace Hiya2.Server.Controllers
             return result;
         }
 
-        private static object BuildVariantResponse(ProductVariant v)
+        private static object BuildVariantResponse(ProductVariant v, IEnumerable<ProductImage> productImages)
         {
             var attrs = ParseVariantAttributes(v);
             var first = attrs.Count > 0 ? attrs[0] : new AttributeNameValueDto { AttributeName = "Weight", AttributeValue = v.VariantName };
+            var images = productImages
+                .Where(i => !i.IsDeleted && i.VariantId == v.Id)
+                .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
+                .ToList();
             return new
             {
                 id = v.Id,
@@ -183,7 +189,15 @@ namespace Hiya2.Server.Controllers
                 stockQuantity = v.AvailableStock,
                 reservedStock = v.ReservedStock,
                 sellableStock = v.AvailableStock - v.ReservedStock,
-                isDefault = v.IsDefault
+                isDefault = v.IsDefault,
+                primaryImage = images.FirstOrDefault()?.ImagePath,
+                images = images.Select(i => new
+                {
+                    id = i.Id,
+                    imagePath = i.ImagePath,
+                    isPrimary = i.IsPrimary,
+                    displayOrder = i.DisplayOrder
+                })
             };
         }
 
@@ -210,8 +224,8 @@ namespace Hiya2.Server.Controllers
                 reviewCount = p.ReviewCount,
                 isBestseller = p.IsFeatured,
                 isActive = p.IsActive,
-                variants = p.Variants.Where(v => !v.IsDeleted).Select(v => BuildVariantResponse(v)),
-                images = p.Images.Where(i => !i.IsDeleted)
+                variants = p.Variants.Where(v => !v.IsDeleted).Select(v => BuildVariantResponse(v, p.Images)),
+                images = p.Images.Where(i => !i.IsDeleted && i.VariantId == null)
                     .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
                     .Select(i => new
                     {
@@ -224,6 +238,7 @@ namespace Hiya2.Server.Controllers
         }
 
         private const long MaxFileSizeBytes = 2 * 1024 * 1024; // 2 MB
+        private const int MaxImagesPerVariant = 6;
 
         [Authorize]
         [HttpPost]
@@ -306,6 +321,8 @@ namespace Hiya2.Server.Controllers
                 // Save the full gallery (with primary flag) if provided — replaces the
                 // single-mainImage-only handling above with the authoritative image list.
                 await SaveImagesFromJsonAsync(created.Id, imagesJson);
+
+                await SyncMainImagePathAsync(created.Id);
 
                 await transaction.CommitAsync();
 
@@ -399,6 +416,8 @@ namespace Hiya2.Server.Controllers
                 // Update the full gallery (with primary flag) if provided.
                 await SaveImagesFromJsonAsync(id, imagesJson);
 
+                await SyncMainImagePathAsync(id);
+
                 await transaction.CommitAsync();
 
                 return Ok(new { message = "Product updated successfully." });
@@ -442,9 +461,15 @@ namespace Hiya2.Server.Controllers
             // Rows sent without an Id (older clients) fall back to matching by SKU.
             var unmatched = existingVars.ToList();
             var now = DateTime.Now;
+            var imageUpdates = new List<(ProductVariant Variant, List<IncomingImageDto> Images)>();
 
             foreach (var v in items)
             {
+                if (v.Images != null && v.Images.Count(i => !string.IsNullOrEmpty(i.ImagePath)) > MaxImagesPerVariant)
+                {
+                    throw new InvalidOperationException($"A variant can have at most {MaxImagesPerVariant} images.");
+                }
+
                 var attrs = (v.Attributes ?? new List<AttributeNameValueDto>())
                     .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName) && !string.IsNullOrWhiteSpace(a.AttributeValue))
                     .ToList();
@@ -480,10 +505,11 @@ namespace Hiya2.Server.Controllers
                     match.IsDefault = v.IsDefault;
                     match.IsActive = true;
                     match.LastModifiedDate = now;
+                    if (v.Images != null) imageUpdates.Add((match, v.Images));
                     continue;
                 }
 
-                await _context.ProductVariants.AddAsync(new ProductVariant
+                var created = new ProductVariant
                 {
                     ProductId = productId,
                     VariantName = comboName,
@@ -494,7 +520,9 @@ namespace Hiya2.Server.Controllers
                     IsActive = true,
                     IsDeleted = false,
                     CreatedDate = now
-                });
+                };
+                await _context.ProductVariants.AddAsync(created);
+                if (v.Images != null) imageUpdates.Add((created, v.Images));
             }
 
             // Whatever wasn't matched was removed by the admin. Soft-delete it and clear
@@ -539,9 +567,99 @@ namespace Hiya2.Server.Controllers
                     r.ReleasedAt = now;
                     r.LastModifiedDate = now;
                 }
+
+                var orphanImages = await _context.ProductImages
+                    .Where(i => i.VariantId.HasValue && removedIds.Contains(i.VariantId.Value) && !i.IsDeleted)
+                    .ToListAsync();
+                foreach (var i in orphanImages)
+                {
+                    i.IsDeleted = true;
+                }
             }
 
+            // Save first so newly added variants get their Id before their images point at it.
             await _context.SaveChangesAsync();
+
+            foreach (var (variant, images) in imageUpdates)
+            {
+                await SaveVariantImagesAsync(productId, variant.Id, images);
+            }
+            await _context.SaveChangesAsync();
+        }
+
+        // Full-replace of one variant's own gallery, same pattern as SaveImagesFromJsonAsync:
+        // soft-delete its existing rows, reinsert from the list (array order = DisplayOrder),
+        // and make exactly one primary - the one the admin flagged, or the first.
+        private async Task SaveVariantImagesAsync(int productId, int variantId, List<IncomingImageDto> images)
+        {
+            var existing = await _context.ProductImages
+                .Where(i => i.VariantId == variantId && !i.IsDeleted)
+                .ToListAsync();
+            foreach (var ei in existing)
+            {
+                ei.IsDeleted = true;
+            }
+
+            var primaryIndex = images.FindIndex(i => i.IsPrimary);
+            if (primaryIndex < 0) primaryIndex = 0;
+
+            for (int i = 0; i < images.Count; i++)
+            {
+                var path = images[i].ImagePath;
+                if (!string.IsNullOrEmpty(path) && path.StartsWith("data:image/"))
+                {
+                    path = await SaveBase64ImageAsync(path);
+                }
+                if (string.IsNullOrEmpty(path)) continue;
+
+                await _context.ProductImages.AddAsync(new ProductImage
+                {
+                    ProductId = productId,
+                    VariantId = variantId,
+                    ImagePath = path,
+                    DisplayOrder = i,
+                    IsPrimary = i == primaryIndex,
+                    IsActive = true,
+                    IsDeleted = false,
+                    CreatedDate = DateTime.Now
+                });
+            }
+        }
+
+        // Product.MainImagePath is what listing cards, cart/wishlist fallbacks, gift hampers and
+        // SEO read, so keep it pointing at the image a shopper sees first: the default variant's
+        // primary image, else the primary common image. Left unchanged if neither exists.
+        private async Task SyncMainImagePathAsync(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null) return;
+
+            var defaultVariantId = await _context.ProductVariants
+                .Where(v => v.ProductId == productId && !v.IsDeleted)
+                .OrderByDescending(v => v.IsDefault).ThenBy(v => v.Id)
+                .Select(v => (int?)v.Id)
+                .FirstOrDefaultAsync();
+
+            var images = await _context.ProductImages
+                .Where(i => i.ProductId == productId && !i.IsDeleted)
+                .ToListAsync();
+
+            var path = images
+                .Where(i => defaultVariantId.HasValue && i.VariantId == defaultVariantId)
+                .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
+                .Select(i => i.ImagePath)
+                .FirstOrDefault()
+                ?? images
+                .Where(i => i.VariantId == null)
+                .OrderByDescending(i => i.IsPrimary).ThenBy(i => i.DisplayOrder)
+                .Select(i => i.ImagePath)
+                .FirstOrDefault();
+
+            if (!string.IsNullOrEmpty(path) && product.MainImagePath != path)
+            {
+                product.MainImagePath = path;
+                await _context.SaveChangesAsync();
+            }
         }
 
         // Full-replace of a product's gallery images, mirroring SaveVariantsFromJsonAsync's
@@ -553,8 +671,9 @@ namespace Hiya2.Server.Controllers
         {
             if (string.IsNullOrWhiteSpace(imagesJson)) return;
 
+            // Common images only - variant galleries are saved with their variant.
             var existingImages = await _context.ProductImages
-                .Where(i => i.ProductId == productId && !i.IsDeleted)
+                .Where(i => i.ProductId == productId && i.VariantId == null && !i.IsDeleted)
                 .ToListAsync();
             foreach (var ei in existingImages)
             {
@@ -670,7 +789,7 @@ namespace Hiya2.Server.Controllers
             }
 
             var existingImages = await _context.ProductImages
-                .Where(i => i.ProductId == id && !i.IsDeleted)
+                .Where(i => i.ProductId == id && i.VariantId == null && !i.IsDeleted)
                 .ToListAsync();
 
             if (isPrimary)

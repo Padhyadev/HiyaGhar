@@ -12,6 +12,10 @@ namespace Hiya2.Server.Models
 
         public int ProductId { get; set; }
 
+        // NULL = common product image (shown when a variant has no images of its own).
+        // Set = this image belongs to that variant's own gallery.
+        public int? VariantId { get; set; }
+
         public string ImagePath { get; set; } = string.Empty;
 
         public int DisplayOrder { get; set; } = 0;
@@ -27,5 +31,9 @@ namespace Hiya2.Server.Models
         [JsonIgnore]
         [ForeignKey("ProductId")]
         public virtual Product? Product { get; set; }
+
+        [JsonIgnore]
+        [ForeignKey("VariantId")]
+        public virtual ProductVariant? Variant { get; set; }
     }
 }

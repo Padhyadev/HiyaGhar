@@ -19,6 +19,7 @@ namespace Hiya2.Server.Repositories.Wishlist
                 .Where(w => w.CustomerId == customerId && !w.IsDeleted && w.IsActive)
                 .Include(w => w.Product)
                 .Include(w => w.Variant)
+                    .ThenInclude(v => v!.Images.Where(i => !i.IsDeleted))
                 .OrderByDescending(w => w.Id)
                 .ToListAsync();
 

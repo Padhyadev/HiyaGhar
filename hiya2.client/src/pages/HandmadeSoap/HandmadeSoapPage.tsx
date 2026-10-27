@@ -12,7 +12,7 @@ import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/
 import { CartService } from '../../cart';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel } from '../../utils/productFormat';
+import { formatVariantLabel, getDefaultVariant, getVariantImages } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
 import './HandmadeSoapPage.css';
 
@@ -89,6 +89,7 @@ function mapApiToSoap(p: ApiProduct): SoapProduct {
     rating: p.rating || 4.8,
     reviewsCount: p.reviewCount || 100,
     image: p.mainImagePath || '/image/Soap/neem.webp',
+    secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     badge: p.isFeatured ? 'Best Seller' : undefined,
     isBestSeller: p.isFeatured,
     weightOptions: weightOpts.length > 0 ? weightOpts : ['100g'],

@@ -66,7 +66,7 @@ namespace Hiya2.Server.Controllers
                         v.IsInStock,
                         v.IsDefault
                     }),
-                    images = p.Product.Images.Select(i => new { i.Id, i.ImagePath, i.DisplayOrder, i.IsPrimary })
+                    images = p.Product.Images.Where(i => i.VariantId == null).Select(i => new { i.Id, i.ImagePath, i.DisplayOrder, i.IsPrimary })
                 })
         };
 

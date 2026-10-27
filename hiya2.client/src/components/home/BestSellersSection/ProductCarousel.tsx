@@ -4,7 +4,7 @@ import type { CategoryItem } from './CategoryCard';
 import { CategoryService, type ApiCategory } from '../../../services/categoryService';
 import { ProductService, type Product as ApiProduct } from '../../../services/productService';
 import { HomePageService } from '../../../services/homePageService';
-import { formatVariantLabel } from '../../../utils/productFormat';
+import { formatVariantLabel, getVariantImages } from '../../../utils/productFormat';
 
 const standardIngredients: { src: string; alt: string; className: string }[] = [];
 
@@ -94,7 +94,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
                 isProduct: true,
                 title: prod.productName,
                 tagline: priceTag,
-                image: prod.images?.find((i) => i.isPrimary)?.imagePath || prod.mainImagePath || '/image/jamunbottole_clean.webp',
+                image: getVariantImages(prod, matchedVar)[0] || '/image/jamunbottole_clean.webp',
                 bgColor: idx % 2 === 0 ? '#F7F3E9' : '#F0F7F3',
                 accentColor: idx % 2 === 0 ? '#CB992C' : '#2D6A4F',
                 floatingIngredients: standardIngredients,
@@ -129,7 +129,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
             isProduct: true,
             title: prod.productName,
             tagline: priceTag,
-            image: prod.images?.find((i) => i.isPrimary)?.imagePath || prod.mainImagePath || '/image/jamunbottole_clean.webp',
+            image: getVariantImages(prod, matchedVar)[0] || '/image/jamunbottole_clean.webp',
             bgColor: idx % 2 === 0 ? '#F7F3E9' : '#F0F7F3',
             accentColor: idx % 2 === 0 ? '#CB992C' : '#2D6A4F',
             floatingIngredients: standardIngredients,

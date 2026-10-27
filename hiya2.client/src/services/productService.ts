@@ -17,6 +17,9 @@ export interface ProductVariant {
   isInStock: boolean;
   isDefault: boolean;
   isActive: boolean;
+  // The variant's own gallery (primary first). Empty when it only uses the common images.
+  primaryImage?: string | null;
+  images?: ProductImage[];
 }
 
 export interface ProductImage {

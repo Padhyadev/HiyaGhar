@@ -51,7 +51,7 @@ namespace Hiya2.Server.Controllers
                     id = l.Item.Id,
                     productId = l.Product.Id,
                     productName = l.Product.ProductName,
-                    imagePath = l.Product.MainImagePath,
+                    imagePath = l.Variant?.GetPrimaryImagePath() ?? l.Product.MainImagePath,
                     variantId = l.Variant?.Id,
                     variantName = l.Variant?.VariantName,
                     packingType = l.Item.PackingType,
