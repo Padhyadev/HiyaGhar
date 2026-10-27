@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MukhwasProductCard } from '../../mukhwas/MukhwasProductCard/MukhwasProductCard';
-import type { MukhwasProduct } from '../../../data/mukhwasData';
+import type { MukhwasProduct } from '../../../types/mukhwas';
 import { ScrollReveal } from '../../common/ScrollReveal/ScrollReveal';
 import { ProductService, type Product as ApiProduct, type ProductVariant, type ProductImage } from '../../../services/productService';
 import { HomePageService } from '../../../services/homePageService';

@@ -10,8 +10,7 @@ import { ExploreCategoriesSection } from '../../components/common/ExploreCategor
 import { PremiumSidebar } from '../../components/common/PremiumSidebar/PremiumSidebar';
 import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/CategoriesMobileTrigger';
 import { CartService } from '../../cart';
-import { mukhwasProducts as fallbackProducts } from '../../data/mukhwasData';
-import type { MukhwasProduct } from '../../data/mukhwasData';
+import type { MukhwasProduct } from '../../types/mukhwas';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { navigateTo } from '../../utils/navigation';
 import { formatVariantLabel } from '../../utils/productFormat';
@@ -61,9 +60,7 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
   onNavigateToDetail,
 }) => {
   const [selectedSort, setSelectedSort] = useState<string>('featured');
-  const [productsList, setProductsList] = useState<MukhwasProduct[]>(() => {
-    return cachedMukhwasList.length > 0 ? cachedMukhwasList : fallbackProducts;
-  });
+  const [productsList, setProductsList] = useState<MukhwasProduct[]>(cachedMukhwasList);
   const [isLoadingProducts, setIsLoadingProducts] = useState<boolean>(cachedMukhwasList.length === 0);
 
   const productGridRef = useRef<HTMLDivElement>(null);
@@ -73,7 +70,7 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
     let isMounted = true;
     ProductService.getProducts(1).then((apiProducts: ApiProduct[]) => {
       if (!isMounted) return;
-      const mapped = apiProducts && apiProducts.length > 0 ? apiProducts.map(mapApiToMukhwas) : fallbackProducts;
+      const mapped = (apiProducts || []).map(mapApiToMukhwas);
       cachedMukhwasList = mapped;
       setProductsList(mapped);
       setIsLoadingProducts(false);
@@ -173,7 +170,7 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
                 ) : filteredProducts.length === 0 ? (
                   <div className="hiyaghar-no-products-found">
                     <h3>No products found</h3>
-                    <p>Try resetting your sorting options.</p>
+                    <p>We couldn't load products right now. Please refresh the page or try again shortly.</p>
                   </div>
                 ) : (
                   <div className="hiyaghar-mukhwas-products-grid">

@@ -3,7 +3,7 @@ import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
-import type { MukhwasProduct } from '../../data/mukhwasData';
+import type { MukhwasProduct } from '../../types/mukhwas';
 import { CartService } from '../../cart';
 import { navigateTo } from '../../utils/navigation';
 import { GiftHamperService, type GiftHamperOccasion, type GiftHamperProduct as ApiGiftHamperProduct } from '../../services/giftHamperService';

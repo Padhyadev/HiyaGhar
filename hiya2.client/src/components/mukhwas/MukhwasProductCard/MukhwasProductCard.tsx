@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import type { MukhwasProduct } from '../../../data/mukhwasData';
+import type { MukhwasProduct } from '../../../types/mukhwas';
 import { CartService, triggerFlyingProductAnimation } from '../../../cart';
 import { WishlistService } from '../../../services/wishlistService';
 import { AnimatedNumber } from '../../common/AnimatedNumber';

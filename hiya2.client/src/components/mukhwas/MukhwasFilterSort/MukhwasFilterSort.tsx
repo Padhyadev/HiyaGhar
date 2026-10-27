@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { sortOptions } from '../../../data/mukhwasData';
 import './MukhwasFilterSort.css';
+
+const sortOptions = [
+  { id: 'featured', label: 'Featured' },
+  { id: 'price-asc', label: 'Price: Low to High' },
+  { id: 'price-desc', label: 'Price: High to Low' },
+  { id: 'newest', label: 'Newest' },
+  { id: 'bestselling', label: 'Best Selling' },
+];
 
 interface MukhwasFilterSortProps {
   selectedCategory?: string;

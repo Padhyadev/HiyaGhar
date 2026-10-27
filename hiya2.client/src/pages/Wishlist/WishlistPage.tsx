@@ -4,8 +4,7 @@ import { Footer } from '../../components/layout/Footer/Footer';
 import { WishlistService } from '../../services/wishlistService';
 import type { WishlistItem } from '../../services/wishlistService';
 import { CartService } from '../../cart';
-import { mukhwasProducts } from '../../data/mukhwasData';
-import type { MukhwasProduct } from '../../data/mukhwasData';
+import type { MukhwasProduct } from '../../types/mukhwas';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
@@ -68,33 +67,32 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
             <div className="hiyaghar-wishlist-grid">
               {wishlistItems.map((item, index) => {
                 const liveApiMatch = apiProducts.find((p) => p.id.toString() === item.productId.toString());
-                const staticMatch = mukhwasProducts.find((p: MukhwasProduct) => p.id === item.productId);
 
                 const weightOpts = liveApiMatch?.variants
                   ? liveApiMatch.variants.map((v) => formatVariantLabel(v.variantName))
-                  : (staticMatch?.weightOptions || [item.weight || '100g']);
+                  : [item.weight || '100g'];
 
                 const productObj: MukhwasProduct = {
                   id: item.productId,
-                  name: liveApiMatch?.productName || item.name || staticMatch?.name || 'Product',
-                  category: (staticMatch?.category as any) || 'special',
-                  categoryLabel: liveApiMatch?.category?.categoryName || staticMatch?.categoryLabel || 'Speciality Product',
-                  shortDescription: liveApiMatch?.shortDescription || staticMatch?.shortDescription || '',
-                  longDescription: liveApiMatch?.fullDescription || staticMatch?.longDescription || '',
+                  name: liveApiMatch?.productName || item.name || 'Product',
+                  category: 'special',
+                  categoryLabel: liveApiMatch?.category?.categoryName || 'Speciality Product',
+                  shortDescription: liveApiMatch?.shortDescription || '',
+                  longDescription: liveApiMatch?.fullDescription || '',
                   price: item.price,
-                  originalPrice: item.originalPrice || liveApiMatch?.discountPrice || staticMatch?.originalPrice || item.price,
+                  originalPrice: item.originalPrice || liveApiMatch?.discountPrice || item.price,
                   discountPercentage: 0,
                   weightOptions: weightOpts.length > 0 ? weightOpts : [item.weight || '100g'],
-                  variants: liveApiMatch?.variants || staticMatch?.variants || [],
+                  variants: liveApiMatch?.variants || [],
                   selectedWeight: item.weight || undefined,
-                  image: item.image || liveApiMatch?.mainImagePath || staticMatch?.image || '/uploads/Noimage.png',
-                  rating: liveApiMatch?.rating || staticMatch?.rating || 4.9,
-                  reviewsCount: liveApiMatch?.reviewCount || staticMatch?.reviewsCount || 50,
-                  isBestSeller: liveApiMatch?.isFeatured || staticMatch?.isBestSeller || false,
+                  image: item.image || liveApiMatch?.mainImagePath || '/uploads/Noimage.png',
+                  rating: liveApiMatch?.rating || 4.9,
+                  reviewsCount: liveApiMatch?.reviewCount || 50,
+                  isBestSeller: liveApiMatch?.isFeatured || false,
                   badge: undefined,
-                  benefits: staticMatch?.benefits || [],
-                  ingredients: staticMatch?.ingredients || [],
-                  nutritionalInfo: staticMatch?.nutritionalInfo || {
+                  benefits: [],
+                  ingredients: [],
+                  nutritionalInfo: {
                     energy: '',
                     carbs: '',
                     protein: '',

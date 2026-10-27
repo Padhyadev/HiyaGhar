@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
-import { mukhwasProducts } from '../../data/mukhwasData';
 import { fallbackTeaMasalaProductsData } from '../TeaMasala/TeaMasalaPage';
 import { fallbackHandmadeSoapProducts } from '../HandmadeSoap/HandmadeSoapPage';
 import { fallbackHairOilProductsData } from '../HairOil/HairOilPage';
@@ -32,7 +31,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   onNavigateMukhwas,
 }) => {
   const allStaticProducts: any[] = [
-    ...mukhwasProducts,
     ...fallbackTeaMasalaProductsData,
     ...fallbackHandmadeSoapProducts,
     ...fallbackHairOilProductsData,
