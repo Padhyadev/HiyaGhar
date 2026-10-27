@@ -294,6 +294,10 @@ namespace Hiya2.Server.Controllers
 
                 product.CreatedBy = GetCurrentUserId();
 
+                // Product, variants and gallery are saved all-or-nothing: if any part fails the
+                // whole save rolls back and the admin sees the real error instead of a false success.
+                await using var transaction = await _context.Database.BeginTransactionAsync();
+
                 var created = await _productRepository.AddAsync(product);
 
                 // Save variants if provided
@@ -302,6 +306,8 @@ namespace Hiya2.Server.Controllers
                 // Save the full gallery (with primary flag) if provided — replaces the
                 // single-mainImage-only handling above with the authoritative image list.
                 await SaveImagesFromJsonAsync(created.Id, imagesJson);
+
+                await transaction.CommitAsync();
 
                 return Ok(new
                 {
@@ -378,6 +384,9 @@ namespace Hiya2.Server.Controllers
 
                 product.LastModifiedBy = GetCurrentUserId();
 
+                // All-or-nothing, same as Create.
+                await using var transaction = await _context.Database.BeginTransactionAsync();
+
                 var success = await _productRepository.UpdateAsync(product);
                 if (!success)
                 {
@@ -389,6 +398,8 @@ namespace Hiya2.Server.Controllers
 
                 // Update the full gallery (with primary flag) if provided.
                 await SaveImagesFromJsonAsync(id, imagesJson);
+
+                await transaction.CommitAsync();
 
                 return Ok(new { message = "Product updated successfully." });
             }
@@ -403,78 +414,134 @@ namespace Hiya2.Server.Controllers
         {
             if (string.IsNullOrWhiteSpace(variantsJson)) return;
 
-            try
+            var existingVars = await _context.ProductVariants
+                .Where(v => v.ProductId == productId && !v.IsDeleted)
+                .ToListAsync();
+
+            var items = System.Text.Json.JsonSerializer.Deserialize<List<IncomingVariantDto>>(
+                variantsJson,
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            ) ?? new List<IncomingVariantDto>();
+
+            // Exactly one variant ends up default: the first one the admin flagged, or the
+            // first row if none was flagged. Listing cards and bundles rely on a single default.
+            if (items.Count > 0)
             {
-                var existingVars = await _context.ProductVariants
-                    .Where(v => v.ProductId == productId && !v.IsDeleted)
-                    .ToListAsync();
+                var defaultIndex = items.FindIndex(i => i.IsDefault);
+                if (defaultIndex < 0) defaultIndex = 0;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    items[i].IsDefault = i == defaultIndex;
+                }
+            }
 
-                // Stock is managed exclusively through the Stock Management admin page now -
-                // this form no longer accepts a stock value. Since every save recreates variant
-                // rows from scratch, carry over each existing variant's stock (matched by SKU)
-                // so editing a product's price/name/images doesn't silently zero out its stock.
-                var stockBySku = existingVars
-                    .Where(ev => !string.IsNullOrWhiteSpace(ev.SKU))
-                    .GroupBy(ev => ev.SKU.Trim().ToUpperInvariant())
-                    .ToDictionary(g => g.Key, g => g.First());
+            // Variants are updated in place (matched by Id) so their Id stays stable. Cart
+            // items, wishlist entries, stock reservations and stock history all point at
+            // VariantId, so recreating rows on every save would orphan them. Stock is never
+            // touched here - it's managed exclusively from the Stock Management page.
+            // Rows sent without an Id (older clients) fall back to matching by SKU.
+            var unmatched = existingVars.ToList();
+            var now = DateTime.Now;
 
-                foreach (var ev in existingVars)
+            foreach (var v in items)
+            {
+                var attrs = (v.Attributes ?? new List<AttributeNameValueDto>())
+                    .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName) && !string.IsNullOrWhiteSpace(a.AttributeValue))
+                    .ToList();
+
+                string comboName;
+                if (attrs.Count == 0 || attrs.Any(a => a.AttributeName == "No Variant" || a.AttributeName == "NONE"))
+                {
+                    comboName = "No Variant";
+                }
+                else
+                {
+                    comboName = string.Join(", ", attrs.Select(a => $"{a.AttributeName}: {a.AttributeValue}"));
+                }
+
+                var sku = !string.IsNullOrWhiteSpace(v.Sku) ? v.Sku.Trim() : $"SKU-{Guid.NewGuid().ToString().Substring(0, 5)}";
+                var price = v.Price > 0 ? v.Price : 149;
+                var originalPrice = v.OriginalPrice > 0 ? v.OriginalPrice : (v.Price > 0 ? v.Price : 199);
+
+                var match = v.Id > 0 ? unmatched.FirstOrDefault(ev => ev.Id == v.Id) : null;
+                if (match == null && v.Id <= 0 && !string.IsNullOrWhiteSpace(v.Sku))
+                {
+                    match = unmatched.FirstOrDefault(ev =>
+                        string.Equals(ev.SKU?.Trim(), sku, StringComparison.OrdinalIgnoreCase));
+                }
+
+                if (match != null)
+                {
+                    unmatched.Remove(match);
+                    match.VariantName = comboName;
+                    match.SKU = sku;
+                    match.Price = price;
+                    match.OriginalPrice = originalPrice;
+                    match.IsDefault = v.IsDefault;
+                    match.IsActive = true;
+                    match.LastModifiedDate = now;
+                    continue;
+                }
+
+                await _context.ProductVariants.AddAsync(new ProductVariant
+                {
+                    ProductId = productId,
+                    VariantName = comboName,
+                    SKU = sku,
+                    Price = price,
+                    OriginalPrice = originalPrice,
+                    IsDefault = v.IsDefault,
+                    IsActive = true,
+                    IsDeleted = false,
+                    CreatedDate = now
+                });
+            }
+
+            // Whatever wasn't matched was removed by the admin. Soft-delete it and clear
+            // the cart lines, wishlist entries and live reservations that still point at it,
+            // so nobody can keep checking out a variant that no longer exists.
+            if (unmatched.Count > 0)
+            {
+                var removedIds = unmatched.Select(ev => ev.Id).ToList();
+                foreach (var ev in unmatched)
                 {
                     ev.IsDeleted = true;
-                    ev.LastModifiedDate = DateTime.Now;
+                    ev.IsActive = false;
+                    ev.LastModifiedDate = now;
                 }
 
-                var items = System.Text.Json.JsonSerializer.Deserialize<List<IncomingVariantDto>>(
-                    variantsJson,
-                    new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                );
-
-                if (items != null && items.Count > 0)
+                var orphanCartItems = await _context.CartItems
+                    .Where(c => c.VariantId.HasValue && removedIds.Contains(c.VariantId.Value) && !c.IsDeleted)
+                    .ToListAsync();
+                foreach (var c in orphanCartItems)
                 {
-                    foreach (var v in items)
-                    {
-                        var attrs = (v.Attributes ?? new List<AttributeNameValueDto>())
-                            .Where(a => !string.IsNullOrWhiteSpace(a.AttributeName) && !string.IsNullOrWhiteSpace(a.AttributeValue))
-                            .ToList();
-
-                        string comboName;
-                        if (attrs.Count == 0 || attrs.Any(a => a.AttributeName == "No Variant" || a.AttributeName == "NONE"))
-                        {
-                            comboName = "No Variant";
-                        }
-                        else
-                        {
-                            comboName = string.Join(", ", attrs.Select(a => $"{a.AttributeName}: {a.AttributeValue}"));
-                        }
-
-                        var sku = !string.IsNullOrWhiteSpace(v.Sku) ? v.Sku : $"SKU-{Guid.NewGuid().ToString().Substring(0, 5)}";
-                        stockBySku.TryGetValue(sku.Trim().ToUpperInvariant(), out var carriedOverStock);
-
-                        var pv = new ProductVariant
-                        {
-                            ProductId = productId,
-                            VariantName = comboName,
-                            SKU = sku,
-                            Price = v.Price > 0 ? v.Price : 149,
-                            OriginalPrice = v.OriginalPrice > 0 ? v.OriginalPrice : (v.Price > 0 ? v.Price : 199),
-                            AvailableStock = carriedOverStock?.AvailableStock ?? 0,
-                            ReservedStock = carriedOverStock?.ReservedStock ?? 0,
-                            LowStockThreshold = carriedOverStock?.LowStockThreshold,
-                            IsInStock = carriedOverStock?.IsInStock ?? true,
-                            IsDefault = v.IsDefault,
-                            IsActive = true,
-                            IsDeleted = false,
-                            CreatedDate = DateTime.Now
-                        };
-                        await _context.ProductVariants.AddAsync(pv);
-                    }
+                    c.IsDeleted = true;
+                    c.IsActive = false;
+                    c.LastModifiedDate = now;
                 }
-                await _context.SaveChangesAsync();
+
+                var orphanWishlist = await _context.WishlistCustomers
+                    .Where(w => w.VariantId.HasValue && removedIds.Contains(w.VariantId.Value) && !w.IsDeleted)
+                    .ToListAsync();
+                foreach (var w in orphanWishlist)
+                {
+                    w.IsDeleted = true;
+                    w.IsActive = false;
+                    w.LastModifiedDate = now;
+                }
+
+                var orphanReservations = await _context.StockReservations
+                    .Where(r => removedIds.Contains(r.VariantId) && r.Status == StockReservationStatus.Reserved)
+                    .ToListAsync();
+                foreach (var r in orphanReservations)
+                {
+                    r.Status = StockReservationStatus.Released;
+                    r.ReleasedAt = now;
+                    r.LastModifiedDate = now;
+                }
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error saving variants from JSON: {ex.Message}");
-            }
+
+            await _context.SaveChangesAsync();
         }
 
         // Full-replace of a product's gallery images, mirroring SaveVariantsFromJsonAsync's
@@ -486,75 +553,68 @@ namespace Hiya2.Server.Controllers
         {
             if (string.IsNullOrWhiteSpace(imagesJson)) return;
 
-            try
+            var existingImages = await _context.ProductImages
+                .Where(i => i.ProductId == productId && !i.IsDeleted)
+                .ToListAsync();
+            foreach (var ei in existingImages)
             {
-                var existingImages = await _context.ProductImages
-                    .Where(i => i.ProductId == productId && !i.IsDeleted)
-                    .ToListAsync();
-                foreach (var ei in existingImages)
-                {
-                    ei.IsDeleted = true;
-                }
-
-                var items = System.Text.Json.JsonSerializer.Deserialize<List<IncomingImageDto>>(
-                    imagesJson,
-                    new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
-                );
-
-                string? primaryPath = null;
-
-                if (items != null && items.Count > 0)
-                {
-                    // Exactly one image ends up primary: whichever the admin flagged, or index 0
-                    // if none was flagged. This closes the "double primary" / "no primary" gap in
-                    // UploadGalleryImage, which never enforced uniqueness.
-                    var primaryIndex = items.FindIndex(i => i.IsPrimary);
-                    if (primaryIndex < 0) primaryIndex = 0;
-
-                    for (int i = 0; i < items.Count; i++)
-                    {
-                        var incoming = items[i];
-                        var path = incoming.ImagePath;
-
-                        if (!string.IsNullOrEmpty(path) && path.StartsWith("data:image/"))
-                        {
-                            path = await SaveBase64ImageAsync(path);
-                        }
-
-                        if (string.IsNullOrEmpty(path)) continue;
-
-                        var isPrimary = i == primaryIndex;
-                        if (isPrimary) primaryPath = path;
-
-                        var pi = new ProductImage
-                        {
-                            ProductId = productId,
-                            ImagePath = path,
-                            DisplayOrder = i,
-                            IsPrimary = isPrimary,
-                            IsActive = true,
-                            IsDeleted = false,
-                            CreatedDate = DateTime.Now
-                        };
-                        await _context.ProductImages.AddAsync(pi);
-                    }
-                }
-
-                if (!string.IsNullOrEmpty(primaryPath))
-                {
-                    var product = await _context.Products.FindAsync(productId);
-                    if (product != null)
-                    {
-                        product.MainImagePath = primaryPath;
-                    }
-                }
-
-                await _context.SaveChangesAsync();
+                ei.IsDeleted = true;
             }
-            catch (Exception ex)
+
+            var items = System.Text.Json.JsonSerializer.Deserialize<List<IncomingImageDto>>(
+                imagesJson,
+                new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
+
+            string? primaryPath = null;
+
+            if (items != null && items.Count > 0)
             {
-                Console.WriteLine($"Error saving images from JSON: {ex.Message}");
+                // Exactly one image ends up primary: whichever the admin flagged, or index 0
+                // if none was flagged. This closes the "double primary" / "no primary" gap in
+                // UploadGalleryImage, which never enforced uniqueness.
+                var primaryIndex = items.FindIndex(i => i.IsPrimary);
+                if (primaryIndex < 0) primaryIndex = 0;
+
+                for (int i = 0; i < items.Count; i++)
+                {
+                    var incoming = items[i];
+                    var path = incoming.ImagePath;
+
+                    if (!string.IsNullOrEmpty(path) && path.StartsWith("data:image/"))
+                    {
+                        path = await SaveBase64ImageAsync(path);
+                    }
+
+                    if (string.IsNullOrEmpty(path)) continue;
+
+                    var isPrimary = i == primaryIndex;
+                    if (isPrimary) primaryPath = path;
+
+                    var pi = new ProductImage
+                    {
+                        ProductId = productId,
+                        ImagePath = path,
+                        DisplayOrder = i,
+                        IsPrimary = isPrimary,
+                        IsActive = true,
+                        IsDeleted = false,
+                        CreatedDate = DateTime.Now
+                    };
+                    await _context.ProductImages.AddAsync(pi);
+                }
             }
+
+            if (!string.IsNullOrEmpty(primaryPath))
+            {
+                var product = await _context.Products.FindAsync(productId);
+                if (product != null)
+                {
+                    product.MainImagePath = primaryPath;
+                }
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         [Authorize]

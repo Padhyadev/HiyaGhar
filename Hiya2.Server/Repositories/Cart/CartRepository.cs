@@ -37,7 +37,9 @@ namespace Hiya2.Server.Repositories.Cart
             var lines = new List<CartLine>();
             foreach (var item in items)
             {
-                if (item.Product == null)
+                // Skip lines whose variant has since been removed by an admin - they must not
+                // be shown or checked out at the removed variant's old price.
+                if (item.Product == null || (item.VariantId.HasValue && (item.Variant == null || item.Variant.IsDeleted)))
                 {
                     continue;
                 }

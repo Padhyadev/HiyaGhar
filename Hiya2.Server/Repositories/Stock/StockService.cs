@@ -68,7 +68,7 @@ WHERE Id = @variantId";
             if (quantity <= 0) return StockOperationResult.Success();
 
             var before = await ReadVariantAsync(variantId);
-            if (before == null) return StockOperationResult.Fail("Product variant not found.");
+            if (before == null || before.IsDeleted || before.ProductId != productId) return StockOperationResult.Fail("Product variant not found.");
 
             var affected = await ApplyStockDeltaAsync(variantId, 0, quantity, true, false, quantity);
             if (affected == 0)

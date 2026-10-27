@@ -533,6 +533,7 @@ export const ProductManagementPage: React.FC = () => {
       if (!existing.isNoVariant) {
         // Switching this row to "No Variant" collapses the whole table to just this row.
         const updatedRow: ProductVariantItem = {
+          id: existing.id,
           sku: existing.sku || `SKU-${Date.now().toString().slice(-4)}`,
           attributes: [],
           isNoVariant: true,
