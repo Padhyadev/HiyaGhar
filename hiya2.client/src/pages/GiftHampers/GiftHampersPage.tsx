@@ -9,6 +9,8 @@ import { navigateTo } from '../../utils/navigation';
 import { GiftHamperService, type GiftHamperOccasion, type GiftHamperProduct as ApiGiftHamperProduct } from '../../services/giftHamperService';
 import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
+// Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
+import '../Mukhwas/MukhwasPage.css';
 import './GiftHampersPage.css';
 
 interface GiftHampersPageProps {

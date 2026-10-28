@@ -14,6 +14,8 @@ import { ProductService, type Product as ApiProduct } from '../../services/produ
 import { navigateTo } from '../../utils/navigation';
 import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
+// Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
+import '../Mukhwas/MukhwasPage.css';
 import './TeaMasalaPage.css';
 
 interface TeaMasalaPageProps {
