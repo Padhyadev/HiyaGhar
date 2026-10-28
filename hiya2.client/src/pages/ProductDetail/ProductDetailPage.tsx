@@ -1111,18 +1111,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   <p className="hiyaghar-tab-paragraph">
                     {product.longDescription || product.shortDescription}
                   </p>
-
-                  <div className="hiyaghar-highlights-grid">
-                    <div className="highlight-item">
-                      <strong>Authentic Craftsmanship</strong>
-                      <p>Handcrafted using traditional Kathiawadi & Ayurvedic methodologies.</p>
-                    </div>
-
-                    <div className="highlight-item">
-                      <strong>Zero Artificial Additives</strong>
-                      <p>Free from artificial colors, chemical preservatives, or synthetic flavors.</p>
-                    </div>
-                  </div>
                 </div>
               )}
 
