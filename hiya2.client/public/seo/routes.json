@@ -161,14 +161,6 @@
       "sitemap": true
     },
     {
-      "path": "/track-order",
-      "title": "Track Your Order | HIYAGHAR",
-      "description": "Track your HIYAGHAR order: enter your order number to see its current shipping progress and courier updates, from dispatch through to delivery at your door.",
-      "h1": "Track Your Order",
-      "intro": "Enter your Order Number above to view real-time shipping progress and courier updates.",
-      "noindex": true
-    },
-    {
       "path": "/cart",
       "title": "Shopping Cart | HIYAGHAR",
       "description": "Review the items in your HIYAGHAR shopping cart, update quantities and continue to secure checkout. Sign in to save your cart across devices and earn rewards.",

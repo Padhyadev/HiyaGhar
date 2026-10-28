@@ -59,9 +59,9 @@ const FAQ_DATA: FaqItem[] = [
   {
     id: 'ord-2',
     category: 'orders',
-    question: 'How can I track my shipment?',
+    question: 'How can I check my order status?',
     answer:
-      'Once your package is shipped, you will receive an SMS and email notification with your tracking details. You can also visit our dedicated "Track Order" page and enter your Order ID anytime.',
+      'You can see your order status anytime in My Account → Orders. We will keep you updated when your order is out for delivery.',
   },
   {
     id: 'ord-3',

@@ -22,7 +22,7 @@ namespace Hiya2.Server.Controllers
 
         /// <summary>
         /// Fixed pages come from wwwroot/seo/routes.json (entries with "sitemap": true - no redirects,
-        /// no noindex pages such as cart/checkout/login/profile/track-order). Their lastmod is the
+        /// no noindex pages such as cart/checkout/login/profile). Their lastmod is the
         /// publish date (timestamp of wwwroot/index.html), so it only changes on a new deploy.
         /// Products: active, non-deleted; lastmod = LastModifiedDate, else CreatedDate.
         /// </summary>

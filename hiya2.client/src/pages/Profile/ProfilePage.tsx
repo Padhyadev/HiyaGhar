@@ -24,7 +24,6 @@ interface ProfilePageProps {
   initialTab?: 'profile' | 'orders' | 'addresses' | 'password' | 'rewards';
   onNavigateHome: () => void;
   onNavigateMukhwas: () => void;
-  onNavigateTrackOrder: (orderId: string) => void;
 }
 
 // Inline SVG (not emoji) so the icon renders identically on every PC/browser,
@@ -47,7 +46,6 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   initialTab = 'profile',
   onNavigateHome,
   onNavigateMukhwas: _onNavigateMukhwas,
-  onNavigateTrackOrder: _onNavigateTrackOrder,
 }) => {
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'addresses' | 'password' | 'rewards'>(initialTab);
   const [customer, setCustomer] = useState<CustomerProfile | null>(CustomerAuthService.getCustomer());
@@ -1093,7 +1091,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                     <div className="hiyaghar-panel-header">
                       <div>
                         <h2 className="hiyaghar-panel-heading">Your Orders</h2>
-                        <p className="hiyaghar-panel-subheading">View your purchases and track your deliveries.</p>
+                        <p className="hiyaghar-panel-subheading">View your purchases and order status.</p>
                       </div>
                     </div>
 

@@ -37,10 +37,10 @@ export const Footer: React.FC = () => {
     {
       title: 'Shop',
       links: [
-        { label: 'Artisanal Mukhwas', type: 'route', href: '/mukhwas' },
-        { label: 'Traditional Tea Masala', type: 'route', href: '/tea-masala' },
+        { label: 'Mukhwas', type: 'route', href: '/mukhwas' },
+        { label: 'Tea Masala', type: 'route', href: '/tea-masala' },
         { label: 'Handmade Soap', type: 'route', href: '/handmade-soap' },
-        { label: 'Ayurvedic Hair Oil', type: 'route', href: '/hair-oil' },
+        { label: 'Hair Oil', type: 'route', href: '/hair-oil' },
       ],
     },
     {
@@ -62,7 +62,6 @@ export const Footer: React.FC = () => {
     {
       title: 'Help & Support',
       links: [
-        { label: 'Track Order', type: 'route', href: '/track-order' },
         { label: 'Shipping Policy', type: 'route', href: '/shipping-policy' },
         { label: 'Return & Refund Policy', type: 'route', href: '/refund-policy' },
         { label: 'My Account', type: 'route', href: '/profile' },

@@ -209,7 +209,7 @@ export const ShippingPolicyPage: React.FC = () => {
 
           <h2>3. Real-Time Tracking & Notifications</h2>
           <p>
-            The moment your order is packed and dispatched, you will receive an SMS and Email containing your courier partner name and unique AWB Tracking Number. You can track your parcel's journey anytime on our <a href="/track-order">Track Order</a> page.
+            The moment your order is packed and dispatched, you will receive an SMS and Email containing your courier partner name and unique AWB Tracking Number. You can see your order status anytime in <a href="/orders">My Account → Orders</a>.
           </p>
 
           <h2>4. Tamper-Evident & Weatherproof Packaging</h2>

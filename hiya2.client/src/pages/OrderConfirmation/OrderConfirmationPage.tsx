@@ -9,14 +9,14 @@ interface OrderConfirmationPageProps {
   orderId?: string;
   onNavigateHome: () => void;
   onNavigateMukhwas: () => void;
-  onNavigateTrackOrder: (orderId: string) => void;
+  onNavigateMyOrders: () => void;
 }
 
 export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
   orderId,
   onNavigateHome,
   onNavigateMukhwas,
-  onNavigateTrackOrder,
+  onNavigateMyOrders,
 }) => {
   const [order, setOrder] = useState<Order | null>(null);
 
@@ -234,9 +234,9 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
               <button
                 type="button"
                 className="hiyaghar-btn-primary track-btn"
-                onClick={() => onNavigateTrackOrder(order.id)}
+                onClick={onNavigateMyOrders}
               >
-                Track Order →
+                View My Orders →
               </button>
               <button
                 type="button"

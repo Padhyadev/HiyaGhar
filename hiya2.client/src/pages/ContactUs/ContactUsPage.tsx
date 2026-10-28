@@ -358,7 +358,7 @@ export const ContactUsPage: React.FC = () => {
                         onChange={handleChange}
                       >
                         <option value="General Inquiry">General Inquiry</option>
-                        <option value="Order Tracking & Support">Order Tracking & Support</option>
+                        <option value="Order Status & Support">Order Status & Support</option>
                         <option value="Custom Combo Box">Custom Combo Box Query</option>
                         <option value="Corporate & Wedding Gifting">Corporate & Wedding Gifting</option>
                         <option value="Bulk & Wholesale Orders">Bulk & Wholesale Orders</option>
@@ -423,15 +423,15 @@ export const ContactUsPage: React.FC = () => {
             <div className="hiyaghar-faq-box">
               <h3>Have a quick question about Orders or Delivery?</h3>
               <p>
-                You can easily track your parcel live with your Order ID or phone number, or check our shipping policy.
+                You can see your order status anytime in My Account → Orders, or check our shipping policy.
               </p>
               <div className="hiyaghar-faq-links">
-                <a href="/track-order" className="hiyaghar-faq-btn">
+                <a href="/orders" className="hiyaghar-faq-btn">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <circle cx="11" cy="11" r="8" />
                     <line x1="21" y1="21" x2="16.65" y2="16.65" />
                   </svg>
-                  <span>Track Order</span>
+                  <span>My Orders</span>
                 </a>
                 <a href="/shipping-policy" className="hiyaghar-faq-btn secondary">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

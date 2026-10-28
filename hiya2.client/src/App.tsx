@@ -23,7 +23,6 @@ const ProductDetailPage = lazy(() => import('./pages/ProductDetail/ProductDetail
 const CartPage = lazy(() => import('./pages/Cart/CartPage').then(m => ({ default: m.CartPage })));
 const CheckoutPage = lazy(() => import('./pages/Checkout/CheckoutPage').then(m => ({ default: m.CheckoutPage })));
 const OrderConfirmationPage = lazy(() => import('./pages/OrderConfirmation/OrderConfirmationPage').then(m => ({ default: m.OrderConfirmationPage })));
-const TrackOrderPage = lazy(() => import('./pages/TrackOrder/TrackOrderPage').then(m => ({ default: m.TrackOrderPage })));
 const ProfilePage = lazy(() => import('./pages/Profile/ProfilePage').then(m => ({ default: m.ProfilePage })));
 const WishlistPage = lazy(() => import('./pages/Wishlist/WishlistPage').then(m => ({ default: m.WishlistPage })));
 const AuthPage = lazy(() => import('./pages/Auth/AuthPage').then(m => ({ default: m.AuthPage })));
@@ -130,6 +129,7 @@ const ROUTE_ALIASES: Record<string, string> = {
   '/shipping': '/shipping-policy',
   '/contact': '/contact-us',
   '/faqs': '/faq',
+  '/track-order': '/orders',
 };
 
 // Per-route meta comes from public/seo/routes.json (shared with the server). Returns null for
@@ -223,9 +223,7 @@ function App() {
   const handleNavigateCart = () => { navigateTo('/cart'); };
   const handleNavigateCheckout = () => { navigateTo('/checkout'); };
   const handleNavigateConfirmation = (orderId: string) => { navigateTo(`/order-confirmation?orderId=${orderId}`); };
-  const handleNavigateTrackOrder = (orderId?: string) => {
-    navigateTo(orderId ? `/track-order?orderId=${orderId}` : '/track-order');
-  };
+  const handleNavigateMyOrders = () => { navigateTo('/orders'); };
 
   const handleAdminLogout = () => {
     AdminAuthService.logout();
@@ -739,7 +737,7 @@ function App() {
         <OrderConfirmationPage
           onNavigateHome={handleNavigateHome}
           onNavigateMukhwas={handleNavigateMukhwas}
-          onNavigateTrackOrder={handleNavigateTrackOrder}
+          onNavigateMyOrders={handleNavigateMyOrders}
         />
       );
     }
@@ -747,15 +745,6 @@ function App() {
     if (route === '/wishlist') {
       return (
         <WishlistPage
-          onNavigateHome={handleNavigateHome}
-          onNavigateMukhwas={handleNavigateMukhwas}
-        />
-      );
-    }
-
-    if (route.startsWith('/track-order')) {
-      return (
-        <TrackOrderPage
           onNavigateHome={handleNavigateHome}
           onNavigateMukhwas={handleNavigateMukhwas}
         />
@@ -792,7 +781,6 @@ function App() {
           initialTab={mainTab}
           onNavigateHome={handleNavigateHome}
           onNavigateMukhwas={handleNavigateMukhwas}
-          onNavigateTrackOrder={handleNavigateTrackOrder}
         />
       );
     }

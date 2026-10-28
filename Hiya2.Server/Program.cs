@@ -416,7 +416,7 @@ using (var scope = app.Services.CreateScope())
                     ('products', 'What is the shelf life of your digestive mukhwas and soaps?', 'Our artisanal mukhwas typically have a shelf life of 6 to 9 months from the date of manufacture. Our cold-processed soaps and herbal hair oils have a shelf life of 12 to 24 months.', 4, 1, 0, GETDATE()),
                     ('products', 'Are your handmade soaps suitable for sensitive skin?', 'Yes! Our soaps are made through traditional cold-process saponification without SLS, parabens, or harsh sulfates. They retain natural glycerin that deeply moisturizes even sensitive skin types.', 5, 1, 0, GETDATE()),
                     ('orders', 'How long will it take to receive my order?', 'Orders are usually packed and dispatched within 24–48 hours. Delivery across major metro cities takes 2–4 business days, and 4–7 business days for other locations across India.', 6, 1, 0, GETDATE()),
-                    ('orders', 'How can I track my shipment?', 'Once your package is shipped, you will receive an SMS and email notification with your tracking details. You can also visit our dedicated ''Track Order'' page and enter your Order ID anytime.', 7, 1, 0, GETDATE()),
+                    ('orders', 'How can I check my order status?', 'You can see your order status anytime in My Account → Orders. We will keep you updated when your order is out for delivery.', 7, 1, 0, GETDATE()),
                     ('orders', 'What payment methods do you accept?', 'We accept all major UPI apps (Google Pay, PhonePe, Paytm), Credit & Debit Cards, Net Banking, and Cash on Delivery (COD) across eligible pin codes.', 8, 1, 0, GETDATE()),
                     ('gifting', 'Can I customize a combo or gift hamper for weddings/festivals?', 'Yes! You can use our interactive ''Customize Combo'' builder online, or contact us directly via WhatsApp / Contact Us page for bulk wedding favors, corporate gifting, and bespoke luxury gift hampers.', 9, 1, 0, GETDATE()),
                     ('gifting', 'Do you provide personalized gift notes inside the box?', 'Yes, you can add a personalized gift message during checkout, and our team will hand-inscribe your thoughtful greeting card inside the premium gift hamper.', 10, 1, 0, GETDATE());
@@ -526,6 +526,7 @@ var routeAliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCa
     ["/shipping"] = "/shipping-policy",
     ["/contact"] = "/contact-us",
     ["/faqs"] = "/faq",
+    ["/track-order"] = "/orders",
 };
 
 app.Use(async (context, next) =>
