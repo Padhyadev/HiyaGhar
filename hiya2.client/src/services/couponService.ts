@@ -1,105 +1,47 @@
 import { CustomerAuthService } from './customerAuthService';
 
-export interface Coupon {
+/** Offer the cart qualifies for now. Applied automatically - no code to enter. */
+export interface AppliedOffer {
   code: string;
-  type: 'percentage' | 'fixed';
-  value: number; // e.g. 10 for 10%, 50 for ₹50
-  minOrderValue: number;
-  description: string;
-}
-
-export interface CouponResult {
-  success: boolean;
-  message: string;
+  label: string; // e.g. "10% OFF on orders above ₹300"
   discountAmount: number;
-  code?: string;
-  coupon?: Coupon;
+  message: string;
 }
 
-// The code a shopper applied on the cart, carried over to checkout (where the server validates it
-// again against the real cart). Per browser tab; storage can be unavailable, so every access is guarded.
-const APPLIED_COUPON_KEY = 'hiya_applied_coupon';
+/** Next offer the shopper can unlock by adding more to the cart. */
+export interface NextOffer {
+  label: string;
+  benefit: string; // e.g. "10% OFF"
+  amountNeeded: number;
+  minOrderAmount: number;
+  discountAmount: number;
+}
+
+export interface AutoOfferResult {
+  applied: AppliedOffer | null;
+  next: NextOffer | null;
+}
+
+const NO_OFFER: AutoOfferResult = { applied: null, next: null };
 
 export class CouponService {
-  public static getSavedCode(): string | null {
-    try {
-      return sessionStorage.getItem(APPLIED_COUPON_KEY);
-    } catch {
-      return null;
-    }
-  }
-
-  public static saveCode(code: string): void {
-    try {
-      sessionStorage.setItem(APPLIED_COUPON_KEY, code.trim().toUpperCase());
-    } catch {
-      // ignore - the shopper can still type the code at checkout
-    }
-  }
-
-  public static clearSavedCode(): void {
-    try {
-      sessionStorage.removeItem(APPLIED_COUPON_KEY);
-    } catch {
-      // ignore
-    }
-  }
-
   /**
-   * Validates a coupon code dynamically against the Admin database coupons via /api/coupon/validate.
+   * Admin-defined offers (Admin → Coupons & Vouchers) for this cart total. The server prices
+   * the order again at checkout, so this is only for display.
    */
-  public static async validateCoupon(code: string, subtotal: number): Promise<CouponResult> {
-    const cleanCode = code.trim().toUpperCase();
-
-    if (!cleanCode) {
-      return {
-        success: false,
-        message: 'Please enter a coupon code.',
-        discountAmount: 0,
-      };
-    }
-
+  public static async getAutoOffer(subtotal: number): Promise<AutoOfferResult> {
+    if (subtotal <= 0) return NO_OFFER;
     try {
-      const res = await fetch('/api/coupon/validate', {
-        method: 'POST',
-        // Send the real customer token so the server can apply per-customer rules
-        // (first-order-only, per-customer limit) exactly as it does at checkout.
+      // Send the customer token so first-order-only and per-customer limits are applied.
+      const res = await fetch(`/api/coupon/auto-offer?subtotal=${encodeURIComponent(subtotal)}`, {
         headers: CustomerAuthService.getAuthHeaders(),
-        body: JSON.stringify({ code: cleanCode, subtotal }),
       });
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data.isValid) {
-          return {
-            success: true,
-            message: data.message || `Coupon ${data.code} applied!`,
-            discountAmount: data.discountAmount || 0,
-            code: data.code,
-            coupon: data.coupon,
-          };
-        } else {
-          return {
-            success: false,
-            message: data.message || 'This coupon code is invalid or expired.',
-            discountAmount: 0,
-          };
-        }
-      } else {
-        const errData = await res.json().catch(() => ({}));
-        return {
-          success: false,
-          message: errData.message || 'This coupon code is invalid or expired.',
-          discountAmount: 0,
-        };
-      }
+      if (!res.ok) return NO_OFFER;
+      const data = await res.json();
+      return { applied: data.applied ?? null, next: data.next ?? null };
     } catch (err) {
-      console.warn('Coupon validation error:', err);
-      return {
-        success: false,
-        message: 'Unable to validate coupon at this moment. Please check your connection.',
-        discountAmount: 0,
-      };
+      console.warn('Offer lookup error:', err);
+      return NO_OFFER;
     }
   }
 }

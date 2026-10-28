@@ -463,6 +463,24 @@
   color: #27AE60;
 }
 
+/* "Add ₹100 more to get 10% OFF" */
+.hiyaghar-offer-nudge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #FFF9E6;
+  border: 1px dashed #D19A27;
+  color: #855F0F;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.hiyaghar-coupon-applied-box + .hiyaghar-offer-nudge {
+  margin-top: 10px;
+}
+
 .hiyaghar-coupon-remove {
   background: none;
   border: none;

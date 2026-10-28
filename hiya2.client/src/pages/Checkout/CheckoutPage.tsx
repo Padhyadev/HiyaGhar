@@ -11,6 +11,7 @@ import { AddressService } from '../../services/addressService';
 import type { UserAddress } from '../../services/addressService';
 import { CustomerAuthService } from '../../services/customerAuthService';
 import { CouponService } from '../../services/couponService';
+import type { AutoOfferResult } from '../../services/couponService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { allowOnlyDigits, sanitizeDigits } from '../../utils/validationUtils';
@@ -112,11 +113,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Coupon (server-validated)
-  const [couponCode, setCouponCode] = useState<string>('');
-  const [appliedCoupon, setAppliedCoupon] = useState<{ code: string; discountAmount: number } | null>(null);
-  const [couponMessage, setCouponMessage] = useState<string | null>(null);
-  const [isApplyingCoupon, setIsApplyingCoupon] = useState<boolean>(false);
+  // Automatic offer (no coupon code); the server prices it again when the order is placed.
+  const [offer, setOffer] = useState<AutoOfferResult>({ applied: null, next: null });
+  const appliedOffer = offer.applied;
+  const nextOffer = offer.next;
 
   // Reward coins
   const [rewardBalance, setRewardBalance] = useState<number>(0);
@@ -225,14 +225,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       onNavigateCart();
     }
 
-    // Bring over the coupon the shopper applied on the cart. The server re-validates it against
-    // the real cart, so an expired or no-longer-eligible code shows its reason instead.
-    const savedCoupon = CouponService.getSavedCode();
-    if (customer && savedCoupon && items.length > 0) {
-      setCouponCode(savedCoupon);
-      handleApplyCoupon(savedCoupon);
-    }
-
     window.scrollTo(0, 0);
 
     // Listen for shipping settings changes (e.g. admin updates in another tab)
@@ -250,38 +242,15 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
-  // codeOverride is the code carried over from the cart; otherwise the one typed here.
-  const handleApplyCoupon = async (codeOverride?: string) => {
-    const code = (codeOverride ?? couponCode).trim();
-    if (!code) return;
-    if (!CustomerAuthService.hasSession()) {
-      setCouponMessage('Please enter your contact details first, then apply the coupon.');
-      return;
-    }
-    setIsApplyingCoupon(true);
-    setCouponMessage(null);
-    try {
-      const res = await fetch('/api/cart/coupon/preview', {
-        method: 'POST',
-        headers: CustomerAuthService.getAuthHeaders(),
-        body: JSON.stringify({ code }),
-      });
-      const data = await res.json();
-      if (data.isSuccess) {
-        setAppliedCoupon({ code: code.toUpperCase(), discountAmount: data.discountAmount });
-        setCouponMessage(`Coupon applied! You saved ₹${data.discountAmount.toFixed(2)}.`);
-        CouponService.saveCode(code);
-      } else {
-        setAppliedCoupon(null);
-        setCouponMessage(data.message || 'This coupon could not be applied.');
-        CouponService.clearSavedCode();
-      }
-    } catch {
-      setCouponMessage('Could not validate coupon right now. Please try again.');
-    } finally {
-      setIsApplyingCoupon(false);
-    }
-  };
+  // Re-price the offer when the cart changes or a guest session starts (the token decides
+  // first-order-only and per-customer limits).
+  useEffect(() => {
+    let cancelled = false;
+    CouponService.getAutoOffer(subtotal).then((result) => {
+      if (!cancelled) setOffer(result);
+    });
+    return () => { cancelled = true; };
+  }, [subtotal, guestReady]);
 
   const handleGuestContinue = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -338,14 +307,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     setEditingAddressId(null);
     setSelectedAddressId('NEW_ADDRESS');
     setIsAddNewAddressOpen(true);
-
-    const savedCoupon = CouponService.getSavedCode();
-    if (savedCoupon && !appliedCoupon) {
-      setCouponCode(savedCoupon);
-      handleApplyCoupon(savedCoupon);
-    } else if (appliedCoupon) {
-      handleApplyCoupon(appliedCoupon.code);
-    }
   };
 
   // Lets a guest go back and change their contact details (starts a fresh guest session).
@@ -356,11 +317,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     setSelectedAddressId('');
     setIsAddNewAddressOpen(false);
     setAddressForm({ fullName: '', mobile: '', email: '', pincode: '', address: '', city: '', state: '' });
-    setAppliedCoupon(null);
-    setCouponMessage(null);
   };
 
-  const discountAmount = appliedCoupon?.discountAmount || 0;
+  const discountAmount = appliedOffer?.discountAmount || 0;
 
   // Free shipping is judged on the price after coupon discount, so re-evaluate
   // the delivery options whenever the subtotal, coupon or settings change.
@@ -579,7 +538,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
         headers: CustomerAuthService.getAuthHeaders(),
         body: JSON.stringify({
           customerAddressId: numericAddressId,
-          couponCode: appliedCoupon?.code,
           useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
           deliveryType: selectedDelivery?.id || 'standard',
         }),
@@ -625,7 +583,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 razorpayPaymentId: response.razorpay_payment_id,
                 razorpaySignature: response.razorpay_signature,
                 customerAddressId: numericAddressId,
-                couponCode: appliedCoupon?.code,
                 useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
                 deliveryType: selectedDelivery?.id || 'standard',
               }),
@@ -651,7 +608,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 paymentMethod: { id: 'online', name: 'Razorpay Online Payment', details: `Payment ID: ${response.razorpay_payment_id}` },
                 subtotal: serverSubtotal,
                 discount: serverDiscount,
-                couponCode: appliedCoupon?.code,
+                couponCode: appliedOffer?.label,
                 shippingFee: serverShippingFee,
                 tax,
                 total: serverTotal,
@@ -659,7 +616,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
               });
 
               CartService.clearCart();
-              CouponService.clearSavedCode();
               showToast('Payment successful! Your order has been placed.', 'success');
               onNavigateConfirmation(verifyData.orderNumber);
             } else {
@@ -700,7 +656,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
         headers: CustomerAuthService.getAuthHeaders(),
         body: JSON.stringify({
           customerAddressId: numericAddressId,
-          couponCode: appliedCoupon?.code,
           useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
           deliveryType: selectedDelivery?.id || 'standard',
         }),
@@ -731,7 +686,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
         paymentMethod: { id: 'cod', name: 'Cash on Delivery', details: 'Cash on Delivery (COD)' },
         subtotal: serverSubtotal,
         discount: serverDiscount,
-        couponCode: appliedCoupon?.code,
+        couponCode: appliedOffer?.label,
         shippingFee: serverShippingFee,
         tax,
         total: serverTotal,
@@ -739,7 +694,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       });
 
       CartService.clearCart();
-      CouponService.clearSavedCode();
       showToast('Order placed successfully!', 'success');
       onNavigateConfirmation(data.orderNumber);
     } catch (err: any) {
@@ -1515,61 +1469,19 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
                 <div className="hiyaghar-summary-divider" />
 
-                {/* Coupon code */}
-                <div className="hiyaghar-summary-coupon-row" style={{ display: 'flex', gap: '8px', margin: '12px 0' }}>
-                  <input
-                    type="text"
-                    placeholder="Have a coupon code?"
-                    value={couponCode}
-                    onChange={(e) => setCouponCode(e.target.value)}
-                    style={{ flex: 1, padding: '8px', borderRadius: '6px', border: '1px solid #ddd' }}
-                    disabled={!!appliedCoupon}
-                  />
-                  {appliedCoupon ? (
-                    <button
-                      type="button"
-                      onClick={() => { setAppliedCoupon(null); setCouponCode(''); setCouponMessage(null); CouponService.clearSavedCode(); }}
-                      className="hiyaghar-back-btn"
-                    >
-                      Remove
-                    </button>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => handleApplyCoupon()}
-                      disabled={isApplyingCoupon || !couponCode.trim()}
-                      className="hiyaghar-step-continue-btn"
-                    >
-                      {isApplyingCoupon ? '...' : 'Apply'}
-                    </button>
-                  )}
-                </div>
-                {!appliedCoupon && (
-                  <div style={{ marginTop: '6px', fontSize: '11.5px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                    <span>💡 Offer:</span>
-                    <button
-                      type="button"
-                      onClick={() => { setCouponCode('WELCOME10'); }}
-                      title="Use WELCOME10"
-                      style={{
-                        background: '#FFF9E6',
-                        border: '1px dashed #D19A27',
-                        color: '#855F0F',
-                        padding: '1px 6px',
-                        borderRadius: '4px',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                        fontSize: '11px',
-                      }}
-                    >
-                      WELCOME10
-                    </button>
-                    <span>(10% OFF on orders above ₹300)</span>
+                {/* Automatic offer (no coupon code). The server applies the same offer when the order is placed. */}
+                {appliedOffer && (
+                  <div className="hiyaghar-summary-row subtle" style={{ color: '#1a7f37', margin: '12px 0 6px' }}>
+                    <span>✓ {appliedOffer.label} applied automatically</span>
                   </div>
                 )}
-                {couponMessage && (
-                  <div className="hiyaghar-summary-row subtle" style={{ color: appliedCoupon ? '#1a7f37' : '#b42318' }}>
-                    {couponMessage}
+                {nextOffer && (
+                  <div
+                    role="status"
+                    aria-live="polite"
+                    style={{ margin: '8px 0 12px', fontSize: '12.5px', background: '#FFF9E6', border: '1px dashed #D19A27', color: '#855F0F', padding: '8px 10px', borderRadius: '6px' }}
+                  >
+                    🎁 Add <strong>₹{Math.ceil(nextOffer.amountNeeded)}</strong> more to get <strong>{nextOffer.benefit}</strong> on your order
                   </div>
                 )}
 
@@ -1596,7 +1508,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   </div>
                   {discountAmount > 0 && (
                     <div className="hiyaghar-summary-row">
-                      <span>Coupon Discount ({appliedCoupon?.code})</span>
+                      <span>Offer Discount</span>
                       <span style={{ display: 'inline-flex', alignItems: 'center' }}>−₹<AnimatedNumber value={discountAmount} /></span>
                     </div>
                   )}

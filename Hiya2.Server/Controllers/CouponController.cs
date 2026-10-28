@@ -91,6 +91,48 @@ namespace Hiya2.Server.Controllers
             });
         }
 
+        /// <summary>
+        /// Automatic offer for a cart total: the offer applied now and the next one to unlock
+        /// (e.g. "Add ₹100 more to get 10% OFF"). No code needed.
+        /// </summary>
+        [HttpGet("auto-offer")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetAutoOffer([FromQuery] decimal subtotal)
+        {
+            var customerId = 0L;
+            if (User?.Identity?.IsAuthenticated == true
+                && long.TryParse(User.FindFirst("CustomerId")?.Value, out var cid))
+            {
+                customerId = cid;
+            }
+
+            var offer = await _couponService.GetAutoOfferAsync(customerId, subtotal);
+            return Ok(ToAutoOfferDto(_couponService, offer));
+        }
+
+        internal static object ToAutoOfferDto(ICouponService couponService, AutoOfferResult offer) => new
+        {
+            applied = offer.Applied?.Coupon == null ? null : new
+            {
+                code = offer.Applied.Coupon.Code,
+                label = couponService.GetOfferLabel(offer.Applied.Coupon),
+                discountAmount = offer.Applied.DiscountAmount,
+                message = offer.Applied.Message
+            },
+            next = ToNextOfferDto(couponService, offer.Next)
+        };
+
+        internal static object? ToNextOfferDto(ICouponService couponService, NextOfferInfo? next) => next == null ? null : new
+        {
+            label = couponService.GetOfferLabel(next.Coupon),
+            amountNeeded = next.AmountNeeded,
+            minOrderAmount = next.Coupon.MinOrderAmount,
+            discountAmount = next.DiscountAmount,
+            benefit = next.Coupon.DiscountType == CouponDiscountType.Percent
+                ? $"{next.Coupon.DiscountValue:0.##}% OFF"
+                : $"₹{next.Coupon.DiscountValue:0.##} OFF"
+        };
+
         [HttpGet("public-active")]
         [AllowAnonymous]
         public async Task<IActionResult> GetPublicActive()
@@ -170,15 +212,31 @@ namespace Hiya2.Server.Controllers
             });
         }
 
+        // Offers apply automatically, so a code is optional. The column is unique, so a blank
+        // code gets a generated one (e.g. OFFER300).
+        private async Task<string> GenerateOfferCodeAsync(decimal minOrderAmount)
+        {
+            var baseCode = $"OFFER{minOrderAmount:0}";
+            var code = baseCode;
+            var suffix = 2;
+            while (await _context.Coupons.AnyAsync(c => c.Code.ToUpper() == code))
+            {
+                code = $"{baseCode}-{suffix++}";
+            }
+            return code;
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CouponSaveDto dto)
         {
-            if (string.IsNullOrWhiteSpace(dto?.Code))
+            if (dto == null)
             {
-                return BadRequest(new { isSuccess = false, message = "Coupon code is required." });
+                return BadRequest(new { isSuccess = false, message = "Invalid offer details." });
             }
 
-            var cleanCode = dto.Code.Trim().ToUpper();
+            var cleanCode = string.IsNullOrWhiteSpace(dto.Code)
+                ? await GenerateOfferCodeAsync(dto.MinOrderAmount)
+                : dto.Code.Trim().ToUpper();
             var codeExists = await _context.Coupons.AnyAsync(c => c.Code.ToUpper() == cleanCode && !c.IsDeleted);
             if (codeExists)
             {

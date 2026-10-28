@@ -194,7 +194,7 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
                 {order.discount > 0 && (
                   <div className="bill-row discount-row">
                     <span className="bill-label">
-                      {order.couponCode ? `Coupon Discount (${order.couponCode}):` : 'Promo Discount:'}
+                      {order.couponCode ? `Offer Discount (${order.couponCode}):` : 'Promo Discount:'}
                     </span>
                     <span className="bill-value discount-value">-₹{order.discount}</span>
                   </div>

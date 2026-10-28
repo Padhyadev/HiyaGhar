@@ -59,15 +59,14 @@ namespace Hiya2.Server.Services
 
             var subtotal = cartLines.Sum(l => l.LineTotal);
 
-            decimal discountAmount = 0;
-            if (!string.IsNullOrWhiteSpace(couponCode))
+            // Same discount rule as OrderService.CreateOrderFromCartAsync, so the amount charged
+            // matches the order total.
+            var couponResult = await _couponService.ResolveDiscountAsync(couponCode, customerId, subtotal);
+            if (!couponResult.IsValid)
             {
-                var couponResult = await _couponService.ValidateAsync(couponCode, customerId, subtotal);
-                if (couponResult.IsValid)
-                {
-                    discountAmount = couponResult.DiscountAmount;
-                }
+                return new RazorpayOrderResult { IsSuccess = false, Message = couponResult.Message };
             }
+            decimal discountAmount = couponResult.DiscountAmount;
 
             var shippingSetting = await _context.ShippingSettings.FirstOrDefaultAsync(s => s.IsActive);
             var freeShippingThreshold = shippingSetting?.FreeShippingThreshold ?? 500m;

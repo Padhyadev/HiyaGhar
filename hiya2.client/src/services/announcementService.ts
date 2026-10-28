@@ -16,7 +16,7 @@ export const DEFAULT_ANNOUNCEMENTS: AnnouncementItem[] = [
   },
   {
     id: 'ann_2',
-    text: 'FLAT 10% OFF ON ORDERS ABOVE ₹300 • CODE: WELCOME10',
+    text: 'FLAT 10% OFF ON ORDERS ABOVE ₹300 • NO CODE NEEDED',
     isActive: true,
     displayOrder: 2,
   },
@@ -47,11 +47,15 @@ export class AnnouncementService {
         if (Array.isArray(parsed) && parsed.length > 0) {
           let modified = false;
 
-          // Auto-migrate any existing announcements from ₹500 to ₹300 for WELCOME10
+          // Auto-migrate the old WELCOME10 announcement: ₹300 minimum, and offers now apply
+          // automatically, so there is no code to show.
           parsed = parsed.map((item) => {
-            if (item.text.includes('ORDERS ABOVE ₹500 • CODE: WELCOME10')) {
+            if (item.text.includes('• CODE: WELCOME10')) {
               modified = true;
-              return { ...item, text: item.text.replace('ORDERS ABOVE ₹500', 'ORDERS ABOVE ₹300') };
+              return {
+                ...item,
+                text: item.text.replace('ORDERS ABOVE ₹500', 'ORDERS ABOVE ₹300').replace('• CODE: WELCOME10', '• NO CODE NEEDED'),
+              };
             }
             return item;
           });

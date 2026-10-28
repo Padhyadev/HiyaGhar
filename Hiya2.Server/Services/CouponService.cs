@@ -47,6 +47,104 @@ namespace Hiya2.Server.Services
                 return new CouponValidationResult { IsValid = false, Message = "Invalid coupon code." };
             }
 
+            // Guest checkout makes a new CustomerId each time, so per-customer limits
+            // count every customer row sharing this shopper's email or mobile.
+            var samePersonIds = await GetSamePersonCustomerIdsAsync(customerId);
+            return await CheckEligibilityAsync(coupon, samePersonIds, cartSubtotal);
+        }
+
+        public async Task<AutoOfferResult> GetAutoOfferAsync(long customerId, decimal cartSubtotal)
+        {
+            var result = new AutoOfferResult();
+            if (cartSubtotal <= 0)
+            {
+                return result;
+            }
+
+            var now = DateTime.Now;
+            var offers = await _context.Coupons
+                .Where(c => c.IsActive && !c.IsDeleted && now >= c.StartDate && now <= c.EndDate)
+                .OrderBy(c => c.MinOrderAmount)
+                .ToListAsync();
+            if (offers.Count == 0)
+            {
+                return result;
+            }
+
+            var samePersonIds = await GetSamePersonCustomerIdsAsync(customerId);
+
+            var eligibleNow = new List<Coupon>();
+            foreach (var offer in offers.Where(o => o.MinOrderAmount <= cartSubtotal))
+            {
+                var check = await CheckEligibilityAsync(offer, samePersonIds, cartSubtotal);
+                if (!check.IsValid)
+                {
+                    continue;
+                }
+                eligibleNow.Add(offer);
+                if (check.DiscountAmount > (result.Applied?.DiscountAmount ?? 0))
+                {
+                    result.Applied = check;
+                }
+            }
+
+            // Offers are sorted by minimum amount, so the first one that would save more is the
+            // closest step up. "More" is judged at that offer's minimum: a 10%-above-₹300 offer
+            // is no step up from a 10% offer the cart already has.
+            foreach (var offer in offers.Where(o => o.MinOrderAmount > cartSubtotal))
+            {
+                var check = await CheckEligibilityAsync(offer, samePersonIds, offer.MinOrderAmount);
+                var alreadyAtThatAmount = eligibleNow.Count == 0 ? 0 : eligibleNow.Max(o => CalculateDiscount(o, offer.MinOrderAmount));
+                if (check.IsValid && check.DiscountAmount > alreadyAtThatAmount)
+                {
+                    result.Next = new NextOfferInfo
+                    {
+                        Coupon = offer,
+                        AmountNeeded = offer.MinOrderAmount - cartSubtotal,
+                        DiscountAmount = check.DiscountAmount
+                    };
+                    break;
+                }
+            }
+
+            if (result.Applied != null)
+            {
+                result.Applied.Message = $"{GetOfferLabel(result.Applied.Coupon!)} applied automatically.";
+            }
+
+            return result;
+        }
+
+        public async Task<CouponValidationResult> ResolveDiscountAsync(string? code, long customerId, decimal cartSubtotal)
+        {
+            var auto = (await GetAutoOfferAsync(customerId, cartSubtotal)).Applied;
+
+            if (!string.IsNullOrWhiteSpace(code))
+            {
+                var manual = await ValidateAsync(code, customerId, cartSubtotal);
+                if (!manual.IsValid)
+                {
+                    return manual;
+                }
+                if (auto == null || manual.DiscountAmount >= auto.DiscountAmount)
+                {
+                    return manual;
+                }
+            }
+
+            return auto ?? new CouponValidationResult { IsValid = true, Message = "No offer applies to this cart." };
+        }
+
+        public string GetOfferLabel(Coupon coupon)
+        {
+            var benefit = coupon.DiscountType == CouponDiscountType.Percent
+                ? $"{coupon.DiscountValue:0.##}% OFF"
+                : $"₹{coupon.DiscountValue:0.##} OFF";
+            return coupon.MinOrderAmount > 0 ? $"{benefit} on orders above ₹{coupon.MinOrderAmount:0.##}" : benefit;
+        }
+
+        private async Task<CouponValidationResult> CheckEligibilityAsync(Coupon coupon, List<long> samePersonIds, decimal cartSubtotal)
+        {
             var now = DateTime.Now;
             if (now < coupon.StartDate || now > coupon.EndDate)
             {
@@ -71,10 +169,6 @@ namespace Hiya2.Server.Services
                 }
             }
 
-            // Guest checkout makes a new CustomerId each time, so per-customer limits
-            // count every customer row sharing this shopper's email or mobile.
-            var samePersonIds = await GetSamePersonCustomerIdsAsync(customerId);
-
             if (coupon.PerCustomerUsage.HasValue)
             {
                 var customerUsage = await _context.CouponUsages.CountAsync(u => u.CouponId == coupon.Id && samePersonIds.Contains(u.CustomerId));
@@ -93,6 +187,17 @@ namespace Hiya2.Server.Services
                 }
             }
 
+            return new CouponValidationResult
+            {
+                IsValid = true,
+                Message = "Coupon applied successfully.",
+                DiscountAmount = CalculateDiscount(coupon, cartSubtotal),
+                Coupon = coupon
+            };
+        }
+
+        private static decimal CalculateDiscount(Coupon coupon, decimal cartSubtotal)
+        {
             decimal discount = coupon.DiscountType == CouponDiscountType.Percent
                 ? Math.Round(cartSubtotal * (coupon.DiscountValue / 100m), 2)
                 : coupon.DiscountValue;
@@ -102,18 +207,7 @@ namespace Hiya2.Server.Services
                 discount = coupon.MaxDiscountAmount.Value;
             }
 
-            if (discount > cartSubtotal)
-            {
-                discount = cartSubtotal;
-            }
-
-            return new CouponValidationResult
-            {
-                IsValid = true,
-                Message = "Coupon applied successfully.",
-                DiscountAmount = discount,
-                Coupon = coupon
-            };
+            return Math.Min(discount, cartSubtotal);
         }
     }
 }

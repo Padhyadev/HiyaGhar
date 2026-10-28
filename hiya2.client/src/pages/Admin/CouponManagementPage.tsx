@@ -254,9 +254,8 @@ export const CouponManagementPage: React.FC = () => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
 
-    if (!formData.code.trim()) {
-      newErrors.code = 'Please enter coupon code';
-    } else if (formData.code.trim().length < 3 || formData.code.trim().length > 20) {
+    // Code is optional: offers apply automatically and the server names a blank one (e.g. OFFER300).
+    if (formData.code.trim() && (formData.code.trim().length < 3 || formData.code.trim().length > 20)) {
       newErrors.code = 'Coupon code must be between 3 and 20 characters';
     }
 
@@ -317,14 +316,16 @@ export const CouponManagementPage: React.FC = () => {
 
       const data = await res.json().catch(() => ({}));
       if (res.ok && data.isSuccess !== false) {
+        // The server generates the code when it was left blank.
+        const savedCode = data.coupon?.code || cleanCode;
         // Save banner and document to client media storage map
-        saveMediaForCoupon(cleanCode, {
+        saveMediaForCoupon(savedCode, {
           bannerImage: formData.bannerImage || undefined,
           documentName: formData.documentName || undefined,
           documentData: formData.documentData || undefined,
         });
 
-        showToast(editingItem ? `Coupon '${payload.code}' updated successfully!` : `Coupon '${payload.code}' created successfully!`, 'success');
+        showToast(editingItem ? `Offer '${savedCode}' updated successfully!` : `Offer '${savedCode}' created successfully!`, 'success');
         await loadCoupons();
         setViewMode('list');
       } else {
@@ -472,18 +473,21 @@ export const CouponManagementPage: React.FC = () => {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '18px' }}>
                 <div className="hiyaghar-form-group">
                   <label style={{ fontWeight: 700, fontSize: '13.5px', display: 'block', marginBottom: '6px' }}>
-                    Coupon Code <span style={{ color: '#dc2626' }}>*</span>
+                    Offer Code <span style={{ color: '#64748b', fontWeight: 500 }}>(optional)</span>
                   </label>
                   <input
                     type="text"
                     maxLength={20}
                     value={formData.code}
                     onChange={(e) => handleFormChange('code', e.target.value.toUpperCase())}
-                    placeholder="e.g. WELCOME10, FESTIVE20, HIYAFREESHIP"
+                    placeholder="Leave blank to auto-generate (e.g. OFFER300)"
                     className={`hiyaghar-search-input ${errors.code ? 'input-error' : ''}`}
                     style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '14px', textTransform: 'uppercase', fontWeight: 800 }}
                   />
                   {errors.code && <span className="hiyaghar-field-error">{errors.code}</span>}
+                  <span style={{ display: 'block', fontSize: '12px', color: '#64748b', marginTop: '4px' }}>
+                    Customers do not enter a code. Every active offer applies automatically once the cart reaches its Minimum Order Amount, and the cart shows how much more to add.
+                  </span>
                 </div>
 
                 <div className="hiyaghar-form-group">

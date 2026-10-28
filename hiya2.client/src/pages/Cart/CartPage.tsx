@@ -4,7 +4,7 @@ import { Footer } from '../../components/layout/Footer/Footer';
 import { CartService } from '../../cart';
 import type { CartItem } from '../../cart';
 import { CouponService } from '../../services/couponService';
-import type { CouponResult } from '../../services/couponService';
+import type { AutoOfferResult } from '../../services/couponService';
 import { SHIPPING_CONFIG, ShippingService } from '../../services/shippingService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
@@ -27,48 +27,26 @@ export const CartPage: React.FC<CartPageProps> = ({
   const [cartItems, setCartItems] = useState<CartItem[]>(CartService.getItems());
   const [subtotal, setSubtotal] = useState<number>(CartService.getSubtotal());
   
-  // Coupon State
-  const [couponInput, setCouponInput] = useState<string>('');
-  const [appliedCoupon, setAppliedCoupon] = useState<CouponResult | null>(null);
+  // Automatic offer (no coupon code): re-priced whenever the cart total changes.
+  const [offer, setOffer] = useState<AutoOfferResult>({ applied: null, next: null });
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
     const unsubscribe = CartService.subscribe(() => {
-      const items = CartService.getItems();
-      const currentSubtotal = CartService.getSubtotal();
-      setCartItems(items);
-      setSubtotal(currentSubtotal);
-
-      // Re-validate coupon if cart subtotal changes
-      if (appliedCoupon && appliedCoupon.code) {
-        CouponService.validateCoupon(appliedCoupon.code, currentSubtotal).then((reval) => {
-          if (reval.success) {
-            setAppliedCoupon(reval);
-          } else {
-            setAppliedCoupon(null);
-            CouponService.clearSavedCode();
-            showToast('Coupon removed: Cart total no longer satisfies minimum requirement.');
-          }
-        });
-      }
+      setCartItems(CartService.getItems());
+      setSubtotal(CartService.getSubtotal());
     });
     window.scrollTo(0, 0);
     return () => unsubscribe();
-  }, [appliedCoupon]);
-
-  // Restore a coupon applied earlier in this tab (e.g. when coming back from checkout).
-  useEffect(() => {
-    const saved = CouponService.getSavedCode();
-    if (!saved || CartService.getSubtotal() <= 0) return;
-    CouponService.validateCoupon(saved, CartService.getSubtotal()).then((result) => {
-      if (result.success) {
-        setAppliedCoupon(result);
-        setCouponInput(result.code || saved);
-      } else {
-        CouponService.clearSavedCode();
-      }
-    });
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    CouponService.getAutoOffer(subtotal).then((result) => {
+      if (!cancelled) setOffer(result);
+    });
+    return () => { cancelled = true; };
+  }, [subtotal]);
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
@@ -85,33 +63,10 @@ export const CartPage: React.FC<CartPageProps> = ({
     showToast(`"${item.name}" removed from your cart.`);
   };
 
-  const handleApplyCoupon = async (e: React.FormEvent, customCode?: string) => {
-    if (e) e.preventDefault();
-    const codeToApply = customCode || couponInput;
-    if (!codeToApply.trim()) {
-      showToast('Please enter a coupon code.');
-      return;
-    }
-    const result = await CouponService.validateCoupon(codeToApply, subtotal);
-    if (result.success) {
-      setAppliedCoupon(result);
-      setCouponInput(result.code || codeToApply.toUpperCase());
-      CouponService.saveCode(result.code || codeToApply);
-      showToast(result.message);
-    } else {
-      showToast(result.message);
-    }
-  };
-
-  const handleRemoveCoupon = () => {
-    setAppliedCoupon(null);
-    setCouponInput('');
-    CouponService.clearSavedCode();
-    showToast('Coupon code removed.');
-  };
-
   // Financial Calculations
-  const discountAmount = appliedCoupon ? appliedCoupon.discountAmount : 0;
+  const appliedOffer = offer.applied;
+  const nextOffer = offer.next;
+  const discountAmount = appliedOffer ? appliedOffer.discountAmount : 0;
   const freeShippingThreshold = SHIPPING_CONFIG.FREE_SHIPPING_THRESHOLD;
   // Free shipping is judged on the price after coupon discount
   // (e.g. ₹500 − ₹50 = ₹450 → not free; ₹600 − ₹60 = ₹540 → free).
@@ -298,68 +253,39 @@ export const CartPage: React.FC<CartPageProps> = ({
                   ))}
                 </div>
 
-                {/* 7. COUPON SECTION */}
-                <div className="hiyaghar-coupon-card">
-                  <div className="hiyaghar-coupon-header">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2">
-                      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
-                      <line x1="7" y1="7" x2="7.01" y2="7" />
-                    </svg>
-                    <span className="hiyaghar-coupon-title">Have a coupon?</span>
-                  </div>
+                {/* 7. AUTOMATIC OFFER (set in Admin → Coupons & Vouchers; no code to enter) */}
+                {(appliedOffer || nextOffer) && (
+                  <div className="hiyaghar-coupon-card">
+                    <div className="hiyaghar-coupon-header">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--hiya-gold-text, #855F0F)" strokeWidth="2">
+                        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+                        <line x1="7" y1="7" x2="7.01" y2="7" />
+                      </svg>
+                      <span className="hiyaghar-coupon-title">Offers</span>
+                    </div>
 
-                  {!appliedCoupon ? (
-                    <div>
-                      <form className="hiyaghar-coupon-form" onSubmit={handleApplyCoupon}>
-                        <input
-                          type="text"
-                          className="hiyaghar-coupon-input"
-                          placeholder="Enter coupon code"
-                          value={couponInput}
-                          onChange={(e) => setCouponInput(e.target.value)}
-                        />
-                        <button type="submit" className="hiyaghar-coupon-btn">
-                          Apply
-                        </button>
-                      </form>
-                      <div style={{ marginTop: '8px', fontSize: '12px', color: '#64748B', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                        <span>💡 Available Offer:</span>
-                        <button
-                          type="button"
-                          onClick={(e) => handleApplyCoupon(e, 'WELCOME10')}
-                          title="Click to apply WELCOME10"
-                          style={{
-                            background: '#FFF9E6',
-                            border: '1px dashed #D19A27',
-                            color: '#855F0F',
-                            padding: '2px 8px',
-                            borderRadius: '4px',
-                            fontWeight: 700,
-                            cursor: 'pointer',
-                            fontSize: '11.5px',
-                          }}
-                        >
-                          WELCOME10
-                        </button>
-                        <span>(10% OFF on orders above ₹300)</span>
+                    {appliedOffer && (
+                      <div className="hiyaghar-coupon-applied-box">
+                        <div className="hiyaghar-coupon-info">
+                          <span className="hiyaghar-coupon-tag">✓ {appliedOffer.label}</span>
+                          <span className="hiyaghar-coupon-msg">
+                            Applied automatically. You save ₹<AnimatedNumber value={appliedOffer.discountAmount} />.
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="hiyaghar-coupon-applied-box">
-                      <div className="hiyaghar-coupon-info">
-                        <span className="hiyaghar-coupon-tag">✓ {appliedCoupon.code}</span>
-                        <span className="hiyaghar-coupon-msg">{appliedCoupon.message}</span>
+                    )}
+
+                    {nextOffer && (
+                      <div className="hiyaghar-offer-nudge" role="status" aria-live="polite">
+                        <i className="fa-solid fa-gift" aria-hidden="true"></i>
+                        <span>
+                          Add <strong>₹<AnimatedNumber value={Math.ceil(nextOffer.amountNeeded)} /></strong> more to get{' '}
+                          <strong>{nextOffer.benefit}</strong> on your order
+                        </span>
                       </div>
-                      <button
-                        type="button"
-                        className="hiyaghar-coupon-remove"
-                        onClick={handleRemoveCoupon}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  )}
-                </div>
+                    )}
+                  </div>
+                )}
 
               </div>
 
@@ -376,7 +302,7 @@ export const CartPage: React.FC<CartPageProps> = ({
 
                     {discountAmount > 0 && (
                       <div className="hiyaghar-summary-row discount">
-                        <span>Discount ({appliedCoupon?.code})</span>
+                        <span>Offer Discount</span>
                         <span className="val" style={{ display: 'inline-flex', alignItems: 'center' }}>-₹<AnimatedNumber value={discountAmount} /></span>
                       </div>
                     )}

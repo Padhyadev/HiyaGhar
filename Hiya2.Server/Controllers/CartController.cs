@@ -21,7 +21,7 @@ namespace Hiya2.Server.Controllers
 
     public class CouponPreviewRequestDto
     {
-        public string Code { get; set; } = string.Empty;
+        public string? Code { get; set; }
     }
 
     [ApiController]
@@ -131,15 +131,21 @@ namespace Hiya2.Server.Controllers
             var customerId = GetCurrentCustomerId();
             if (customerId <= 0) return Unauthorized();
 
+            // Priced on the server cart with the same rule checkout uses (automatic offer,
+            // or the code if it saves more).
             var subtotal = await _cartRepository.GetSubtotalAsync(customerId);
-            var result = await _couponService.ValidateAsync(dto.Code, customerId, subtotal);
+            var result = await _couponService.ResolveDiscountAsync(dto?.Code, customerId, subtotal);
+            var offer = await _couponService.GetAutoOfferAsync(customerId, subtotal);
 
             return Ok(new
             {
                 isSuccess = result.IsValid,
                 message = result.Message,
                 discountAmount = result.DiscountAmount,
-                subtotal
+                code = result.Coupon?.Code,
+                label = result.Coupon != null ? _couponService.GetOfferLabel(result.Coupon) : null,
+                subtotal,
+                next = CouponController.ToNextOfferDto(_couponService, offer.Next)
             });
         }
     }

@@ -166,18 +166,14 @@ namespace Hiya2.Server.Services
 
             var subtotal = cartLines.Sum(l => l.LineTotal);
 
-            decimal discountAmount = 0;
-            Coupon? appliedCoupon = null;
-            if (!string.IsNullOrWhiteSpace(couponCode))
+            // Offers apply automatically; a code (if sent) is used only when it saves more.
+            var couponResult = await _couponService.ResolveDiscountAsync(couponCode, customerId, subtotal);
+            if (!couponResult.IsValid)
             {
-                var couponResult = await _couponService.ValidateAsync(couponCode, customerId, subtotal);
-                if (!couponResult.IsValid)
-                {
-                    return new OrderResult { IsSuccess = false, Message = couponResult.Message };
-                }
-                discountAmount = couponResult.DiscountAmount;
-                appliedCoupon = couponResult.Coupon;
+                return new OrderResult { IsSuccess = false, Message = couponResult.Message };
             }
+            decimal discountAmount = couponResult.DiscountAmount;
+            Coupon? appliedCoupon = couponResult.Coupon;
 
             // Free-shipping threshold is judged on the price after coupon discount
             // (e.g. ₹500 cart − ₹50 coupon = ₹450 → not free).
