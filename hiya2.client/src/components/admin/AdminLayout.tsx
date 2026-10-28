@@ -1,12 +1,12 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { AdminAuthService } from '../../services/adminAuthService';
 import { usePermission } from '../../context/PermissionContext';
-import { MenuIcon, getMenuIconClass } from '../../utils/iconUtils';
+import { MenuIcon } from '../../utils/iconUtils';
 import { showToast } from '../../utils/alertService';
 import './AdminLayout.css';
 import '../../pages/Admin/RoleManagementPage.css'
 
-interface AdminNavItem {
+interface AdminNavSubItem {
   key: string;
   name: string;
   hash: string;
@@ -14,38 +14,16 @@ interface AdminNavItem {
   displayOrder?: number;
 }
 
-const ROUTE_DICTIONARY: Record<string, string> = {
-  DASHBOARD: '/admin/dashboard',
-  USER: '/admin/users',
-  ROLE: '/admin/roles',
-  PRODUCT: '/admin/products',
-  MENU: '/admin/menus',
-  CUSTOMER: '/admin/customers',
-  CATEGORY: '/admin/categories',
-  ATTRIBUTE: '/admin/attributes',
-  HOMEPAGECOMPONENT: '/admin/homepage-components',
-  HOMEPAGE_COMPONENT: '/admin/homepage-components',
-  GIFTHAMPER: '/admin/gift-hampers',
-  ORDER: '/admin/orders',
-  SHIPPING: '/admin/shipping',
-  SHIPPING_SETTINGS: '/admin/shipping',
-  COMBOPACK: '/admin/combo-packs',
-  COMBO_PACK: '/admin/combo-packs',
-  LOV: '/admin/lov',
-  STOCK: '/admin/stock',
-  STOCKSETTING: '/admin/stock-settings',
-  REWARD: '/admin/reward-slabs',
-  COUPON: '/admin/coupons',
-  REVIEW: '/admin/reviews',
-  CONTACT_QUERY: '/admin/contact-queries',
-  CONTACTQUERY: '/admin/contact-queries',
-  CONTACT_QUERIES: '/admin/contact-queries',
-  FAQ: '/admin/faqs',
-  FAQ_MANAGEMENT: '/admin/faqs',
-  DELIVERY_PINCODE: '/admin/delivery-pincodes',
-  TESTMENU: '/admin/test-menu',
-  TEST_MENU: '/admin/test-menu',
-};
+interface AdminNavGroup {
+  key: string;
+  name: string;
+  icon: string;
+  displayOrder: number;
+  hash?: string;
+  children?: AdminNavSubItem[];
+}
+
+
 
 interface AdminLayoutProps {
   currentHash: string;
@@ -64,6 +42,9 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   const { permissions, hasPermission } = usePermission();
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+
+  // Accordion: only one parent group open at a time; all closed by default.
+  const [openGroup, setOpenGroup] = useState<string | null>(null);
 
   // Change Password Modal State
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
@@ -114,146 +95,130 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     }
   };
 
-  const authorizedNavItems = useMemo(() => {
-    const items: AdminNavItem[] = [
-      { key: 'DASHBOARD', name: 'Dashboard', hash: '/admin/dashboard', icon: 'fa-solid fa-chart-line', displayOrder: 0 },
+  const authorizedNavGroups = useMemo<AdminNavGroup[]>(() => {
+    const isSuperAdmin = user?.roles?.some((r) => r.roleCode === 'SUPER_ADMIN' || r.roleName === 'Super Admin') ?? false;
+    const canSee = (k: string) => isSuperAdmin || hasPermission(k, 'canView');
+
+    const catalogChildren: AdminNavSubItem[] = [
+      { key: 'PRODUCT', name: 'Products', hash: '/admin/products', icon: 'fa-solid fa-box', displayOrder: 1 },
+      { key: 'CATEGORY', name: 'Categories', hash: '/admin/categories', icon: 'fa-solid fa-tags', displayOrder: 2 },
+      { key: 'ATTRIBUTE', name: 'Attributes', hash: '/admin/attributes', icon: 'fa-solid fa-sliders', displayOrder: 3 },
+      { key: 'COMBOPACK', name: 'Combo Packs', hash: '/admin/combo-packs', icon: 'fa-solid fa-boxes-packing', displayOrder: 4 },
+      { key: 'GIFTHAMPER', name: 'Gift Hampers', hash: '/admin/gift-hampers', icon: 'fa-solid fa-gift', displayOrder: 5 },
+      { key: 'STOCK', name: 'Stock & Inventory', hash: '/admin/stock', icon: 'fa-solid fa-boxes-stacked', displayOrder: 6 },
+    ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));
+
+    const ordersChildren: AdminNavSubItem[] = [
+      { key: 'ORDER', name: 'Order Management', hash: '/admin/orders', icon: 'fa-solid fa-box-open', displayOrder: 1 },
+      { key: 'DELIVERY_PINCODE', name: 'Delivery Pincodes', hash: '/admin/delivery-pincodes', icon: 'fa-solid fa-map-location-dot', displayOrder: 2 },
+      { key: 'SHIPPING', name: 'Store Settings', hash: '/admin/shipping', icon: 'fa-solid fa-sliders', displayOrder: 3 },
+    ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));
+
+    const customersChildren: AdminNavSubItem[] = [
+      { key: 'CUSTOMER', name: 'Customers', hash: '/admin/customers', icon: 'fa-solid fa-users', displayOrder: 1 },
+      { key: 'REVIEW', name: 'Customer Reviews', hash: '/admin/reviews', icon: 'fa-solid fa-star', displayOrder: 2 },
+      { key: 'CONTACT_QUERY', name: 'Contact Inquiries', hash: '/admin/contact-queries', icon: 'fa-solid fa-envelope-open-text', displayOrder: 3 },
+    ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));
+
+    const marketingChildren: AdminNavSubItem[] = [
+      { key: 'COUPON', name: 'Coupons & Vouchers', hash: '/admin/coupons', icon: 'fa-solid fa-ticket', displayOrder: 1 },
+      { key: 'REWARD', name: 'Reward Coins', hash: '/admin/reward-slabs', icon: 'fa-solid fa-coins', displayOrder: 2 },
+    ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));
+
+    const contentChildren: AdminNavSubItem[] = [
+      { key: 'HOMEPAGECOMPONENT', name: 'Homepage Banners', hash: '/admin/homepage-components', icon: 'fa-solid fa-puzzle-piece', displayOrder: 1 },
+      { key: 'FAQ', name: 'FAQ Management', hash: '/admin/faqs', icon: 'fa-solid fa-circle-question', displayOrder: 2 },
+    ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));
+
+    const systemChildren: AdminNavSubItem[] = [
+      { key: 'USER', name: 'Users', hash: '/admin/users', icon: 'fa-solid fa-user', displayOrder: 1 },
+      { key: 'ROLE', name: 'Roles & Permissions', hash: '/admin/roles', icon: 'fa-solid fa-user-shield', displayOrder: 2 },
+      { key: 'MENU', name: 'Menu Registry', hash: '/admin/menus', icon: 'fa-solid fa-bars', displayOrder: 3 },
+      { key: 'LOV', name: 'Dropdown Masters', hash: '/admin/lov', icon: 'fa-solid fa-list-check', displayOrder: 4 },
+    ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));
+
+    const groups: AdminNavGroup[] = [
+      {
+        key: 'DASHBOARD',
+        name: 'Dashboard',
+        hash: '/admin/dashboard',
+        icon: 'fa-solid fa-chart-line',
+        displayOrder: 0,
+      },
     ];
 
-    const addedKeys = new Set<string>(['DASHBOARD']);
-
-    Object.keys(permissions).forEach((rawKey) => {
-      const key = rawKey.toUpperCase().replace(/\s+/g, '_');
-      if (addedKeys.has(key)) return;
-
-      const perm = permissions[rawKey];
-      if (hasPermission(key, 'canView')) {
-        addedKeys.add(key);
-
-        const isShipping = key === 'SHIPPING' || key === 'SHIPPING_SETTINGS';
-        const isLov = key === 'LOV' || key === 'LIST_OF_VALUES';
-        const name = isShipping
-          ? 'Store Settings'
-          : isLov
-          ? 'Dropdown & Status Master'
-          : (perm.menuName || rawKey);
-        const icon = isShipping
-          ? 'fa-solid fa-sliders'
-          : isLov
-          ? 'fa-solid fa-list-check'
-          : getMenuIconClass(perm.icon, key);
-        const hash = ROUTE_DICTIONARY[key] || `/admin/${key.toLowerCase().replace(/_/g, '-')}`;
-        const displayOrder = perm.displayOrder ?? 99;
-
-        items.push({
-          key,
-          name,
-          hash,
-          icon,
-          displayOrder,
-        });
-      }
-    });
-
-    const isSuperAdmin = user?.roles?.some((r) => r.roleCode === 'SUPER_ADMIN' || r.roleName === 'Super Admin') ?? false;
-    
-    // Always include core modules for Super Admin or when accessible
-    if (isSuperAdmin || hasPermission('SHIPPING', 'canView')) {
-      if (!addedKeys.has('SHIPPING')) {
-        addedKeys.add('SHIPPING');
-        items.push({
-          key: 'SHIPPING',
-          name: 'Store Settings',
-          hash: '/admin/shipping',
-          icon: 'fa-solid fa-sliders',
-          displayOrder: 11,
-        });
-      }
-    }
-
-    if (isSuperAdmin || hasPermission('COMBOPACK', 'canView') || hasPermission('COMBO_PACK', 'canView')) {
-      if (!addedKeys.has('COMBOPACK')) {
-        addedKeys.add('COMBOPACK');
-        items.push({
-          key: 'COMBOPACK',
-          name: 'Combo Packs',
-          hash: '/admin/combo-packs',
-          icon: 'fa-solid fa-boxes-packing',
-          displayOrder: 12,
-        });
-      }
-    }
-
-    if (isSuperAdmin || hasPermission('COUPON', 'canView')) {
-      if (!addedKeys.has('COUPON')) {
-        addedKeys.add('COUPON');
-        items.push({
-          key: 'COUPON',
-          name: 'Coupons & Vouchers',
-          hash: '/admin/coupons',
-          icon: 'fa-solid fa-ticket',
-          displayOrder: 13,
-        });
-      }
-    }
-
-    if (isSuperAdmin || hasPermission('CONTACT_QUERY', 'canView') || hasPermission('CONTACTQUERY', 'canView')) {
-      if (!addedKeys.has('CONTACT_QUERY')) {
-        addedKeys.add('CONTACT_QUERY');
-        items.push({
-          key: 'CONTACT_QUERY',
-          name: 'Contact Inquiries',
-          hash: '/admin/contact-queries',
-          icon: 'fa-solid fa-envelope-open-text',
-          displayOrder: 13.5,
-        });
-      }
-    }
-
-    if (isSuperAdmin || hasPermission('FAQ', 'canView') || hasPermission('FAQ_MANAGEMENT', 'canView')) {
-      if (!addedKeys.has('FAQ')) {
-        addedKeys.add('FAQ');
-        items.push({
-          key: 'FAQ',
-          name: 'FAQ Management',
-          hash: '/admin/faqs',
-          icon: 'fa-solid fa-circle-question',
-          displayOrder: 13.8,
-        });
-      }
-    }
-
-    if (isSuperAdmin && Object.keys(permissions).length <= 1) {
-      const superDefaults: AdminNavItem[] = [
-        { key: 'USER', name: 'User', hash: '/admin/users', icon: 'fa-solid fa-user', displayOrder: 1 },
-        { key: 'ROLE', name: 'Role', hash: '/admin/roles', icon: 'fa-solid fa-user-shield', displayOrder: 2 },
-        { key: 'PRODUCT', name: 'Product', hash: '/admin/products', icon: 'fa-solid fa-box', displayOrder: 3 },
-        { key: 'MENU', name: 'Menu', hash: '/admin/menus', icon: 'fa-solid fa-bars', displayOrder: 4 },
-        { key: 'CUSTOMER', name: 'Customer', hash: '/admin/customers', icon: 'fa-solid fa-users', displayOrder: 5 },
-        { key: 'CATEGORY', name: 'Category', hash: '/admin/categories', icon: 'fa-solid fa-tags', displayOrder: 6 },
-        { key: 'ATTRIBUTE', name: 'Attribute', hash: '/admin/attributes', icon: 'fa-solid fa-sliders', displayOrder: 7 },
-        { key: 'HOMEPAGECOMPONENT', name: 'HomePageComponent', hash: '/admin/homepage-components', icon: 'fa-solid fa-puzzle-piece', displayOrder: 8 },
-        { key: 'GIFTHAMPER', name: 'Gift Hampers', hash: '/admin/gift-hampers', icon: 'fa-solid fa-gift', displayOrder: 9 },
-        { key: 'ORDER', name: 'Orders', hash: '/admin/orders', icon: 'fa-solid fa-box-open', displayOrder: 10 },
-        { key: 'SHIPPING', name: 'Store Settings', hash: '/admin/shipping', icon: 'fa-solid fa-sliders', displayOrder: 11 },
-        { key: 'COMBOPACK', name: 'Combo Packs', hash: '/admin/combo-packs', icon: 'fa-solid fa-boxes-packing', displayOrder: 12 },
-        { key: 'COUPON', name: 'Coupons & Vouchers', hash: '/admin/coupons', icon: 'fa-solid fa-ticket', displayOrder: 13 },
-        { key: 'CONTACT_QUERY', name: 'Contact Inquiries', hash: '/admin/contact-queries', icon: 'fa-solid fa-envelope-open-text', displayOrder: 13.5 },
-        { key: 'FAQ', name: 'FAQ Management', hash: '/admin/faqs', icon: 'fa-solid fa-circle-question', displayOrder: 13.8 },
-        { key: 'LOV', name: 'Dropdown & Status Master', hash: '/admin/lov', icon: 'fa-solid fa-list-check', displayOrder: 14 },
-      ];
-
-      superDefaults.forEach((def) => {
-        if (!addedKeys.has(def.key)) {
-          addedKeys.add(def.key);
-          items.push(def);
-        }
+    if (catalogChildren.length > 0) {
+      groups.push({
+        key: 'CATALOG_GROUP',
+        name: 'Catalog & Inventory',
+        icon: 'fa-solid fa-boxes-stacked',
+        displayOrder: 1,
+        children: catalogChildren,
       });
     }
 
-    return items.sort((a, b) => (a.displayOrder ?? 99) - (b.displayOrder ?? 99));
+    if (ordersChildren.length > 0) {
+      groups.push({
+        key: 'ORDERS_GROUP',
+        name: 'Orders & Logistics',
+        icon: 'fa-solid fa-truck-fast',
+        displayOrder: 2,
+        children: ordersChildren,
+      });
+    }
+
+    if (customersChildren.length > 0) {
+      groups.push({
+        key: 'CUSTOMERS_GROUP',
+        name: 'Customers & Inquiries',
+        icon: 'fa-solid fa-users-gear',
+        displayOrder: 3,
+        children: customersChildren,
+      });
+    }
+
+    if (marketingChildren.length > 0) {
+      groups.push({
+        key: 'MARKETING_GROUP',
+        name: 'Marketing & Promotions',
+        icon: 'fa-solid fa-bullhorn',
+        displayOrder: 4,
+        children: marketingChildren,
+      });
+    }
+
+    if (contentChildren.length > 0) {
+      groups.push({
+        key: 'CONTENT_GROUP',
+        name: 'Website & Content',
+        icon: 'fa-solid fa-globe',
+        displayOrder: 5,
+        children: contentChildren,
+      });
+    }
+
+    if (systemChildren.length > 0) {
+      groups.push({
+        key: 'SYSTEM_GROUP',
+        name: 'System & Security',
+        icon: 'fa-solid fa-shield-halved',
+        displayOrder: 6,
+        children: systemChildren,
+      });
+    }
+
+    return groups.sort((a, b) => a.displayOrder - b.displayOrder);
   }, [permissions, hasPermission, user]);
 
   const cleanCurrentRoute = currentHash.replace(/^#\/?/, '/');
+
+  // Open the group that contains the current page, so the active menu is visible after navigation.
+  const activeGroupKey = authorizedNavGroups.find((g) =>
+    g.children?.some((c) => cleanCurrentRoute.includes(c.hash))
+  )?.key;
+  useEffect(() => {
+    if (activeGroupKey) setOpenGroup(activeGroupKey);
+  }, [activeGroupKey, cleanCurrentRoute]);
 
   return (
     <div className={`hiyaghar-admin-layout ${collapsed ? 'is-collapsed' : ''} ${mobileOpen ? 'is-mobile-open' : ''}`}>
@@ -349,27 +314,96 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             </button>
           </div>
           <nav className="hiyaghar-sidebar-nav">
-            {authorizedNavItems.map((item) => {
-              const isActive =
-                cleanCurrentRoute.includes(item.hash) ||
-                (item.hash === '/admin/dashboard' &&
-                  (cleanCurrentRoute === '/admin' || cleanCurrentRoute === '/admin/dashboard'));
+            {authorizedNavGroups.map((group) => {
+              // 1. Standalone Top-Level Menu (e.g. Dashboard)
+              if (!group.children || group.children.length === 0) {
+                const isActive =
+                  cleanCurrentRoute.includes(group.hash!) ||
+                  (group.hash === '/admin/dashboard' &&
+                    (cleanCurrentRoute === '/admin' || cleanCurrentRoute === '/admin/dashboard'));
+                return (
+                  <button
+                    key={group.key}
+                    type="button"
+                    role="link"
+                    className={`hiyaghar-nav-link ${isActive ? 'is-active' : ''}`}
+                    onClick={() => {
+                      if (group.hash) onNavigate(group.hash);
+                      setMobileOpen(false);
+                    }}
+                  >
+                    <span className="hiyaghar-nav-icon">
+                      <MenuIcon icon={group.icon} menuKey={group.key} />
+                    </span>
+                    <span className="hiyaghar-nav-text">{group.name}</span>
+                  </button>
+                );
+              }
+
+              // 2. Parent Menu with Accordion Submenu
+              const isOpen = openGroup === group.key;
+              const hasActiveChild = group.children.some((c) => cleanCurrentRoute.includes(c.hash));
+
               return (
-                <button
-                  key={item.key}
-                  type="button"
-                  role="link"
-                  className={`hiyaghar-nav-link ${isActive ? 'is-active' : ''}`}
-                  onClick={() => {
-                    onNavigate(item.hash);
-                    setMobileOpen(false);
-                  }}
+                <div
+                  key={group.key}
+                  className={`hiyaghar-nav-group-wrapper ${hasActiveChild ? 'has-active-child' : ''} ${isOpen ? 'is-open' : ''}`}
                 >
-                  <span className="hiyaghar-nav-icon">
-                    <MenuIcon icon={item.icon} menuKey={item.key} />
-                  </span>
-                  <span className="hiyaghar-nav-text">{item.name}</span>
-                </button>
+                  <button
+                    type="button"
+                    className={`hiyaghar-nav-group-btn ${hasActiveChild ? 'is-active' : ''}`}
+                    onClick={() => {
+                      if (collapsed) {
+                        setCollapsed(false);
+                        setOpenGroup(group.key);
+                      } else {
+                        setOpenGroup((prev) => (prev === group.key ? null : group.key));
+                      }
+                    }}
+                    title={group.name}
+                    aria-expanded={isOpen}
+                  >
+                    <div className="hiyaghar-nav-group-left">
+                      <span className="hiyaghar-nav-icon">
+                        <MenuIcon icon={group.icon} menuKey={group.key} />
+                      </span>
+                      <span className="hiyaghar-nav-text">{group.name}</span>
+                    </div>
+                    <span className={`hiyaghar-nav-chevron ${isOpen ? 'is-open' : ''}`} aria-hidden="true">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 6 15 12 9 18" />
+                      </svg>
+                    </span>
+                  </button>
+
+                  {/* Always rendered so it can slide open/closed; hidden from tab order while closed */}
+                  <div className={`hiyaghar-nav-submenu-wrap ${isOpen && !collapsed ? 'is-open' : ''}`}>
+                    <div className="hiyaghar-nav-submenu" role="region" aria-label={group.name} inert={!isOpen || collapsed}>
+                      {group.children.map((child) => {
+                        const isChildActive = cleanCurrentRoute.includes(child.hash);
+                        return (
+                          <button
+                            key={child.key}
+                            type="button"
+                            role="link"
+                            className={`hiyaghar-nav-sublink ${isChildActive ? 'is-active' : ''}`}
+                            onClick={() => {
+                              onNavigate(child.hash);
+                              setMobileOpen(false);
+                            }}
+                            title={child.name}
+                            aria-current={isChildActive ? 'page' : undefined}
+                          >
+                            <span className="hiyaghar-nav-sub-icon">
+                              <MenuIcon icon={child.icon} menuKey={child.key} />
+                            </span>
+                            <span className="hiyaghar-nav-sub-text">{child.name}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </nav>

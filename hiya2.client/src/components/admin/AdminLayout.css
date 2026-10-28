@@ -265,42 +265,221 @@
   display: flex;
   flex-direction: column;
   gap: 4px;
-  padding: 0 12px;
+  padding: 16px 12px;
 }
 
-.hiyaghar-nav-link {
+/* ---------- Top-level links & parent group buttons ---------- */
+.hiyaghar-nav-link,
+.hiyaghar-nav-group-btn {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  color: #10243E;
-  text-decoration: none;
-  font-size: 0.92rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  /* Button reset */
-  background: transparent;
-  border: none;
-  cursor: pointer;
   width: 100%;
-  text-align: left;
+  padding: 11px 14px;
+  border: none;
+  border-radius: 12px;
+  background: transparent;
+  color: #10243E;
   font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease;
 }
 
-.hiyaghar-nav-link:hover {
+.hiyaghar-nav-group-btn {
+  justify-content: space-between;
+}
+
+.hiyaghar-nav-link:hover,
+.hiyaghar-nav-group-btn:hover {
   background: #F7F5EF;
-  color: #D19A27;
+}
+
+.hiyaghar-nav-link:focus-visible,
+.hiyaghar-nav-group-btn:focus-visible,
+.hiyaghar-nav-sublink:focus-visible {
+  outline: 2px solid #D19A27;
+  outline-offset: 1px;
+}
+
+.hiyaghar-nav-group-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Long group names ("Customers & Inquiries") wrap to two lines instead of being cut off */
+.hiyaghar-nav-text {
+  line-height: 1.25;
+}
+
+/* Plain parent icon (same look as before the redesign) */
+.hiyaghar-nav-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 22px;
+  font-size: 1.15rem;
+  transition: color 0.18s ease;
+}
+
+.hiyaghar-nav-link:hover,
+.hiyaghar-nav-group-btn:hover {
+  color: #B9821C;
+}
+
+/* Active page (Dashboard) or group containing the active page */
+.hiyaghar-nav-link.is-active,
+.hiyaghar-nav-group-wrapper.has-active-child > .hiyaghar-nav-group-btn {
+  color: #B9821C;
+  font-weight: 700;
 }
 
 .hiyaghar-nav-link.is-active {
   background: rgba(209, 154, 39, 0.1);
-  color: #D19A27;
-  font-weight: 700;
 }
 
-.hiyaghar-nav-icon {
-  font-size: 1.2rem;
+.hiyaghar-nav-link.is-active .hiyaghar-nav-icon,
+.hiyaghar-nav-group-wrapper.has-active-child > .hiyaghar-nav-group-btn .hiyaghar-nav-icon {
+  color: #D19A27;
+}
+
+.hiyaghar-nav-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: #94a3b8;
+  transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1), color 0.18s ease;
+}
+
+.hiyaghar-nav-chevron.is-open {
+  transform: rotate(90deg);
+  color: #D19A27;
+}
+
+/* ---------- Group card + sliding submenu ---------- */
+.hiyaghar-nav-group-wrapper {
+  display: flex;
+  flex-direction: column;
+  border-radius: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.hiyaghar-nav-group-wrapper.is-open {
+  background: #FBF8F1;
+}
+
+.hiyaghar-nav-group-wrapper.is-open > .hiyaghar-nav-group-btn:hover {
+  background: transparent;
+}
+
+.hiyaghar-nav-submenu-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hiyaghar-nav-submenu-wrap.is-open {
+  grid-template-rows: 1fr;
+}
+
+.hiyaghar-nav-submenu {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: 0;
+  overflow: hidden;
+  /* Indent so the child icon lines up under the parent text (14px padding + 22px icon + 12px gap - 12px sublink padding) */
+  padding: 0 8px 0 36px;
+}
+
+.hiyaghar-nav-submenu-wrap.is-open .hiyaghar-nav-submenu {
+  padding-bottom: 8px;
+}
+
+.hiyaghar-nav-sublink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: #475569;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.hiyaghar-nav-sublink:hover {
+  background: #ffffff;
+  color: #10243E;
+}
+
+.hiyaghar-nav-sublink.is-active {
+  background: #ffffff;
+  color: #B9821C;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(16, 36, 62, 0.08);
+}
+
+.hiyaghar-nav-sub-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 18px;
+  font-size: 0.85rem;
+  color: #94a3b8;
+  transition: color 0.15s ease;
+}
+
+.hiyaghar-nav-sublink:hover .hiyaghar-nav-sub-icon {
+  color: #10243E;
+}
+
+.hiyaghar-nav-sublink.is-active .hiyaghar-nav-sub-icon {
+  color: #D19A27;
+}
+
+/* Gold bar on the active child */
+.hiyaghar-nav-sublink.is-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 3px;
+  background: #D19A27;
+}
+
+/* ---------- Collapsed (icon-only) sidebar ---------- */
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-nav-link,
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-nav-group-btn {
+  justify-content: center;
+  padding: 11px 0;
+}
+
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-nav-group-wrapper.is-open {
+  background: transparent;
+}
+
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-nav-chevron,
+.hiyaghar-admin-layout.is-collapsed .hiyaghar-nav-submenu-wrap {
+  display: none !important;
 }
 
 .hiyaghar-sidebar-footer {

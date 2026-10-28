@@ -192,6 +192,7 @@ namespace Hiya2.Server.Controllers
                 permissionId = p.PermissionId,
                 roleId = p.RoleId,
                 menuId = p.MenuId,
+                parentId = p.Menu?.ParentId ?? 0,
                 menuName = p.Menu?.Name,
                 controller = p.Menu?.Controller,
                 icon = p.Menu?.Icon,

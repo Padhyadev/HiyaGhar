@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import { AdminAuthService } from '../services/adminAuthService';
 
 export interface ActionPermissions {
+  menuId?: number;
+  parentId?: number;
   menuName?: string;
   icon?: string;
   displayOrder?: number;
@@ -52,7 +54,7 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode; syncEnabl
           const data = await res.json();
           if (data && Array.isArray(data.permissions)) {
             const permMap: Record<string, ActionPermissions> = {
-              DASHBOARD: { canView: true, canAdd: true, canEdit: true, canDelete: true, canExport: true, menuName: 'Dashboard', displayOrder: 0, icon: 'fa-solid fa-chart-line' },
+              DASHBOARD: { canView: true, canAdd: true, canEdit: true, canDelete: true, canExport: true, menuName: 'Dashboard', displayOrder: 0, icon: 'fa-solid fa-chart-line', parentId: 0 },
             };
             data.permissions.forEach((p: any) => {
               const rawKey = p.controller
@@ -62,6 +64,8 @@ export const PermissionProvider: React.FC<{ children: React.ReactNode; syncEnabl
               if (key) {
                 const hasAccess = !!(p.canView || p.canAdd || p.canEdit || p.canDelete);
                 permMap[key] = {
+                  menuId: p.menuId,
+                  parentId: p.parentId ?? 0,
                   menuName: p.menuName,
                   icon: p.icon,
                   displayOrder: p.displayOrder,
