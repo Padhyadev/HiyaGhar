@@ -12,7 +12,7 @@ import { WishlistService } from '../../services/wishlistService';
 import type { WishlistItem } from '../../services/wishlistService';
 import { RewardService } from '../../services/rewardService';
 import type { RewardSettingsInfo, RewardLedgerEntry } from '../../services/rewardService';
-import { ShippingService } from '../../services/shippingService';
+import { ShippingService, DELIVERY_AREA_MESSAGE } from '../../services/shippingService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { allowOnlyDigits, sanitizeDigits } from '../../utils/validationUtils';
@@ -343,8 +343,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
       errors.postalCode = 'Please enter pincode';
     } else if (addressForm.postalCode.trim().length !== 6) {
       errors.postalCode = 'Please enter valid 6 digit pincode';
-    } else if (!ShippingService.isAhmedabadPincode(addressForm.postalCode.trim())) {
-      errors.postalCode = 'Order place only in Ahmedabad. We currently deliver only to Ahmedabad addresses.';
+    } else if (!ShippingService.isDeliverablePincode(addressForm.postalCode.trim())) {
+      errors.postalCode = DELIVERY_AREA_MESSAGE;
     }
     if (!addressForm.state?.trim()) {
       errors.state = 'Please enter state';
@@ -352,8 +352,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
 
     if (Object.keys(errors).length > 0) {
       setAddressErrors(errors);
-      if (errors.postalCode && addressForm.postalCode && !ShippingService.isAhmedabadPincode(addressForm.postalCode.trim())) {
-        showToast('Order place only in Ahmedabad.', 'error');
+      if (errors.postalCode && addressForm.postalCode && !ShippingService.isDeliverablePincode(addressForm.postalCode.trim())) {
+        showToast(DELIVERY_AREA_MESSAGE, 'error');
       }
       return;
     }

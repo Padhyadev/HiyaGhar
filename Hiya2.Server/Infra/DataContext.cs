@@ -49,6 +49,7 @@ namespace HIyaghar.Infra
         public DbSet<NewsletterSubscriber> NewsletterSubscribers { get; set; }
         public DbSet<ContactQuery> ContactQueries { get; set; }
         public DbSet<Faq> Faqs { get; set; }
+        public DbSet<DeliveryPincode> DeliveryPincodes { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

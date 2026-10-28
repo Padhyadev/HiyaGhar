@@ -42,6 +42,7 @@ const ROUTE_DICTIONARY: Record<string, string> = {
   CONTACT_QUERIES: '/admin/contact-queries',
   FAQ: '/admin/faqs',
   FAQ_MANAGEMENT: '/admin/faqs',
+  DELIVERY_PINCODE: '/admin/delivery-pincodes',
   TESTMENU: '/admin/test-menu',
   TEST_MENU: '/admin/test-menu',
 };

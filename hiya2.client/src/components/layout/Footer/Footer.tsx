@@ -137,10 +137,8 @@ export const Footer: React.FC = () => {
                 <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
             </a>
-            {/* TODO(brand): replace with the official HIYAGHAR Facebook page URL (e.g. facebook.com/<brand-handle>).
-                The current link is a generic profile.php?id= personal-profile URL. Do not guess. */}
             <a
-              href="https://www.facebook.com/profile.php?id=61593338044762"
+              href="https://www.facebook.com/hiyaghar"
               target="_blank"
               rel="noopener noreferrer"
               className="hiyaghar-footer-social-btn"

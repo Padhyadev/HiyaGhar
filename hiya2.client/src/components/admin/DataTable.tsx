@@ -24,6 +24,9 @@ interface DataTableProps<T> {
   onExportClick?: () => void;
   extraControls?: React.ReactNode;
   loading?: boolean;
+  // Initial sort column (default: newest records first by id)
+  defaultSortKey?: string;
+  defaultSortDirection?: 'asc' | 'desc';
 }
 
 // Helper to extract plain text string from React elements or primitive values
@@ -63,12 +66,14 @@ export function DataTable<T extends Record<string, any>>({
   onExportClick,
   extraControls,
   loading = false,
+  defaultSortKey,
+  defaultSortDirection = 'asc',
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pageSize, setPageSize] = useState<number>(10);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [sortKey, setSortKey] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+  const [sortKey, setSortKey] = useState<string | null>(defaultSortKey ?? null);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>(defaultSortDirection);
 
   // Filter Data (Triggers on 3+ characters or when cleared)
   const filteredData = useMemo(() => {

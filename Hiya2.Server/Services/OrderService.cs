@@ -157,6 +157,13 @@ namespace Hiya2.Server.Services
                 return new OrderResult { IsSuccess = false, Message = "Selected delivery address was not found." };
             }
 
+            var postalCode = (address.PostalCode ?? string.Empty).Trim();
+            var isDeliverable = await _context.DeliveryPincodes.AnyAsync(p => p.Pincode == postalCode && p.IsAllowed);
+            if (!isDeliverable)
+            {
+                return new OrderResult { IsSuccess = false, Message = "Sorry, we currently deliver only around Ghatlodiya, Ahmedabad (about 5 km). Please choose an address in our delivery area." };
+            }
+
             var subtotal = cartLines.Sum(l => l.LineTotal);
 
             decimal discountAmount = 0;

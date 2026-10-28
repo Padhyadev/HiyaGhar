@@ -20,6 +20,12 @@ export interface ShippingSettings {
 }
 
 const STORAGE_KEY = 'hiyaghar_shipping_settings';
+const ALLOWED_PINCODES_STORAGE_KEY = 'hiyaghar_allowed_pincodes';
+
+// Used until the first /api/deliverypincode/allowed response arrives (same defaults the server seeds).
+const DEFAULT_ALLOWED_PINCODES = ['380013', '380052', '380061', '380063', '382480', '382481'];
+
+export const DELIVERY_AREA_MESSAGE = 'Sorry, we currently deliver only around Ghatlodiya, Ahmedabad (about 5 km).';
 
 export const DEFAULT_SHIPPING_SETTINGS: ShippingSettings = {
   freeShippingThreshold: 500,
@@ -133,6 +139,8 @@ export class ShippingService {
    * Call this on app/page mount so all users get the latest admin settings.
    */
   public static async loadSettingsFromApi(): Promise<ShippingSettings> {
+    // Every page that refreshes settings also refreshes the delivery pincode list.
+    void ShippingService.loadAllowedPincodesFromApi();
     try {
       const res = await fetch('/api/shippingsetting');
       const data = await res.json();
@@ -323,14 +331,45 @@ export class ShippingService {
   }
 
   /**
-   * Check if a pincode belongs to Ahmedabad / Gandhinagar Delivery Zone (380xxx, 382xxx)
+   * Pincodes we deliver to (Admin → Delivery Pincodes), from the last API response cached in
+   * localStorage.
    */
-  public static isAhmedabadPincode(pincode: string): boolean {
-    const settings = this.getSettings();
-    if (!settings.onlyAhmedabadDelivery) return true;
+  public static getAllowedPincodes(): string[] {
+    if (typeof window === 'undefined') return DEFAULT_ALLOWED_PINCODES;
+    try {
+      const stored = localStorage.getItem(ALLOWED_PINCODES_STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch {
+      // Fallback
+    }
+    return DEFAULT_ALLOWED_PINCODES;
+  }
+
+  public static async loadAllowedPincodesFromApi(): Promise<string[]> {
+    try {
+      const res = await fetch('/api/deliverypincode/allowed');
+      const data = await res.json();
+      if (data?.isSuccess && Array.isArray(data.pincodes)) {
+        localStorage.setItem(ALLOWED_PINCODES_STORAGE_KEY, JSON.stringify(data.pincodes));
+        return data.pincodes;
+      }
+    } catch {
+      // Network error — fall back to localStorage cache
+    }
+    return ShippingService.getAllowedPincodes();
+  }
+
+  /**
+   * Check if we deliver to a pincode: it must be allowed in Admin → Delivery Pincodes.
+   * The server checks the same list again when the order is placed.
+   */
+  public static isDeliverablePincode(pincode: string): boolean {
     const pin = pincode.trim();
     if (!/^\d{6}$/.test(pin)) return false;
-    return pin.startsWith('380') || pin.startsWith('382');
+    return this.getAllowedPincodes().includes(pin);
   }
 
   /**
@@ -349,11 +388,11 @@ export class ShippingService {
 
     const settings = this.getSettings();
 
-    if (settings.onlyAhmedabadDelivery && !this.isAhmedabadPincode(cleanPin)) {
+    if (!this.isDeliverablePincode(cleanPin)) {
       return {
         serviceable: false,
         estimatedDays: '',
-        message: 'Order place only in Ahmedabad. We currently deliver only to Ahmedabad addresses.',
+        message: DELIVERY_AREA_MESSAGE,
       };
     }
 

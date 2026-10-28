@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ShippingService, type ShippingSettings } from '../../services/shippingService';
+import { ShippingService, DELIVERY_AREA_MESSAGE, type ShippingSettings } from '../../services/shippingService';
 import { AnnouncementService, type AnnouncementItem } from '../../services/announcementService';
 import { AdminAuthService } from '../../services/adminAuthService';
 import { showToast } from '../../utils/alertService';
@@ -640,56 +640,18 @@ export const ShippingSettingsPage: React.FC = () => {
             <div className="hiyaghar-setting-card-header">
               <h3 className="hiyaghar-setting-card-title">
                 <i className="fa-solid fa-map-location-dot"></i>
-                5. Serviceable Delivery Zone Restriction
+                5. Serviceable Delivery Zone
               </h3>
-              <div>
-                {editingSection !== 'zones' ? (
-                  <button
-                    type="button"
-                    className="hiyaghar-section-btn-edit"
-                    onClick={() => setEditingSection('zones')}
-                  >
-                    <i className="fa-solid fa-pen-to-square"></i>
-                    Edit Zone Restriction
-                  </button>
-                ) : (
-                  <div style={{ display: 'flex', gap: '8px' }}>
-                    <button
-                      type="button"
-                      className="hiyaghar-section-btn-cancel"
-                      onClick={handleCancelSection}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      className="hiyaghar-section-btn-save"
-                      onClick={() => handleSaveSection('Delivery Zone Restriction')}
-                    >
-                      <i className="fa-solid fa-floppy-disk"></i>
-                      Save
-                    </button>
-                  </div>
-                )}
-              </div>
             </div>
 
             <div style={{ background: '#f8fafc', border: '1px solid #E2E8F0', padding: '16px 20px', borderRadius: '10px' }}>
-              <label className={`hiyaghar-toggle-label ${editingSection !== 'zones' ? 'is-disabled' : ''}`}>
-                <input
-                  type="checkbox"
-                  disabled={editingSection !== 'zones'}
-                  checked={form.onlyAhmedabadDelivery}
-                  onChange={(e) => handleChange('onlyAhmedabadDelivery', e.target.checked)}
-                  className="hiyaghar-toggle-checkbox"
-                  style={{ width: '20px', height: '20px' }}
-                />
-                <span style={{ fontWeight: 700, fontSize: '14px' }}>
-                  Restrict orders & delivery strictly to Ahmedabad / Gandhinagar pincodes (380xxx, 382xxx)
-                </span>
-              </label>
-              <p style={{ margin: '8px 0 0 30px', fontSize: '13px', color: '#64748b' }}>
-                When checked, any customer trying to enter a pincode outside Ahmedabad will be blocked from ordering with the message: <em>"Order place only in Ahmedabad."</em>
+              <p style={{ margin: 0, fontWeight: 700, fontSize: '14px' }}>
+                Orders are accepted only from allowed Ahmedabad pincodes.
+              </p>
+              <p style={{ margin: '8px 0 0 0', fontSize: '13px', color: '#64748b' }}>
+                Allow or stop delivery for each pincode in{' '}
+                <a href="/admin/delivery-pincodes" style={{ fontWeight: 600 }}>Delivery Pincodes</a>.
+                Customers with any other pincode see: <em>"{DELIVERY_AREA_MESSAGE}"</em>
               </p>
             </div>
           </div>

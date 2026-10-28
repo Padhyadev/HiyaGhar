@@ -3,7 +3,7 @@ import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { CartService } from '../../cart';
 import type { CartItem } from '../../cart';
-import { ShippingService } from '../../services/shippingService';
+import { ShippingService, DELIVERY_AREA_MESSAGE } from '../../services/shippingService';
 import type { DeliveryOption, ShippingSettings } from '../../services/shippingService';
 import { OrderService } from '../../services/orderService';
 import type { ShippingAddress } from '../../services/orderService';
@@ -108,10 +108,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     });
     // Check pincode serviceability without modifying city/state
     if (addr.postalCode && addr.postalCode.length === 6) {
-      if (!ShippingService.isAhmedabadPincode(addr.postalCode.trim())) {
+      if (!ShippingService.isDeliverablePincode(addr.postalCode.trim())) {
         setAddressErrors((prev) => ({
           ...prev,
-          postalCode: 'Order place only in Ahmedabad. We currently deliver only to Ahmedabad addresses.',
+          postalCode: DELIVERY_AREA_MESSAGE,
         }));
       } else {
         setAddressErrors((prev) => ({
@@ -332,8 +332,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       errors.postalCode = 'Please enter pincode';
     } else if (newAddressForm.postalCode.trim().length !== 6) {
       errors.postalCode = 'Please enter valid 6-digit pincode';
-    } else if (!ShippingService.isAhmedabadPincode(newAddressForm.postalCode.trim())) {
-      errors.postalCode = 'Order place only in Ahmedabad. We currently deliver only to Ahmedabad addresses.';
+    } else if (!ShippingService.isDeliverablePincode(newAddressForm.postalCode.trim())) {
+      errors.postalCode = DELIVERY_AREA_MESSAGE;
     }
     if (!newAddressForm.city.trim()) {
       errors.city = 'Please enter city';
@@ -344,8 +344,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
     if (Object.keys(errors).length > 0) {
       setAddressErrors(errors);
-      if (errors.postalCode && !ShippingService.isAhmedabadPincode(newAddressForm.postalCode.trim())) {
-        showToast('Order place only in Ahmedabad.', 'error');
+      if (errors.postalCode && !ShippingService.isDeliverablePincode(newAddressForm.postalCode.trim())) {
+        showToast(DELIVERY_AREA_MESSAGE, 'error');
       }
       return;
     }
@@ -396,12 +396,12 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   // Handle Pincode Check & Auto-Fill City & State
   const handlePincodeBlur = async (pin: string) => {
     if (pin.trim().length === 6) {
-      if (!ShippingService.isAhmedabadPincode(pin.trim())) {
+      if (!ShippingService.isDeliverablePincode(pin.trim())) {
         setAddressErrors((prev) => ({
           ...prev,
-          postalCode: 'Order place only in Ahmedabad. We currently deliver only to Ahmedabad addresses.',
+          postalCode: DELIVERY_AREA_MESSAGE,
         }));
-        showToast('Order place only in Ahmedabad.', 'error');
+        showToast(DELIVERY_AREA_MESSAGE, 'error');
       }
       const res = await ShippingService.lookupPincode(pin);
       if (res.found && (res.city || res.state)) {
@@ -429,8 +429,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       showToast('Please enter delivery pincode.', 'error');
       return false;
     }
-    if (!ShippingService.isAhmedabadPincode(addressForm.pincode.trim())) {
-      showToast('Order place only in Ahmedabad.', 'error');
+    if (!ShippingService.isDeliverablePincode(addressForm.pincode.trim())) {
+      showToast(DELIVERY_AREA_MESSAGE, 'error');
       return false;
     }
     return true;
@@ -653,9 +653,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     }
 
     const currentSelectedAddr = savedAddresses.find((a) => a.id === selectedAddressId);
-    if (currentSelectedAddr && !ShippingService.isAhmedabadPincode(currentSelectedAddr.postalCode)) {
-      setSubmitError('Order place only in Ahmedabad. Please select an Ahmedabad address.');
-      showToast('Order place only in Ahmedabad.', 'error');
+    if (currentSelectedAddr && !ShippingService.isDeliverablePincode(currentSelectedAddr.postalCode)) {
+      setSubmitError(`${DELIVERY_AREA_MESSAGE} Please select an address in our delivery area.`);
+      showToast(DELIVERY_AREA_MESSAGE, 'error');
       return;
     }
 

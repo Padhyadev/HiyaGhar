@@ -23,6 +23,8 @@ namespace Hiya2.Server.Models
         public bool EnableFreeShipping { get; set; } = true;
 
         // Delivery Zone
+        // No longer used for the delivery check: allowed pincodes live in the DeliveryPincode table
+        // (Admin → Delivery Pincodes). Kept so the existing column and settings API stay unchanged.
         public bool OnlyAhmedabadDelivery { get; set; } = true;
 
         // Delivery Duration Labels

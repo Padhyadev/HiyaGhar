@@ -369,8 +369,8 @@ using (var scope = app.Services.CreateScope())
             BEGIN
                 IF NOT EXISTS (SELECT 1 FROM dbo.[Menus] WHERE [Name] = 'Contact Inquiries' OR [Controller] = 'CONTACT_QUERY' OR [Controller] = 'ContactQuery')
                 BEGIN
-                    INSERT INTO dbo.[Menus] ([Name], [Controller], [Icon], [DisplayOrder], [IsActive], [IsDeleted], [SuperAdmin], [CreatedDate])
-                    VALUES ('Contact Inquiries', 'CONTACT_QUERY', 'fa-solid fa-envelope-open-text', 14, 1, 0, 0, GETDATE());
+                    INSERT INTO dbo.[Menus] ([ParentId], [Name], [Controller], [Icon], [DisplayOrder], [IsActive], [IsDeleted], [SuperAdmin], [CreatedDate])
+                    VALUES (0, 'Contact Inquiries', 'CONTACT_QUERY', 'fa-solid fa-envelope-open-text', 14, 1, 0, 0, GETDATE());
                 END
 
                 -- Grant Super Admin permission to Contact Inquiries
@@ -427,8 +427,8 @@ using (var scope = app.Services.CreateScope())
                 BEGIN
                     IF NOT EXISTS (SELECT 1 FROM dbo.[Menus] WHERE [Name] = 'FAQ Management' OR [Controller] = 'FAQ' OR [Controller] = 'Faq')
                     BEGIN
-                        INSERT INTO dbo.[Menus] ([Name], [Controller], [Icon], [DisplayOrder], [IsActive], [IsDeleted], [SuperAdmin], [CreatedDate])
-                        VALUES ('FAQ Management', 'FAQ', 'fa-solid fa-circle-question', 15, 1, 0, 0, GETDATE());
+                        INSERT INTO dbo.[Menus] ([ParentId], [Name], [Controller], [Icon], [DisplayOrder], [IsActive], [IsDeleted], [SuperAdmin], [CreatedDate])
+                        VALUES (0, 'FAQ Management', 'FAQ', 'fa-solid fa-circle-question', 15, 1, 0, 0, GETDATE());
                     END
 
                     DECLARE @FaqMenuId INT = (SELECT TOP 1 [MenuId] FROM dbo.[Menus] WHERE [Name] = 'FAQ Management' OR [Controller] = 'FAQ');
@@ -449,11 +449,67 @@ using (var scope = app.Services.CreateScope())
                         END
                     END
                 END
+
+            -- Delivery Pincodes: fixed list of Ahmedabad pincodes, admin only switches IsAllowed
+            IF OBJECT_ID('dbo.[DeliveryPincode]', 'U') IS NULL
+            BEGIN
+                CREATE TABLE dbo.[DeliveryPincode] (
+                    [Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+                    [Pincode] NVARCHAR(6) NOT NULL,
+                    [AreaName] NVARCHAR(200) NOT NULL DEFAULT N'',
+                    [IsAllowed] BIT NOT NULL DEFAULT 0,
+                    [LastModifiedBy] BIGINT NULL,
+                    [LastModifiedDate] DATETIME2 NULL
+                );
+                CREATE UNIQUE INDEX [IX_DeliveryPincode_Pincode] ON dbo.[DeliveryPincode] ([Pincode]);
+            END
+
+            IF OBJECT_ID('dbo.[Menus]', 'U') IS NOT NULL
+            BEGIN
+                IF NOT EXISTS (SELECT 1 FROM dbo.[Menus] WHERE [Controller] = 'DELIVERY_PINCODE')
+                BEGIN
+                    INSERT INTO dbo.[Menus] ([ParentId], [Name], [Controller], [Icon], [DisplayOrder], [IsActive], [IsDeleted], [SuperAdmin], [CreatedDate])
+                    VALUES (0, 'Delivery Pincodes', 'DELIVERY_PINCODE', 'fa-solid fa-map-location-dot', 16, 1, 0, 0, GETDATE());
+                END
+
+                DECLARE @PincodeMenuId INT = (SELECT TOP 1 [MenuId] FROM dbo.[Menus] WHERE [Controller] = 'DELIVERY_PINCODE');
+                DECLARE @SuperAdminRoleIdForPincode INT = (SELECT TOP 1 [RoleId] FROM dbo.[Role] WHERE [RoleCode] = 'SUPER_ADMIN' OR [RoleName] = 'Super Admin');
+
+                IF @PincodeMenuId IS NOT NULL AND @SuperAdminRoleIdForPincode IS NOT NULL
+                    AND NOT EXISTS (SELECT 1 FROM dbo.[RoleMenuPermission] WHERE [RoleId] = @SuperAdminRoleIdForPincode AND [MenuId] = @PincodeMenuId)
+                BEGIN
+                    INSERT INTO dbo.[RoleMenuPermission] ([RoleId], [MenuId], [CanView], [CanAdd], [CanEdit], [CanDelete], [CanExport], [CreatedDate])
+                    VALUES (@SuperAdminRoleIdForPincode, @PincodeMenuId, 1, 0, 1, 0, 1, GETDATE());
+                END
+            END
         ");
     }
     catch (Exception ex)
     {
         Console.WriteLine($"Database initialization note: {ex.Message}");
+    }
+
+    // Separate try: a failing statement in the SQL above must not leave the pincode list empty
+    // (an empty list blocks every order).
+    try
+    {
+        // Seed the Ahmedabad pincode master list once; existing rows (and admins' allow/not-allow
+        // choices) are never overwritten.
+        var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+        if (!context.DeliveryPincodes.Any())
+        {
+            context.DeliveryPincodes.AddRange(Hiya2.Server.Infra.DeliveryPincodeSeed.Pincodes.Select(p => new Hiya2.Server.Models.DeliveryPincode
+            {
+                Pincode = p.Pincode,
+                AreaName = p.AreaName,
+                IsAllowed = p.IsAllowed
+            }));
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Delivery pincode seeding note: {ex.Message}");
     }
 }
 

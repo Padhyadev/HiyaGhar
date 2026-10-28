@@ -55,6 +55,7 @@ const GiftHamperManagementPage = lazy(() => import('./pages/Admin/GiftHamperMana
 const ReviewManagementPage = lazy(() => import('./pages/Admin/ReviewManagementPage').then(m => ({ default: m.ReviewManagementPage })));
 const ContactQueryManagementPage = lazy(() => import('./pages/Admin/ContactQueryManagementPage').then(m => ({ default: m.ContactQueryManagementPage })));
 const FaqManagementPage = lazy(() => import('./pages/Admin/FaqManagementPage').then(m => ({ default: m.FaqManagementPage })));
+const DeliveryPincodeManagementPage = lazy(() => import('./pages/Admin/DeliveryPincodeManagementPage').then(m => ({ default: m.DeliveryPincodeManagementPage })));
 const StockModulePage = lazy(() => import('./pages/Admin/StockModulePage').then(m => ({ default: m.StockModulePage })));
 const RewardModulePage = lazy(() => import('./pages/Admin/RewardModulePage').then(m => ({ default: m.RewardModulePage })));
 const OrderManagementPage = lazy(() => import('./pages/Admin/OrderManagementPage').then(m => ({ default: m.OrderManagementPage })));
@@ -458,6 +459,22 @@ function App() {
             }
           >
             <ContactQueryManagementPage />
+          </PermissionGuard>
+        );
+      } else if (route.includes('delivery-pincode')) {
+        adminChild = (
+          <PermissionGuard
+            menuKey="DELIVERY_PINCODE"
+            action="canView"
+            fallback={
+              <AccessDeniedPage
+                moduleName="Delivery Pincodes"
+                onNavigateDashboard={() => navigateTo('/admin/dashboard')}
+                onNavigateHome={handleNavigateHome}
+              />
+            }
+          >
+            <DeliveryPincodeManagementPage />
           </PermissionGuard>
         );
       } else if (route.includes('faq')) {
