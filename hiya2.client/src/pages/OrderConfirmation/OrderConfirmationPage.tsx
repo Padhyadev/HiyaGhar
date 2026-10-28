@@ -3,6 +3,9 @@ import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { OrderService } from '../../services/orderService';
 import type { Order } from '../../services/orderService';
+import { CustomerAuthService } from '../../services/customerAuthService';
+import type { CustomerProfile } from '../../services/customerAuthService';
+import { showToast } from '../../utils/alertService';
 import './OrderConfirmationPage.css';
 
 interface OrderConfirmationPageProps {
@@ -19,6 +22,38 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
   onNavigateMyOrders,
 }) => {
   const [order, setOrder] = useState<Order | null>(null);
+
+  // Guest checkout: offer to turn the guest details into an account.
+  const [guest, setGuest] = useState<CustomerProfile | null>(() =>
+    CustomerAuthService.isGuestSession() ? CustomerAuthService.getGuestCustomer() : null
+  );
+  const [password, setPassword] = useState<string>('');
+  const [accountError, setAccountError] = useState<string | null>(null);
+  const [isCreatingAccount, setIsCreatingAccount] = useState<boolean>(false);
+
+  const handleCreateAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!guest) return;
+    if (password.length < 8) {
+      setAccountError('Password must be at least 8 characters long.');
+      return;
+    }
+    setIsCreatingAccount(true);
+    const result = await CustomerAuthService.registerApi({
+      firstName: guest.firstName,
+      lastName: guest.lastName || '',
+      email: guest.email,
+      mobileNo: guest.mobileNo,
+      password,
+    });
+    setIsCreatingAccount(false);
+    if (!result.success) {
+      setAccountError(result.message || 'Could not create your account. Please try again.');
+      return;
+    }
+    setGuest(null);
+    showToast('Account created! Your order is now in My Orders.', 'success');
+  };
 
   useEffect(() => {
     // Read orderId from prop or window hash URL search params
@@ -229,15 +264,42 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
               </div>
             </div>
 
+            {/* GUEST: TURN THIS CHECKOUT INTO AN ACCOUNT */}
+            {guest && (
+              <form className="hiyaghar-conf-guest-account" onSubmit={handleCreateAccount} noValidate>
+                <h3 className="box-title">Create an account to track this order</h3>
+                <p className="box-text">
+                  We'll use <strong>{guest.email}</strong> and <strong>{guest.mobileNo}</strong>. Just choose a password —
+                  this order will move into your new account.
+                </p>
+                <div className="hiyaghar-conf-guest-account-row">
+                  <input
+                    type="password"
+                    autoComplete="new-password"
+                    placeholder="Choose a password (min. 8 characters)"
+                    aria-label="Choose a password"
+                    value={password}
+                    onChange={(e) => { setPassword(e.target.value); setAccountError(null); }}
+                  />
+                  <button type="submit" className="hiyaghar-btn-primary" disabled={isCreatingAccount}>
+                    {isCreatingAccount ? 'Creating...' : 'Create Account'}
+                  </button>
+                </div>
+                {accountError && <span className="field-error" role="alert">{accountError}</span>}
+              </form>
+            )}
+
             {/* ACTION BUTTONS */}
             <div className="hiyaghar-conf-actions">
-              <button
-                type="button"
-                className="hiyaghar-btn-primary track-btn"
-                onClick={onNavigateMyOrders}
-              >
-                View My Orders →
-              </button>
+              {!guest && (
+                <button
+                  type="button"
+                  className="hiyaghar-btn-primary track-btn"
+                  onClick={onNavigateMyOrders}
+                >
+                  View My Orders →
+                </button>
+              )}
               <button
                 type="button"
                 className="hiyaghar-btn-secondary"

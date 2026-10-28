@@ -13,6 +13,28 @@ namespace Hiya2.Server.Services
             _context = context;
         }
 
+        private async Task<List<long>> GetSamePersonCustomerIdsAsync(long customerId)
+        {
+            var customer = await _context.Customers.AsNoTracking()
+                .Where(c => c.CustomerId == customerId)
+                .Select(c => new { c.Email, c.MobileNo })
+                .FirstOrDefaultAsync();
+            if (customer == null)
+            {
+                return new List<long> { customerId };
+            }
+
+            var email = (customer.Email ?? string.Empty).ToLower();
+            var mobile = customer.MobileNo ?? string.Empty;
+            var ids = await _context.Customers.AsNoTracking()
+                .Where(c => c.CustomerId == customerId
+                    || (email != "" && c.Email.ToLower() == email)
+                    || (mobile != "" && c.MobileNo == mobile))
+                .Select(c => c.CustomerId)
+                .ToListAsync();
+            return ids;
+        }
+
         public async Task<CouponValidationResult> ValidateAsync(string code, long customerId, decimal cartSubtotal)
         {
             var normalizedCode = (code ?? string.Empty).Trim().ToUpper();
@@ -49,9 +71,13 @@ namespace Hiya2.Server.Services
                 }
             }
 
+            // Guest checkout makes a new CustomerId each time, so per-customer limits
+            // count every customer row sharing this shopper's email or mobile.
+            var samePersonIds = await GetSamePersonCustomerIdsAsync(customerId);
+
             if (coupon.PerCustomerUsage.HasValue)
             {
-                var customerUsage = await _context.CouponUsages.CountAsync(u => u.CouponId == coupon.Id && u.CustomerId == customerId);
+                var customerUsage = await _context.CouponUsages.CountAsync(u => u.CouponId == coupon.Id && samePersonIds.Contains(u.CustomerId));
                 if (customerUsage >= coupon.PerCustomerUsage.Value)
                 {
                     return new CouponValidationResult { IsValid = false, Message = "You have already used this coupon the maximum number of times." };
@@ -60,7 +86,7 @@ namespace Hiya2.Server.Services
 
             if (coupon.IsFirstOrderOnly)
             {
-                var hasPriorOrder = await _context.Orders.AnyAsync(o => o.CustomerId == customerId && !o.IsDeleted);
+                var hasPriorOrder = await _context.Orders.AnyAsync(o => samePersonIds.Contains(o.CustomerId) && !o.IsDeleted);
                 if (hasPriorOrder)
                 {
                     return new CouponValidationResult { IsValid = false, Message = "This coupon is valid for first-time orders only." };

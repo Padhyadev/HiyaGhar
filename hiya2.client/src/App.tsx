@@ -731,15 +731,8 @@ function App() {
       );
     }
 
+    // Open to signed-out shoppers too: CheckoutPage offers login or guest checkout.
     if (route === '/checkout') {
-      if (!CustomerAuthService.isLoggedIn()) {
-        return (
-          <AuthPage
-            initialMode="login"
-            onNavigateHome={handleNavigateHome}
-          />
-        );
-      }
       return (
         <CheckoutPage
           onNavigateHome={handleNavigateHome}

@@ -16,7 +16,21 @@ import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { allowOnlyDigits, sanitizeDigits } from '../../utils/validationUtils';
 import { showToast } from '../../utils/alertService';
 import { loadRazorpayScript } from '../../utils/razorpayLoader';
+import { navigateTo } from '../../utils/navigation';
 import './CheckoutPage.css';
+
+const EMPTY_NEW_ADDRESS_FORM = {
+  fullName: '',
+  mobileNo: '',
+  email: '',
+  addressLine1: '',
+  addressLine2: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  addressType: 'SHIPPING' as const,
+  isDefault: false,
+};
 
 interface CheckoutPageProps {
   onNavigateHome: () => void;
@@ -34,6 +48,23 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
   // 4-Step Checkout Progress: 1 = Address, 2 = Delivery, 3 = Payment, 4 = Review
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
+
+  // Guest checkout: a signed-out shopper first gives contact details, which
+  // starts a guest session; after that the normal address/order flow runs on it.
+  const isGuest = !CustomerAuthService.isLoggedIn();
+  const [guestReady, setGuestReady] = useState<boolean>(CustomerAuthService.isGuestSession());
+  const [guestForm, setGuestForm] = useState(() => {
+    const guest = CustomerAuthService.getGuestCustomer();
+    return {
+      firstName: guest?.firstName || '',
+      lastName: guest?.lastName || '',
+      email: guest?.email || '',
+      mobileNo: guest?.mobileNo || '',
+    };
+  });
+  const [guestErrors, setGuestErrors] = useState<Record<string, string>>({});
+  const [guestNotice, setGuestNotice] = useState<{ message: string; accountExists: boolean } | null>(null);
+  const [isStartingGuest, setIsStartingGuest] = useState<boolean>(false);
 
   // Saved Addresses State (Shipping Addresses ONLY)
   const [savedAddresses, setSavedAddresses] = useState<UserAddress[]>(AddressService.getShippingAddresses());
@@ -96,7 +127,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   // Helper to sync selected saved address into addressForm
   const selectSavedAddress = (addr: UserAddress) => {
     setSelectedAddressId(addr.id);
-    const customer = CustomerAuthService.getCustomer();
+    const customer = CustomerAuthService.getCheckoutCustomer();
     setAddressForm({
       fullName: addr.fullName,
       mobile: addr.mobileNo,
@@ -154,13 +185,13 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       setSelectedDelivery(options[0]);
     }
 
-    const customer = CustomerAuthService.getCustomer();
+    const customer = CustomerAuthService.getCheckoutCustomer();
 
-    // Load shipping addresses — from the server when logged in, otherwise local-only.
+    // Load shipping addresses — from the server when logged in (or mid guest
+    // checkout), otherwise none: a new guest enters one after their contact details.
     const loadAddresses = async () => {
-      const shippingAddrs = customer
-        ? (await AddressService.fetchAddressesFromApi(customer.customerId)).filter((a) => a.addressType === 'SHIPPING')
-        : AddressService.getShippingAddresses();
+      if (!customer) return;
+      const shippingAddrs = (await AddressService.fetchAddressesFromApi(customer.customerId)).filter((a) => a.addressType === 'SHIPPING');
       setSavedAddresses(shippingAddrs);
       if (shippingAddrs.length > 0) {
         const defaultAddr = shippingAddrs.find((a) => a.isDefault) || shippingAddrs[0];
@@ -169,8 +200,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     };
     loadAddresses();
 
-    // Load reward balance + settings when logged in.
-    if (customer) {
+    // Load reward balance + settings when logged in (guests have no coins).
+    if (CustomerAuthService.isLoggedIn()) {
       fetch('/api/reward/settings')
         .then((r) => r.json())
         .then((data) => {
@@ -223,6 +254,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const handleApplyCoupon = async (codeOverride?: string) => {
     const code = (codeOverride ?? couponCode).trim();
     if (!code) return;
+    if (!CustomerAuthService.hasSession()) {
+      setCouponMessage('Please enter your contact details first, then apply the coupon.');
+      return;
+    }
     setIsApplyingCoupon(true);
     setCouponMessage(null);
     try {
@@ -246,6 +281,83 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     } finally {
       setIsApplyingCoupon(false);
     }
+  };
+
+  const handleGuestContinue = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const form = {
+      firstName: guestForm.firstName.trim(),
+      lastName: guestForm.lastName.trim(),
+      email: guestForm.email.trim(),
+      mobileNo: guestForm.mobileNo.trim(),
+    };
+    const errors: Record<string, string> = {};
+    if (!form.firstName) errors.firstName = 'Please enter first name';
+    if (!form.lastName) errors.lastName = 'Please enter last name';
+    if (!form.email) {
+      errors.email = 'Please enter email address';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+      errors.email = 'Please enter a valid email address';
+    }
+    if (!form.mobileNo) {
+      errors.mobileNo = 'Please enter mobile number';
+    } else if (form.mobileNo.length !== 10) {
+      errors.mobileNo = 'Please enter valid 10-digit mobile number';
+    }
+    setGuestErrors(errors);
+    if (Object.keys(errors).length > 0) return;
+
+    setIsStartingGuest(true);
+    setGuestNotice(null);
+    const itemCountBefore = CartService.getTotalCount();
+    const result = await CustomerAuthService.startGuestCheckout(form);
+    setIsStartingGuest(false);
+
+    if (!result.success) {
+      setGuestNotice({ message: result.message || 'Could not continue as guest. Please try again.', accountExists: !!result.accountExists });
+      return;
+    }
+
+    // The cart now comes from the server, which only holds what is in stock.
+    const items = CartService.getItems();
+    setCartItems(items);
+    setSubtotal(CartService.getSubtotal());
+    if (items.length === 0) {
+      showToast('Sorry, the items in your cart are no longer available.', 'error');
+      onNavigateCart();
+      return;
+    }
+    if (CartService.getTotalCount() < itemCountBefore) {
+      showToast('Some items in your cart were updated to match available stock.', 'info');
+    }
+
+    setGuestReady(true);
+    setSavedAddresses([]);
+    setNewAddressForm({ ...EMPTY_NEW_ADDRESS_FORM, fullName: `${form.firstName} ${form.lastName}`, mobileNo: form.mobileNo });
+    setAddressErrors({});
+    setEditingAddressId(null);
+    setSelectedAddressId('NEW_ADDRESS');
+    setIsAddNewAddressOpen(true);
+
+    const savedCoupon = CouponService.getSavedCode();
+    if (savedCoupon && !appliedCoupon) {
+      setCouponCode(savedCoupon);
+      handleApplyCoupon(savedCoupon);
+    } else if (appliedCoupon) {
+      handleApplyCoupon(appliedCoupon.code);
+    }
+  };
+
+  // Lets a guest go back and change their contact details (starts a fresh guest session).
+  const handleEditGuestDetails = () => {
+    CustomerAuthService.endGuestSession();
+    setGuestReady(false);
+    setSavedAddresses([]);
+    setSelectedAddressId('');
+    setIsAddNewAddressOpen(false);
+    setAddressForm({ fullName: '', mobile: '', email: '', pincode: '', address: '', city: '', state: '' });
+    setAppliedCoupon(null);
+    setCouponMessage(null);
   };
 
   const discountAmount = appliedCoupon?.discountAmount || 0;
@@ -351,7 +463,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     }
     setAddressErrors({});
 
-    const customer = CustomerAuthService.getCustomer();
+    const customer = CustomerAuthService.getCheckoutCustomer();
     const addressPayload = {
       id: editingAddressId || undefined,
       fullName: newAddressForm.fullName.trim(),
@@ -368,7 +480,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     if (customer) {
       const ok = await AddressService.saveAddressApi(addressPayload, customer.customerId);
       if (!ok) {
-        showToast('Could not save address to your account. Please try again.');
+        showToast(customer.isGuest ? 'Could not save this address. Please try again.' : 'Could not save address to your account. Please try again.');
         return;
       }
       const updated = (await AddressService.fetchAddressesFromApi(customer.customerId)).filter((a) => a.addressType === 'SHIPPING');
@@ -640,9 +752,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const handlePlaceOrder = async () => {
     if (!selectedDelivery) return;
 
-    const customer = CustomerAuthService.getCustomer();
+    const customer = CustomerAuthService.getCheckoutCustomer();
     if (!customer) {
-      setSubmitError('Please log in to place an order.');
+      setSubmitError('Your checkout session has expired. Please enter your details again.');
+      setGuestReady(false);
+      setCurrentStep(1);
       return;
     }
 
@@ -736,9 +850,134 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           <div className="hiyaghar-checkout-grid">
             {/* LEFT COLUMN — Step Forms */}
             <div className="hiyaghar-checkout-left-col">
-              {/* STEP 1: ADDRESS */}
-              {currentStep === 1 && (
+              {/* STEP 1 (SIGNED-OUT): LOG IN OR CONTINUE AS GUEST */}
+              {currentStep === 1 && isGuest && !guestReady && (
                 <div className="hiyaghar-checkout-card">
+                  <div className="hiyaghar-checkout-card-header">
+                    <h2 className="hiyaghar-card-title">01. Contact Details</h2>
+                  </div>
+
+                  <div className="hiyaghar-guest-login-prompt">
+                    <span>Already have an account? Log in to use your saved addresses and reward coins.</span>
+                    <button
+                      type="button"
+                      className="hiyaghar-guest-login-btn"
+                      onClick={() => navigateTo('/login?redirect=/checkout')}
+                    >
+                      Log In
+                    </button>
+                  </div>
+
+                  <p className="hiyaghar-guest-intro">Or check out as a guest. We'll send your order updates to this email and mobile number.</p>
+
+                  <form onSubmit={handleGuestContinue} className="hiyaghar-new-address-inline-form" noValidate>
+                    <div className="hiyaghar-form-row">
+                      <div className="hiyaghar-form-group">
+                        <label htmlFor="guest-first-name">First Name *</label>
+                        <input
+                          id="guest-first-name"
+                          type="text"
+                          autoComplete="given-name"
+                          value={guestForm.firstName}
+                          className={guestErrors.firstName ? 'has-error' : ''}
+                          onChange={(e) => {
+                            setGuestForm({ ...guestForm, firstName: e.target.value });
+                            if (guestErrors.firstName) setGuestErrors((prev) => ({ ...prev, firstName: '' }));
+                          }}
+                        />
+                        {guestErrors.firstName && <span className="field-error">{guestErrors.firstName}</span>}
+                      </div>
+
+                      <div className="hiyaghar-form-group">
+                        <label htmlFor="guest-last-name">Last Name *</label>
+                        <input
+                          id="guest-last-name"
+                          type="text"
+                          autoComplete="family-name"
+                          value={guestForm.lastName}
+                          className={guestErrors.lastName ? 'has-error' : ''}
+                          onChange={(e) => {
+                            setGuestForm({ ...guestForm, lastName: e.target.value });
+                            if (guestErrors.lastName) setGuestErrors((prev) => ({ ...prev, lastName: '' }));
+                          }}
+                        />
+                        {guestErrors.lastName && <span className="field-error">{guestErrors.lastName}</span>}
+                      </div>
+                    </div>
+
+                    <div className="hiyaghar-form-row">
+                      <div className="hiyaghar-form-group">
+                        <label htmlFor="guest-email">Email *</label>
+                        <input
+                          id="guest-email"
+                          type="email"
+                          autoComplete="email"
+                          placeholder="you@example.com"
+                          value={guestForm.email}
+                          className={guestErrors.email ? 'has-error' : ''}
+                          onChange={(e) => {
+                            setGuestForm({ ...guestForm, email: e.target.value });
+                            if (guestErrors.email) setGuestErrors((prev) => ({ ...prev, email: '' }));
+                          }}
+                        />
+                        {guestErrors.email && <span className="field-error">{guestErrors.email}</span>}
+                      </div>
+
+                      <div className="hiyaghar-form-group">
+                        <label htmlFor="guest-mobile">Mobile Number *</label>
+                        <input
+                          id="guest-mobile"
+                          type="tel"
+                          autoComplete="tel-national"
+                          maxLength={10}
+                          placeholder="10-digit mobile number"
+                          value={guestForm.mobileNo}
+                          className={guestErrors.mobileNo ? 'has-error' : ''}
+                          onKeyDown={allowOnlyDigits}
+                          onChange={(e) => {
+                            setGuestForm({ ...guestForm, mobileNo: sanitizeDigits(e.target.value) });
+                            if (guestErrors.mobileNo) setGuestErrors((prev) => ({ ...prev, mobileNo: '' }));
+                          }}
+                        />
+                        {guestErrors.mobileNo && <span className="field-error">{guestErrors.mobileNo}</span>}
+                      </div>
+                    </div>
+
+                    {guestNotice && (
+                      <div className="hiyaghar-guest-notice" role="alert">
+                        <span>{guestNotice.message}</span>
+                        {guestNotice.accountExists && (
+                          <button
+                            type="button"
+                            className="hiyaghar-guest-login-btn"
+                            onClick={() => navigateTo('/login?redirect=/checkout')}
+                          >
+                            Log In
+                          </button>
+                        )}
+                      </div>
+                    )}
+
+                    <button type="submit" className="hiyaghar-step-continue-btn" disabled={isStartingGuest}>
+                      {isStartingGuest ? 'Please wait...' : 'Continue as Guest →'}
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              {/* STEP 1: ADDRESS */}
+              {currentStep === 1 && (!isGuest || guestReady) && (
+                <div className="hiyaghar-checkout-card">
+                  {isGuest && (
+                    <div className="hiyaghar-guest-login-prompt">
+                      <span>
+                        Checking out as guest: <strong>{guestForm.firstName} {guestForm.lastName}</strong> · {guestForm.email} · {guestForm.mobileNo}
+                      </span>
+                      <button type="button" className="hiyaghar-guest-login-btn" onClick={handleEditGuestDetails}>
+                        Change
+                      </button>
+                    </div>
+                  )}
                   <div className="hiyaghar-checkout-card-header">
                     <h2 className="hiyaghar-card-title">01. Delivery Address</h2>
                     <button
@@ -754,6 +993,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   </div>
 
                   {/* ADDRESS SELECTOR DROPDOWN (Shipping Addresses Only) */}
+                  {savedAddresses.length > 0 && (
                   <div className="hiyaghar-address-dropdown-wrapper">
                     <label className="hiyaghar-field-label">Select Saved Shipping Address:</label>
                     <select
@@ -769,6 +1009,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       <option value="NEW_ADDRESS">+ Add New Delivery Address...</option>
                     </select>
                   </div>
+                  )}
 
                   {/* SAVED ADDRESSES CARDS (Quick Select Grid) */}
                   {!isAddNewAddressOpen && selectedAddressId !== 'NEW_ADDRESS' && savedAddresses.length > 0 && (
@@ -817,6 +1058,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                     <form onSubmit={handleSaveNewAddressSubmit} className="hiyaghar-new-address-inline-form animate-fade-in" noValidate>
                       <div className="hiyaghar-new-form-header">
                         <h3>{editingAddressId ? 'Edit Delivery Address' : 'Add New Delivery Address'}</h3>
+                        {!(isGuest && savedAddresses.length === 0) && (
                         <button
                           type="button"
                           className="hiyaghar-cancel-new-addr-btn"
@@ -848,6 +1090,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                         >
                           ✕ Cancel
                         </button>
+                        )}
                       </div>
 
                       <div className="hiyaghar-form-row">
@@ -975,6 +1218,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                         <div />
                       </div>
 
+                      {!isGuest && (
                       <div className="hiyaghar-checkbox-group" style={{ alignSelf: 'flex-start', marginTop: '4px', marginBottom: '8px' }}>
                         <label className="checkbox-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '14px', color: 'var(--hiya-navy, #11223A)' }}>
                           <input
@@ -986,6 +1230,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                           Make this my default shipping address
                         </label>
                       </div>
+                      )}
 
                       <button type="submit" className="hiyaghar-save-address-btn">
                         <i className="fa-solid fa-floppy-disk" style={{ marginRight: '8px' }} aria-hidden="true"></i>

@@ -26,13 +26,23 @@ namespace Hiya2.Server.Controllers
             return 0;
         }
 
+        private bool IsStaff() => User.FindFirstValue("token_type") == "staff";
+
+        // Only staff may act on another customer's addresses; a shopper's
+        // token always resolves to their own CustomerId whatever they pass.
+        private long ResolveTargetCustomerId(long? requestedCustomerId)
+        {
+            if (IsStaff() && requestedCustomerId > 0) return requestedCustomerId.Value;
+            return GetCurrentCustomerId();
+        }
+
         /// <summary>
         /// Get all SHIPPING addresses for customer (ordered by IsDefault DESC, Id DESC).
         /// </summary>
         [HttpGet]
         public async Task<IActionResult> GetAddresses([FromQuery] long? customerId)
         {
-            long targetCustomerId = customerId > 0 ? customerId.Value : GetCurrentCustomerId();
+            long targetCustomerId = ResolveTargetCustomerId(customerId);
             if (targetCustomerId <= 0)
             {
                 return Ok(new List<CustomerAddress>());
@@ -57,7 +67,7 @@ namespace Hiya2.Server.Controllers
         [HttpGet("home")]
         public async Task<IActionResult> GetHomeAddress([FromQuery] long? customerId)
         {
-            long targetCustomerId = customerId > 0 ? customerId.Value : GetCurrentCustomerId();
+            long targetCustomerId = ResolveTargetCustomerId(customerId);
             if (targetCustomerId <= 0)
             {
                 return Ok(null);
@@ -87,7 +97,7 @@ namespace Hiya2.Server.Controllers
                 return BadRequest(new { isSuccess = false, message = "Address Line 1, City, and Postal Code are required." });
             }
 
-            long targetCustomerId = address.CustomerId > 0 ? address.CustomerId : GetCurrentCustomerId();
+            long targetCustomerId = ResolveTargetCustomerId(address.CustomerId);
             if (targetCustomerId <= 0)
             {
                 return BadRequest(new { isSuccess = false, message = "Customer ID is required." });
@@ -137,7 +147,7 @@ namespace Hiya2.Server.Controllers
             // SCENARIO 2: SHIPPING ADDRESS (MULTIPLE DELIVERY ADDRESSES PERMITTED)
             if (address.Id > 0)
             {
-                var existing = await _context.CustomerAddresses.FirstOrDefaultAsync(a => a.Id == address.Id && !a.IsDeleted);
+                var existing = await _context.CustomerAddresses.FirstOrDefaultAsync(a => a.Id == address.Id && a.CustomerId == targetCustomerId && !a.IsDeleted);
                 if (existing == null)
                 {
                     return NotFound(new { isSuccess = false, message = "Shipping address not found." });
@@ -182,7 +192,7 @@ namespace Hiya2.Server.Controllers
         [HttpPut("{id}/set-default")]
         public async Task<IActionResult> SetDefaultAddress(long id, [FromQuery] long? customerId)
         {
-            long targetCustomerId = customerId > 0 ? customerId.Value : GetCurrentCustomerId();
+            long targetCustomerId = ResolveTargetCustomerId(customerId);
             if (targetCustomerId <= 0)
             {
                 return BadRequest(new { isSuccess = false, message = "Customer ID is required." });
@@ -208,7 +218,7 @@ namespace Hiya2.Server.Controllers
         public async Task<IActionResult> DeleteAddress(long id)
         {
             var addr = await _context.CustomerAddresses.FirstOrDefaultAsync(a => a.Id == id && !a.IsDeleted);
-            if (addr == null)
+            if (addr == null || (!IsStaff() && addr.CustomerId != GetCurrentCustomerId()))
             {
                 return NotFound(new { isSuccess = false, message = "Address not found." });
             }

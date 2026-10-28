@@ -48,7 +48,7 @@ async function resolveLine(productIdRaw: string | number, weight: string): Promi
 }
 
 async function postDelta(productIdRaw: string | number, weight: string, quantityDelta: number): Promise<void> {
-  if (!CustomerAuthService.isLoggedIn() || quantityDelta === 0) return;
+  if (!CustomerAuthService.hasSession() || quantityDelta === 0) return;
 
   try {
     const line = await resolveLine(productIdRaw, weight);
@@ -115,7 +115,7 @@ export class CartApiService {
   // Push every item currently in the guest (localStorage) cart onto the
   // server cart. Called once, right after login.
   public static async mergeGuestCartToServer(items: Array<{ productId: string; weight: string; quantity: number }>): Promise<void> {
-    if (!CustomerAuthService.isLoggedIn() || items.length === 0) return;
+    if (!CustomerAuthService.hasSession() || items.length === 0) return;
 
     const resolvedItems = (
       await Promise.all(
@@ -155,7 +155,7 @@ export class CartApiService {
     weight: string;
     quantity: number;
   }> | null> {
-    if (!CustomerAuthService.isLoggedIn()) return null;
+    if (!CustomerAuthService.hasSession()) return null;
 
     try {
       const res = await fetch('/api/cart', { headers: CustomerAuthService.getAuthHeaders() });

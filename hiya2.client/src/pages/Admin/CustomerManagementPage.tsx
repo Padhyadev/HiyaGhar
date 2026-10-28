@@ -13,6 +13,7 @@ interface CustomerItem {
   mobileNo: string;
   city?: string;
   isActive: boolean;
+  isGuest?: boolean;
 }
 
 export const CustomerManagementPage: React.FC = () => {
@@ -97,7 +98,23 @@ export const CustomerManagementPage: React.FC = () => {
   };
 
   const columns: ColumnDef<CustomerItem>[] = [
-    { key: 'name', label: 'Customer Name', render: (c) => `${c.firstName} ${c.lastName}` },
+    {
+      key: 'name',
+      label: 'Customer Name',
+      render: (c) => (
+        <>
+          {`${c.firstName} ${c.lastName}`}
+          {c.isGuest ? (
+            <span
+              style={{ marginLeft: '8px', padding: '2px 8px', borderRadius: '999px', fontSize: '11px', fontWeight: 700, background: 'rgba(209, 154, 39, 0.1)', color: '#D19A27' }}
+              title="Created by guest checkout - no password"
+            >
+              Guest
+            </span>
+          ) : null}
+        </>
+      ),
+    },
     { key: 'email', label: 'Email Address' },
     { key: 'mobileNo', label: 'Mobile No' },
   ];

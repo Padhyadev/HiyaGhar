@@ -24,9 +24,14 @@ namespace Hiya2.Server.Controllers
             return long.TryParse(claim, out var id) ? id : 0;
         }
 
+        // Admin-only module: a shopper's customer token must never list or edit customers.
+        private bool IsStaff() => User.FindFirstValue("token_type") == "staff";
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            if (!IsStaff()) return Forbid();
+
             var customers = await _customerRepository.GetAllAsync();
             return Ok(customers);
         }
@@ -34,6 +39,8 @@ namespace Hiya2.Server.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(long id)
         {
+            if (!IsStaff()) return Forbid();
+
             var customer = await _customerRepository.GetByIdAsync(id);
             if (customer == null)
             {
@@ -45,6 +52,8 @@ namespace Hiya2.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] Customer customer)
         {
+            if (!IsStaff()) return Forbid();
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -59,6 +68,8 @@ namespace Hiya2.Server.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(long id, [FromBody] Customer customer)
         {
+            if (!IsStaff()) return Forbid();
+
             if (id != customer.CustomerId)
             {
                 return BadRequest(new { message = "Id in route parameter does not match CustomerId in request body." });
@@ -78,6 +89,8 @@ namespace Hiya2.Server.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
+            if (!IsStaff()) return Forbid();
+
             var success = await _customerRepository.DeleteAsync(id);
             if (!success)
             {

@@ -18,6 +18,8 @@ using Hiya2.Server.Services;
 using Hiya2.Server.Authorization;
 
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.AspNetCore.RateLimiting;
+using System.Threading.RateLimiting;
 using System.IO.Compression;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -99,6 +101,17 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
     // No OnTokenValidated session enforcement — multiple devices/browsers can be logged in simultaneously
+});
+
+// Guest checkout creates a Customer row and issues a token without a password,
+// so cap how often one IP can start a guest session.
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddPolicy("GuestCheckout", httpContext =>
+        RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+            _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(10) }));
 });
 
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, DynamicPermissionPolicyProvider>();
@@ -655,6 +668,8 @@ app.UseOutputCache();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseRateLimiter();
 
 app.MapControllers();
 

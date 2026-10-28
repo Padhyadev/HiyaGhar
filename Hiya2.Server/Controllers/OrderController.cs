@@ -62,6 +62,8 @@ namespace Hiya2.Server.Controllers
             return long.TryParse(claimSub, out var id) ? id : 0;
         }
 
+        private bool IsStaff() => User.FindFirstValue("token_type") == "staff";
+
         // Fetches the "OrderStatus" LOV labels once per request so a list of
         // orders doesn't run one lookup query per row.
         private async Task<Dictionary<string, string>> GetOrderStatusLabelsAsync()
@@ -71,7 +73,7 @@ namespace Hiya2.Server.Controllers
                 .ToDictionaryAsync(l => l.LovCode, l => l.LovDesc);
         }
 
-        private static object ToOrderDto(Order o, Dictionary<string, string> statusLabels) => new
+        private static object ToOrderDto(Order o, Dictionary<string, string> statusLabels, bool isGuest = false) => new
         {
             id = o.Id,
             orderNumber = o.OrderNumber,
@@ -95,6 +97,7 @@ namespace Hiya2.Server.Controllers
             postalCode = o.PostalCode,
             country = o.Country,
             mobileNo = o.MobileNo,
+            isGuest,
             cancelReason = o.CancelReason,
             cancelledDate = o.CancelledDate,
             courierName = o.CourierName,
@@ -198,15 +201,24 @@ namespace Hiya2.Server.Controllers
         [HttpGet("admin")]
         public async Task<IActionResult> GetAllAdmin([FromQuery] int page = 1, [FromQuery] int pageSize = 50)
         {
+            if (!IsStaff()) return Forbid();
+
             var orders = await _orderService.GetAllOrdersAdminAsync(page, pageSize);
             var statusLabels = await GetOrderStatusLabelsAsync();
-            return Ok(new { isSuccess = true, orders = orders.Select(o => ToOrderDto(o, statusLabels)) });
+            var customerIds = orders.Select(o => o.CustomerId).Distinct().ToList();
+            var guestIds = (await _context.Customers
+                .Where(c => customerIds.Contains(c.CustomerId) && c.IsGuest)
+                .Select(c => c.CustomerId)
+                .ToListAsync()).ToHashSet();
+            return Ok(new { isSuccess = true, orders = orders.Select(o => ToOrderDto(o, statusLabels, guestIds.Contains(o.CustomerId))) });
         }
 
         [Authorize]
         [HttpPost("admin/{id}/status")]
         public async Task<IActionResult> UpdateStatusAdmin(long id, [FromBody] UpdateOrderStatusRequestDto dto)
         {
+            if (!IsStaff()) return Forbid();
+
             long? changedBy = null;
             if (User.FindFirstValue("token_type") == "staff")
             {
@@ -238,6 +250,8 @@ namespace Hiya2.Server.Controllers
         [HttpPost("admin/{id}/tracking")]
         public async Task<IActionResult> UpdateTrackingAdmin(long id, [FromBody] UpdateOrderTrackingRequestDto dto)
         {
+            if (!IsStaff()) return Forbid();
+
             long? changedBy = null;
             if (User.FindFirstValue("token_type") == "staff")
             {
@@ -267,6 +281,8 @@ namespace Hiya2.Server.Controllers
         [HttpPost("admin/{id}/payment-status")]
         public async Task<IActionResult> UpdatePaymentStatusAdmin(long id, [FromBody] UpdateOrderPaymentStatusRequestDto dto)
         {
+            if (!IsStaff()) return Forbid();
+
             long? changedBy = null;
             if (User.FindFirstValue("token_type") == "staff")
             {

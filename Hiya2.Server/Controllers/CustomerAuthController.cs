@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
@@ -23,6 +24,14 @@ namespace Hiya2.Server.Controllers
         public string Password { get; set; } = string.Empty;
         public string? Username { get; set; }
         public string? ReferralCode { get; set; }
+    }
+
+    public class GuestCheckoutDto
+    {
+        public string FirstName { get; set; } = string.Empty;
+        public string LastName { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string MobileNo { get; set; } = string.Empty;
     }
 
     public class ChangeCustomerPasswordDto
@@ -83,6 +92,7 @@ namespace Hiya2.Server.Controllers
                 .FirstOrDefaultAsync(c =>
                     !c.IsDeleted &&
                     c.IsActive &&
+                    !c.IsGuest &&
                     (c.Email.ToLower() == input || c.MobileNo == dto.Email.Trim())
                 );
 
@@ -161,13 +171,14 @@ namespace Hiya2.Server.Controllers
             var emailClean = dto.Email.Trim().ToLower();
             var mobileClean = dto.MobileNo.Trim();
 
-            bool emailExists = await _context.Customers.AnyAsync(c => c.Email.ToLower() == emailClean && !c.IsDeleted);
+            // Guest-checkout rows don't count: that shopper is now creating their real account.
+            bool emailExists = await _context.Customers.AnyAsync(c => c.Email.ToLower() == emailClean && !c.IsDeleted && !c.IsGuest);
             if (emailExists)
             {
                 return BadRequest(new { isSuccess = false, message = "An account with this Email address already exists." });
             }
 
-            bool mobileExists = await _context.Customers.AnyAsync(c => c.MobileNo == mobileClean && !c.IsDeleted);
+            bool mobileExists = await _context.Customers.AnyAsync(c => c.MobileNo == mobileClean && !c.IsDeleted && !c.IsGuest);
             if (mobileExists)
             {
                 return BadRequest(new { isSuccess = false, message = "An account with this Mobile Number already exists." });
@@ -210,6 +221,8 @@ namespace Hiya2.Server.Controllers
             }
             await _rewardService.CreditSignupBonusAsync(newCustomer.CustomerId);
 
+            await ClaimGuestOrdersAsync(newCustomer);
+
             var token = _authService.GenerateCustomerToken(newCustomer);
 
             return Ok(new
@@ -229,6 +242,122 @@ namespace Hiya2.Server.Controllers
                     rewardCoins = newCustomer.RewardCoins
                 }
             });
+        }
+
+        /// <summary>
+        /// Guest checkout: creates a password-less guest Customer for this one checkout
+        /// and returns a short-lived customer token, so the normal cart/address/order
+        /// endpoints work unchanged. A fresh guest row is made every time so one guest
+        /// can never see another checkout's addresses or orders.
+        /// </summary>
+        [HttpPost("guest")]
+        [EnableRateLimiting("GuestCheckout")]
+        public async Task<IActionResult> StartGuestCheckout([FromBody] GuestCheckoutDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.FirstName))
+            {
+                return BadRequest(new { isSuccess = false, message = "Please enter First Name." });
+            }
+            if (string.IsNullOrWhiteSpace(dto.LastName))
+            {
+                return BadRequest(new { isSuccess = false, message = "Please enter Last Name." });
+            }
+            if (string.IsNullOrWhiteSpace(dto.Email) || !dto.Email.Contains("@"))
+            {
+                return BadRequest(new { isSuccess = false, message = "Please enter a valid Email address." });
+            }
+
+            var emailClean = dto.Email.Trim().ToLower();
+            var mobileClean = (dto.MobileNo ?? string.Empty).Trim();
+            if (mobileClean.Length != 10 || !mobileClean.All(char.IsDigit))
+            {
+                return BadRequest(new { isSuccess = false, message = "Please enter a valid 10-digit Mobile Number." });
+            }
+
+            // Never hand out a token for a registered account - the shopper must log in.
+            bool accountExists = await _context.Customers.AnyAsync(c =>
+                !c.IsDeleted && !c.IsGuest && (c.Email.ToLower() == emailClean || c.MobileNo == mobileClean));
+            if (accountExists)
+            {
+                return Conflict(new
+                {
+                    isSuccess = false,
+                    code = "ACCOUNT_EXISTS",
+                    message = "You already have a HIYAGHAR account with this email or mobile number. Please log in to continue."
+                });
+            }
+
+            var guest = new Customer
+            {
+                FirstName = dto.FirstName.Trim(),
+                LastName = dto.LastName.Trim(),
+                Email = emailClean,
+                MobileNo = mobileClean,
+                PasswordHash = string.Empty,
+                IsGuest = true,
+                IsActive = true,
+                IsDeleted = false,
+                CreatedDate = DateTime.Now
+            };
+
+            await _context.Customers.AddAsync(guest);
+            await _context.SaveChangesAsync();
+
+            var token = _authService.GenerateCustomerToken(guest);
+
+            return Ok(new
+            {
+                isSuccess = true,
+                token,
+                customer = new
+                {
+                    customerId = guest.CustomerId,
+                    firstName = guest.FirstName,
+                    lastName = guest.LastName,
+                    email = guest.Email,
+                    mobileNo = guest.MobileNo,
+                    rewardCoins = 0,
+                    isGuest = true
+                }
+            });
+        }
+
+        // Moves guest-checkout orders onto a newly registered account. Both email AND
+        // mobile must match, since neither is verified at sign-up and an order holds
+        // the shopper's home address.
+        private async Task ClaimGuestOrdersAsync(Customer account)
+        {
+            try
+            {
+                var guestIds = await _context.Customers
+                    .Where(c => c.IsGuest && !c.IsDeleted && c.Email.ToLower() == account.Email && c.MobileNo == account.MobileNo)
+                    .Select(c => c.CustomerId)
+                    .ToListAsync();
+                if (guestIds.Count == 0) return;
+
+                await _context.Orders
+                    .Where(o => guestIds.Contains(o.CustomerId))
+                    .ExecuteUpdateAsync(s => s.SetProperty(o => o.CustomerId, account.CustomerId));
+                await _context.CouponUsages
+                    .Where(u => guestIds.Contains(u.CustomerId))
+                    .ExecuteUpdateAsync(s => s.SetProperty(u => u.CustomerId, account.CustomerId));
+                await _context.CustomerAddresses
+                    .Where(a => guestIds.Contains(a.CustomerId) && !a.IsDeleted)
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(a => a.CustomerId, account.CustomerId)
+                        .SetProperty(a => a.IsDefault, false));
+                await _context.Customers
+                    .Where(c => guestIds.Contains(c.CustomerId))
+                    .ExecuteUpdateAsync(s => s
+                        .SetProperty(c => c.IsActive, false)
+                        .SetProperty(c => c.IsDeleted, true)
+                        .SetProperty(c => c.LastModifiedDate, DateTime.Now));
+            }
+            catch (Exception ex)
+            {
+                // Best-effort - the account itself is already created.
+                Console.WriteLine($"[GUEST CLAIM ERROR] Customer {account.CustomerId}: {ex}");
+            }
         }
 
         /// <summary>
@@ -321,7 +450,7 @@ namespace Hiya2.Server.Controllers
             }
 
             var emailClean = dto.Email.Trim().ToLower();
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email.ToLower() == emailClean && !c.IsDeleted && c.IsActive);
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email.ToLower() == emailClean && !c.IsDeleted && c.IsActive && !c.IsGuest);
 
             if (customer == null)
             {

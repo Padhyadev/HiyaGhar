@@ -25,3 +25,4 @@ namespace Hiya2.Server.Models
         public DateTime? LastModifiedDate { get; set; }
     }
 }
+ 

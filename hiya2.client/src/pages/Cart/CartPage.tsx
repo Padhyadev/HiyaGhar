@@ -406,14 +406,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                   <button
                     type="button"
                     className="hiyaghar-checkout-cta-btn"
-                    onClick={() => {
-                      if (!CustomerAuthService.isLoggedIn()) {
-                        showToast('Please sign in to complete your checkout.');
-                        navigateTo('/login?redirect=/checkout');
-                        return;
-                      }
-                      onNavigateCheckout();
-                    }}
+                    onClick={onNavigateCheckout}
                   >
                     <span>Proceed to Checkout</span>
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">

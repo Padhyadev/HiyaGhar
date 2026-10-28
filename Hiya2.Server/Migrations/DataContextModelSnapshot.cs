@@ -390,6 +390,9 @@ namespace Hiya2.Server.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsGuest")
+                        .HasColumnType("bit");
+
                     b.Property<long?>("LastModifiedBy")
                         .HasColumnType("bigint");
 

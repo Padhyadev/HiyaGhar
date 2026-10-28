@@ -40,6 +40,7 @@ interface AdminOrder {
   postalCode: string;
   country: string;
   mobileNo: string;
+  isGuest?: boolean;
   cancelReason?: string | null;
   cancelledDate?: string | null;
   courierName?: string | null;
@@ -812,7 +813,20 @@ export const OrderManagementPage: React.FC = () => {
 
   const columns: ColumnDef<AdminOrder>[] = [
     { key: 'orderNumber', label: 'Order Number' },
-    { key: 'recipientName', label: 'Recipient' },
+    {
+      key: 'recipientName',
+      label: 'Recipient',
+      render: (o) => (
+        <>
+          {o.recipientName}
+          {o.isGuest ? (
+            <span className="hiyaghar-order-status-pill status-progress" style={{ marginLeft: '8px' }} title="Placed through guest checkout">
+              Guest
+            </span>
+          ) : null}
+        </>
+      ),
+    },
     { key: 'mobileNo', label: 'Mobile' },
     { key: 'totalAmount', label: 'Total', render: (o) => `₹${o.totalAmount.toFixed(2)}` },
     {

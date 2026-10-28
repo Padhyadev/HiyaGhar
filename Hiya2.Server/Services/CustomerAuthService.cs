@@ -22,6 +22,11 @@ namespace Hiya2.Server.Services
             var issuer = jwtSettings["Issuer"] ?? "HIYAGHAR.Server";
             var audience = jwtSettings["Audience"] ?? "HIYAGHAR.Client";
             var expiryHours = double.TryParse(jwtSettings["ExpiryInHours"], out var h) ? h : 720; // 30 days default for shoppers
+            if (customer.IsGuest)
+            {
+                // A guest token only has to last one checkout (incl. a slow Razorpay payment).
+                expiryHours = 24;
+            }
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -34,7 +39,8 @@ namespace Hiya2.Server.Services
                 new Claim(ClaimTypes.Email, customer.Email ?? string.Empty),
                 new Claim(ClaimTypes.Name, $"{customer.FirstName} {customer.LastName}".Trim()),
                 new Claim(ClaimTypes.Role, "CUSTOMER"),
-                new Claim("token_type", "customer")
+                new Claim("token_type", "customer"),
+                new Claim("is_guest", customer.IsGuest ? "true" : "false")
             };
 
             var token = new JwtSecurityToken(

@@ -31,6 +31,10 @@ namespace Hiya2.Server.Models
 
         public long? ReferredByCustomerId { get; set; }
 
+        // Created by guest checkout: no password, cannot log in, earns no coins.
+        // A later sign-up with the same email/mobile takes over its orders.
+        public bool IsGuest { get; set; } = false;
+
         public bool IsActive { get; set; } = true;
 
         public bool IsDeleted { get; set; } = false;

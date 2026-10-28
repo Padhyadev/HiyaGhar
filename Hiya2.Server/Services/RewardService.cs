@@ -62,6 +62,11 @@ namespace Hiya2.Server.Services
                 return new CoinValidationResult { IsValid = false, Message = "Customer not found." };
             }
 
+            if (customer.IsGuest)
+            {
+                return new CoinValidationResult { IsValid = false, Message = "Please create an account to use reward coins." };
+            }
+
             if (coinsRequested > customer.RewardCoins)
             {
                 return new CoinValidationResult { IsValid = false, Message = "You do not have enough reward coins." };
@@ -137,7 +142,8 @@ namespace Hiya2.Server.Services
             }
 
             var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == customerId);
-            if (customer == null)
+            // Guests don't earn coins; if they sign up first, the order moves to their account and earns then.
+            if (customer == null || customer.IsGuest)
             {
                 return;
             }

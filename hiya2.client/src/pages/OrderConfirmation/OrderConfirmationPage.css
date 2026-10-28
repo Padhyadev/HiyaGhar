@@ -404,3 +404,38 @@
   max-width: 500px;
   margin: 40px auto;
 }
+
+/* Guest checkout: create-account prompt */
+.hiyaghar-conf-guest-account {
+  background: #FDFBF7;
+  border: 1px solid #E8E2C9;
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.hiyaghar-conf-guest-account-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.hiyaghar-conf-guest-account-row input {
+  flex: 1 1 220px;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1.5px solid #E8E2C9;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #ffffff;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-conf-guest-account .field-error {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #b42318;
+}

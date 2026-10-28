@@ -879,3 +879,51 @@
     opacity: 1;
   }
 }
+
+/* Guest checkout: login prompt, guest identity strip and "account exists" notice */
+.hiyaghar-guest-login-prompt,
+.hiyaghar-guest-notice {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: #FFFDF4;
+  border: 1.5px solid #E8DFC8;
+  padding: 14px 18px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: var(--hiya-navy, #11223A);
+  overflow-wrap: anywhere;
+}
+
+.hiyaghar-guest-notice {
+  background: #FEF3F2;
+  border-color: #FECDCA;
+  color: #b42318;
+}
+
+.hiyaghar-guest-login-btn {
+  background: #FFFDF4;
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  color: var(--hiya-navy, #11223A);
+  padding: 8px 18px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.hiyaghar-guest-login-btn:hover {
+  background: var(--hiya-gold, #CB992C);
+  color: #ffffff;
+}
+
+.hiyaghar-guest-intro {
+  font-size: 14px;
+  color: #475569;
+  margin: 0 0 16px;
+}
