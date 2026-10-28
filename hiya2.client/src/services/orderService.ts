@@ -238,8 +238,7 @@ export class OrderService {
   // replaces the local cache with them.
   public static async fetchMyOrders(): Promise<Order[]> {
     if (!CustomerAuthService.isLoggedIn()) {
-      this.saveOrders([]);
-      return [];
+      return this.getAllOrders();
     }
 
     try {

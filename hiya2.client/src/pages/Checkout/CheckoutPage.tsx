@@ -47,8 +47,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const [cartItems, setCartItems] = useState<CartItem[]>(CartService.getItems());
   const [subtotal, setSubtotal] = useState<number>(CartService.getSubtotal());
 
-  // 4-Step Checkout Progress: 1 = Address, 2 = Delivery, 3 = Payment, 4 = Review
-  const [currentStep, setCurrentStep] = useState<1 | 2 | 3 | 4>(1);
+  // 3-Step Checkout Progress: 1 = Address, 2 = Payment, 3 = Review
+  const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
 
   // Guest checkout: a signed-out shopper first gives contact details, which
   // starts a guest session; after that the normal address/order flow runs on it.
@@ -102,8 +102,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   // Live shipping settings state (refreshed from localStorage on every change)
   const [shippingSettings, setShippingSettings] = useState<ShippingSettings>(ShippingService.getSettings());
 
-  // Delivery Options for Step 2
-  const [deliveryOptions, setDeliveryOptions] = useState<DeliveryOption[]>([]);
+  // Delivery State (Standard Delivery)
   const [selectedDelivery, setSelectedDelivery] = useState<DeliveryOption | null>(null);
 
   // Payment Options for Step 3: 'razorpay' (Online: UPI, Cards, NetBanking) vs 'cod' (Cash on Delivery)
@@ -158,7 +157,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     const freshSettings = ShippingService.getSettings();
     setShippingSettings(freshSettings);
     const options = ShippingService.getDeliveryOptions(currentSubtotal);
-    setDeliveryOptions(options);
     return options;
   }, []);
 
@@ -172,7 +170,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     ShippingService.loadSettingsFromApi().then((freshSettings) => {
       setShippingSettings(freshSettings);
       const options = ShippingService.getDeliveryOptions(currentSubtotal);
-      setDeliveryOptions(options);
       setSelectedDelivery((prev) => {
         if (prev) return options.find((o) => o.id === prev.id) || options[0] || null;
         return options[0] || null;
@@ -326,7 +323,6 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   useEffect(() => {
     if (subtotal <= 0) return;
     const options = ShippingService.getDeliveryOptions(Math.max(0, subtotal - discountAmount));
-    setDeliveryOptions(options);
     setSelectedDelivery((prev) => (prev ? options.find((o) => o.id === prev.id) || options[0] || null : options[0] || null));
   }, [subtotal, discountAmount, shippingSettings]);
 
@@ -517,15 +513,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
   const handleStep2Submit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (selectedDelivery) {
-      setCurrentStep(3);
-      window.scrollTo(0, 200);
-    }
-  };
-
-  const handleStep3Submit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setCurrentStep(4);
+    setCurrentStep(3);
     window.scrollTo(0, 200);
   };
 
@@ -787,16 +775,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
             <div className="hiyaghar-step-line" />
             <div className={`hiyaghar-step-item ${currentStep === 2 ? 'is-active' : currentStep > 2 ? 'is-complete' : ''}`}>
               <span className="hiyaghar-step-num">{currentStep > 2 ? '✓' : '02'}</span>
-              <span className="hiyaghar-step-label">Delivery</span>
-            </div>
-            <div className="hiyaghar-step-line" />
-            <div className={`hiyaghar-step-item ${currentStep === 3 ? 'is-active' : currentStep > 3 ? 'is-complete' : ''}`}>
-              <span className="hiyaghar-step-num">{currentStep > 3 ? '✓' : '03'}</span>
               <span className="hiyaghar-step-label">Payment</span>
             </div>
             <div className="hiyaghar-step-line" />
-            <div className={`hiyaghar-step-item ${currentStep === 4 ? 'is-active' : ''}`}>
-              <span className="hiyaghar-step-num">04</span>
+            <div className={`hiyaghar-step-item ${currentStep === 3 ? 'is-active' : ''}`}>
+              <span className="hiyaghar-step-num">03</span>
               <span className="hiyaghar-step-label">Review</span>
             </div>
           </div>
@@ -1214,73 +1197,25 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       ) : null}
 
                       <button type="submit" className="hiyaghar-step-continue-btn">
-                        Continue to Delivery Options →
+                        Continue to Payment →
                       </button>
                     </form>
                   )}
                 </div>
               )}
 
-              {/* STEP 2: DELIVERY OPTIONS */}
+              {/* STEP 2: PAYMENT METHOD */}
               {currentStep === 2 && (
                 <div className="hiyaghar-checkout-card">
                   <div className="hiyaghar-checkout-card-header">
-                    <h2 className="hiyaghar-card-title">02. Select Delivery Method</h2>
-                  </div>
-
-                  <form onSubmit={handleStep2Submit} className="hiyaghar-delivery-form">
-                    <div className="hiyaghar-delivery-options-list">
-                      {deliveryOptions.map((option) => (
-                        <label
-                          key={option.id}
-                          className={`hiyaghar-delivery-option-card ${selectedDelivery?.id === option.id ? 'is-selected' : ''}`}
-                        >
-                          <input
-                            type="radio"
-                            name="deliveryMethod"
-                            checked={selectedDelivery?.id === option.id}
-                            onChange={() => setSelectedDelivery(option)}
-                          />
-                          <div className="hiyaghar-delivery-option-info">
-                            <span className="hiyaghar-delivery-name">{option.name}</span>
-                            <span className="hiyaghar-delivery-est">Estimated: {option.estimatedDays}</span>
-                            <span className="hiyaghar-delivery-desc">{option.description}</span>
-                          </div>
-                          <div className="hiyaghar-delivery-price-col">
-                            {option.price === 0 ? (
-                              <span className="free-badge">FREE</span>
-                            ) : (
-                              <span className="price">₹{option.price}</span>
-                            )}
-                          </div>
-                        </label>
-                      ))}
-                    </div>
-
-                    <div className="hiyaghar-step-actions-row">
-                      <button type="button" className="hiyaghar-back-btn" onClick={() => setCurrentStep(1)}>
-                        ← Back to Address
-                      </button>
-                      <button type="submit" className="hiyaghar-step-continue-btn">
-                        Continue to Payment →
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              )}
-
-              {/* STEP 3: PAYMENT METHOD */}
-              {currentStep === 3 && (
-                <div className="hiyaghar-checkout-card">
-                  <div className="hiyaghar-checkout-card-header">
-                    <h2 className="hiyaghar-card-title">03. Select Payment Method</h2>
+                    <h2 className="hiyaghar-card-title">02. Select Payment Method</h2>
                     <span className="hiyaghar-secure-badge">
                       <i className="fa-solid fa-lock" aria-hidden="true" style={{ color: 'var(--hiya-gold-text, #855F0F)', marginRight: '6px' }}></i>
                       256-Bit Razorpay Encrypted
                     </span>
                   </div>
 
-                  <form onSubmit={handleStep3Submit} className="hiyaghar-payment-form">
+                  <form onSubmit={handleStep2Submit} className="hiyaghar-payment-form">
                     <div className="hiyaghar-payment-methods-grid">
                       {/* RAZORPAY ONLINE PAYMENT (UPI, Cards, NetBanking, Wallets) */}
                       <label className={`hiyaghar-payment-method-item ${selectedPaymentMethod === 'razorpay' ? 'is-selected' : ''}`}>
@@ -1328,8 +1263,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                     </div>
 
                     <div className="hiyaghar-step-actions-row">
-                      <button type="button" className="hiyaghar-back-btn" onClick={() => setCurrentStep(2)}>
-                        ← Back to Delivery
+                      <button type="button" className="hiyaghar-back-btn" onClick={() => setCurrentStep(1)}>
+                        ← Back to Address
                       </button>
                       <button type="submit" className="hiyaghar-step-continue-btn">
                         Review Order →
@@ -1339,11 +1274,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 </div>
               )}
 
-              {/* STEP 4: REVIEW YOUR ORDER */}
-              {currentStep === 4 && (
+              {/* STEP 3: REVIEW YOUR ORDER */}
+              {currentStep === 3 && (
                 <div className="hiyaghar-checkout-card">
                   <div className="hiyaghar-checkout-card-header">
-                    <h2 className="hiyaghar-card-title">04. Review Your Order</h2>
+                    <h2 className="hiyaghar-card-title">03. Review Your Order</h2>
                   </div>
 
                   {submitError && (
@@ -1373,25 +1308,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       </p>
                     </div>
 
-                    {/* Delivery Method Summary */}
-                    <div className="hiyaghar-review-block">
-                      <div className="hiyaghar-review-block-header">
-                        <h3>Delivery Method</h3>
-                        <button type="button" className="hiyaghar-edit-step-btn" onClick={() => setCurrentStep(2)}>
-                          Edit
-                        </button>
-                      </div>
-                      <p className="hiyaghar-review-text">
-                        <strong>{selectedDelivery?.name}</strong> ({selectedDelivery?.estimatedDays}) —{' '}
-                        {selectedDelivery?.price === 0 ? 'FREE Shipping' : `₹${selectedDelivery?.price}`}
-                      </p>
-                    </div>
-
                     {/* Payment Method Summary */}
                     <div className="hiyaghar-review-block">
                       <div className="hiyaghar-review-block-header">
                         <h3>Payment Method</h3>
-                        <button type="button" className="hiyaghar-edit-step-btn" onClick={() => setCurrentStep(3)}>
+                        <button type="button" className="hiyaghar-edit-step-btn" onClick={() => setCurrentStep(2)}>
                           Edit
                         </button>
                       </div>

@@ -56,21 +56,45 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
   };
 
   useEffect(() => {
-    // Read orderId from prop or window hash URL search params
-    const hash = window.location.hash;
+    // 1. Read orderId from prop
     let targetId = orderId;
 
-    if (!targetId) {
+    // 2. Read orderId from URL search query (?orderId=...)
+    if (!targetId && typeof window !== 'undefined') {
+      const searchParams = new URLSearchParams(window.location.search);
+      targetId = searchParams.get('orderId') || undefined;
+    }
+
+    // 3. Read orderId from window hash fallback
+    if (!targetId && typeof window !== 'undefined') {
+      const hash = window.location.hash;
       const match = hash.match(/orderId=([^&]+)/);
       if (match) targetId = match[1];
     }
 
+    // 4. Try finding by targetId in local cache
     if (targetId) {
       const found = OrderService.getOrderById(targetId);
-      setOrder(found);
-    } else {
+      if (found) {
+        setOrder(found);
+      }
+    }
+
+    // 5. Fallback: load latest cached order (crucial for guest checkout)
+    const localOrders = OrderService.getAllOrders();
+    if (localOrders.length > 0) {
+      setOrder((prev) => prev || localOrders[0]);
+    }
+
+    // 6. If signed-in, sync latest orders from backend
+    if (CustomerAuthService.isLoggedIn()) {
       OrderService.fetchMyOrders().then((all) => {
-        if (all.length > 0) setOrder(all[0]);
+        if (targetId) {
+          const matched = all.find((o) => o.id === targetId || o.id === `#${targetId}`);
+          if (matched) setOrder(matched);
+        } else if (all.length > 0) {
+          setOrder((prev) => prev || all[0]);
+        }
       });
     }
 

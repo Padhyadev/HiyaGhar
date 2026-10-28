@@ -743,8 +743,11 @@ function App() {
     }
 
     if (route.startsWith('/order-confirmation')) {
+      const searchParams = new URLSearchParams(window.location.search);
+      const urlOrderId = searchParams.get('orderId') || undefined;
       return (
         <OrderConfirmationPage
+          orderId={urlOrderId}
           onNavigateHome={handleNavigateHome}
           onNavigateMukhwas={handleNavigateMukhwas}
           onNavigateMyOrders={handleNavigateMyOrders}

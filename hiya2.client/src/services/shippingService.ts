@@ -31,7 +31,7 @@ export const DEFAULT_SHIPPING_SETTINGS: ShippingSettings = {
   freeShippingThreshold: 500,
   standardShippingPrice: 49,
   expressShippingPrice: 99,
-  enableExpressDelivery: true,
+  enableExpressDelivery: false,
   enableFreeShipping: true,
   onlyAhmedabadDelivery: true,
   standardDeliveryDays: '3–5 business days',
@@ -436,16 +436,6 @@ export class ShippingService {
         description: isFreeShipping ? 'FREE Shipping Unlocked' : 'Safe & reliable transit',
       },
     ];
-
-    if (settings.enableExpressDelivery) {
-      options.push({
-        id: 'express',
-        name: 'Express Delivery',
-        estimatedDays: settings.expressDeliveryDays || '1–2 business days',
-        price: settings.expressShippingPrice,
-        description: 'Priority handling & fast-track courier',
-      });
-    }
 
     return options;
   }
