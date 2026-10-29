@@ -95,11 +95,14 @@
     },
     {
       "path": "/combos",
-      "title": "Customize Your Combo Pack | HIYAGHAR",
-      "description": "Build your own HIYAGHAR combo box: pick 3, 4 or 6 products from mukhwas, tea masala, handmade soap and hair oil, and save 10%, 15% or 20% on the bundle.",
-      "h1": "Customize Combo",
-      "linkText": "Wellness Combos",
-      "intro": "Select how many products you want in your bundle. Pick 3 items & save 10%, pick 4 items & save 15%, or pick 6 items & save 20%.",
+      "title": "Mukhwas & Wellness Combo Packs | HIYAGHAR",
+      "description": "Shop HIYAGHAR combo packs: ready-made sets of handcrafted mukhwas, tea masala, soap and hair oil at one combo price, lower than buying each item separately.",
+      "h1": "Combo Packs",
+      "linkText": "Combo Packs",
+      "intro": "Ready-made combo packs of our handcrafted favourites, priced lower than buying each item separately.",
+      "breadcrumb": "Combos",
+      "schemaType": "CollectionPage",
+      "collection": "combos",
       "sitemap": true
     },
     {

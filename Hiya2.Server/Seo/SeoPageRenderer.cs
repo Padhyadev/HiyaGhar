@@ -164,17 +164,24 @@ namespace Hiya2.Server.Seo
                     .Select(r => (r.LinkText ?? r.H1 ?? r.Title, r.Path!)));
             }
 
-            if (route.CategoryId.HasValue || route.Collection == "giftHampers")
+            if (route.CategoryId.HasValue || route.Collection == "giftHampers" || route.Collection == "combos")
             {
                 var paths = await GetProductPathsAsync();
                 string PathOf(Models.Product p) => paths.TryGetValue(p.Id, out var path) ? path : "/product/" + p.Id;
-                var occasions = route.CategoryId.HasValue ? new List<Models.GiftHamperOccasion>() : await _hampers.GetAllOccasionsAsync(true);
+                var occasions = route.Collection == "giftHampers" ? await _hampers.GetAllOccasionsAsync(true) : new List<Models.GiftHamperOccasion>();
                 var occasionLinks = occasions.Where(o => !string.IsNullOrWhiteSpace(o.Slug))
                     .Select(o => (o.Name.Trim(), SeoMarkup.OccasionPath(o.Slug))).ToList();
                 if (occasionLinks.Count > 0) body += SeoMarkup.LinkList(occasionLinks);
 
-                var items = route.CategoryId.HasValue
-                    ? (await _products.GetAllAsync(route.CategoryId.Value))
+                // Combos live in the "Combos" category, whose id is only known once the admin created it.
+                var categoryId = route.CategoryId ?? (route.Collection == "combos"
+                    ? await _db.Categories.AsNoTracking()
+                        .Where(cat => !cat.IsDeleted && cat.CategoryName == Services.ComboPricing.CategoryName)
+                        .Select(cat => (int?)cat.Id).FirstOrDefaultAsync()
+                    : null);
+
+                var items = route.Collection != "giftHampers"
+                    ? (categoryId.HasValue ? await _products.GetAllAsync(categoryId.Value) : Enumerable.Empty<Models.Product>())
                         .Where(p => p.IsActive && !p.IsDeleted)
                         .Select(p => (p.ProductName, PathOf(p))).ToList()
                     : occasions
@@ -310,6 +317,18 @@ namespace Hiya2.Server.Seo
             var body = SeoMarkup.Heading(p.ProductName, description)
                 + "<p>Price: " + SeoMarkup.E(priceText) + "</p>"
                 + (inStock == null ? "" : "<p>Availability: " + (inStock.Value ? "In stock" : "Out of stock") + "</p>");
+
+            // Combo (Services/ComboPricing.cs): what is in the box and what the items cost separately.
+            var comboItems = Services.ComboPricing.ParseItems(p.FullDescription);
+            if (comboItems.Count > 0)
+            {
+                body += "<h2>This combo includes</h2><ul>" + string.Concat(comboItems.Select(i =>
+                    "<li>" + SeoMarkup.E($"{i.Quantity} × {i.Name}" + (i.Variant.Length > 0 ? $" ({i.Variant})" : "")) + "</li>")) + "</ul>";
+                var worth = variants.Select(v => v.OriginalPrice).FirstOrDefault(o => o.HasValue && o > prices.Min());
+                if (worth.HasValue) body += "<p>" + SeoMarkup.E($"Items bought separately: {SeoMarkup.FormatPrice(worth.Value)}") + "</p>";
+                var combosRoute = c.Routes.FirstOrDefault(r => r.Collection == "combos");
+                if (combosRoute?.Path != null) body += SeoMarkup.LinkList(new[] { (combosRoute.LinkText ?? combosRoute.Title, combosRoute.Path) });
+            }
 
             var sizes = variants.Where(v => SeoMarkup.VariantLabel(v).Length > 0).ToList();
             if (sizes.Count > 1)

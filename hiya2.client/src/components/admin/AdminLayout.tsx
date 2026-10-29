@@ -104,7 +104,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
       { key: 'PRODUCT', name: 'Products', hash: '/admin/products', icon: 'fa-solid fa-box', displayOrder: 1 },
       { key: 'CATEGORY', name: 'Categories', hash: '/admin/categories', icon: 'fa-solid fa-tags', displayOrder: 2 },
       { key: 'ATTRIBUTE', name: 'Attributes', hash: '/admin/attributes', icon: 'fa-solid fa-sliders', displayOrder: 3 },
-      { key: 'COMBOPACK', name: 'Combo Packs', hash: '/admin/combo-packs', icon: 'fa-solid fa-boxes-packing', displayOrder: 4 },
+      { key: 'COMBOPACK', name: 'Combos', hash: '/admin/combo-packs', icon: 'fa-solid fa-boxes-packing', displayOrder: 4 },
       { key: 'GIFTHAMPER', name: 'Gift Hampers', hash: '/admin/gift-hampers', icon: 'fa-solid fa-gift', displayOrder: 5 },
       { key: 'STOCK', name: 'Stock & Inventory', hash: '/admin/stock', icon: 'fa-solid fa-boxes-stacked', displayOrder: 6 },
     ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));

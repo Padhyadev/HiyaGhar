@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from '../../components/layout/Header/Header';
 import { Hero } from '../../components/home/Hero/Hero';
 import { BestSellersSection } from '../../components/home/BestSellersSection/BestSellersSection';
-import { CustomizeComboSection } from '../../components/home/CustomizeComboSection/CustomizeComboSection';
+import { CombosSection } from '../../components/home/CombosSection/CombosSection';
 import { WhyHiyaSection } from '../../components/home/WhyHiyaSection/WhyHiyaSection';
 import { FounderStrip } from '../../components/story/FounderStrip/FounderStrip';
 import { GiftingHampersSection } from '../../components/home/GiftingHampersSection/GiftingHampersSection';
@@ -23,7 +23,7 @@ export const Home: React.FC = () => {
         {/* 2. Bestsellers Product Section (BESTSELLERS / Our Most Popular Products) */}
         <BestSellersSection componentKey="Bestsellers" />
 
-        <CustomizeComboSection />
+        <CombosSection />
         <WhyHiyaSection />
         {/* Founder Strip below product categories and above footer */}
         <FounderStrip />

@@ -48,8 +48,7 @@ export const Footer: React.FC = () => {
       title: 'Gifting',
       links: [
         { label: 'Gift Hampers', type: 'route', href: '/gift-hampers' },
-        { label: 'Wellness Combos', type: 'route', href: '/combos' },
-        { label: 'Customize Combo', type: 'route', href: '/combos' },
+        { label: 'Combo Packs', type: 'route', href: '/combos' },
       ],
     },
     {

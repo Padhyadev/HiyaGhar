@@ -3,6 +3,19 @@ export interface ProductFaq {
   answer: string;
 }
 
+/**
+ * One product line inside a combo (admin: Catalog > Combos). name/variant are a snapshot for
+ * display; the struck-through combo price is re-totalled on the server from the live variant
+ * prices (Hiya2.Server/Services/ComboPricing.cs).
+ */
+export interface ComboItem {
+  productId: number;
+  variantId: number;
+  quantity: number;
+  name: string;
+  variant: string;
+}
+
 export interface ProductCustomMeta {
   ingredients?: string[];
   benefits?: string[];
@@ -13,6 +26,8 @@ export interface ProductCustomMeta {
   /** Plain text; line breaks are kept on the product page. */
   howToUse?: string;
   faqs?: ProductFaq[];
+  /** Present only on combo products. */
+  comboItems?: ComboItem[];
   crossSellProductIds?: number[];
   highlights?: Array<{
     title: string;
@@ -68,6 +83,7 @@ export const parseProductFullDescription = (
   shelfLife: string;
   howToUse: string;
   faqs: ProductFaq[];
+  comboItems: ComboItem[];
   crossSellProductIds?: number[];
   highlights?: Array<{ title: string; description: string }>;
 } => {
@@ -126,6 +142,9 @@ export const parseProductFullDescription = (
     shelfLife: (mergedMeta.shelfLife || '').trim(),
     howToUse: (mergedMeta.howToUse || '').trim(),
     faqs,
+    comboItems: Array.isArray(mergedMeta.comboItems)
+      ? mergedMeta.comboItems.filter((i) => i && i.productId > 0 && i.variantId > 0 && i.quantity > 0)
+      : [],
     crossSellProductIds: mergedMeta.crossSellProductIds,
     highlights: mergedMeta.highlights,
   };

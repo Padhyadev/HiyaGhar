@@ -10,8 +10,8 @@ import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { ProductReviews } from '../../components/ProductReviews/ProductReviews';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
-import { parseProductFullDescription } from '../../utils/productMetaStore';
+import { formatVariantLabel, getVariantImages, NO_IMAGE, productPath } from '../../utils/productFormat';
+import { parseProductFullDescription, type ComboItem } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
 import { buildProductSeoDescription, seoConfig } from '../../seo/routeSeo';
@@ -150,6 +150,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           shelfLife: parsed.shelfLife,
           howToUse: parsed.howToUse,
           faqs: parsed.faqs,
+          comboItems: parsed.comboItems,
         });
 
         setSelectedImage(finalImgs[0]);
@@ -790,6 +791,36 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               </div>
 
               <p className="hiyaghar-detail-lead">{product.shortDescription}</p>
+
+              {/* Combo (admin: Catalog > Combos): the products in the box, each linking to its own page. */}
+              {product.comboItems?.length > 0 && (
+                <div className="hiyaghar-detail-option-group" style={{ background: '#fffdf2', border: '1px solid #f1e3b5', borderRadius: '12px', padding: '14px 16px' }}>
+                  <h2 style={{ fontSize: '1rem', fontWeight: 800, color: '#11223A', margin: '0 0 8px' }}>This combo includes</h2>
+                  <ul style={{ margin: 0, paddingLeft: '18px', lineHeight: 1.8 }}>
+                    {product.comboItems.map((item: ComboItem) => (
+                      <li key={`${item.productId}-${item.variantId}`}>
+                        <strong>{item.quantity} ×</strong>{' '}
+                        <a
+                          href={productPath(item.name, item.productId)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            navigateTo(productPath(item.name, item.productId));
+                          }}
+                          style={{ color: '#11223A' }}
+                        >
+                          {item.name}
+                        </a>
+                        {item.variant && <span style={{ color: '#64748b' }}> ({item.variant})</span>}
+                      </li>
+                    ))}
+                  </ul>
+                  {currentOriginalPrice > currentPrice && (
+                    <p style={{ margin: '8px 0 0', color: '#166534', fontWeight: 700 }}>
+                      Bought separately: ₹{currentOriginalPrice} – you save ₹{currentOriginalPrice - currentPrice}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* Attribute Selector - one labeled row per attribute (Weight, Packing, ...), alphabetical, all on one line */}
               {attributeGroups.length > 0 && (

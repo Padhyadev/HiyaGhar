@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Repositories.Product;
+using Hiya2.Server.Services;
 
 namespace Hiya2.Server.Controllers
 {
@@ -55,8 +56,20 @@ namespace Hiya2.Server.Controllers
         // The storefront product list is output-cached ("CatalogCache"); drop it after any admin change
         // so a deactivated product disappears right away instead of after the cache expires.
         // Runs after the save is committed, so a failure here must not turn into an error response.
+        // A price change may change a combo's "total of items" (its struck-through price), so combos
+        // are re-totalled first (Services/ComboPricing.cs).
         private async Task EvictCatalogCacheAsync()
         {
+            try
+            {
+                await ComboPricing.RecalculateAsync(_context);
+            }
+            catch (Exception ex)
+            {
+                HttpContext.RequestServices.GetRequiredService<ILogger<ProductController>>()
+                    .LogWarning(ex, "Combo price recalculation failed; combos keep their previous totals.");
+            }
+
             try
             {
                 await _outputCacheStore.EvictByTagAsync("catalog", default);

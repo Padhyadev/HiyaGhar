@@ -20,7 +20,7 @@ import { isUpdateAvailable } from './utils/appVersion';
 import { productPath } from './utils/productFormat';
 
 // ─── Lazy-loaded storefront pages ──────────────────────────────────────────
-const CustomizeComboPage = lazy(() => import('./pages/CustomizeCombo/CustomizeComboPage').then(m => ({ default: m.CustomizeComboPage })));
+const CombosPage = lazy(() => import('./pages/Combos/CombosPage').then(m => ({ default: m.CombosPage })));
 const MukhwasPage = lazy(() => import('./pages/Mukhwas/MukhwasPage').then(m => ({ default: m.MukhwasPage })));
 const ProductDetailPage = lazy(() => import('./pages/ProductDetail/ProductDetailPage').then(m => ({ default: m.ProductDetailPage })));
 const CartPage = lazy(() => import('./pages/Cart/CartPage').then(m => ({ default: m.CartPage })));
@@ -63,7 +63,7 @@ const StockModulePage = lazy(() => import('./pages/Admin/StockModulePage').then(
 const RewardModulePage = lazy(() => import('./pages/Admin/RewardModulePage').then(m => ({ default: m.RewardModulePage })));
 const OrderManagementPage = lazy(() => import('./pages/Admin/OrderManagementPage').then(m => ({ default: m.OrderManagementPage })));
 const ShippingSettingsPage = lazy(() => import('./pages/Admin/ShippingSettingsPage').then(m => ({ default: m.ShippingSettingsPage })));
-const ComboPackManagementPage = lazy(() => import('./pages/Admin/ComboPackManagementPage').then(m => ({ default: m.ComboPackManagementPage })));
+const ComboManagementPage = lazy(() => import('./pages/Admin/ComboManagementPage').then(m => ({ default: m.ComboManagementPage })));
 const CouponManagementPage = lazy(() => import('./pages/Admin/CouponManagementPage').then(m => ({ default: m.CouponManagementPage })));
 const LovManagementPage = lazy(() => import('./pages/Admin/LovManagementPage').then(m => ({ default: m.LovManagementPage })));
 const GenericModulePage = lazy(() => import('./pages/Admin/GenericModulePage').then(m => ({ default: m.GenericModulePage })));
@@ -550,13 +550,13 @@ function App() {
             action="canView"
             fallback={
               <AccessDeniedPage
-                moduleName="Combo Packs"
+                moduleName="Combos"
                 onNavigateDashboard={() => navigateTo('/admin/dashboard')}
                 onNavigateHome={handleNavigateHome}
               />
             }
           >
-            <ComboPackManagementPage />
+            <ComboManagementPage />
           </PermissionGuard>
         );
       } else if (route.includes('coupon')) {
@@ -669,7 +669,7 @@ function App() {
       route === '/combos' ||
       route === '/customize-combo'
     ) {
-      return <CustomizeComboPage onNavigateHome={handleNavigateHome} />;
+      return <CombosPage onNavigateHome={handleNavigateHome} onNavigateToDetail={handleNavigateToDetail} />;
     }
 
     if (route === '/gift-hampers' || route === '/gifting' || route.toLowerCase().startsWith('/gift-hampers/')) {
