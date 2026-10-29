@@ -75,7 +75,7 @@ export const Hero: React.FC = () => {
 
                 {/* 2. Main Product Images Layer (z-index: 2 & 3) */}
                 <img
-                  src="/image/MasalaKharek.webp"
+                  src="/image/Jamun_Pop.webp"
                   alt="Masala Kharek Mukhwas"
                   className="hiyaghar-product-img-main"
                   loading="eager"
@@ -83,7 +83,7 @@ export const Hero: React.FC = () => {
                   decoding="async"
                 />
                 <img
-                  src="/image/Aavlamukvash.webp"
+                  src="/image/Amla_Madhur.webp"
                   alt="Organic Superfood Aavla Mukhwas"
                   className="hiyaghar-product-img-secondary"
                   loading="eager"

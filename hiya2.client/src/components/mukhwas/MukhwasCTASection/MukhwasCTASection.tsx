@@ -18,8 +18,8 @@ export const MukhwasCTASection: React.FC<MukhwasCTASectionProps> = ({
   heading = 'Discover Your Favourite Mukhwas',
   subtext = 'From sweet Gulkand rose paan to fiery spiced kharek & organic jamun drops — bring home authentic Gujarati digestive taste and health in every bite.',
   buttonText = 'Shop All Mukhwas',
-  mainImage = '/image/Tadka.webp',
-  subImage = '/image/Sahi_Kharekh.webp',
+  mainImage = '/image/Ambodiya.webp',
+  subImage = '/image/Shahi_Kharek.webp',
 }) => {
   return (
     <section className="hiyaghar-mukhwas-cta-section" aria-label="Explore Collection CTA">

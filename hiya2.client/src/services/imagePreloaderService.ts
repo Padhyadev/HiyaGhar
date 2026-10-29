@@ -17,7 +17,7 @@ const CRITICAL_IMAGE_URLS = [
   '/image/gifting_festival.webp',
   '/image/lifestyle_kitchen.webp',
   '/image/jamunbottole_clean.webp',
-  '/image/Aavlamukvash.webp',
+  '/image/Jamun_Pop.webp',
   '/image/ImageforMukhwash/Amla%20Madhur.webp',
   '/image/ImageforMukhwash/Choco%20Masti.webp',
   '/image/ImageforMukhwash/Digest%20Ease.webp',
