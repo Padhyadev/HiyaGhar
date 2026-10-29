@@ -27,6 +27,10 @@ interface DataTableProps<T> {
   // Initial sort column (default: newest records first by id)
   defaultSortKey?: string;
   defaultSortDirection?: 'asc' | 'desc';
+  // Optional: the only texts the search box looks in (e.g. name + category). When set, search
+  // starts from the first character. Without it, every field is searched from 3 characters.
+  searchFields?: (item: T) => Array<string | null | undefined>;
+  searchPlaceholder?: string;
 }
 
 // Helper to extract plain text string from React elements or primitive values
@@ -68,6 +72,8 @@ export function DataTable<T extends Record<string, any>>({
   loading = false,
   defaultSortKey,
   defaultSortDirection = 'asc',
+  searchFields,
+  searchPlaceholder = 'Search...',
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [pageSize, setPageSize] = useState<number>(10);
@@ -80,6 +86,11 @@ export function DataTable<T extends Record<string, any>>({
     const term = searchTerm.trim().toLowerCase();
     // If search is empty, return all data
     if (!term) return data;
+
+    if (searchFields) {
+      return data.filter((item) => searchFields(item).some((text) => (text || '').toLowerCase().includes(term)));
+    }
+
     // If search is less than 3 characters, require at least 3 characters before filtering
     if (term.length < 3) return data;
 
@@ -92,7 +103,7 @@ export function DataTable<T extends Record<string, any>>({
         return String(val).toLowerCase().includes(term);
       })
     );
-  }, [data, searchTerm]);
+  }, [data, searchTerm, searchFields]);
 
   // Sort Data (Default: Newest additions at #1, or user-selected column sort)
   const sortedData = useMemo(() => {
@@ -268,7 +279,7 @@ export function DataTable<T extends Record<string, any>>({
             type="text"
             value={searchTerm}
             onChange={handleSearchChange}
-            placeholder="Search..."
+            placeholder={searchPlaceholder}
             className="hiyaghar-search-input"
           />
         </div>

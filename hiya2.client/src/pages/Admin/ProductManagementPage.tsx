@@ -46,6 +46,10 @@ const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 MB Limit
 const MAX_VARIANT_IMAGES = 6;
 
 
+// Products table search: product name and category name only (not descriptions, SKUs, prices or
+// image paths), from the first letter.
+const productSearchFields = (p: ProductItem) => [p.productName, p.categoryName];
+
 const variantDisplayLabel = (v: ProductVariantItem, index: number) =>
   v.isNoVariant ? 'Product' : (v.attributes.map((a) => a.attributeValue).join(' • ') || `Variant ${index + 1}`);
 
@@ -968,6 +972,8 @@ export const ProductManagementPage: React.FC = () => {
           canAdd={currentMenuPermission.canAdd}
           canEdit={currentMenuPermission.canEdit}
           canDelete={currentMenuPermission.canDelete}
+          searchFields={productSearchFields}
+          searchPlaceholder="Product or category name"
         />
       ) : (
         <div className="hiyaghar-datatable-card">
