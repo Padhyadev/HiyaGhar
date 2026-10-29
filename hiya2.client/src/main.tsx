@@ -4,6 +4,22 @@ import { HelmetProvider } from 'react-helmet-async';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './styles/globals/global.css';
 import App from './App.tsx';
+import { startVersionWatch } from './utils/appVersion';
+
+// Reload tabs that are still running a version from before the last publish (see appVersion.ts).
+startVersionWatch();
+
+// This site does not use a service worker. A service worker left in a browser by an earlier
+// version of the site answers normal reloads with its saved copy of the OLD site (only a hard
+// refresh bypasses it), so remove any registration and its saved files.
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then((registrations) => {
+    if (registrations.length === 0) return;
+    Promise.all(registrations.map((r) => r.unregister()))
+      .then(() => (window.caches ? caches.keys().then((keys) => Promise.all(keys.map((k) => caches.delete(k)))) : undefined))
+      .catch(() => {});
+  }).catch(() => {});
+}
 
 // Filter third-party SDK noise from console (e.g. Razorpay Sardine/Sentry internal port probes)
 if (typeof window !== 'undefined') {

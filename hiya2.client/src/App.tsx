@@ -16,6 +16,7 @@ import { preloadCriticalImages } from './services/imagePreloaderService';
 import { SEO } from './components/common/SEO/SEO';
 import { findRouteMeta, type RouteMeta } from './seo/routeSeo';
 import { trackPageView } from './utils/analytics';
+import { isUpdateAvailable } from './utils/appVersion';
 import { productPath } from './utils/productFormat';
 
 // ─── Lazy-loaded storefront pages ──────────────────────────────────────────
@@ -181,6 +182,12 @@ function App() {
   useEffect(() => {
     if (currentRoute === initialRouteRef.current) return;
     document.querySelectorAll('script[type="application/ld+json"][data-server-seo]').forEach((el) => el.remove());
+  }, [currentRoute]);
+
+  // A newer version was published while this tab was open: load it now, at a page change
+  // (the URL is already the new route), rather than keep running the old code.
+  useEffect(() => {
+    if (currentRoute !== initialRouteRef.current && isUpdateAvailable()) window.location.reload();
   }, [currentRoute]);
 
   // GA4 page view per route (no-op until VITE_GA4_MEASUREMENT_ID is set; admin pages skipped).

@@ -3,6 +3,7 @@ import { ScrollReveal } from '../../common/ScrollReveal/ScrollReveal';
 import { navigateTo } from '../../../utils/navigation';
 import { ShippingService, type ShippingSettings } from '../../../services/shippingService';
 import './Footer.css';
+import { LOGO_URL } from '../../../utils/brand';
 
 // "+91 92744 43617" / "9274443617" / "09274443617" -> "+919274443617"
 const toTelHref = (phone: string): string => {
@@ -154,7 +155,7 @@ export const Footer: React.FC = () => {
 
           {/* Center Brand Logo & Trust Signals */}
           <ScrollReveal variant="fade-up" delay={100} className="hiyaghar-footer-center-logo">
-            <img src="/image/HiyaGhar.webp" alt="HIYA" width={140} height={42} loading="lazy" decoding="async" className="hiyaghar-footer-logo-img" />
+            <img src={LOGO_URL} alt="HIYA" width={140} height={42} loading="lazy" decoding="async" className="hiyaghar-footer-logo-img" />
             {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
               <div className="hiyaghar-footer-fssai-pill">
                 <span className="hiyaghar-fssai-label">FSSAI Lic. No.</span>

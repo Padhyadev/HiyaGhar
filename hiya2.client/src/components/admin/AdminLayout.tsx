@@ -4,6 +4,7 @@ import { usePermission } from '../../context/PermissionContext';
 import { MenuIcon } from '../../utils/iconUtils';
 import { showToast } from '../../utils/alertService';
 import './AdminLayout.css';
+import { LOGO_URL } from '../../utils/brand';
 import '../../pages/Admin/RoleManagementPage.css'
 
 interface AdminNavSubItem {
@@ -239,7 +240,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             ☰
           </button>
           <div className="hiyaghar-topbar-brand" onClick={() => onNavigate('/admin/dashboard')}>
-            <img src="/image/HiyaGhar.webp" alt="HIYA" className="hiyaghar-topbar-logo" />
+            <img src={LOGO_URL} alt="HIYA" className="hiyaghar-topbar-logo" />
           </div>
         </div>
 

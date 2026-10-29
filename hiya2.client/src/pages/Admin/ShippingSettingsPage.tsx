@@ -24,7 +24,16 @@ export const ShippingSettingsPage: React.FC = () => {
       setForm(settings);
       setSavedForm(settings);
     });
+    // Announcements are stored on the server (Home Page Component "Announcements"); after each
+    // save the service reloads them, so follow its updates to keep the server ids of new lines.
     setAnnouncements(AnnouncementService.getAnnouncements());
+    AnnouncementService.loadFromApi({ migrateLocal: true }).then(setAnnouncements);
+    const onUpdated = (e: Event) => {
+      const items = (e as CustomEvent<AnnouncementItem[]>).detail;
+      if (Array.isArray(items)) setAnnouncements(items);
+    };
+    window.addEventListener('announcementsUpdated', onUpdated);
+    return () => window.removeEventListener('announcementsUpdated', onUpdated);
   }, []);
 
   const handleChange = (field: keyof ShippingSettings, value: any) => {

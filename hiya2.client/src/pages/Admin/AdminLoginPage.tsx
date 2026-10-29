@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AdminAuthService } from '../../services/adminAuthService';
 import { showToast } from '../../utils/alertService';
 import './AdminLoginPage.css';
+import { LOGO_URL } from '../../utils/brand';
 
 interface AdminLoginPageProps {
   onLoginSuccess: () => void;
@@ -123,7 +124,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
       <div className="hiyaghar-admin-login-card">
         <div className="hiyaghar-admin-login-header">
           <div className="hiyaghar-admin-brand" onClick={onNavigateHome}>
-            <img src="/image/HiyaGhar.webp" alt="HIYA" className="hiyaghar-brand-icon" />
+            <img src={LOGO_URL} alt="HIYA" className="hiyaghar-brand-icon" />
           </div>
           <p className="hiyaghar-admin-login-subtitle">Admin & Staff Portal Access</p>
         </div>

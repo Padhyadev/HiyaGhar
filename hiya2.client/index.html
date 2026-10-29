@@ -1,33 +1,62 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" href="/favicon.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#11223A" />
-    <!-- Preload Largest Contentful Paint (LCP) Hero Image -->
-    <link rel="preload" as="image" href="/image/jamunbottole_clean.webp" fetchpriority="high" type="image/webp" />
-    <!-- DM Sans is self-hosted via @fontsource (bundled into the CSS chunk with font-display:swap).
+
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZGB06KNMGD"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-ZGB06KNMGD');
+  </script>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#11223A" />
+  <!-- Preload Largest Contentful Paint (LCP) Hero Image -->
+  <link rel="preload" as="image" href="/image/jamunbottole_clean.webp" fetchpriority="high" type="image/webp" />
+  <!-- DM Sans is self-hosted via @fontsource (bundled into the CSS chunk with font-display:swap).
          No third-party CDN request. No render-blocking font CSS. -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,400;1,500;1,600&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <!--SEO_HEAD-->
-    <title data-static-head>Handcrafted Natural Mukhwas & Wellness | HIYAGHAR</title>
-    <meta data-static-head name="description" content="Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR." />
-    <meta data-static-head name="robots" content="index,follow" />
-    <!--/SEO_HEAD-->
-    <!-- Server pre-render (Seo/SeoMarkup.Prerender): shown only until React replaces #root. -->
-    <style>
-      .seo-prerender { max-width: 960px; margin: 0 auto; padding: 96px 16px 48px; font-family: Poppins, system-ui, sans-serif; color: #11223A; line-height: 1.6; }
-      .seo-prerender h1 { font-size: 2rem; margin: 0 0 12px; }
-      .seo-prerender a { color: #11223A; }
-    </style>
-  </head>
-  <body>
-    <div id="root"><!--SEO_BODY--><!--/SEO_BODY--></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,400;1,500;1,600&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
+  <!--SEO_HEAD-->
+  <title data-static-head>Handcrafted Natural Mukhwas & Wellness | HIYAGHAR</title>
+  <meta data-static-head name="description"
+    content="Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR." />
+  <meta data-static-head name="robots" content="index,follow" />
+  <!--/SEO_HEAD-->
+  <!-- Server pre-render (Seo/SeoMarkup.Prerender): page text in the HTML for search engines and AI
+       crawlers that do not run JavaScript. Visitors never see it: it is visually hidden (still in
+       the DOM) and a logo shows until React replaces #root (about 1-2 s). -->
+  <style>
+    .seo-prerender {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    #root:has(> .seo-prerender) {
+      min-height: 100vh;
+      /* --hiya-cream (src/styles/tokens/tokens.css); logo URL = LOGO_URL in src/utils/brand.ts */
+      background: #FFFFE3 url("/image/HiyaGhar.webp?v=2026-10-29") center / 180px auto no-repeat;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root"><!--SEO_BODY--><!--/SEO_BODY--></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>

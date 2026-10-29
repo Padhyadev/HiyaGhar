@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Preloader.css';
+import { LOGO_URL } from '../../../utils/brand';
 
 interface PreloaderProps {
   logoSrc?: string;
@@ -7,7 +8,7 @@ interface PreloaderProps {
 }
 
 export const Preloader: React.FC<PreloaderProps> = ({
-  logoSrc = '/image/HiyaGhar.webp',
+  logoSrc = LOGO_URL,
   onComplete
 }) => {
   const hasLoadedBefore = sessionStorage.getItem('hiyaghar_initial_loaded') === 'true';

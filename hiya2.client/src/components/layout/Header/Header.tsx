@@ -14,6 +14,7 @@ import { AnimatedNumber } from '../../common/AnimatedNumber';
 import '../../../cart.css';
 import './Header.css';
 import { showNoImageOnError, NO_IMAGE, productPath } from '../../../utils/productFormat';
+import { LOGO_URL } from '../../../utils/brand';
 
 export const Header: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(CartService.isCartOpen());
@@ -215,6 +216,8 @@ export const Header: React.FC = () => {
 
     window.addEventListener('announcementsUpdated', updateMarquee);
     window.addEventListener('storage', updateMarquee);
+    // Fetch the admin-saved lines (fires 'announcementsUpdated' when they arrive).
+    AnnouncementService.loadFromApi();
     return () => {
       window.removeEventListener('announcementsUpdated', updateMarquee);
       window.removeEventListener('storage', updateMarquee);
@@ -446,7 +449,7 @@ export const Header: React.FC = () => {
           {/* Center Brand Logo */}
           <div className="hiyaghar-header-center">
             <a href="/" className="hiyaghar-ref-logo" aria-label="Home" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '/'); window.dispatchEvent(new Event('popstate')); }}>
-              <img src="/image/HiyaGhar.webp" alt="HIYA" width={160} height={48} fetchPriority="high" className="hiyaghar-logo-img" />
+              <img src={LOGO_URL} alt="HIYA" width={160} height={48} fetchPriority="high" className="hiyaghar-logo-img" />
             </a>
           </div>
 

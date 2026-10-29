@@ -550,7 +550,7 @@ app.Use(async (context, next) =>
         }
 
         var csp = $"default-src 'self'; " +
-                  $"script-src 'self' 'nonce-{nonce}' https://checkout.razorpay.com https://www.googletagmanager.com; " +
+                  $"script-src 'self' 'unsafe-inline' 'nonce-{nonce}' https://checkout.razorpay.com https://www.googletagmanager.com; " +
                   $"style-src 'self' 'unsafe-inline'; " +
                   $"img-src 'self' data: https://*.razorpay.com https://*.google-analytics.com https://*.googletagmanager.com; " +
                   $"font-src 'self'; " +
@@ -647,9 +647,17 @@ app.UseStaticFiles(new StaticFileOptions
             // Hashed asset names — safe to cache for 1 year
             ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=31536000,immutable");
         }
-        else if (reqPath.StartsWithSegments("/image") || reqPath.StartsWithSegments("/uploads"))
+        else if (reqPath.StartsWithSegments("/uploads"))
         {
+            // Admin uploads get a new GUID file name on every upload, so they can be cached long.
             ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=2592000"); // 30 days
+        }
+        else if (reqPath.StartsWithSegments("/image"))
+        {
+            // Site images keep their file names when replaced (e.g. the logo), so cache for one day:
+            // a new image reaches every browser within a day. Use a ?v= URL for an instant change
+            // (see src/utils/brand.ts).
+            ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=86400"); // 1 day
         }
         else if (fileName.EndsWith(".html"))
         {
@@ -674,6 +682,23 @@ app.UseHttpsRedirection();
 
 // Old Security Headers removed and moved above
 
+// API data (products, stock, prices, settings) must never be kept by browsers or proxies: a product
+// set Inactive in admin has to disappear on the next normal refresh. Set when the response starts,
+// so it also applies to responses replayed from the server-side output cache below.
+app.Use(async (context, next) =>
+{
+    if (context.Request.Path.StartsWithSegments("/api"))
+    {
+        context.Response.OnStarting(() =>
+        {
+            context.Response.Headers.CacheControl = "no-store, no-cache, must-revalidate";
+            context.Response.Headers.Pragma = "no-cache";
+            return Task.CompletedTask;
+        });
+    }
+    await next();
+});
+
 app.UseOutputCache();
 
 app.UseAuthentication();
@@ -682,6 +707,31 @@ app.UseAuthorization();
 app.UseRateLimiter();
 
 app.MapControllers();
+
+// Service-worker kill switch. This site has no service worker, but one left in a browser by an
+// earlier version of the site keeps serving its saved copy of the old site on every normal reload.
+// Browsers re-download a service worker's script to check for updates; at these usual addresses
+// they get this script, which deletes its caches, unregisters itself and reloads open tabs.
+const string serviceWorkerKillSwitch = """
+    self.addEventListener('install', () => self.skipWaiting());
+    self.addEventListener('activate', (event) => {
+      event.waitUntil((async () => {
+        const keys = await caches.keys();
+        await Promise.all(keys.map((k) => caches.delete(k)));
+        await self.registration.unregister();
+        const tabs = await self.clients.matchAll({ type: 'window' });
+        tabs.forEach((tab) => tab.navigate(tab.url));
+      })());
+    });
+    """;
+foreach (var swPath in new[] { "/sw.js", "/service-worker.js", "/serviceworker.js", "/serviceWorker.js", "/registerSW.js", "/firebase-messaging-sw.js" })
+{
+    app.MapGet(swPath, (HttpContext ctx) =>
+    {
+        ctx.Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";
+        return Results.Text(serviceWorkerKillSwitch, "application/javascript");
+    });
+}
 
 // SPA fallback with real status codes and server-side SEO (Seo/SeoPageRenderer.cs): routes listed in
 // wwwroot/seo/routes.json (the same file the React app uses) and active products get 200, anything
@@ -710,7 +760,9 @@ app.MapFallback(async context =>
 
     context.Response.StatusCode = result.StatusCode;
     context.Response.ContentType = "text/html; charset=utf-8";
-    context.Response.Headers.CacheControl = "no-cache";
+    // Never keep page HTML: it names the current JS/CSS files, which change on every publish.
+    // (Same as the static index.html rule above.)
+    context.Response.Headers.CacheControl = "no-cache, no-store, must-revalidate";
     if (result.Html != null && !HttpMethods.IsHead(context.Request.Method))
     {
         var nonce = context.Items["CSP_Nonce"]?.ToString() ?? "";

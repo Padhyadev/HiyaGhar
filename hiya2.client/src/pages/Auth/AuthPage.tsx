@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { CustomerAuthService } from '../../services/customerAuthService';
 import { showToast } from '../../utils/alertService';
 import './AuthPage.css';
+import { LOGO_URL } from '../../utils/brand';
 
 interface AuthPageProps {
   initialMode?: 'login' | 'signup';
@@ -387,7 +388,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           <div className="hiyaghar-form-logo-row">
             <a href="#/" onClick={(e) => { e.preventDefault(); onNavigateHome(); }}>
               <img
-                src="/image/HiyaGhar.webp"
+                src={LOGO_URL}
                 alt="HIYA"
                 className="hiyaghar-form-panel-logo"
               />

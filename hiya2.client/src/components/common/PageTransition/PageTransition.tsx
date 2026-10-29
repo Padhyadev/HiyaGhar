@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './PageTransition.css';
+import { LOGO_URL } from '../../../utils/brand';
 
 interface PageTransitionProps {
   currentHash: string;
@@ -80,7 +81,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
             {/* HIYAGHAR Clean Brand Emblem & Logo */}
             <div className="hiyaghar-frosted-logo-box">
               <img
-                src="/image/HiyaGhar.webp"
+                src={LOGO_URL}
                 alt="HIYAGHAR"
                 className="hiyaghar-frosted-logo"
               />
