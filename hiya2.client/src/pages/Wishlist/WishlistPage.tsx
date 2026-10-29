@@ -9,6 +9,7 @@ import { ProductService, type Product as ApiProduct } from '../../services/produ
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
 import { showToast } from '../../utils/alertService';
+import { navigateTo } from '../../utils/navigation';
 import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
 import './WishlistPage.css';
 
@@ -107,7 +108,7 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                     product={productObj}
                     index={index}
                     onNavigateToDetail={(productId) => {
-                      window.location.hash = `#product/${productId}`;
+                      navigateTo('/product/' + productId);
                     }}
                     onAddToCart={(prod, weight, qty, price, originalPrice) => {
                       const itemId = CartService.addItem({

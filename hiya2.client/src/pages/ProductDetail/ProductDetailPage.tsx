@@ -43,11 +43,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const numericId = Number(productId);
   const isNumericId = !isNaN(numericId) && numericId > 0;
 
-  // For a real numeric catalog id, don't show ANY product until the live fetch
-  // resolves. If neither the live product nor static data exists, show a clean Not Found page.
+  // For a numeric id or a slug, don't show ANY product until the live fetch resolves.
+  // If neither the live product nor static data exists, show a clean Not Found page.
   const [productData, setProductData] = useState<any>(isNumericId ? null : (staticMatch || null));
-  const [isLoadingProduct, setIsLoadingProduct] = useState<boolean>(isNumericId);
-  const [productNotFound, setProductNotFound] = useState<boolean>(!isNumericId && !staticMatch);
+  const [isLoadingProduct, setIsLoadingProduct] = useState<boolean>(isNumericId || !staticMatch);
+  const [productNotFound, setProductNotFound] = useState<boolean>(false);
+  // Canonical /product/{slug} path of the loaded live product (null for static fallback data).
+  const [canonicalPath, setCanonicalPath] = useState<string | null>(null);
   const [selectedAttrs, setSelectedAttrs] = useState<Record<string, string>>({});
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedImage, setSelectedImage] = useState<string>('');
@@ -71,11 +73,22 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   };
 
   useEffect(() => {
+    let isCurrent = true;
     setIsLoadingProduct(true);
+    setCanonicalPath(null);
     ProductService.getProductByIdOrSlug(productId).then((apiProd: ApiProduct | null) => {
       // Inactive products are hidden from customers, including direct links to them.
       if (apiProd && apiProd.isActive !== false) {
         setProductNotFound(false);
+        // Links and old bookmarks may use the numeric id; show the canonical slug URL instead
+        // (the server 301-redirects the id URL to the same path).
+        ProductService.getCanonicalPath(apiProd).then((path) => {
+          if (!isCurrent) return;
+          setCanonicalPath(path);
+          if (window.location.pathname !== path) {
+            window.history.replaceState(window.history.state, '', path + window.location.search + window.location.hash);
+          }
+        });
         const inStockVar = apiProd.variants?.find(isVariantInStock);
         const defaultVar = (apiProd.variants?.find((v) => v.isDefault && isVariantInStock(v)))
           || inStockVar
@@ -242,6 +255,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         setIsLoadingProduct(false);
       }
     });
+    return () => { isCurrent = false; };
   }, [productId]);
 
   // `product` is null while the real fetch for a numeric id is still in flight
@@ -576,10 +590,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         <SEO
           title={`${product.name} | HIYAGHAR`}
           description={product.seoDescription || buildProductSeoDescription(product.name, undefined)}
-          path={`/product/${productId}`}
+          path={canonicalPath || `/product/${productId}`}
           image={product.seoImage || product.image}
           type="product"
-          noindex={!isNumericId}
+          noindex={!canonicalPath}
         />
       ) : !isLoadingProduct ? (
         <SEO
@@ -1106,16 +1120,15 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
 
             <div className="hiyaghar-detail-tab-content">
-              {activeTab === 'description' && (
-                <div>
-                  <p className="hiyaghar-tab-paragraph">
-                    {product.longDescription || product.shortDescription}
-                  </p>
-                </div>
-              )}
+              {/* Text panels stay in the DOM so crawlers read every tab; inactive ones are `hidden`. */}
+              <div hidden={activeTab !== 'description'}>
+                <p className="hiyaghar-tab-paragraph">
+                  {product.longDescription || product.shortDescription}
+                </p>
+              </div>
 
-              {activeTab === 'ingredients' && product.ingredients && (
-                <div>
+              {product.ingredients && product.ingredients.length > 0 && (
+                <div hidden={activeTab !== 'ingredients'}>
                   <h4 className="pane-subheading">Key Ingredients:</h4>
                   <div className="ingredients-pills-list" style={{ marginBottom: '24px' }}>
                     {product.ingredients?.map((ing: string, i: number) => (
@@ -1138,8 +1151,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 </div>
               )}
 
-              {activeTab === 'nutrition' && product.nutritionalInfo && (
-                <div>
+              {product.nutritionalInfo && (
+                <div hidden={activeTab !== 'nutrition'}>
                   <h4 className="pane-subheading">
                     Nutritional Values (per {selectedAttrs.Weight || product.servingSize || '100g'} serving):
                   </h4>

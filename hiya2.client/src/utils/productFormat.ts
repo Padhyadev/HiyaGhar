@@ -55,15 +55,22 @@ export function formatVariantLabel(raw?: string | null): string {
   return formatted;
 }
 
+/**
+ * URL slug from a product name ("Beet Radiance - Beetroot Soap" → "beet-radiance-beetroot-soap"),
+ * falling back to the id. Same rule as SeoMarkup.ProductSlug on the server, which serves
+ * /product/{slug} as the canonical URL and 301-redirects /product/{id} to it.
+ */
 export function toProductSlug(name?: string | null, id?: string | number): string {
-  if (!name) return id ? String(id) : '';
-  const clean = name
+  const clean = (name || '')
     .toLowerCase()
-    .replace(/[^\w\s-]/g, '') // remove special characters
-    .trim()
-    .replace(/\s+/g, '-'); // replace spaces with hyphens
+    .replace(/[^a-z0-9\s-]/g, '') // remove special characters
+    .replace(/[\s-]+/g, '-') // spaces and repeated hyphens → one hyphen
+    .replace(/^-+|-+$/g, '');
   return clean || String(id || '');
 }
+
+/** Canonical product URL path. */
+export const productPath = (name?: string | null, id?: string | number) => `/product/${toProductSlug(name, id)}`;
 
 interface ImageLike {
   imagePath: string;

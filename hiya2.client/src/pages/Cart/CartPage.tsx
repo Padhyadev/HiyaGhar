@@ -15,7 +15,7 @@ import './CartPage.css';
 interface CartPageProps {
   onNavigateHome?: () => void;
   onNavigateMukhwas?: () => void;
-  onNavigateToDetail: (id: string) => void;
+  onNavigateToDetail: (id: string, name?: string) => void;
   onNavigateCheckout: () => void;
 }
 
@@ -191,7 +191,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                     <div key={item.id} className="hiyaghar-cart-item-card">
                       <div
                         className="hiyaghar-cart-item-img-wrapper"
-                        onClick={() => onNavigateToDetail(item.productId)}
+                        onClick={() => onNavigateToDetail(item.productId, item.name)}
                         role="button"
                         tabIndex={0}
                       >
@@ -202,7 +202,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                         <span className="hiyaghar-cart-item-cat">Gourmet Mukhwas</span>
                         <h3
                           className="hiyaghar-cart-item-name"
-                          onClick={() => onNavigateToDetail(item.productId)}
+                          onClick={() => onNavigateToDetail(item.productId, item.name)}
                         >
                           {item.name}
                         </h3>

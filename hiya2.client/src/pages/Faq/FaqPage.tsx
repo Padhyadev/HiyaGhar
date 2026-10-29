@@ -233,6 +233,7 @@ export const FaqPage: React.FC = () => {
                         className="hiyaghar-faq-question"
                         onClick={() => toggleItem(item.id)}
                         aria-expanded={isOpen}
+                        aria-controls={`faq-answer-${item.id}`}
                       >
                         <span>{item.question}</span>
                         <span className="hiyaghar-faq-icon">
@@ -241,11 +242,10 @@ export const FaqPage: React.FC = () => {
                           </svg>
                         </span>
                       </button>
-                      {isOpen && (
-                        <div className="hiyaghar-faq-answer">
-                          {item.answer}
-                        </div>
-                      )}
+                      {/* Always in the DOM (crawlers read closed answers too); `hidden` until opened. */}
+                      <div id={`faq-answer-${item.id}`} className="hiyaghar-faq-answer" hidden={!isOpen}>
+                        {item.answer}
+                      </div>
                     </div>
                   );
                 })}

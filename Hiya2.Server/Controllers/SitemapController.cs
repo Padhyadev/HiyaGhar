@@ -13,18 +13,20 @@ namespace Hiya2.Server.Controllers
     {
         private readonly DataContext _context;
         private readonly SeoContentStore _seo;
+        private readonly SeoPageRenderer _renderer;
 
-        public SitemapController(DataContext context, SeoContentStore seo)
+        public SitemapController(DataContext context, SeoContentStore seo, SeoPageRenderer renderer)
         {
             _context = context;
             _seo = seo;
+            _renderer = renderer;
         }
 
         /// <summary>
         /// Fixed pages come from wwwroot/seo/routes.json (entries with "sitemap": true - no redirects,
         /// no noindex pages such as cart/checkout/login/profile). Their lastmod is the
         /// publish date (timestamp of wwwroot/index.html), so it only changes on a new deploy.
-        /// Products: active, non-deleted; lastmod = LastModifiedDate, else CreatedDate.
+        /// Products: active, non-deleted, at their canonical /product/{slug} path; lastmod = LastModifiedDate, else CreatedDate.
         /// </summary>
         [HttpGet("sitemap.xml")]
         [HttpHead("sitemap.xml")]
@@ -52,9 +54,11 @@ namespace Hiya2.Server.Controllers
                 .Select(p => new { p.Id, p.LastModifiedDate, p.CreatedDate })
                 .ToListAsync();
 
+            var paths = await _renderer.GetProductPathsAsync();
             foreach (var prod in products)
             {
-                AppendUrl(sb, $"{siteUrl}/product/{prod.Id}", prod.LastModifiedDate ?? prod.CreatedDate, "0.7");
+                var path = paths.TryGetValue(prod.Id, out var p) ? p : "/product/" + prod.Id;
+                AppendUrl(sb, SeoMarkup.CanonicalUrl(siteUrl, path), prod.LastModifiedDate ?? prod.CreatedDate, "0.7");
             }
 
             sb.AppendLine("</urlset>");

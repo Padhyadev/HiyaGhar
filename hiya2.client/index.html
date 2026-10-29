@@ -19,10 +19,15 @@
     <meta data-static-head name="description" content="Discover handcrafted natural mukhwas, authentic Gujarati digestive treats, traditional tea masala, handmade soap, and artisan gifting from HIYAGHAR." />
     <meta data-static-head name="robots" content="index,follow" />
     <!--/SEO_HEAD-->
+    <!-- Server pre-render (Seo/SeoMarkup.Prerender): shown only until React replaces #root. -->
+    <style>
+      .seo-prerender { max-width: 960px; margin: 0 auto; padding: 96px 16px 48px; font-family: Poppins, system-ui, sans-serif; color: #11223A; line-height: 1.6; }
+      .seo-prerender h1 { font-size: 2rem; margin: 0 0 12px; }
+      .seo-prerender a { color: #11223A; }
+    </style>
   </head>
   <body>
-    <!--SEO_BODY--><!--/SEO_BODY-->
-    <div id="root"></div>
+    <div id="root"><!--SEO_BODY--><!--/SEO_BODY--></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

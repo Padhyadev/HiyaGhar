@@ -1,3 +1,5 @@
+import { toProductSlug } from '../utils/productFormat';
+
 export interface VariantAttributePair {
   attributeName: string;
   attributeValue: string;
@@ -115,17 +117,25 @@ export class ProductService {
       return this.getProductById(num);
     }
 
+    // Lowest id wins when two products share a slug (same rule as the server).
     const cleanSlug = identifier.toLowerCase().trim();
     const allProds = await this.getProducts();
-    const match = allProds.find((p) => {
-      const slug = p.productName
-        .toLowerCase()
-        .replace(/[^\w\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-');
-      return slug === cleanSlug || p.productName.toLowerCase() === cleanSlug;
-    });
+    const match = [...allProds]
+      .sort((a, b) => a.id - b.id)
+      .find((p) => toProductSlug(p.productName) === cleanSlug || p.productName.toLowerCase() === cleanSlug);
 
     return match || null;
+  }
+
+  /**
+   * Canonical URL path for a product, as the server computes it (SeoMarkup.ProductPaths):
+   * /product/{slug}, or /product/{id} when a lower-id product already has the same slug.
+   */
+  public static async getCanonicalPath(product: Pick<Product, 'id' | 'productName'>): Promise<string> {
+    const slug = toProductSlug(product.productName);
+    if (!slug) return `/product/${product.id}`;
+    const all = await this.getProducts();
+    const taken = all.some((p) => p.id < product.id && p.isActive !== false && toProductSlug(p.productName) === slug);
+    return `/product/${taken ? product.id : slug}`;
   }
 }

@@ -13,7 +13,7 @@ import { showToast } from '../../../utils/alertService';
 import { AnimatedNumber } from '../../common/AnimatedNumber';
 import '../../../cart.css';
 import './Header.css';
-import { showNoImageOnError, NO_IMAGE } from '../../../utils/productFormat';
+import { showNoImageOnError, NO_IMAGE, productPath } from '../../../utils/productFormat';
 
 export const Header: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(CartService.isCartOpen());
@@ -262,7 +262,7 @@ export const Header: React.FC = () => {
         </button>
         <div className="hiyaghar-ticker-track" style={{ animationPlayState: isTickerPaused ? 'paused' : 'running' }}>
           {marqueeItems.concat(marqueeItems).map((item, index) => (
-            <div key={index} className="hiyaghar-ticker-item">
+            <div key={index} className="hiyaghar-ticker-item" aria-hidden={index >= marqueeItems.length || undefined}>
               <span>{item}</span>
             </div>
           ))}
@@ -998,7 +998,7 @@ export const Header: React.FC = () => {
                         className="hiyaghar-search-result-item"
                         onClick={() => {
                           setIsSearchOpen(false);
-                          navigateTo(`/product/${p.id}`);
+                          navigateTo(productPath(p.productName, p.id));
                         }}
                       >
                         <div className="hiyaghar-search-item-img-wrap">

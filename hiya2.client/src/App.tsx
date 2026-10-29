@@ -15,6 +15,7 @@ import { FloatingWidgets } from './components/common/FloatingWidgets/FloatingWid
 import { preloadCriticalImages } from './services/imagePreloaderService';
 import { SEO } from './components/common/SEO/SEO';
 import { findRouteMeta, type RouteMeta } from './seo/routeSeo';
+import { productPath } from './utils/productFormat';
 
 // ─── Lazy-loaded storefront pages ──────────────────────────────────────────
 const CustomizeComboPage = lazy(() => import('./pages/CustomizeCombo/CustomizeComboPage').then(m => ({ default: m.CustomizeComboPage })));
@@ -220,7 +221,9 @@ function App() {
 
   const handleNavigateHome = () => { navigateTo('/'); };
   const handleNavigateMukhwas = () => { navigateTo('/mukhwas'); };
-  const handleNavigateToDetail = (productId: string) => { navigateTo(`/product/${productId}`); };
+  const handleNavigateToDetail = (productId: string, productName?: string) => {
+    navigateTo(productPath(productName, productId));
+  };
   const handleNavigateCart = () => { navigateTo('/cart'); };
   const handleNavigateCheckout = () => { navigateTo('/checkout'); };
   const handleNavigateConfirmation = (orderId: string) => { navigateTo(`/order-confirmation?orderId=${orderId}`); };

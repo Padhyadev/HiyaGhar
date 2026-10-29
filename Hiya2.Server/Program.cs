@@ -691,6 +691,13 @@ app.MapFallback(async context =>
     var renderer = context.RequestServices.GetRequiredService<Hiya2.Server.Seo.SeoPageRenderer>();
     var result = await renderer.RenderAsync(path);
 
+    if (result.Location != null)
+    {
+        context.Response.StatusCode = result.StatusCode;
+        context.Response.Headers.Location = result.Location + context.Request.QueryString;
+        return;
+    }
+
     context.Response.StatusCode = result.StatusCode;
     context.Response.ContentType = "text/html; charset=utf-8";
     context.Response.Headers.CacheControl = "no-cache";

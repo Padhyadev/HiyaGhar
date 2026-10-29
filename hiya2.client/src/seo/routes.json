@@ -11,9 +11,17 @@
     "logo": "/image/HiyaGhar.webp",
     "email": "support@hiyaghar.com",
     "telephone": "+91 9274443617",
+    "streetAddress": "303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya",
     "addressLocality": "Ahmedabad",
     "addressRegion": "Gujarat",
+    "postalCode": "380061",
     "addressCountry": "IN",
+    "openingHours": ["Mo-Sa 10:00-19:00"],
+    "founder": {
+      "name": "Priti Shah",
+      "jobTitle": "Founder",
+      "image": "/image/founder-priti-shah.webp"
+    },
     "sameAs": [
       "https://www.instagram.com/hiyaghar_/",
       "https://www.facebook.com/hiyaghar"
@@ -27,7 +35,8 @@
       "h1": "Handcrafted Natural Mukhwas & Wellness",
       "intro": "Authentic artisan digestives, royal chai spices & natural body care crafted with love.",
       "sitemap": true,
-      "homeLinks": true
+      "homeLinks": true,
+      "localBusiness": true
     },
     {
       "path": "/mukhwas",
@@ -112,6 +121,7 @@
       "intro": "Have questions about our handcrafted natural mukhwas, custom combo boxes, corporate gift hampers, or your delivery? We’re always here to assist you.",
       "schemaType": "ContactPage",
       "contactDetails": true,
+      "localBusiness": true,
       "sitemap": true
     },
     {

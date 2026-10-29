@@ -117,12 +117,69 @@ public class SeoMarkupTests
     [Fact]
     public void Inject_replaces_markers_and_urls_are_canonical()
     {
-        var html = "<head><!--SEO_HEAD--><title data-static-head>x</title><!--/SEO_HEAD--></head><body><!--SEO_BODY--><!--/SEO_BODY--><div id=\"root\"></div></body>";
-        var result = SeoMarkup.Inject(html, "<title>T</title>", "<noscript>B</noscript>");
-        Assert.Equal("<head><title>T</title></head><body><noscript>B</noscript><div id=\"root\"></div></body>", result);
+        var html = "<head><!--SEO_HEAD--><title data-static-head>x</title><!--/SEO_HEAD--></head><body><div id=\"root\"><!--SEO_BODY--><!--/SEO_BODY--></div></body>";
+        var result = SeoMarkup.Inject(html, "<title>T</title>", SeoMarkup.Prerender("B"));
+        Assert.Equal("<head><title>T</title></head><body><div id=\"root\"><div data-server-seo=\"1\" class=\"seo-prerender\">B</div></div></body>", result);
 
         Assert.Equal("https://hiyaghar.com/mukhwas", SeoMarkup.CanonicalUrl("https://hiyaghar.com", "/Mukhwas/?x=1"));
         Assert.Equal("https://hiyaghar.com/", SeoMarkup.CanonicalUrl("https://hiyaghar.com", "/"));
         Assert.Equal("https://hiyaghar.com/image/HiyaGhar.webp", SeoMarkup.AbsoluteUrl("https://hiyaghar.com", "/image/HiyaGhar.webp"));
+    }
+
+    [Theory]
+    [InlineData("Beet Radiance Beetroot Soap", "beet-radiance-beetroot-soap")]
+    [InlineData("Beet Radiance - Beetroot Soap", "beet-radiance-beetroot-soap")]
+    [InlineData("  Hing Hajma (100g) & Jeera_Goli ", "hing-hajma-100g-jeeragoli")]
+    [InlineData("मुखवास", "")]
+    public void Product_slug_matches_client_rule(string name, string expected)
+    {
+        Assert.Equal(expected, SeoMarkup.ProductSlug(name));
+    }
+
+    [Fact]
+    public void Product_paths_keep_slug_for_lowest_id_and_fall_back_to_id()
+    {
+        var paths = SeoMarkup.ProductPaths(new (int, string?)[] { (7, "Tea Masala"), (3, "Tea  Masala"), (9, "मुखवास") });
+        Assert.Equal("/product/tea-masala", paths[3]);
+        Assert.Equal("/product/7", paths[7]);
+        Assert.Equal("/product/9", paths[9]);
+    }
+
+    [Fact]
+    public void Product_meta_reads_saved_ingredients_only()
+    {
+        var (ing, ben) = SeoMarkup.ProductMeta("Text <!--HIYA_META: {\"ingredients\":[\"Fennel\",\"<b>Sugar</b>\",\"\"],\"benefits\":[\"Aids digestion\"]} -->");
+        Assert.Equal(new[] { "Fennel", "Sugar" }, ing);
+        Assert.Equal(new[] { "Aids digestion" }, ben);
+
+        Assert.Empty(SeoMarkup.ProductMeta("no meta").Ingredients);
+        Assert.Empty(SeoMarkup.ProductMeta("<!--HIYA_META: {broken -->").Ingredients);
+        Assert.Empty(SeoMarkup.ProductMeta("<!--HIYA_META: [1,2] -->").Benefits);
+    }
+
+    [Fact]
+    public void Store_and_founder_nodes_use_config_values()
+    {
+        var c = Config();
+        c.Organization.StreetAddress = "303, APM Mall Complex, Ghatlodiya";
+        c.Organization.PostalCode = "380061";
+        c.Organization.OpeningHours = new() { "Mo-Sa 10:00-19:00" };
+        c.Organization.Founder = new SeoPerson { Name = "Priti Shah", JobTitle = "Founder", Image = "/image/founder-priti-shah.webp" };
+
+        var graph = JsonDocument.Parse(SeoMarkup.SerializeJsonLd(new[] { SeoMarkup.Organization(c), SeoMarkup.LocalBusiness(c) }))
+            .RootElement.GetProperty("@graph").EnumerateArray().ToList();
+        var org = graph.Single(n => n.GetProperty("@type").GetString() == "Organization");
+        var store = graph.Single(n => n.GetProperty("@type").GetString() == "Store");
+
+        Assert.Equal("380061", store.GetProperty("address").GetProperty("postalCode").GetString());
+        Assert.Equal("Mo-Sa 10:00-19:00", store.GetProperty("openingHours")[0].GetString());
+        Assert.Equal("https://hiyaghar.com/#organization", store.GetProperty("parentOrganization").GetProperty("@id").GetString());
+        Assert.Equal("Priti Shah", org.GetProperty("founder").GetProperty("name").GetString());
+        Assert.Equal("https://hiyaghar.com/#founder", org.GetProperty("founder").GetProperty("@id").GetString());
+
+        // No founder configured: no founder property at all (not null).
+        c.Organization.Founder = null;
+        var orgOnly = JsonDocument.Parse(SeoMarkup.SerializeJsonLd(new[] { SeoMarkup.Organization(c) })).RootElement.GetProperty("@graph")[0];
+        Assert.False(orgOnly.TryGetProperty("founder", out _));
     }
 }

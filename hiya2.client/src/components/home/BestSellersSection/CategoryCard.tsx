@@ -2,6 +2,7 @@ import React, { useRef } from 'react';
 import { navigateTo } from '../../../utils/navigation';
 import { CartService, triggerFlyingProductAnimation } from '../../../cart';
 import { showToast } from '../../../utils/alertService';
+import { productPath } from '../../../utils/productFormat';
 
 export interface FloatingIngredient {
   src: string;
@@ -40,15 +41,13 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
   const imageRef = useRef<HTMLImageElement>(null);
   const isProduct = category.isProduct || category.id.startsWith('product/');
 
+  const href = isProduct
+    ? productPath(category.title, category.productId || category.id.replace('product/', ''))
+    : category.id.replace(/^#\/?/, '/');
+
   const handleClick = () => {
     onDeactivate?.();
-    if (isProduct) {
-      const productId = category.productId || category.id.replace('product/', '');
-      navigateTo(`/product/${productId}`);
-    } else {
-      const cleanPath = category.id.replace(/^#\/?/, '/');
-      navigateTo(cleanPath);
-    }
+    navigateTo(href);
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -120,7 +119,21 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 
       {/* Category / Product Info at Bottom */}
       <div className="hiyaghar-category-card-header">
-        <h3 className="hiyaghar-category-card-title">{category.title}</h3>
+        <h3 className="hiyaghar-category-card-title">
+          {/* Real link so crawlers can follow it; the card's own click handler does the navigation. */}
+          <a
+            href={href}
+            style={{ color: 'inherit', textDecoration: 'none' }}
+            tabIndex={-1}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              handleClick();
+            }}
+          >
+            {category.title}
+          </a>
+        </h3>
         {category.tagline && (
           <p className="hiyaghar-category-card-tagline">{category.tagline}</p>
         )}

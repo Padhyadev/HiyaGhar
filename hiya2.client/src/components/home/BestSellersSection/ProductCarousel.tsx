@@ -279,8 +279,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
             key={category.uniqueKey}
             className="hiyaghar-carousel-item"
             aria-hidden={category._clone ? 'true' : undefined}
-            // @ts-expect-error — inert is a valid HTML attribute; React types lag behind the spec
-            inert={category._clone ? '' : undefined}
+            inert={category._clone ? true : undefined}
           >
             <CategoryCard
               category={category}

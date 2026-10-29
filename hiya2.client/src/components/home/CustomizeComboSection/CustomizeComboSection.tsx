@@ -72,21 +72,27 @@ export const CustomizeComboSection: React.FC = () => {
         {/* 1. First Line Continuous Infinite Loop Marquee Showcase (Clean Product Image + Price Tag) */}
         <div className="hiyaghar-combo-marquee-wrap" aria-label="Combo Showcase Continuous Loop">
           <div className="hiyaghar-combo-marquee-track">
-            {[...items, ...items, ...items].map((item, idx) => (
-              <div key={`${item.id}-${idx}`} className="hiyaghar-combo-marquee-card" onClick={handleOpenPage}>
-                <div className="hiyaghar-combo-marquee-img-wrap">
-                  <img
-                    src={item.image}
-                    alt={item.name}
-                    className="hiyaghar-combo-marquee-img"
-                  />
+            {/* Three copies make the loop seamless; only the first is exposed to crawlers and screen readers. */}
+            {[...items, ...items, ...items].map((item, idx) => {
+              const isCopy = idx >= items.length;
+              return (
+                <div key={`${item.id}-${idx}`} className="hiyaghar-combo-marquee-card" onClick={handleOpenPage} aria-hidden={isCopy || undefined}>
+                  <div className="hiyaghar-combo-marquee-img-wrap">
+                    <img
+                      src={item.image}
+                      alt={isCopy ? '' : item.name}
+                      className="hiyaghar-combo-marquee-img"
+                    />
+                  </div>
+                  <div className="hiyaghar-combo-marquee-info">
+                    {isCopy
+                      ? <p className="hiyaghar-combo-marquee-name">{item.name}</p>
+                      : <h3 className="hiyaghar-combo-marquee-name">{item.name}</h3>}
+                    <span className="hiyaghar-combo-marquee-price">{item.priceFormatted}</span>
+                  </div>
                 </div>
-                <div className="hiyaghar-combo-marquee-info">
-                  <h3 className="hiyaghar-combo-marquee-name">{item.name}</h3>
-                  <span className="hiyaghar-combo-marquee-price">{item.priceFormatted}</span>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 

@@ -131,6 +131,8 @@
 }
 
 .hiyaghar-combo-marquee-name {
+  /* Same as the global h3 font; loop copies render this class on a <p>. */
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--hiya-navy, #11223A);
