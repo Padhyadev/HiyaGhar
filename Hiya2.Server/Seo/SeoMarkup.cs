@@ -24,6 +24,14 @@ namespace Hiya2.Server.Seo
         public string BodyHtml { get; set; } = string.Empty;
     }
 
+    /// <summary>Values the admin saved in a product's HIYA_META block. Empty when not entered.</summary>
+    public record ProductMetaInfo(
+        List<string> Ingredients,
+        List<string> Benefits,
+        string ShelfLife,
+        string HowToUse,
+        List<(string Question, string Answer)> Faqs);
+
     /// <summary>
     /// Pure markup builders (no I/O) so they can be unit-tested. All text is HTML-encoded; JSON-LD
     /// is produced by System.Text.Json whose encoder always escapes &lt; &gt; &amp; ' as < etc.,
@@ -269,33 +277,88 @@ namespace Hiya2.Server.Seo
         public static string CleanText(string? text) =>
             Whitespace.Replace(HtmlTag.Replace(HiyaMetaBlock.Replace(text ?? string.Empty, " "), " "), " ").Trim();
 
-        private static readonly Regex HiyaMetaJson = new(@"<!--HIYA_META:\s*([\s\S]*?)\s*-->", RegexOptions.Compiled);
+        // ---------- gift hamper occasions ----------
+
+        public const string OccasionPathPrefix = "/gift-hampers/";
+
+        public static string OccasionPath(string slug) => OccasionPathPrefix + slug.Trim().ToLowerInvariant();
+
+        /// <summary>"Wedding" → "Wedding Gift Hampers | HIYAGHAR"; names that already say gift/hamper are kept as-is.</summary>
+        public static string OccasionTitle(string name, string siteName)
+        {
+            var n = name.Trim();
+            var hasGiftWord = n.Contains("gift", StringComparison.OrdinalIgnoreCase) || n.Contains("hamper", StringComparison.OrdinalIgnoreCase);
+            return (hasGiftWord ? n : n + " Gift Hampers") + " | " + siteName;
+        }
+
+        /// <summary>The admin description (plain text, max 160 chars at a word boundary), else a standard sentence.</summary>
+        public static string OccasionDescription(string name, string? description)
+        {
+            var text = CleanText(description);
+            if (text.Length == 0)
+            {
+                return $"Shop HIYAGHAR {name.Trim()} gift hampers: curated handcrafted mukhwas, tea masala, soaps and wellness gifts. See prices and order online across India.";
+            }
+            if (text.Length <= 160) return text;
+            var cut = text[..159];
+            var space = cut.LastIndexOf(' ');
+            return cut[..(space > 120 ? space : 159)] + "…";
+        }
+
+        private static readonly Regex HiyaMetaJson =new(@"<!--HIYA_META:\s*([\s\S]*?)\s*-->", RegexOptions.Compiled);
 
         /// <summary>
         /// Ingredients and benefits saved by the admin in the &lt;!--HIYA_META: {...} --&gt; block of
         /// FullDescription (format: src/utils/productMetaStore.ts). Only real saved values: the client's
         /// per-category placeholder lists are never used here. Empty lists when missing or invalid.
         /// </summary>
-        public static (List<string> Ingredients, List<string> Benefits) ProductMeta(string? fullDescription)
+        public static ProductMetaInfo ProductMeta(string? fullDescription)
         {
+            var empty = new ProductMetaInfo(new(), new(), "", "", new());
             var match = HiyaMetaJson.Match(fullDescription ?? string.Empty);
-            if (!match.Success) return (new(), new());
+            if (!match.Success) return empty;
             try
             {
                 using var doc = JsonDocument.Parse(match.Groups[1].Value);
+                var root = doc.RootElement;
+                if (root.ValueKind != JsonValueKind.Object) return empty;
+
                 List<string> Strings(string name) =>
-                    doc.RootElement.ValueKind == JsonValueKind.Object
-                    && doc.RootElement.TryGetProperty(name, out var arr) && arr.ValueKind == JsonValueKind.Array
+                    root.TryGetProperty(name, out var arr) && arr.ValueKind == JsonValueKind.Array
                         ? arr.EnumerateArray().Where(x => x.ValueKind == JsonValueKind.String)
                             .Select(x => CleanText(x.GetString())).Where(x => x.Length > 0).ToList()
                         : new List<string>();
-                return (Strings("ingredients"), Strings("benefits"));
+                string Text(string name) =>
+                    root.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.String ? (v.GetString() ?? "").Trim() : "";
+                string Field(JsonElement el, string name) =>
+                    el.ValueKind == JsonValueKind.Object && el.TryGetProperty(name, out var v) && v.ValueKind == JsonValueKind.String ? (v.GetString() ?? "").Trim() : "";
+
+                var faqs = root.TryGetProperty("faqs", out var list) && list.ValueKind == JsonValueKind.Array
+                    ? list.EnumerateArray().Select(f => (Question: Field(f, "question"), Answer: Field(f, "answer")))
+                        .Where(f => f.Question.Length > 0 && f.Answer.Length > 0).ToList()
+                    : new List<(string Question, string Answer)>();
+
+                return new ProductMetaInfo(Strings("ingredients"), Strings("benefits"), Text("shelfLife"), Text("howToUse"), faqs);
             }
             catch (JsonException)
             {
-                return (new(), new());
+                return empty;
             }
         }
+
+        /// <summary>FAQPage node for a product's own FAQs (admin: How to Use, Shelf Life &amp; FAQs).</summary>
+        public static object ProductFaqNode(SeoConfig c, string productPath, IEnumerable<(string Question, string Answer)> faqs) => new Dictionary<string, object?>
+        {
+            ["@type"] = "FAQPage",
+            ["@id"] = CanonicalUrl(c.SiteUrl, productPath) + "#faq",
+            ["about"] = new Dictionary<string, object?> { ["@id"] = CanonicalUrl(c.SiteUrl, productPath) + "#product" },
+            ["mainEntity"] = faqs.Select(f => new Dictionary<string, object?>
+            {
+                ["@type"] = "Question",
+                ["name"] = f.Question,
+                ["acceptedAnswer"] = new Dictionary<string, object?> { ["@type"] = "Answer", ["text"] = f.Answer },
+            }).ToList(),
+        };
 
         /// <summary>Same rule as buildProductSeoDescription() in the client (src/seo/routeSeo.ts).</summary>
         public static string ProductDescription(Product p, string template)

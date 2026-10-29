@@ -18,6 +18,7 @@ import { allowOnlyDigits, sanitizeDigits } from '../../utils/validationUtils';
 import { showToast } from '../../utils/alertService';
 import { loadRazorpayScript } from '../../utils/razorpayLoader';
 import { navigateTo } from '../../utils/navigation';
+import { trackBeginCheckout } from '../../utils/analytics';
 import './CheckoutPage.css';
 
 const EMPTY_NEW_ADDRESS_FORM = {
@@ -165,6 +166,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     const currentSubtotal = CartService.getSubtotal();
     setCartItems(items);
     setSubtotal(currentSubtotal);
+    trackBeginCheckout(items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, variant: i.weight })));
 
     // Load shipping settings from DB API (so customer sees latest admin-configured values)
     ShippingService.loadSettingsFromApi().then((freshSettings) => {

@@ -550,11 +550,11 @@ app.Use(async (context, next) =>
         }
 
         var csp = $"default-src 'self'; " +
-                  $"script-src 'self' 'nonce-{nonce}' https://checkout.razorpay.com; " +
+                  $"script-src 'self' 'nonce-{nonce}' https://checkout.razorpay.com https://www.googletagmanager.com; " +
                   $"style-src 'self' 'unsafe-inline'; " +
-                  $"img-src 'self' data: https://*.razorpay.com; " +
+                  $"img-src 'self' data: https://*.razorpay.com https://*.google-analytics.com https://*.googletagmanager.com; " +
                   $"font-src 'self'; " +
-                  $"connect-src 'self' https://api.postalpincode.in https://*.razorpay.com; " +
+                  $"connect-src 'self' https://api.postalpincode.in https://*.razorpay.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; " +
                   $"frame-src 'self' https://*.razorpay.com; " +
                   $"form-action 'self' https://*.razorpay.com; " +
                   $"object-src 'none'; " +
@@ -613,6 +613,16 @@ app.Use(async (context, next) =>
         string? target = routeAliases.TryGetValue(trimmed, out var alias) ? alias
             : trimmed != path ? trimmed
             : null;
+
+        // Old occasion filter links (/gift-hampers?category=wedding) → /gift-hampers/wedding.
+        var category = request.Query["category"].ToString().Trim().ToLowerInvariant();
+        if ((target ?? trimmed).Equals("/gift-hampers", StringComparison.OrdinalIgnoreCase)
+            && category.Length > 0 && category != "all" && category.All(ch => char.IsLetterOrDigit(ch) || ch == '-'))
+        {
+            context.Response.StatusCode = StatusCodes.Status301MovedPermanently;
+            context.Response.Headers.Location = Hiya2.Server.Seo.SeoMarkup.OccasionPath(category);
+            return;
+        }
 
         if (target != null)
         {

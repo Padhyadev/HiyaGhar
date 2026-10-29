@@ -9,9 +9,14 @@ import { navigateTo } from '../../utils/navigation';
 import { GiftHamperService, type GiftHamperOccasion, type GiftHamperProduct as ApiGiftHamperProduct } from '../../services/giftHamperService';
 import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
+import { SEO } from '../../components/common/SEO/SEO';
+import { buildOccasionDescription, buildOccasionTitle, occasionPath, seoConfig } from '../../seo/routeSeo';
 // Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
 import '../Mukhwas/MukhwasPage.css';
 import './GiftHampersPage.css';
+
+// Occasion card titles are real links (crawlable); the card's own click handler selects the occasion.
+const occasionLinkStyle: React.CSSProperties = { color: 'inherit', textDecoration: 'none' };
 
 interface GiftHampersPageProps {
   onNavigateHome: () => void;
@@ -72,8 +77,11 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
   const [occasions, setOccasions] = useState<GiftHamperOccasion[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
+  // Occasion from /gift-hampers/{slug}; old ?category={slug} links still work (the server 301s them).
   const getCategoryFromUrl = (): string => {
     try {
+      const fromPath = window.location.pathname.match(/^\/gift-hampers\/([^/?#]+)/i)?.[1];
+      if (fromPath) return decodeURIComponent(fromPath).toLowerCase();
       const search = window.location.search;
       const hash = window.location.hash;
       const urlStr = search || hash;
@@ -90,6 +98,12 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
   const [sortBy, setSortBy] = useState<string>('featured');
 
   useEffect(() => {
+    // Show an old ?category= link as its canonical /gift-hampers/{slug} URL.
+    const initial = getCategoryFromUrl();
+    if (initial !== 'all' && window.location.search.includes('category=')) {
+      window.history.replaceState(null, '', occasionPath(initial));
+    }
+
     GiftHamperService.getOccasions(true).then((data) => {
       setOccasions(data);
       setIsLoading(false);
@@ -103,9 +117,9 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
   }, []);
 
   const handleSelectCategory = (slug: string) => {
-    setActiveCategory(slug);
+    setActiveCategory(slug.toLowerCase());
     try {
-      const newUrl = slug === 'all' ? '/gift-hampers' : `/gift-hampers?category=${slug}`;
+      const newUrl = slug === 'all' ? '/gift-hampers' : occasionPath(slug);
       window.history.replaceState(null, '', newUrl);
     } catch {
       // fallback
@@ -113,7 +127,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
   };
 
   const currentOccasion = useMemo(
-    () => occasions.find((o) => o.slug === activeCategory) || null,
+    () => occasions.find((o) => o.slug.toLowerCase() === activeCategory) || null,
     [occasions, activeCategory]
   );
 
@@ -178,11 +192,23 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
 
       <main id="main-content" tabIndex={-1} className="hiyaghar-gift-hampers-main">
 
-        {/* 1. HERO BANNER */}
+        {/* Occasion pages (/gift-hampers/{slug}) set their own meta; same values as the server (SeoPageRenderer). */}
+        {currentOccasion ? (
+          <SEO
+            title={buildOccasionTitle(currentOccasion.name)}
+            description={buildOccasionDescription(currentOccasion.name, currentOccasion.description)}
+            path={occasionPath(currentOccasion.slug)}
+            image={currentOccasion.bannerImagePath || undefined}
+          />
+        ) : activeCategory !== 'all' && !isLoading ? (
+          <SEO title={seoConfig.notFound.title} description={seoConfig.notFound.description} path={window.location.pathname} noindex />
+        ) : null}
+
+        {/* 1. HERO BANNER (the page H1: the occasion name on an occasion page) */}
         <MukhwasHero
           onNavigateHome={onNavigateHome}
-          title="Gift Hampers"
-          breadcrumbCurrent="Gift Hampers"
+          title={currentOccasion?.name.trim() || 'Gift Hampers'}
+          breadcrumbCurrent={currentOccasion?.name.trim() || 'Gift Hampers'}
           bgImage="/image/gifting_hero_banner.webp"
         />
 
@@ -205,18 +231,18 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
                 {featuredOccasion && (
                   <div
                     key={featuredOccasion.id}
-                    className={`hiyaghar-5card-item is-featured ${activeCategory === featuredOccasion.slug ? 'is-active' : ''}`}
-                    onClick={() => handleSelectCategory(activeCategory === featuredOccasion.slug ? 'all' : featuredOccasion.slug)}
+                    className={`hiyaghar-5card-item is-featured ${activeCategory === featuredOccasion.slug.toLowerCase() ? 'is-active' : ''}`}
+                    onClick={() => handleSelectCategory(activeCategory === featuredOccasion.slug.toLowerCase() ? 'all' : featuredOccasion.slug)}
                     role="button"
                     tabIndex={0}
                   >
-                    {activeCategory === featuredOccasion.slug && (
+                    {activeCategory === featuredOccasion.slug.toLowerCase() && (
                       <div className="hiyaghar-card-active-badge"><span>✓ Selected</span></div>
                     )}
                     <img src={featuredOccasion.bannerImagePath || '/uploads/Noimage.png'} alt={featuredOccasion.name} className="card-bg-image" />
                     <div className="card-overlay" />
                     <div className="card-content">
-                      <h3 className="card-title">{featuredOccasion.name}</h3>
+                      <h3 className="card-title"><a href={occasionPath(featuredOccasion.slug)} onClick={(e) => e.preventDefault()} style={occasionLinkStyle}>{featuredOccasion.name}</a></h3>
                     </div>
                   </div>
                 )}
@@ -224,7 +250,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
                 {restOccasions.length > 0 && (
                   <div className="hiyaghar-5card-right-grid">
                     {restOccasions.map((o) => {
-                      const isActive = activeCategory === o.slug;
+                      const isActive = activeCategory === o.slug.toLowerCase();
                       return (
                         <div
                           key={o.id}
@@ -237,7 +263,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
                           <img src={o.bannerImagePath || '/uploads/Noimage.png'} alt={o.name} className="card-bg-image" />
                           <div className="card-overlay" />
                           <div className="card-content">
-                            <h3 className="card-title">{o.name}</h3>
+                            <h3 className="card-title"><a href={occasionPath(o.slug)} onClick={(e) => e.preventDefault()} style={occasionLinkStyle}>{o.name}</a></h3>
                           </div>
                         </div>
                       );

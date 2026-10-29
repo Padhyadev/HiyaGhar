@@ -15,6 +15,7 @@ import { FloatingWidgets } from './components/common/FloatingWidgets/FloatingWid
 import { preloadCriticalImages } from './services/imagePreloaderService';
 import { SEO } from './components/common/SEO/SEO';
 import { findRouteMeta, type RouteMeta } from './seo/routeSeo';
+import { trackPageView } from './utils/analytics';
 import { productPath } from './utils/productFormat';
 
 // ─── Lazy-loaded storefront pages ──────────────────────────────────────────
@@ -180,6 +181,13 @@ function App() {
   useEffect(() => {
     if (currentRoute === initialRouteRef.current) return;
     document.querySelectorAll('script[type="application/ld+json"][data-server-seo]').forEach((el) => el.remove());
+  }, [currentRoute]);
+
+  // GA4 page view per route (no-op until VITE_GA4_MEASUREMENT_ID is set; admin pages skipped).
+  // Deferred a tick so the page's <title> has updated.
+  useEffect(() => {
+    const timer = window.setTimeout(() => trackPageView(), 0);
+    return () => window.clearTimeout(timer);
   }, [currentRoute]);
 
   // Client-side fallback for the server's 301s: replace an alias URL with its canonical path.
@@ -657,7 +665,7 @@ function App() {
       return <CustomizeComboPage onNavigateHome={handleNavigateHome} />;
     }
 
-    if (route === '/gift-hampers' || route === '/gifting') {
+    if (route === '/gift-hampers' || route === '/gifting' || route.toLowerCase().startsWith('/gift-hampers/')) {
       return (
         <GiftHampersPage
           onNavigateHome={handleNavigateHome}

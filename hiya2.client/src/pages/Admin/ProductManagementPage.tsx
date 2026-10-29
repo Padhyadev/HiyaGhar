@@ -8,6 +8,7 @@ import {
   buildFullDescriptionWithMeta,
   saveStoredProductMeta,
   type ProductCustomMeta,
+  type ProductFaq,
 } from '../../utils/productMetaStore';
 // Shared admin modal styles (overlay/card/header), same as LovManagementPage.
 import './OrderManagementPage.css';
@@ -168,6 +169,9 @@ export const ProductManagementPage: React.FC = () => {
     servingSize: '100g',
     nutritionItems: [] as NutritionFactRow[],
     crossSellProductIds: [] as number[],
+    shelfLife: '',
+    howToUse: '',
+    faqs: [] as ProductFaq[],
     isBestseller: true,
     isActive: true,
     hasVariantsMode: true,
@@ -258,12 +262,14 @@ export const ProductManagementPage: React.FC = () => {
     }
   };
 
+  // Nutrient names only: values must come from the product's lab report / label. Rows left
+  // empty are not saved, so the product page shows no nutrition table until real values exist.
   const defaultNutritionRows: NutritionFactRow[] = [
-    { id: '1', name: 'Energy', value: '385 kcal' },
-    { id: '2', name: 'Carbohydrates', value: '68.5g' },
-    { id: '3', name: 'Protein', value: '6.2g' },
-    { id: '4', name: 'Total Fat', value: '9.8g' },
-    { id: '5', name: 'Dietary Fiber', value: '14.2g' },
+    { id: '1', name: 'Energy', value: '' },
+    { id: '2', name: 'Carbohydrates', value: '' },
+    { id: '3', name: 'Protein', value: '' },
+    { id: '4', name: 'Total Fat', value: '' },
+    { id: '5', name: 'Dietary Fiber', value: '' },
   ];
 
   const handleOpenAdd = () => {
@@ -281,6 +287,9 @@ export const ProductManagementPage: React.FC = () => {
       servingSize: '100g',
       nutritionItems: [...defaultNutritionRows],
       crossSellProductIds: [],
+      shelfLife: '',
+      howToUse: '',
+      faqs: [],
       isBestseller: false,
       isActive: true,
       hasVariantsMode: false,
@@ -387,12 +396,15 @@ export const ProductManagementPage: React.FC = () => {
       productName: item.productName,
       categoryName: catName,
       shortDescription: item.shortDescription || '',
-      fullDescription: parsed.cleanDescription || item.fullDescription || '',
+      fullDescription: parsed.cleanDescription,
       ingredientsText: parsed.ingredients?.join('\n') || '',
       benefitsText: parsed.benefits?.join('\n') || '',
       servingSize: parsed.servingSize || '100g',
       nutritionItems: nutritionRows,
       crossSellProductIds: Array.isArray(parsed.crossSellProductIds) ? parsed.crossSellProductIds : [],
+      shelfLife: parsed.shelfLife,
+      howToUse: parsed.howToUse,
+      faqs: parsed.faqs,
       isBestseller: item.isBestseller,
       isActive: item.isActive !== false,
       hasVariantsMode: hasVars,
@@ -743,6 +755,14 @@ export const ProductManagementPage: React.FC = () => {
       servingSize: formData.servingSize?.trim() || '100g',
       nutritionalInfo: Object.keys(nutritionMap).length > 0 ? nutritionMap : undefined,
       crossSellProductIds: formData.crossSellProductIds && formData.crossSellProductIds.length > 0 ? formData.crossSellProductIds : undefined,
+      shelfLife: formData.shelfLife.trim() || undefined,
+      howToUse: formData.howToUse.trim() || undefined,
+      faqs: (() => {
+        const list = formData.faqs
+          .map((f) => ({ question: f.question.trim(), answer: f.answer.trim() }))
+          .filter((f) => f.question && f.answer);
+        return list.length > 0 ? list : undefined;
+      })(),
     };
 
     const finalFullDescription = buildFullDescriptionWithMeta(formData.fullDescription.trim(), customMeta);
@@ -1540,6 +1560,104 @@ export const ProductManagementPage: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
+
+            {/* USAGE, SHELF LIFE & PRODUCT FAQs (shown on the product page and read by search/AI engines) */}
+            <div style={{ marginTop: '24px', background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '20px' }}>
+              <h3 style={{ margin: '0 0 4px', fontSize: '1.1rem', fontWeight: 800, color: '#0f172a', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <i className="fa-solid fa-circle-info" style={{ color: '#2d6a4f' }}></i>
+                How to Use, Shelf Life & FAQs
+              </h3>
+              <p style={{ margin: '0 0 16px', fontSize: '0.85rem', color: '#64748b' }}>
+                Optional. Leave empty if not known; empty fields are not shown on the product page.
+              </p>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '20px' }}>
+                <div className="hiyaghar-form-group">
+                  <label>
+                    <i className="fa-solid fa-hand-holding-heart" style={{ color: '#2d6a4f', marginRight: '6px' }}></i>
+                    How to Use
+                  </label>
+                  <textarea
+                    rows={4}
+                    placeholder={'e.g.\nTake half a teaspoon after meals.\nStore in a cool, dry place.'}
+                    value={formData.howToUse}
+                    onChange={(e) => setFormData({ ...formData, howToUse: e.target.value })}
+                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.88rem', fontFamily: 'inherit', resize: 'vertical' }}
+                  />
+                </div>
+                <div className="hiyaghar-form-group">
+                  <label>
+                    <i className="fa-solid fa-calendar-check" style={{ color: '#2d6a4f', marginRight: '6px' }}></i>
+                    Shelf Life
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="e.g. 6 months from manufacture"
+                    value={formData.shelfLife}
+                    onChange={(e) => setFormData({ ...formData, shelfLife: e.target.value })}
+                    style={{ width: '100%', padding: '10px 14px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.88rem', fontFamily: 'inherit' }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '16px 0 8px' }}>
+                <label style={{ fontWeight: 700, fontSize: '0.9rem', color: '#0f172a' }}>
+                  <i className="fa-solid fa-circle-question" style={{ color: '#2d6a4f', marginRight: '6px' }}></i>
+                  Product FAQs (4-6 recommended)
+                </label>
+                <button
+                  type="button"
+                  onClick={() => setFormData((prev) => ({ ...prev, faqs: [...prev.faqs, { question: '', answer: '' }] }))}
+                  style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #2d6a4f', background: '#f0f7f3', color: '#2d6a4f', fontWeight: 700, fontSize: '0.82rem', cursor: 'pointer' }}
+                >
+                  + Add FAQ
+                </button>
+              </div>
+
+              {formData.faqs.length === 0 ? (
+                <div style={{ fontSize: '0.85rem', color: '#64748b' }}>
+                  No FAQs yet. Click <strong>+ Add FAQ</strong> to add a question customers ask about this product.
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                  {formData.faqs.map((faq, index) => (
+                    <div key={index} style={{ border: '1px solid #e2e8f0', borderRadius: '10px', padding: '12px', display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        <input
+                          type="text"
+                          placeholder="Question, e.g. Is it safe for daily use?"
+                          value={faq.question}
+                          onChange={(e) => setFormData((prev) => ({
+                            ...prev,
+                            faqs: prev.faqs.map((f, i) => (i === index ? { ...f, question: e.target.value } : f)),
+                          }))}
+                          style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.88rem', fontFamily: 'inherit' }}
+                        />
+                        <textarea
+                          rows={2}
+                          placeholder="Answer"
+                          value={faq.answer}
+                          onChange={(e) => setFormData((prev) => ({
+                            ...prev,
+                            faqs: prev.faqs.map((f, i) => (i === index ? { ...f, answer: e.target.value } : f)),
+                          }))}
+                          style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', fontSize: '0.88rem', fontFamily: 'inherit', resize: 'vertical' }}
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        aria-label="Remove FAQ"
+                        title="Remove FAQ"
+                        onClick={() => setFormData((prev) => ({ ...prev, faqs: prev.faqs.filter((_, i) => i !== index) }))}
+                        style={{ alignSelf: 'start', border: 'none', background: 'transparent', color: '#ef4444', cursor: 'pointer', fontSize: '1rem' }}
+                      >
+                        <i className="fa-solid fa-trash"></i>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* DYNAMIC NUTRITIONAL FACTS SECTION */}

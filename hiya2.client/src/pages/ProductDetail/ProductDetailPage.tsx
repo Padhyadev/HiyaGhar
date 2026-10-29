@@ -15,6 +15,7 @@ import { parseProductFullDescription } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
 import { buildProductSeoDescription, seoConfig } from '../../seo/routeSeo';
+import { trackViewItem } from '../../utils/analytics';
 import './ProductDetailPage.css';
 
 
@@ -98,6 +99,13 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
         const weightOpts = rawLabels.length > 0 ? rawLabels : [];
         const curPrice = defaultVar ? defaultVar.price : (apiProd.discountPrice || apiProd.basePrice);
         const origPrice = defaultVar?.originalPrice || (apiProd.basePrice > curPrice ? apiProd.basePrice : Math.round(curPrice * 1.25));
+        trackViewItem({
+          productId: apiProd.id,
+          name: apiProd.productName,
+          price: curPrice,
+          variant: defaultVar ? formatVariantLabel(defaultVar.variantName) : undefined,
+          category: apiProd.category?.categoryName || (apiProd as any).categoryName,
+        });
 
         // Start on the default variant's own gallery (falls back to the common images).
         const imgs = Array.from(new Set(getVariantImages(apiProd, defaultVar)));
@@ -139,6 +147,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           benefits: parsed.benefits,
           servingSize: parsed.servingSize || '100g',
           nutritionalInfo: parsed.nutritionalInfo,
+          shelfLife: parsed.shelfLife,
+          howToUse: parsed.howToUse,
+          faqs: parsed.faqs,
         });
 
         setSelectedImage(finalImgs[0]);
@@ -1092,7 +1103,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               >
                 Product Description
               </button>
-              {product.ingredients && product.ingredients.length > 0 && (
+              {(product.ingredients?.length > 0 || product.benefits?.length > 0) && (
                 <button
                   type="button"
                   className={`hiyaghar-tab-btn ${activeTab === 'ingredients' ? 'is-active' : ''}`}
@@ -1125,16 +1136,29 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 <p className="hiyaghar-tab-paragraph">
                   {product.longDescription || product.shortDescription}
                 </p>
+                {product.howToUse && (
+                  <>
+                    <h4 className="pane-subheading">How to Use:</h4>
+                    <p className="hiyaghar-tab-paragraph" style={{ whiteSpace: 'pre-line' }}>{product.howToUse}</p>
+                  </>
+                )}
+                {product.shelfLife && (
+                  <p className="hiyaghar-tab-paragraph"><strong>Shelf Life:</strong> {product.shelfLife}</p>
+                )}
               </div>
 
-              {product.ingredients && product.ingredients.length > 0 && (
+              {(product.ingredients?.length > 0 || product.benefits?.length > 0) && (
                 <div hidden={activeTab !== 'ingredients'}>
-                  <h4 className="pane-subheading">Key Ingredients:</h4>
-                  <div className="ingredients-pills-list" style={{ marginBottom: '24px' }}>
-                    {product.ingredients?.map((ing: string, i: number) => (
-                      <span key={i} className="ing-pill">{ing}</span>
-                    ))}
-                  </div>
+                  {product.ingredients?.length > 0 && (
+                    <>
+                      <h4 className="pane-subheading">Key Ingredients:</h4>
+                      <div className="ingredients-pills-list" style={{ marginBottom: '24px' }}>
+                        {product.ingredients.map((ing: string, i: number) => (
+                          <span key={i} className="ing-pill">{ing}</span>
+                        ))}
+                      </div>
+                    </>
+                  )}
 
                   {product.benefits && product.benefits.length > 0 && (
                     <>
@@ -1174,6 +1198,22 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               )}
             </div>
           </div>
+
+          {/* Product FAQs (admin: Products > How to Use, Shelf Life & FAQs). Answers are always in
+              the DOM (<details>), so crawlers read them; the server adds FAQPage JSON-LD. */}
+          {product.faqs?.length > 0 && (
+            <section className="hiyaghar-detail-tabs-container" aria-labelledby="product-faq-heading" style={{ marginTop: '24px' }}>
+              <h2 id="product-faq-heading" className="pane-subheading" style={{ fontSize: '1.25rem', margin: '0 0 12px' }}>
+                Frequently Asked Questions
+              </h2>
+              {product.faqs.map((faq: { question: string; answer: string }, i: number) => (
+                <details key={i} style={{ borderTop: '1px solid #e2e8f0', padding: '12px 0' }}>
+                  <summary style={{ cursor: 'pointer', fontWeight: 700, color: '#11223A' }}>{faq.question}</summary>
+                  <p className="hiyaghar-tab-paragraph" style={{ margin: '8px 0 0', whiteSpace: 'pre-line' }}>{faq.answer}</p>
+                </details>
+              ))}
+            </section>
+          )}
         </div>
         )}
       </main>

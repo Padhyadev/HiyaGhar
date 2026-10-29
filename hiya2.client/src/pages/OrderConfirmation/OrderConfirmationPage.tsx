@@ -6,6 +6,7 @@ import type { Order } from '../../services/orderService';
 import { CustomerAuthService } from '../../services/customerAuthService';
 import type { CustomerProfile } from '../../services/customerAuthService';
 import { showToast } from '../../utils/alertService';
+import { trackPurchase } from '../../utils/analytics';
 import './OrderConfirmationPage.css';
 
 interface OrderConfirmationPageProps {
@@ -100,6 +101,20 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
 
     window.scrollTo(0, 0);
   }, [orderId]);
+
+  // GA4 purchase: once per order id, only for recent orders (see utils/analytics.ts).
+  useEffect(() => {
+    if (!order) return;
+    trackPurchase({
+      id: order.orderNumber || order.id,
+      createdAt: order.createdAt,
+      total: order.total,
+      tax: order.tax,
+      shippingFee: order.shippingFee,
+      couponCode: order.couponCode,
+      items: order.items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, variant: i.weight })),
+    });
+  }, [order]);
 
   if (!order) {
     return (

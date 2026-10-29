@@ -89,6 +89,20 @@ namespace Hiya2.Server.Seo
                 if (product == null) return NotFoundResult(path, s, baseNodes);
                 page = BuildProductPage(product, found.Path, c, s.DefaultImage, baseNodes);
             }
+            else if (path.StartsWith(SeoMarkup.OccasionPathPrefix, StringComparison.OrdinalIgnoreCase))
+            {
+                var slug = path[SeoMarkup.OccasionPathPrefix.Length..];
+                var occasion = (await _hampers.GetAllOccasionsAsync(true))
+                    .FirstOrDefault(o => !string.IsNullOrWhiteSpace(o.Slug) && string.Equals(o.Slug.Trim(), slug, StringComparison.OrdinalIgnoreCase));
+                if (occasion == null) return NotFoundResult(path, s, baseNodes);
+
+                var canonical = SeoMarkup.OccasionPath(occasion.Slug);
+                if (!string.Equals(path, canonical, StringComparison.Ordinal))
+                {
+                    return new SeoRenderResult(StatusCodes.Status301MovedPermanently, null, canonical);
+                }
+                page = await BuildOccasionPageAsync(occasion, canonical, c, s.DefaultImage, baseNodes);
+            }
             else
             {
                 return NotFoundResult(path, s, baseNodes);
@@ -154,11 +168,16 @@ namespace Hiya2.Server.Seo
             {
                 var paths = await GetProductPathsAsync();
                 string PathOf(Models.Product p) => paths.TryGetValue(p.Id, out var path) ? path : "/product/" + p.Id;
+                var occasions = route.CategoryId.HasValue ? new List<Models.GiftHamperOccasion>() : await _hampers.GetAllOccasionsAsync(true);
+                var occasionLinks = occasions.Where(o => !string.IsNullOrWhiteSpace(o.Slug))
+                    .Select(o => (o.Name.Trim(), SeoMarkup.OccasionPath(o.Slug))).ToList();
+                if (occasionLinks.Count > 0) body += SeoMarkup.LinkList(occasionLinks);
+
                 var items = route.CategoryId.HasValue
                     ? (await _products.GetAllAsync(route.CategoryId.Value))
                         .Where(p => p.IsActive && !p.IsDeleted)
                         .Select(p => (p.ProductName, PathOf(p))).ToList()
-                    : (await _hampers.GetAllOccasionsAsync(true))
+                    : occasions
                         .SelectMany(o => o.Products.Where(op => op.Product != null).OrderBy(op => op.DisplayOrder))
                         .Select(op => op.Product!)
                         .Where(p => p.IsActive && !p.IsDeleted)
@@ -220,6 +239,44 @@ namespace Hiya2.Server.Seo
             page.BodyHtml = SeoMarkup.Prerender(body);
         }
 
+        /// <summary>One gift hamper occasion (/gift-hampers/{slug}): its products, breadcrumbs, CollectionPage.</summary>
+        private async Task<SeoPage> BuildOccasionPageAsync(Models.GiftHamperOccasion o, string path, SeoConfig c, string defaultImage, List<object> baseNodes)
+        {
+            var paths = await GetProductPathsAsync();
+            var items = o.Products
+                .Where(op => op.Product != null && op.Product.IsActive && !op.Product.IsDeleted)
+                .OrderBy(op => op.DisplayOrder)
+                .Select(op => op.Product!)
+                .GroupBy(p => p.Id).Select(g => g.First())
+                .Select(p => (p.ProductName, paths.TryGetValue(p.Id, out var pp) ? pp : "/product/" + p.Id))
+                .ToList();
+
+            var hub = c.Routes.FirstOrDefault(r => r.Collection == "giftHampers");
+            var page = new SeoPage
+            {
+                Title = SeoMarkup.OccasionTitle(o.Name, c.SiteName),
+                Description = SeoMarkup.OccasionDescription(o.Name, o.Description),
+                Path = path,
+                Image = string.IsNullOrWhiteSpace(o.BannerImagePath) ? defaultImage : o.BannerImagePath!,
+                JsonLd = new List<object>(baseNodes),
+            };
+
+            var pageNode = SeoMarkup.WebPageNode(c, "CollectionPage", page);
+            pageNode["mainEntity"] = SeoMarkup.ItemList(c, items);
+            page.JsonLd.Add(pageNode);
+            var crumbs = new List<(string, string)> { ("Home", "/") };
+            if (hub?.Path != null) crumbs.Add((hub.Breadcrumb ?? hub.H1 ?? hub.Title, hub.Path));
+            crumbs.Add((o.Name.Trim(), path));
+            page.JsonLd.Add(SeoMarkup.Breadcrumbs(c, crumbs));
+
+            var body = SeoMarkup.Heading(o.Name.Trim(), page.Description)
+                + "<p>" + SeoMarkup.E($"Showing {items.Count} product{(items.Count == 1 ? "" : "s")}") + "</p>"
+                + SeoMarkup.LinkList(items);
+            if (hub?.Path != null) body += SeoMarkup.LinkList(new[] { ("All " + (hub.LinkText ?? hub.Title), hub.Path) });
+            page.BodyHtml = SeoMarkup.Prerender(body);
+            return page;
+        }
+
         private static SeoPage BuildProductPage(Models.Product p, string path, SeoConfig c, string defaultImage, List<object> baseNodes)
         {
             var description = SeoMarkup.ProductDescription(p, c.ProductDescriptionTemplate);
@@ -267,9 +324,17 @@ namespace Hiya2.Server.Seo
                 body += "<h2>Description</h2><p>" + SeoMarkup.E(fullText) + "</p>";
             }
 
-            var (ingredients, benefits) = SeoMarkup.ProductMeta(p.FullDescription);
-            if (ingredients.Count > 0) body += "<h2>Ingredients</h2><ul>" + string.Concat(ingredients.Select(x => "<li>" + SeoMarkup.E(x) + "</li>")) + "</ul>";
-            if (benefits.Count > 0) body += "<h2>Benefits</h2><ul>" + string.Concat(benefits.Select(x => "<li>" + SeoMarkup.E(x) + "</li>")) + "</ul>";
+            var meta = SeoMarkup.ProductMeta(p.FullDescription);
+            if (meta.HowToUse.Length > 0) body += "<h2>How to Use</h2><p>" + SeoMarkup.E(meta.HowToUse) + "</p>";
+            if (meta.ShelfLife.Length > 0) body += "<p>Shelf life: " + SeoMarkup.E(meta.ShelfLife) + "</p>";
+            if (meta.Ingredients.Count > 0) body += "<h2>Ingredients</h2><ul>" + string.Concat(meta.Ingredients.Select(x => "<li>" + SeoMarkup.E(x) + "</li>")) + "</ul>";
+            if (meta.Benefits.Count > 0) body += "<h2>Benefits</h2><ul>" + string.Concat(meta.Benefits.Select(x => "<li>" + SeoMarkup.E(x) + "</li>")) + "</ul>";
+            if (meta.Faqs.Count > 0)
+            {
+                body += "<h2>Frequently Asked Questions</h2><dl>"
+                    + string.Concat(meta.Faqs.Select(f => "<dt>" + SeoMarkup.E(f.Question) + "</dt><dd>" + SeoMarkup.E(f.Answer) + "</dd>")) + "</dl>";
+                page.JsonLd.Add(SeoMarkup.ProductFaqNode(c, path, meta.Faqs));
+            }
             if (categoryRoute?.Path != null)
             {
                 body += SeoMarkup.LinkList(new[] { (categoryRoute.LinkText ?? categoryRoute.Breadcrumb ?? categoryRoute.Title, categoryRoute.Path) });

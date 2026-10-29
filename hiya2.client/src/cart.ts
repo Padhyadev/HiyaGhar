@@ -1,5 +1,6 @@
 import { CartApiService } from './services/cartApiService';
 import { NO_IMAGE } from './utils/productFormat';
+import { trackAddToCart } from './utils/analytics';
 
 export interface CartItem {
   id: string; // Unique composite ID: productId + weight (e.g., 'royal-rose-paan-250g')
@@ -54,6 +55,7 @@ export class CartService {
 
     this.saveItems(items);
     this.itemAddedListeners.forEach((listener) => listener(item));
+    trackAddToCart({ productId: item.productId, name: item.name, price: item.price, quantity: item.quantity, variant: item.weight });
 
     const hash = window.location.hash.toLowerCase();
     if (!hash.includes('/cart') && !hash.includes('/checkout')) {

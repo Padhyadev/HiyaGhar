@@ -13,6 +13,10 @@ Source: `HIYAGHAR_Requirements_FOR_AEO&GEO.pdf` (28 Oct 2026). Plan date: 29 Oct
 | W5 DOM content | ✅ FAQ answers and product tabs always in the DOM. Loop copies in the combo strip and ticker are `aria-hidden`. Home category card title is a real link. Empty `alt`s are decorative (correct). |
 | W6 Product content (server HTML) | ✅ Server outputs the full description, saved ingredients/benefits and each size with its price. ⏳ Copy and new fields still needed from the client. |
 | W9 | ✅ `llms.txt` added. Code-splitting was already in place. |
+| W2 Occasion pages | ✅ `/gift-hampers/{slug}` (server pre-render, CollectionPage + breadcrumbs, sitemap). `?category=` returns 301. Occasion cards are real links. |
+| W6 Product fields | ✅ Admin: How to Use, Shelf Life, FAQs (stored in HIYA_META, no DB change). Product page shows them. Server outputs FAQPage JSON-LD. Placeholder ingredients, benefits, nutrition and description removed. ⏳ Content still to be filled in. |
+| G4 GA4 (code) | ✅ page_view, view_item, add_to_cart, begin_checkout, purchase (once per order). Off until `VITE_GA4_MEASUREMENT_ID` is set in `hiya2.client/.env.production`. CSP allows Google. |
+| G3 Merchant feed | ✅ `/feeds/google-products.xml`: one item per variant with its own photo, price/sale price, stock. ⏳ Add the URL in Merchant Center. |
 
 ## 0. Where the site stands today
 

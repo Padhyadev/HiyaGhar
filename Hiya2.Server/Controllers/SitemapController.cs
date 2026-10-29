@@ -47,6 +47,18 @@ namespace Hiya2.Server.Controllers
                 AppendUrl(sb, SeoMarkup.CanonicalUrl(siteUrl, route.Path!), publishDate, route.Path == "/" ? "1.0" : "0.8");
             }
 
+            // Gift hamper occasion pages (/gift-hampers/{slug}), active only.
+            var occasions = await _context.GiftHamperOccasions
+                .AsNoTracking()
+                .Where(o => !o.IsDeleted && o.IsActive && o.Slug != "")
+                .OrderBy(o => o.DisplayOrder)
+                .Select(o => new { o.Slug, o.LastModifiedDate, o.CreatedDate })
+                .ToListAsync();
+            foreach (var occ in occasions)
+            {
+                AppendUrl(sb, SeoMarkup.CanonicalUrl(siteUrl, SeoMarkup.OccasionPath(occ.Slug)), occ.LastModifiedDate ?? occ.CreatedDate, "0.7");
+            }
+
             var products = await _context.Products
                 .AsNoTracking()
                 .Where(p => !p.IsDeleted && p.IsActive)

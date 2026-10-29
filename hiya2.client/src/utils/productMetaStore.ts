@@ -1,8 +1,18 @@
+export interface ProductFaq {
+  question: string;
+  answer: string;
+}
+
 export interface ProductCustomMeta {
   ingredients?: string[];
   benefits?: string[];
   servingSize?: string;
   nutritionalInfo?: Record<string, string>;
+  /** e.g. "6 months from the date of manufacture" */
+  shelfLife?: string;
+  /** Plain text; line breaks are kept on the product page. */
+  howToUse?: string;
+  faqs?: ProductFaq[];
   crossSellProductIds?: number[];
   highlights?: Array<{
     title: string;
@@ -38,19 +48,26 @@ export const saveStoredProductMeta = (productId: string | number, meta: ProductC
 /**
  * Parses embedded JSON block or standard text from fullDescription.
  * Format inside fullDescription can be standard text, or can embed:
- * <!--HIYA_META: {"ingredients":[...], "benefits":[...], "nutritionalInfo":{...}} -->
+ * <!--HIYA_META: {"ingredients":[...], "benefits":[...], "nutritionalInfo":{...}, "shelfLife":"...", "howToUse":"...", "faqs":[{"question":"...","answer":"..."}]} -->
+ *
+ * Only values saved by the admin are returned. There are no per-category placeholder
+ * ingredients, benefits, nutrition values or descriptions: empty means "not entered" and the
+ * product page hides that section. The server reads the same block (SeoMarkup.ProductMeta).
  */
 export const parseProductFullDescription = (
   fullDescription?: string,
   productId?: string | number,
-  categoryName?: string,
-  productName?: string
+  _categoryName?: string,
+  _productName?: string
 ): {
   cleanDescription: string;
   ingredients: string[];
   benefits: string[];
   servingSize: string;
   nutritionalInfo: Record<string, string> | null;
+  shelfLife: string;
+  howToUse: string;
+  faqs: ProductFaq[];
   crossSellProductIds?: number[];
   highlights?: Array<{ title: string; description: string }>;
 } => {
@@ -79,95 +96,36 @@ export const parseProductFullDescription = (
     },
   };
 
-  const catLower = (categoryName || '').toLowerCase();
-  const nameLower = (productName || '').toLowerCase();
+  const cleanList = (list?: string[]) =>
+    Array.isArray(list) ? list.map((x) => String(x ?? '').trim()).filter((x) => x.length > 0) : [];
 
-  const isNonFood =
-    catLower.includes('oil') ||
-    catLower.includes('soap') ||
-    catLower.includes('bath') ||
-    catLower.includes('skin') ||
-    catLower.includes('hair') ||
-    nameLower.includes('oil') ||
-    nameLower.includes('soap') ||
-    nameLower.includes('shampoo');
-
-  const isMasala =
-    catLower.includes('masala') ||
-    catLower.includes('tea') ||
-    catLower.includes('chai') ||
-    nameLower.includes('masala') ||
-    nameLower.includes('tea');
-
-  // Determine dynamic default ingredients
-  let defaultIngredients: string[] = [];
-  let defaultBenefits: string[] = [];
-  let defaultNutrition: Record<string, string> | null = null;
-
-  if (isNonFood) {
-    if (catLower.includes('soap') || nameLower.includes('soap')) {
-      defaultIngredients = ['Organic Coconut Oil', 'Pure Neem Extracts', 'Cold-Pressed Aloe Vera', 'Essential Oils', 'Natural Glycerin'];
-      defaultBenefits = ['Deeply cleanses & purifies skin', '100% Chemical & Paraben Free', 'Retains natural skin moisture', 'Gentle for everyday use'];
-    } else {
-      defaultIngredients = ['Cold-Pressed Sesame Oil', 'Pure Coconut Oil', 'Bhringraj & Amla', 'Brahmi & Hibiscus', '14 Rare Ayurvedic Herbs'];
-      defaultBenefits = ['Reduces hair fall & strengthens roots', 'Promotes shiny, thick hair growth', 'Deeply nourishes scalp & prevents dandruff', '100% Mineral Oil Free'];
-    }
-    defaultNutrition = null; // Non-food items do not have nutritional values
-  } else if (isMasala) {
-    defaultIngredients = ['Green Cardamom (Elaichi)', 'Sun-dried Ginger (Sonth)', 'Cinnamon (Dalchini)', 'Cloves (Laung)', 'Black Pepper & Nutmeg'];
-    defaultBenefits = ['Boosts immunity & metabolism', 'Authentic traditional aroma & rich flavor', 'Rich in natural antioxidants', '100% Pure Spices with Zero Preservatives'];
-    defaultNutrition = {
-      Energy: '280 kcal',
-      Carbohydrates: '42.0g',
-      Protein: '9.5g',
-      'Total Fat': '7.8g',
-      'Dietary Fiber': '18.4g',
-    };
-  } else {
-    // Mukhwas / Edible Mouth Freshener default
-    defaultIngredients = ['100% Natural Ingredients', 'Sun-dried Rose Gulkand', 'Silver Cardamom', 'Sweet Coconut Flakes', 'Menthol Crystals'];
-    defaultBenefits = ['Authentic taste & freshness', 'Instant long-lasting oral freshness', '100% Tobacco & Supari Free', 'Aids post-meal digestive wellness'];
-    defaultNutrition = {
-      Energy: '385 kcal',
-      Carbohydrates: '68.5g',
-      Protein: '6.2g',
-      'Total Fat': '9.8g',
-      'Dietary Fiber': '14.2g',
-    };
-  }
-
-  const ingredients =
-    mergedMeta.ingredients && mergedMeta.ingredients.length > 0
-      ? mergedMeta.ingredients
-      : defaultIngredients;
-
-  const benefits =
-    mergedMeta.benefits && mergedMeta.benefits.length > 0
-      ? mergedMeta.benefits
-      : defaultBenefits;
-
+  // Filter out empty entries
   let nutritionalInfo: Record<string, string> | null = null;
-  if (mergedMeta.nutritionalInfo && Object.keys(mergedMeta.nutritionalInfo).length > 0) {
-    // Filter out empty entries
-    const cleanNutrition: Record<string, string> = {};
-    Object.entries(mergedMeta.nutritionalInfo).forEach(([k, v]) => {
-      if (v && v.trim().length > 0) {
-        cleanNutrition[k] = v.trim();
-      }
-    });
-    if (Object.keys(cleanNutrition).length > 0) {
-      nutritionalInfo = cleanNutrition;
+  const cleanNutrition: Record<string, string> = {};
+  Object.entries(mergedMeta.nutritionalInfo || {}).forEach(([k, v]) => {
+    if (k.trim() && v && String(v).trim().length > 0) {
+      cleanNutrition[k.trim()] = String(v).trim();
     }
-  } else if (!isNonFood) {
-    nutritionalInfo = defaultNutrition;
+  });
+  if (Object.keys(cleanNutrition).length > 0) {
+    nutritionalInfo = cleanNutrition;
   }
+
+  const faqs = Array.isArray(mergedMeta.faqs)
+    ? mergedMeta.faqs
+        .map((f) => ({ question: String(f?.question ?? '').trim(), answer: String(f?.answer ?? '').trim() }))
+        .filter((f) => f.question.length > 0 && f.answer.length > 0)
+    : [];
 
   return {
-    cleanDescription: cleanDescription || (isNonFood ? '100% Pure Ayurvedic & Natural wellness formula handcrafted with organic ingredients.' : 'Handcrafted with pure premium natural ingredients for unmatched taste and wellness.'),
-    ingredients,
-    benefits,
+    cleanDescription,
+    ingredients: cleanList(mergedMeta.ingredients),
+    benefits: cleanList(mergedMeta.benefits),
     servingSize: mergedMeta.servingSize?.trim() || '100g',
     nutritionalInfo,
+    shelfLife: (mergedMeta.shelfLife || '').trim(),
+    howToUse: (mergedMeta.howToUse || '').trim(),
+    faqs,
     crossSellProductIds: mergedMeta.crossSellProductIds,
     highlights: mergedMeta.highlights,
   };

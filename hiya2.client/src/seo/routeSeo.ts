@@ -77,3 +77,24 @@ export function buildProductSeoDescription(
   const space = cut.lastIndexOf(' ');
   return `${cut.slice(0, space > 120 ? space : 159)}…`;
 }
+
+/** Gift hamper occasion page path: /gift-hampers/{slug} (same as SeoMarkup.OccasionPath on the server). */
+export const occasionPath = (slug: string) => `/gift-hampers/${slug.trim().toLowerCase()}`;
+
+/** Same rule as SeoMarkup.OccasionTitle: "Wedding" → "Wedding Gift Hampers | HIYAGHAR". */
+export function buildOccasionTitle(name: string): string {
+  const n = name.trim();
+  return `${/gift|hamper/i.test(n) ? n : `${n} Gift Hampers`} | ${config.siteName}`;
+}
+
+/** Same rule as SeoMarkup.OccasionDescription: admin description (max 160 chars), else a standard sentence. */
+export function buildOccasionDescription(name: string, description?: string | null): string {
+  const text = (description || '').replace(/<!--HIYA_META[\s\S]*?-->/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!text) {
+    return `Shop HIYAGHAR ${name.trim()} gift hampers: curated handcrafted mukhwas, tea masala, soaps and wellness gifts. See prices and order online across India.`;
+  }
+  if (text.length <= 160) return text;
+  const cut = text.slice(0, 159);
+  const space = cut.lastIndexOf(' ');
+  return `${cut.slice(0, space > 120 ? space : 159)}…`;
+}

@@ -148,9 +148,18 @@ public class SeoMarkupTests
     [Fact]
     public void Product_meta_reads_saved_ingredients_only()
     {
-        var (ing, ben) = SeoMarkup.ProductMeta("Text <!--HIYA_META: {\"ingredients\":[\"Fennel\",\"<b>Sugar</b>\",\"\"],\"benefits\":[\"Aids digestion\"]} -->");
-        Assert.Equal(new[] { "Fennel", "Sugar" }, ing);
-        Assert.Equal(new[] { "Aids digestion" }, ben);
+        var meta = SeoMarkup.ProductMeta("Text <!--HIYA_META: {\"ingredients\":[\"Fennel\",\"<b>Sugar</b>\",\"\"],\"benefits\":[\"Aids digestion\"],"
+            + "\"shelfLife\":\" 6 months \",\"howToUse\":\"After meals\",\"faqs\":[{\"question\":\"Vegan?\",\"answer\":\"Yes\"},{\"question\":\"No answer\",\"answer\":\"\"},5]} -->");
+        Assert.Equal(new[] { "Fennel", "Sugar" }, meta.Ingredients);
+        Assert.Equal(new[] { "Aids digestion" }, meta.Benefits);
+        Assert.Equal("6 months", meta.ShelfLife);
+        Assert.Equal("After meals", meta.HowToUse);
+        Assert.Equal(new[] { ("Vegan?", "Yes") }, meta.Faqs);
+
+        var faqNode = JsonDocument.Parse(SeoMarkup.SerializeJsonLd(new[] { SeoMarkup.ProductFaqNode(Config(), "/product/fennel", meta.Faqs) }))
+            .RootElement.GetProperty("@graph")[0];
+        Assert.Equal("FAQPage", faqNode.GetProperty("@type").GetString());
+        Assert.Equal("Yes", faqNode.GetProperty("mainEntity")[0].GetProperty("acceptedAnswer").GetProperty("text").GetString());
 
         Assert.Empty(SeoMarkup.ProductMeta("no meta").Ingredients);
         Assert.Empty(SeoMarkup.ProductMeta("<!--HIYA_META: {broken -->").Ingredients);
