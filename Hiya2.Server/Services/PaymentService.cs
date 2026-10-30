@@ -44,6 +44,9 @@ namespace Hiya2.Server.Services
 
         public async Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard", BuyNowItem? buyNowItem = null)
         {
+            // Reward coins paused (see RewardFeature): charge the full amount, no coins used.
+            if (!RewardFeature.Enabled) useRewardCoins = 0;
+
             List<CartLine> cartLines;
             if (buyNowItem != null)
             {

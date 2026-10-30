@@ -49,7 +49,21 @@ interface AdminOrder {
   items: AdminOrderItem[];
 }
 
-const FORWARD_STATUS_OPTIONS = ['Confirmed', 'Processing', 'Packed', 'Shipped', 'OutForDelivery', 'Delivered'];
+const FORWARD_STATUS_OPTIONS = ['Placed', 'Confirmed', 'Processing', 'Packed', 'Shipped', 'OutForDelivery', 'Delivered'];
+
+// Statuses an order may move to - mirrors OrderService.AllowedTransitions on the server,
+// so the dropdown doesn't offer a move the server would reject (e.g. Processing -> Placed).
+const ALLOWED_NEXT_STATUSES: Record<string, string[]> = {
+  Placed: ['Confirmed', 'Processing', 'Packed', 'Shipped', 'OutForDelivery', 'Delivered'],
+  Confirmed: ['Processing', 'Packed', 'Shipped', 'OutForDelivery', 'Delivered'],
+  Processing: ['Packed', 'Shipped', 'OutForDelivery', 'Delivered'],
+  Packed: ['Shipped', 'OutForDelivery', 'Delivered'],
+  Shipped: ['OutForDelivery', 'Delivered'],
+  OutForDelivery: ['Delivered'],
+};
+
+const isAllowedNextStatus = (current: string, next: string) =>
+  (ALLOWED_NEXT_STATUSES[current] || []).includes(next);
 
 const STATUS_LABELS: Record<string, string> = {
   Placed: 'Placed',
@@ -62,19 +76,6 @@ const STATUS_LABELS: Record<string, string> = {
   Cancelled: 'Cancelled',
   Returned: 'Returned',
 };
-
-const COURIER_PARTNERS = [
-  'DTDC Express',
-  'Delhivery',
-  'Blue Dart',
-  'Ekart Logistics',
-  'India Post (Speed Post)',
-  'Shadowfax',
-  'Xpressbees',
-  'Ecom Express',
-  'Professional Couriers',
-  'Self Pickup / Local Delivery',
-];
 
 const statusPillClass = (status: string) => {
   if (status === 'Delivered') return 'status-delivered';
@@ -89,7 +90,6 @@ export const OrderManagementPage: React.FC = () => {
 
   const [statusLabelMap, setStatusLabelMap] = useState<Record<string, string>>({});
   const [lovStatuses, setLovStatuses] = useState<Array<{ code: string; desc: string }>>([]);
-  const [lovCouriers, setLovCouriers] = useState<string[]>([]);
   const formatDropdownStatus = (code: string) => statusLabelMap[code] || STATUS_LABELS[code] || code;
 
   const [viewMode, setViewMode] = useState<'list' | 'detail'>('list');
@@ -126,15 +126,6 @@ export const OrderManagementPage: React.FC = () => {
       setIsUpdatingPayment(false);
     }
   };
-
-  // Shipping Modal State
-  const [isShippingModalOpen, setIsShippingModalOpen] = useState<boolean>(false);
-  const [shippingModalMode, setShippingModalMode] = useState<'shipped' | 'edit_tracking'>('shipped');
-  const [courierName, setCourierName] = useState<string>('DTDC Express');
-  const [customCourier, setCustomCourier] = useState<string>('');
-  const [trackingNumber, setTrackingNumber] = useState<string>('');
-  const [trackingUrl, setTrackingUrl] = useState<string>('');
-  const [shippingErrors, setShippingErrors] = useState<Record<string, string>>({});
 
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
   const [cancelReason, setCancelReason] = useState<string>('');
@@ -200,23 +191,16 @@ export const OrderManagementPage: React.FC = () => {
     }).catch(() => {
       LovService.getPublicLabels('OrderStatus').then(setStatusLabelMap);
     });
-
-    LovService.getItems('CourierPartner').then((items) => {
-      if (Array.isArray(items) && items.length > 0) {
-        const activeCouriers = items
-          .filter((it) => it.isActive)
-          .sort((a, b) => a.displayOrder - b.displayOrder)
-          .map((it) => it.lovDesc);
-        if (activeCouriers.length > 0) {
-          setLovCouriers(activeCouriers);
-        }
-      }
-    }).catch((e) => console.warn('Failed to load couriers from LOV', e));
   }, []);
+
+  // The status dropdown starts on the order's current status (also when the order
+  // is opened from a ?orderNumber= link).
+  useEffect(() => {
+    setStatusChoice(selectedOrder?.orderStatus || '');
+  }, [selectedOrder?.id, selectedOrder?.orderStatus]);
 
   const handleViewOrder = (order: AdminOrder) => {
     setSelectedOrder(order);
-    setStatusChoice('');
     setStatusError(null);
     setViewMode('detail');
   };
@@ -230,127 +214,15 @@ export const OrderManagementPage: React.FC = () => {
     setViewMode('list');
   };
 
-  const handleOpenEditTrackingModal = () => {
-    if (!selectedOrder) return;
-    setShippingModalMode('edit_tracking');
-    const existingCourier = selectedOrder.courierName || '';
-    if (COURIER_PARTNERS.includes(existingCourier)) {
-      setCourierName(existingCourier);
-      setCustomCourier('');
-    } else if (existingCourier) {
-      setCourierName('Other');
-      setCustomCourier(existingCourier);
-    } else {
-      setCourierName('DTDC Express');
-      setCustomCourier('');
-    }
-    setTrackingNumber(selectedOrder.trackingNumber || '');
-    setTrackingUrl(selectedOrder.trackingUrl || '');
-    setShippingErrors({});
-    setIsShippingModalOpen(true);
-  };
-
+  // Every status, Shipped included, saves directly - no courier/tracking step.
   const handleUpdateStatus = async () => {
     if (!selectedOrder || !statusChoice) return;
-
-    if (statusChoice === 'Shipped') {
-      setShippingModalMode('shipped');
-      const existingCourier = selectedOrder.courierName || '';
-      if (COURIER_PARTNERS.includes(existingCourier)) {
-        setCourierName(existingCourier);
-        setCustomCourier('');
-      } else if (existingCourier) {
-        setCourierName('Other');
-        setCustomCourier(existingCourier);
-      } else {
-        setCourierName('DTDC Express');
-        setCustomCourier('');
-      }
-      setTrackingNumber(selectedOrder.trackingNumber || '');
-      setTrackingUrl(selectedOrder.trackingUrl || '');
-      setShippingErrors({});
-      setIsShippingModalOpen(true);
-      return;
-    }
-
     await performStatusUpdate({ status: statusChoice });
-  };
-
-  const handleConfirmShipping = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedOrder) return;
-
-    const errors: Record<string, string> = {};
-    const effectiveCourier = courierName === 'Other' ? customCourier.trim() : courierName;
-    if (!effectiveCourier) {
-      errors.courierName = 'Please enter courier partner name';
-    }
-    if (!trackingNumber.trim()) {
-      errors.trackingNumber = 'Please enter tracking number / AWB';
-    }
-
-    if (Object.keys(errors).length > 0) {
-      setShippingErrors(errors);
-      return;
-    }
-    setShippingErrors({});
-
-    setIsShippingModalOpen(false);
-
-    if (shippingModalMode === 'edit_tracking') {
-      await performTrackingUpdate({
-        courierName: effectiveCourier,
-        trackingNumber: trackingNumber.trim(),
-        trackingUrl: trackingUrl.trim() || undefined,
-      });
-    } else {
-      await performStatusUpdate({
-        status: 'Shipped',
-        courierName: effectiveCourier,
-        trackingNumber: trackingNumber.trim(),
-        trackingUrl: trackingUrl.trim() || undefined,
-      });
-    }
-  };
-
-  const performTrackingUpdate = async (payload: {
-    courierName: string;
-    trackingNumber: string;
-    trackingUrl?: string;
-  }) => {
-    if (!selectedOrder) return;
-    setIsUpdatingStatus(true);
-    setStatusError(null);
-    try {
-      const res = await fetch(`/api/order/admin/${selectedOrder.id}/tracking`, {
-        method: 'POST',
-        headers: AdminAuthService.getAuthHeaders(),
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (res.ok && data.isSuccess) {
-        const updatedList = await loadOrders();
-        const refreshed = updatedList.find((o) => o.id === selectedOrder.id);
-        if (refreshed) {
-          setSelectedOrder(refreshed);
-        }
-        showToast('Tracking details updated successfully.', 'success');
-      } else {
-        setStatusError(data.message || 'Failed to update tracking details.');
-      }
-    } catch (err: any) {
-      setStatusError(err.message || 'Network error while updating tracking.');
-    } finally {
-      setIsUpdatingStatus(false);
-    }
   };
 
   const performStatusUpdate = async (payload: {
     status: string;
     reason?: string;
-    courierName?: string;
-    trackingNumber?: string;
-    trackingUrl?: string;
   }) => {
     if (!selectedOrder) return;
     setIsUpdatingStatus(true);
@@ -490,9 +362,9 @@ export const OrderManagementPage: React.FC = () => {
 
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(71, 85, 105);
-      doc.text('Courier / AWB:', 112, infoBoxY + 19.5);
+      doc.text('Order No:', 112, infoBoxY + 19.5);
       doc.setTextColor(15, 23, 42);
-      doc.text(`${selectedOrder.courierName || 'Standard'} (${selectedOrder.trackingNumber || selectedOrder.orderNumber})`, 140, infoBoxY + 19.5);
+      doc.text(selectedOrder.orderNumber, 140, infoBoxY + 19.5);
 
       doc.setFont('helvetica', 'normal');
       doc.setTextColor(71, 85, 105);
@@ -706,9 +578,7 @@ export const OrderManagementPage: React.FC = () => {
               <h4>Order & Payment Details:</h4>
               <p><strong>Order Date:</strong> ${new Date(selectedOrder.orderDate).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
               <p><strong>Payment Mode:</strong> ${selectedOrder.paymentMode} (${selectedOrder.paymentStatus})</p>
-              <p><strong>Order Status:</strong> ${selectedOrder.orderStatusDisplay}</p>
-              ${selectedOrder.courierName ? `<p><strong>Courier:</strong> ${selectedOrder.courierName} (AWB: ${selectedOrder.trackingNumber || '-'})</p>` : ''}
-            </div>
+              <p><strong>Order Status:</strong> ${selectedOrder.orderStatusDisplay}</p>            </div>
           </div>
 
           <table>
@@ -1017,32 +887,7 @@ export const OrderManagementPage: React.FC = () => {
 
             <div className="hiyaghar-order-detail-block">
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #EAE4D3', paddingBottom: '6px', marginBottom: '10px' }}>
-                <h4 style={{ margin: 0, borderBottom: 'none', paddingBottom: 0 }}>Status & Courier Info</h4>
-                {currentMenuPermission.canEdit && selectedOrder.orderStatus !== 'Cancelled' && (
-                  <button
-                    type="button"
-                    onClick={handleOpenEditTrackingModal}
-                    style={{
-                      background: '#FFFDF0',
-                      border: '1px solid #D19A27',
-                      color: '#D19A27',
-                      padding: '3px 9px',
-                      borderRadius: '6px',
-                      fontSize: '0.78rem',
-                      fontWeight: 700,
-                      cursor: 'pointer',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '5px'
-                    }}
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-                    </svg>
-                    <span>Edit Tracking</span>
-                  </button>
-                )}
+                <h4 style={{ margin: 0, borderBottom: 'none', paddingBottom: 0 }}>Status Info</h4>
               </div>
               <p>Payment Mode: <strong>{selectedOrder.paymentMode}</strong></p>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', margin: '4px 0' }}>
@@ -1066,26 +911,6 @@ export const OrderManagementPage: React.FC = () => {
                 )}
               </div>
               <p>Order Status: {selectedOrder.orderStatusDisplay}</p>
-              {selectedOrder.courierName && (
-                <p style={{ color: '#0369a1', fontWeight: 600, marginTop: '4px' }}>
-                  Courier: {selectedOrder.courierName}
-                </p>
-              )}
-              {selectedOrder.trackingNumber && (
-                <p style={{ color: '#0369a1', fontSize: '0.85rem' }}>
-                  AWB / Tracking: <strong>{selectedOrder.trackingNumber}</strong>
-                  {selectedOrder.trackingUrl && (
-                    <a
-                      href={selectedOrder.trackingUrl}
-                      target="_blank"
-                      rel="noreferrer"
-                      style={{ marginLeft: '8px', color: '#D19A27', textDecoration: 'underline' }}
-                    >
-                      Track Shipment ↗
-                    </a>
-                  )}
-                </p>
-              )}
               {selectedOrder.cancelReason && (
                 <p style={{ color: '#b42318', marginTop: '4px' }}>Cancel Reason: {selectedOrder.cancelReason}</p>
               )}
@@ -1123,29 +948,29 @@ export const OrderManagementPage: React.FC = () => {
           {currentMenuPermission.canEdit && selectedOrder.orderStatus !== 'Cancelled' && selectedOrder.orderStatus !== 'Delivered' && (
             <div className="hiyaghar-order-status-actions">
               <div className="hiyaghar-order-status-select-wrap">
-                <label>Change Status to:</label>
+                <label>Order Status:</label>
+                {/* Starts on the current status; pick a later one to enable Update Status. */}
                 <select
                   value={statusChoice}
                   onChange={(e) => setStatusChoice(e.target.value)}
                   className="hiyaghar-select-pagesize"
                 >
-                  <option value="">-- Choose New Status --</option>
                   {lovStatuses.length > 0
                     ? lovStatuses.map((st) => (
-                        <option key={st.code} value={st.code} disabled={st.code === selectedOrder.orderStatus}>
-                          {st.desc}
+                        <option key={st.code} value={st.code} disabled={!isAllowedNextStatus(selectedOrder.orderStatus, st.code)}>
+                          {st.desc}{st.code === selectedOrder.orderStatus ? ' (current)' : ''}
                         </option>
                       ))
                     : FORWARD_STATUS_OPTIONS.map((st) => (
-                        <option key={st} value={st} disabled={st === selectedOrder.orderStatus}>
-                          {formatDropdownStatus(st)}
+                        <option key={st} value={st} disabled={!isAllowedNextStatus(selectedOrder.orderStatus, st)}>
+                          {formatDropdownStatus(st)}{st === selectedOrder.orderStatus ? ' (current)' : ''}
                         </option>
                       ))}
                 </select>
                 <button
                   type="button"
                   className="hiyaghar-panel-btn primary"
-                  disabled={!statusChoice || isUpdatingStatus}
+                  disabled={!statusChoice || statusChoice === selectedOrder.orderStatus || isUpdatingStatus}
                   onClick={handleUpdateStatus}
                 >
                   {isUpdatingStatus ? 'Updating...' : 'Update Status'}
@@ -1177,100 +1002,6 @@ export const OrderManagementPage: React.FC = () => {
         )}
         </div>
       ) : null}
-
-      {/* Courier & Tracking Modal for Shipped status / Edit Tracking */}
-      {isShippingModalOpen && selectedOrder && (
-        <div className="hiyaghar-modal-overlay" onClick={() => setIsShippingModalOpen(false)}>
-          <div className="hiyaghar-modal-card" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px' }}>
-            <div className="hiyaghar-modal-header">
-              <h3>{shippingModalMode === 'edit_tracking' ? 'Edit Tracking Details' : 'Shipping & Courier Details'}</h3>
-              <button type="button" className="close-btn" onClick={() => setIsShippingModalOpen(false)}>
-                ✕
-              </button>
-            </div>
-
-            <p style={{ fontSize: '0.85rem', color: 'var(--hiya-muted, #475467)', margin: '0 0 16px 0' }}>
-              {shippingModalMode === 'edit_tracking'
-                ? `Update the courier partner and tracking details for Order #${selectedOrder.orderNumber}.`
-                : `Mark Order #${selectedOrder.orderNumber} as Shipped by providing tracking details.`}
-            </p>
-
-            <form onSubmit={handleConfirmShipping} noValidate>
-              <div className="hiyaghar-form-group">
-                <label>Courier Company / Partner *</label>
-                <select
-                  value={courierName}
-                  onChange={(e) => setCourierName(e.target.value)}
-                  className="hiyaghar-search-input"
-                  style={{ width: '100%', marginBottom: '8px' }}
-                >
-                  {(lovCouriers.length > 0 ? lovCouriers : COURIER_PARTNERS).map((cp) => (
-                    <option key={cp} value={cp}>
-                      {cp}
-                    </option>
-                  ))}
-                  <option value="Other">Other Courier...</option>
-                </select>
-                {courierName === 'Other' && (
-                  <input
-                    type="text"
-                    placeholder="Enter custom courier name"
-                    className={`hiyaghar-search-input ${shippingErrors.courierName ? 'input-error' : ''}`}
-                    style={{ width: '100%', marginTop: '6px' }}
-                    value={customCourier}
-                    onChange={(e) => setCustomCourier(e.target.value)}
-                  />
-                )}
-                {shippingErrors.courierName && <span className="hiyaghar-field-error">{shippingErrors.courierName}</span>}
-              </div>
-
-              <div className="hiyaghar-form-group">
-                <label>AWB / Tracking Number *</label>
-                <input
-                  type="text"
-                  placeholder="e.g. DTDC12345678 or DELHIVERY9988"
-                  className={`hiyaghar-search-input ${shippingErrors.trackingNumber ? 'input-error' : ''}`}
-                  style={{ width: '100%' }}
-                  value={trackingNumber}
-                  onChange={(e) => {
-                    setTrackingNumber(e.target.value);
-                    if (shippingErrors.trackingNumber) setShippingErrors((prev) => ({ ...prev, trackingNumber: '' }));
-                  }}
-                />
-                {shippingErrors.trackingNumber && <span className="hiyaghar-field-error">{shippingErrors.trackingNumber}</span>}
-              </div>
-
-              <div className="hiyaghar-form-group">
-                <label>Tracking URL (Optional)</label>
-                <input
-                  type="text"
-                  placeholder="https://track.dtdc.com/..."
-                  className="hiyaghar-search-input"
-                  style={{ width: '100%' }}
-                  value={trackingUrl}
-                  onChange={(e) => setTrackingUrl(e.target.value)}
-                />
-              </div>
-
-              <div className="hiyaghar-modal-footer" style={{ marginTop: '20px' }}>
-                <button
-                  type="button"
-                  className="hiyaghar-btn-cancel"
-                  onClick={() => setIsShippingModalOpen(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="hiyaghar-panel-btn primary"
-                >
-                  {shippingModalMode === 'edit_tracking' ? 'Save Tracking Details' : 'Confirm & Mark Shipped'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Cancel Order Modal */}
       {isCancelModalOpen && selectedOrder && (

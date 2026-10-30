@@ -124,6 +124,7 @@ namespace Hiya2.Server.Services
 
         public async Task CreditForDeliveredOrderAsync(long customerId, long orderId, decimal orderFinalAmount)
         {
+            if (!RewardFeature.Enabled) return; // paused - see RewardFeature
             var slab = await _context.OrderRewardSlabs
                 .Where(s => s.IsActive && orderFinalAmount >= s.MinOrderAmount && orderFinalAmount <= s.MaxOrderAmount)
                 .OrderByDescending(s => s.MinOrderAmount)
@@ -227,6 +228,7 @@ namespace Hiya2.Server.Services
 
         public async Task<int> CreditSignupBonusAsync(long customerId)
         {
+            if (!RewardFeature.Enabled) return 0; // paused - see RewardFeature
             var settings = await GetSettingsAsync();
             if (settings.SignupCoins <= 0) return 0;
 
@@ -255,6 +257,7 @@ namespace Hiya2.Server.Services
 
         public async Task<int> CreditDailyLoginBonusAsync(long customerId)
         {
+            if (!RewardFeature.Enabled) return 0; // paused - see RewardFeature
             var settings = await GetSettingsAsync();
             if (settings.LoginCoins <= 0) return 0;
 
@@ -286,6 +289,7 @@ namespace Hiya2.Server.Services
 
         public async Task<(int ReferrerCoins, int JoineeCoins)> CreditReferralBonusAsync(long newCustomerId, long referrerCustomerId)
         {
+            if (!RewardFeature.Enabled) return (0, 0); // paused - see RewardFeature
             var settings = await GetSettingsAsync();
 
             var alreadyGranted = await _context.RewardTransactions.AnyAsync(r =>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { DataTable, type ColumnDef } from '../../components/admin/DataTable';
 import { AdminAuthService } from '../../services/adminAuthService';
 import { usePermission } from '../../context/PermissionContext';
@@ -47,6 +47,35 @@ export const StockManagementPage: React.FC<StockManagementPageProps> = ({ onView
   const [isBulkMode, setIsBulkMode] = useState<boolean>(false);
   const [bulkDraft, setBulkDraft] = useState<Record<number, number>>({});
   const [bulkSaving, setBulkSaving] = useState<boolean>(false);
+
+  const [selectedProductId, setSelectedProductId] = useState<string>('all');
+  const [selectedStatus, setSelectedStatus] = useState<string>('all');
+
+  // Extract unique products sorted alphabetically
+  const uniqueProducts = useMemo(() => {
+    const map = new Map<number, string>();
+    lines.forEach((l) => {
+      if (!map.has(l.productId)) {
+        map.set(l.productId, l.productName);
+      }
+    });
+    return Array.from(map.entries())
+      .map(([id, name]) => ({ id, name }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }, [lines]);
+
+  // Filtered stock lines based on selected product and status
+  const filteredLines = useMemo(() => {
+    return lines.filter((l) => {
+      if (selectedProductId !== 'all' && l.productId !== Number(selectedProductId)) {
+        return false;
+      }
+      if (selectedStatus !== 'all' && l.status !== selectedStatus) {
+        return false;
+      }
+      return true;
+    });
+  }, [lines, selectedProductId, selectedStatus]);
 
   const showToastMsg = (msg: string, type: 'success' | 'error' | 'info' = 'success') => {
     showToast(msg, type);
@@ -261,14 +290,76 @@ export const StockManagementPage: React.FC<StockManagementPageProps> = ({ onView
         <DataTable<StockLine>
           title="Stock Management"
           columns={columns}
-          data={lines}
+          data={filteredLines}
           loading={loading}
           canAdd={false}
           canEdit={false}
           canDelete={false}
+          searchFields={(l) => [l.productName, l.variantName, l.status, statusLabel[l.status]]}
+          searchPlaceholder="Search product or variant..."
           extraControls={
-            currentMenuPermission.canEdit && (
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+              {/* Product Filter Dropdown */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <label htmlFor="stock-product-filter" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#475569' }}>
+                  Product:
+                </label>
+                <select
+                  id="stock-product-filter"
+                  value={selectedProductId}
+                  onChange={(e) => setSelectedProductId(e.target.value)}
+                  className="hiyaghar-select-pagesize"
+                  style={{ padding: '4px 8px', fontSize: '0.85rem', minWidth: '180px', maxWidth: '240px' }}
+                  aria-label="Filter by Product"
+                >
+                  <option value="all">All Products ({uniqueProducts.length})</option>
+                  {uniqueProducts.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Status Filter Dropdown */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <label htmlFor="stock-status-filter" style={{ fontSize: '0.85rem', fontWeight: 600, color: '#475569' }}>
+                  Status:
+                </label>
+                <select
+                  id="stock-status-filter"
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="hiyaghar-select-pagesize"
+                  style={{ padding: '4px 8px', fontSize: '0.85rem', minWidth: '125px' }}
+                  aria-label="Filter by Stock Status"
+                >
+                  <option value="all">All Statuses</option>
+                  <option value="InStock">In Stock</option>
+                  <option value="LowStock">Low Stock</option>
+                  <option value="OutOfStock">Out of Stock</option>
+                </select>
+              </div>
+
+              {/* Clear Filters Button */}
+              {(selectedProductId !== 'all' || selectedStatus !== 'all') && (
+                <button
+                  type="button"
+                  className="hiyaghar-export-btn"
+                  style={{ padding: '3px 8px', fontSize: '0.8rem', color: '#b42318' }}
+                  onClick={() => {
+                    setSelectedProductId('all');
+                    setSelectedStatus('all');
+                  }}
+                  title="Reset filters"
+                >
+                  ✕ Reset
+                </button>
+              )}
+
+              {/* Bulk Quick Edit Button */}
+              {currentMenuPermission.canEdit && (
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
                 {isBulkMode ? (
                   <>
                     <button
@@ -309,8 +400,9 @@ export const StockManagementPage: React.FC<StockManagementPageProps> = ({ onView
                     <span>Bulk Stock Quick Edit</span>
                   </button>
                 )}
-              </div>
-            )
+                </div>
+              )}
+            </div>
           }
         />
       ) : (

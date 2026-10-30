@@ -127,7 +127,7 @@ export const CartPage: React.FC<CartPageProps> = ({
               <h2 className="hiyaghar-empty-cart-heading">Your Cart is Empty</h2>
               <p className="hiyaghar-empty-cart-text">
                 {!CustomerAuthService.isLoggedIn()
-                  ? "You are browsing as a guest. Sign in to your account to save your cart across devices and enjoy exclusive rewards!"
+                  ? "You are browsing as a guest. Sign in to your account to save your cart across devices."
                   : "Looks like you haven't added anything to your cart yet."}
               </p>
               <div className="hiyaghar-empty-cart-actions">

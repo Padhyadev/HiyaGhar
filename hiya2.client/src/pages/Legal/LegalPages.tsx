@@ -30,7 +30,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             <li>To send SMS, WhatsApp, and email order confirmation, dispatch alerts, and live courier tracking links.</li>
             <li>To process verified payments through RBI-compliant secure gateways.</li>
             <li>To provide prompt customer support via email or WhatsApp regarding modifications or inquiries.</li>
-            <li>To maintain your reward points, account discounts, and personalized offers (with full opt-out available).</li>
+            <li>To maintain your account discounts and personalized offers (with full opt-out available).</li>
           </ul>
 
           <h2>3. Payment Security & Data Protection</h2>

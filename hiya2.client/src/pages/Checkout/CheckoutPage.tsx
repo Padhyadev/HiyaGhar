@@ -12,6 +12,7 @@ import type { UserAddress } from '../../services/addressService';
 import { CustomerAuthService } from '../../services/customerAuthService';
 import { CouponService } from '../../services/couponService';
 import { CartApiService } from '../../services/cartApiService';
+import { REWARD_COINS_ENABLED } from '../../utils/features';
 import type { AutoOfferResult } from '../../services/couponService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
@@ -215,7 +216,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     loadAddresses();
 
     // Load reward balance + settings when logged in (guests have no coins).
-    if (CustomerAuthService.isLoggedIn()) {
+    // Off while reward coins are disabled (utils/features.ts): balance stays 0, so no
+    // "use coins" option is shown and every order is sent with 0 coins.
+    if (REWARD_COINS_ENABLED && CustomerAuthService.isLoggedIn()) {
       fetch('/api/reward/settings')
         .then((r) => r.json())
         .then((data) => {
@@ -824,7 +827,11 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   </div>
 
                   <div className="hiyaghar-guest-login-prompt">
-                    <span>Already have an account? Log in to use your saved addresses and reward coins.</span>
+                    <span>
+                      {REWARD_COINS_ENABLED
+                        ? 'Already have an account? Log in to use your saved addresses and reward coins.'
+                        : 'Already have an account? Log in to use your saved addresses.'}
+                    </span>
                     <button
                       type="button"
                       className="hiyaghar-guest-login-btn"
@@ -1435,8 +1442,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                   </div>
                 )}
 
-                {/* Reward coins */}
-                {rewardBalance > 0 && (
+                {/* Reward coins - hidden while reward coins are off (utils/features.ts) */}
+                {REWARD_COINS_ENABLED && rewardBalance > 0 && (
                   <div className="hiyaghar-summary-row" style={{ margin: '8px 0' }}>
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
                       <input
@@ -1462,7 +1469,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       <span style={{ display: 'inline-flex', alignItems: 'center' }}>−₹<AnimatedNumber value={discountAmount} /></span>
                     </div>
                   )}
-                  {coinDiscount > 0 && (
+                  {REWARD_COINS_ENABLED && coinDiscount > 0 && (
                     <div className="hiyaghar-summary-row">
                       <span>Reward Coins</span>
                       <span style={{ display: 'inline-flex', alignItems: 'center' }}>−₹<AnimatedNumber value={coinDiscount} /></span>

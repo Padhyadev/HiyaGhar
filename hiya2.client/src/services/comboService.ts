@@ -9,7 +9,7 @@ import { parseProductFullDescription, type ComboItem } from '../utils/productMet
 // The included items are stored in the product's HIYA_META block as `comboItems`.
 export const COMBO_CATEGORY_NAME = 'Combos';
 
-const isComboCategoryName = (name?: string) => (name || '').trim().toLowerCase() === COMBO_CATEGORY_NAME.toLowerCase();
+export const isComboCategoryName = (name?: string) => (name || '').trim().toLowerCase() === COMBO_CATEGORY_NAME.toLowerCase();
 
 export const getComboItems = (product: Pick<Product, 'id' | 'fullDescription'>): ComboItem[] =>
   parseProductFullDescription(product.fullDescription, product.id).comboItems;

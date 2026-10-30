@@ -16,6 +16,10 @@ namespace Hiya2.Server.Models
         [MaxLength(200)]
         public string Value { get; set; } = string.Empty;
 
+        // Order of this value's button within its attribute (Pouch before Bottle, ...).
+        // Lower first; 0 = not set (shown after the ordered ones).
+        public int DisplayOrder { get; set; } = 0;
+
         public bool? IsActive { get; set; } = true;
 
         public bool? IsDeleted { get; set; } = false;

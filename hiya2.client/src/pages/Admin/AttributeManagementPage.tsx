@@ -124,6 +124,42 @@ export const AttributeManagementPage: React.FC = () => {
     }));
   };
 
+  // The row order here is the order the value buttons show on the product page.
+  const handleMoveValue = (index: number, direction: -1 | 1) => {
+    const target = index + direction;
+    if (target < 0 || target >= formData.values.length) return;
+    setFormData((prev) => {
+      const values = [...prev.values];
+      [values[index], values[target]] = [values[target], values[index]];
+      return { ...prev, values };
+    });
+    // Editing state is kept per row index, so swap it along with the rows.
+    setEditingRowIndices((prev) => ({ ...prev, [index]: !!prev[target], [target]: !!prev[index] }));
+  };
+
+  // ↑/↓ on the list: order of the attribute rows (Packing, Weight, ...) on the product page.
+  const handleMoveAttribute = async (item: AttributeItem, direction: -1 | 1) => {
+    const index = attributes.findIndex((a) => a.id === item.id);
+    const target = index + direction;
+    if (index < 0 || target < 0 || target >= attributes.length) return;
+    const reordered = [...attributes];
+    [reordered[index], reordered[target]] = [reordered[target], reordered[index]];
+    setAttributes(reordered);
+    try {
+      const res = await fetch('/api/attribute/reorder', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...AdminAuthService.getAuthHeaders() },
+        body: JSON.stringify({ attributeIds: reordered.map((a) => a.id) }),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      showToastMsg('Attribute order saved.');
+    } catch (e) {
+      console.warn('Error saving attribute order:', e);
+      showToastMsg('Could not save the attribute order. Please try again.', 'error');
+      await loadAttributes();
+    }
+  };
+
   const handleRemoveValTag = (indexToRemove: number) => {
     setFormData((prev) => ({
       ...prev,
@@ -162,9 +198,10 @@ export const AttributeManagementPage: React.FC = () => {
       isActive: true,
       values: formData.values
         .filter((v) => v.value.trim() !== '')
-        .map((v) => ({
+        .map((v, index) => ({
           id: v.id || 0,
           value: v.value.trim(),
+          displayOrder: index + 1,
         })),
     };
 
@@ -196,7 +233,44 @@ export const AttributeManagementPage: React.FC = () => {
     setViewMode('list');
   };
 
+  const orderButtonStyle = (disabled: boolean): React.CSSProperties => ({
+    background: '#ffffff',
+    border: '1px solid #cbd5e1',
+    color: disabled ? '#cbd5e1' : '#334155',
+    width: '28px',
+    height: '28px',
+    borderRadius: '6px',
+    fontWeight: 800,
+    fontSize: '0.85rem',
+    cursor: disabled ? 'not-allowed' : 'pointer',
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+  });
+
   const columns: ColumnDef<AttributeItem>[] = [
+    {
+      key: 'displayOrder',
+      label: 'Order',
+      sortValue: (a) => attributes.findIndex((x) => x.id === a.id),
+      render: (a) => {
+        const index = attributes.findIndex((x) => x.id === a.id);
+        const isFirst = index <= 0;
+        const isLast = index === attributes.length - 1;
+        return (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontWeight: 800, color: '#64748b', minWidth: '18px' }}>{index + 1}</span>
+            {currentMenuPermission.canEdit && (
+              <>
+                <button type="button" title="Show this attribute earlier on the product page" aria-label={`Move ${a.name} up`} disabled={isFirst} onClick={() => handleMoveAttribute(a, -1)} style={orderButtonStyle(isFirst)}>↑</button>
+                <button type="button" title="Show this attribute later on the product page" aria-label={`Move ${a.name} down`} disabled={isLast} onClick={() => handleMoveAttribute(a, 1)} style={orderButtonStyle(isLast)}>↓</button>
+              </>
+            )}
+          </div>
+        );
+      },
+    },
     { key: 'name', label: 'Attribute Name' },
     {
       key: 'values',
@@ -236,6 +310,8 @@ export const AttributeManagementPage: React.FC = () => {
           addButtonText="+ Add Attribute Master"
           columns={columns}
           data={attributes}
+          defaultSortKey="displayOrder"
+          defaultSortDirection="asc"
           onAddClick={handleOpenAdd}
           onEditClick={handleOpenEdit}
           onDeleteClick={handleDelete}
@@ -281,7 +357,7 @@ export const AttributeManagementPage: React.FC = () => {
                 Attribute Values List (Manage Values for this Attribute) *
               </label>
               <p style={{ margin: '0 0 14px', fontSize: '0.82rem', color: '#64748b' }}>
-                Each value record is displayed on its own line below. Click <strong>Update</strong> next to any row to edit it, then click <strong>Update Attribute Master</strong> at the bottom to bulk save all records together.
+                Each value record is displayed on its own line below. Click <strong>Update</strong> next to any row to edit it, then click <strong>Update Attribute Master</strong> at the bottom to bulk save all records together. Use <strong>↑ / ↓</strong> to set the order the values show on the product page (top = first).
               </p>
 
               <div style={{ display: 'flex', gap: '10px', marginBottom: '16px' }}>
@@ -335,6 +411,8 @@ export const AttributeManagementPage: React.FC = () => {
                           <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#64748b', minWidth: '28px' }}>
                             #{i + 1}
                           </span>
+                          <button type="button" title="Show this value earlier on the product page" aria-label={`Move ${v.value} up`} disabled={i === 0} onClick={() => handleMoveValue(i, -1)} style={orderButtonStyle(i === 0)}>↑</button>
+                          <button type="button" title="Show this value later on the product page" aria-label={`Move ${v.value} down`} disabled={i === formData.values.length - 1} onClick={() => handleMoveValue(i, 1)} style={orderButtonStyle(i === formData.values.length - 1)}>↓</button>
                           <input
                             type="text"
                             value={v.value}

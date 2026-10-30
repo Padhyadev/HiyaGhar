@@ -20,6 +20,14 @@ namespace Hiya2.Server.Controllers
         public int Id { get; set; }
         public string Value { get; set; } = string.Empty;
         public bool? IsActive { get; set; } = true;
+        /// <summary>Position of the value's button on the product page (1 = first).</summary>
+        public int DisplayOrder { get; set; } = 0;
+    }
+
+    public class AttributeReorderDto
+    {
+        /// <summary>Attribute ids in the order their rows should show on the product page.</summary>
+        public List<int> AttributeIds { get; set; } = new();
     }
 
     [ApiController]
@@ -37,29 +45,77 @@ namespace Hiya2.Server.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
+            // Unset orders (0) sort after the ordered ones, then by creation.
             var attributes = await _context.Attributes
                 .Include(a => a.AttributeValues)
                 .Where(a => a.IsDeleted == false || a.IsDeleted == null)
+                .OrderBy(a => a.DisplayOrder == 0).ThenBy(a => a.DisplayOrder).ThenBy(a => a.Id)
                 .Select(a => new
                 {
                     a.Id,
                     a.Name,
                     a.DisplayName,
                     a.IsActive,
+                    a.DisplayOrder,
                     a.CreatedDate,
                     values = a.AttributeValues
                         .Where(v => v.IsDeleted == false || v.IsDeleted == null)
+                        .OrderBy(v => v.DisplayOrder == 0).ThenBy(v => v.DisplayOrder).ThenBy(v => v.Id)
                         .Select(v => new
                         {
                             v.Id,
                             v.AttributeId,
                             v.Value,
-                            v.IsActive
+                            v.IsActive,
+                            v.DisplayOrder
                         }).ToList()
                 })
                 .ToListAsync();
 
             return Ok(attributes);
+        }
+
+        // Storefront: the admin-set order of attribute rows and value buttons on the product
+        // page. Names/values only - variants store their options as "Name: Value" text.
+        [AllowAnonymous]
+        [HttpGet("display-order")]
+        public async Task<IActionResult> GetDisplayOrder()
+        {
+            var attributes = await _context.Attributes
+                .Where(a => (a.IsDeleted == false || a.IsDeleted == null) && a.IsActive != false)
+                .Select(a => new
+                {
+                    name = a.Name,
+                    displayName = a.DisplayName,
+                    displayOrder = a.DisplayOrder,
+                    values = a.AttributeValues
+                        .Where(v => (v.IsDeleted == false || v.IsDeleted == null) && v.IsActive != false)
+                        .Select(v => new { value = v.Value, displayOrder = v.DisplayOrder })
+                        .ToList()
+                })
+                .ToListAsync();
+
+            return Ok(attributes);
+        }
+
+        // Admin: saves the attribute row order (↑/↓ on the Attributes list).
+        [HttpPut("reorder")]
+        public async Task<IActionResult> Reorder([FromBody] AttributeReorderDto dto)
+        {
+            var attributes = await _context.Attributes
+                .Where(a => dto.AttributeIds.Contains(a.Id))
+                .ToListAsync();
+
+            for (var i = 0; i < dto.AttributeIds.Count; i++)
+            {
+                var attr = attributes.FirstOrDefault(a => a.Id == dto.AttributeIds[i]);
+                if (attr == null) continue;
+                attr.DisplayOrder = i + 1;
+                attr.LastModifiedDate = DateTime.Now;
+            }
+
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
         [HttpPost]
@@ -70,11 +126,17 @@ namespace Hiya2.Server.Controllers
                 return BadRequest(new { message = "Please enter Attribute Name." });
             }
 
+            // A new attribute goes to the end of the product-page row order.
+            var lastOrder = await _context.Attributes
+                .Where(a => a.IsDeleted == false || a.IsDeleted == null)
+                .MaxAsync(a => (int?)a.DisplayOrder) ?? 0;
+
             var newAttr = new AttributeEntity
             {
                 Name = dto.Name.Trim(),
                 DisplayName = dto.DisplayName?.Trim(),
                 IsActive = dto.IsActive ?? true,
+                DisplayOrder = lastOrder + 1,
                 IsDeleted = false,
                 CreatedDate = DateTime.Now,
                 AttributeValues = dto.Values
@@ -82,6 +144,7 @@ namespace Hiya2.Server.Controllers
                     .Select(v => new AttributeValue
                     {
                         Value = v.Value.Trim(),
+                        DisplayOrder = v.DisplayOrder,
                         IsActive = v.IsActive ?? true,
                         IsDeleted = false,
                         CreatedDate = DateTime.Now
@@ -100,8 +163,9 @@ namespace Hiya2.Server.Controllers
                 newAttr.Name,
                 newAttr.DisplayName,
                 newAttr.IsActive,
+                newAttr.DisplayOrder,
                 newAttr.CreatedDate,
-                values = newAttr.AttributeValues.Select(v => new { v.Id, v.AttributeId, v.Value, v.IsActive })
+                values = newAttr.AttributeValues.Select(v => new { v.Id, v.AttributeId, v.Value, v.IsActive, v.DisplayOrder })
             });
         }
 
@@ -145,6 +209,7 @@ namespace Hiya2.Server.Controllers
                     if (existingVal != null)
                     {
                         existingVal.Value = valDto.Value.Trim();
+                        existingVal.DisplayOrder = valDto.DisplayOrder;
                         existingVal.IsActive = valDto.IsActive ?? true;
                         existingVal.IsDeleted = false;
                         existingVal.LastModifiedDate = DateTime.Now;
@@ -156,6 +221,7 @@ namespace Hiya2.Server.Controllers
                     {
                         AttributeId = id,
                         Value = valDto.Value.Trim(),
+                        DisplayOrder = valDto.DisplayOrder,
                         IsActive = valDto.IsActive ?? true,
                         IsDeleted = false,
                         CreatedDate = DateTime.Now
@@ -170,10 +236,12 @@ namespace Hiya2.Server.Controllers
                 existingAttr.Name,
                 existingAttr.DisplayName,
                 existingAttr.IsActive,
+                existingAttr.DisplayOrder,
                 existingAttr.CreatedDate,
                 values = existingAttr.AttributeValues
                     .Where(v => v.IsDeleted != true)
-                    .Select(v => new { v.Id, v.AttributeId, v.Value, v.IsActive })
+                    .OrderBy(v => v.DisplayOrder == 0).ThenBy(v => v.DisplayOrder).ThenBy(v => v.Id)
+                    .Select(v => new { v.Id, v.AttributeId, v.Value, v.IsActive, v.DisplayOrder })
             });
         }
 

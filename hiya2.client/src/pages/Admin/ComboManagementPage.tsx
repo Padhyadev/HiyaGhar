@@ -13,7 +13,7 @@ import './OrderManagementPage.css';
 // Admin: Catalog > Combos (route /admin/combo-packs, permission COMBOPACK).
 // A combo is saved as a product in the "Combos" category with one hidden variant: price = the combo
 // price entered here, original price = total of the items (see services/comboService.ts).
-// Stock is the combo's own stock (added here or on Stock & Inventory).
+// Stock is the combo's own stock, added on Stock & Inventory (only shown here).
 
 const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2 MB, same as products
 const MAX_IMAGES = 6; // server limit per variant
@@ -48,7 +48,6 @@ const emptyForm = {
   images: [] as ComboImage[],
   items: [] as ComboItem[],
   price: '',
-  addStock: '',
   isActive: true,
 };
 
@@ -175,7 +174,6 @@ export const ComboManagementPage: React.FC = () => {
       images,
       items: parsed.comboItems,
       price: v ? String(v.price) : '',
-      addStock: '',
       isActive: p.isActive !== false,
     });
     setErrors({});
@@ -264,8 +262,6 @@ export const ComboManagementPage: React.FC = () => {
     if (!(comboPrice > 0)) next.price = 'Please enter the combo selling price';
     else if (comboPrice >= itemsTotal) next.price = `Combo price must be lower than the item total (${money(itemsTotal)})`;
     if (form.images.length === 0) next.images = 'Add at least one image';
-    const addStock = Math.floor(Number(form.addStock) || 0);
-    if (addStock < 0) next.addStock = 'Enter a positive number';
     setErrors(next);
     if (Object.keys(next).length > 0) return;
 
@@ -317,22 +313,6 @@ export const ComboManagementPage: React.FC = () => {
         showToast(err?.message || 'Could not save the combo.', 'error');
         return;
       }
-      const savedId: number = editing ? editing.id : (await res.json().catch(() => null))?.id;
-
-      if (addStock > 0 && savedId) {
-        const fresh = await fetch(`/api/product/${savedId}`, { headers: AdminAuthService.getAuthHeaders(), cache: 'no-store' })
-          .then((r) => (r.ok ? r.json() : null)).catch(() => null);
-        const variantId = fresh ? comboVariant(fresh)?.id : undefined;
-        const stockRes = variantId
-          ? await fetch('/api/stock/adjust', {
-              method: 'POST',
-              headers: AdminAuthService.getAuthHeaders(),
-              body: JSON.stringify({ variantId, quantity: addStock, changeType: 'StockIn', remarks: `Combo stock added (Combos page): ${form.name.trim()}` }),
-            })
-          : null;
-        if (!stockRes?.ok) showToast('Combo saved, but the stock could not be added. Add it on Stock & Inventory.', 'error');
-      }
-
       showToast(editing ? `Combo ${form.name} updated.` : `Combo ${form.name} created.`, 'success');
       await load();
       setViewMode('list');
@@ -518,18 +498,12 @@ export const ComboManagementPage: React.FC = () => {
                 </div>
               )}
             </div>
-            <div className="hiyaghar-form-group" style={{ margin: 0 }}>
-              <label>Add Stock {editing && <span style={{ fontWeight: 500, color: '#64748b' }}>(current: {currentStock})</span>}</label>
-              <input
-                type="number"
-                min={0}
-                placeholder="e.g. 20"
-                className={errors.addStock ? 'input-error' : ''}
-                value={form.addStock}
-                onChange={(e) => setForm({ ...form, addStock: e.target.value })}
-              />
-              <div style={{ color: '#64748b', fontSize: '0.78rem', marginTop: 4 }}>Combo boxes ready to sell. Also editable on Stock &amp; Inventory.</div>
-              {errors.addStock && <span className="hiyaghar-field-error">{errors.addStock}</span>}
+            <div>
+              <div style={{ color: '#64748b', fontSize: '0.85rem', fontWeight: 700 }}>Stock</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: currentStock > 0 ? '#166534' : '#dc2626' }}>{currentStock}</div>
+              <div style={{ color: '#64748b', fontSize: '0.78rem' }}>
+                {editing ? 'Add stock on Stock & Inventory.' : 'After saving, add stock on Stock & Inventory.'}
+              </div>
             </div>
           </div>
           <label style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '16px', fontWeight: 700, cursor: 'pointer' }}>

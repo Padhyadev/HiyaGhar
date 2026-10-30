@@ -8,8 +8,10 @@ import { CartService, triggerFlyingProductAnimation } from '../../cart';
 import { WishlistService } from '../../services/wishlistService';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
+import { AttributeOrderService, type AttributeOrder } from '../../services/attributeOrderService';
 import { ProductReviews } from '../../components/ProductReviews/ProductReviews';
 import { navigateTo } from '../../utils/navigation';
+import { cameDirectlyFrom } from '../../utils/scrollMemory';
 import { formatVariantLabel, getVariantImages, NO_IMAGE, productPath } from '../../utils/productFormat';
 import { parseProductFullDescription, type ComboItem } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
@@ -18,6 +20,38 @@ import { buildProductSeoDescription, seoConfig } from '../../seo/routeSeo';
 import { trackViewItem } from '../../utils/analytics';
 import './ProductDetailPage.css';
 
+// Option rows (Packing, Weight, ...) and their buttons follow the order set in admin
+// Catalog > Attributes (see AttributeOrderService). Anything without an admin order comes
+// after, sorted the same way for every product: amounts by size (100 g < 200 g < 1 kg),
+// anything else alphabetically.
+const UNIT_FACTORS: Record<string, number> = { mg: 0.001, g: 1, gm: 1, gram: 1, grams: 1, kg: 1000, ml: 1, l: 1000, ltr: 1000, litre: 1000, liter: 1000 };
+
+const parseAmount = (value: string): number | null => {
+  const m = value.trim().toLowerCase().match(/^(\d+(?:\.\d+)?)\s*([a-z]*)$/);
+  if (!m) return null;
+  const factor = m[2] ? UNIT_FACTORS[m[2]] : 1;
+  return factor === undefined ? null : Number(m[1]) * factor;
+};
+
+const compareAttributeValues = (a: string, b: string): number => {
+  const amountA = parseAmount(a);
+  const amountB = parseAmount(b);
+  if (amountA !== null && amountB !== null) return amountA - amountB;
+  if (amountA !== null) return -1;
+  if (amountB !== null) return 1;
+  return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' });
+};
+
+// Admin order first (null = not ordered, goes last), then the fallback comparison.
+const byAdminOrder = <T,>(orderOf: (item: T) => number | null, fallback: (a: T, b: T) => number) =>
+  (a: T, b: T): number => {
+    const oa = orderOf(a);
+    const ob = orderOf(b);
+    if (oa !== null && ob !== null && oa !== ob) return oa - ob;
+    if (oa !== null && ob === null) return -1;
+    if (oa === null && ob !== null) return 1;
+    return fallback(a, b);
+  };
 
 interface ProductDetailPageProps {
   productId: string;
@@ -52,6 +86,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // Canonical /product/{slug} path of the loaded live product (null for static fallback data).
   const [canonicalPath, setCanonicalPath] = useState<string | null>(null);
   const [selectedAttrs, setSelectedAttrs] = useState<Record<string, string>>({});
+  const [attributeOrder, setAttributeOrder] = useState<AttributeOrder | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
   const [selectedImage, setSelectedImage] = useState<string>('');
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
@@ -270,6 +305,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     return () => { isCurrent = false; };
   }, [productId]);
 
+  useEffect(() => {
+    let isCurrent = true;
+    AttributeOrderService.getOrder().then((order) => {
+      if (isCurrent) setAttributeOrder(order);
+    });
+    return () => { isCurrent = false; };
+  }, []);
+
   // `product` is null while the real fetch for a numeric id is still in flight
   // (see isLoadingProduct/isNumericId above) — every direct `product.x` read below
   // uses optional chaining so this component never crashes during that window;
@@ -289,6 +332,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     .map((w: string) => formatVariantLabel(w))
     .filter((w: string) => w && w.trim().length > 0);
 
+  const sortValuesOf = (attributeName: string) =>
+    byAdminOrder<string>((value) => attributeOrder?.valueOrder(attributeName, value) ?? null, compareAttributeValues);
+
   const attributeGroups: { name: string; values: string[] }[] = hasStructuredAttributes
     ? (() => {
         const groups: Record<string, string[]> = {};
@@ -303,11 +349,11 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           });
         });
         return Object.keys(groups)
-          .sort((a, b) => a.localeCompare(b))
-          .map((name) => ({ name, values: groups[name] }))
+          .sort(byAdminOrder<string>((name) => attributeOrder?.attributeOrder(name) ?? null, (a, b) => a.localeCompare(b)))
+          .map((name) => ({ name, values: [...groups[name]].sort(sortValuesOf(name)) }))
           .filter((g) => g.values.length > 0);
       })()
-    : (rawWeightOptions.length > 0 ? [{ name: 'Weight', values: rawWeightOptions }] : []);
+    : (rawWeightOptions.length > 0 ? [{ name: 'Weight', values: [...rawWeightOptions].sort(sortValuesOf('Weight')) }] : []);
 
   const matchedVariant = hasStructuredAttributes
     ? (product?.variants || []).find((v: any) => {
@@ -684,7 +730,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   type="button"
                   className="hiyaghar-detail-back-button"
                   onClick={() => {
-                    navigateTo(catPath);
+                    // Came from this listing: go back so it reopens where the shopper left it.
+                    if (cameDirectlyFrom(catPath)) window.history.back();
+                    else navigateTo(catPath);
                   }}
                   aria-label={`Back to ${catName}`}
                   title={`Back to ${catName}`}

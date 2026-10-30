@@ -174,6 +174,41 @@
   border-top: 1px solid #f1f5f9;
 }
 
+/* Base + primary button styles live in the storefront Profile/Wishlist CSS, which the
+   admin panel doesn't load - without these "Update Status" renders as plain text. */
+.hiyaghar-order-status-actions .hiyaghar-panel-btn,
+.hiyaghar-modal-card .hiyaghar-panel-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.hiyaghar-panel-btn.primary {
+  background: var(--hiya-navy, #11223A);
+  color: #FFFFFF;
+  border: 1px solid var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-panel-btn.primary:hover:not(:disabled) {
+  background: #1A345B;
+  border-color: #1A345B;
+  box-shadow: 0 4px 12px rgba(17, 34, 58, 0.15);
+}
+
+.hiyaghar-panel-btn.primary:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
 .hiyaghar-panel-btn.danger {
   background: #FFF5F5;
   color: #C0392B;

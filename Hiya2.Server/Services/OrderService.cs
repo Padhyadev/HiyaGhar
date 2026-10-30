@@ -145,6 +145,9 @@ namespace Hiya2.Server.Services
             string deliveryType = "standard",
             BuyNowItem? buyNowItem = null)
         {
+            // Reward coins paused (see RewardFeature): never spend coins on an order.
+            if (!RewardFeature.Enabled) useRewardCoins = 0;
+
             List<CartLine> cartLines;
             if (buyNowItem != null)
             {

@@ -12,6 +12,7 @@ import {
 } from '../../utils/productMetaStore';
 // Shared admin modal styles (overlay/card/header), same as LovManagementPage.
 import { compressImageFile } from '../../utils/imageCompress';
+import { isComboCategoryName, isComboProduct } from '../../services/comboService';
 import './OrderManagementPage.css';
 
 export interface ProductImageItem {
@@ -161,7 +162,7 @@ export const ProductManagementPage: React.FC = () => {
       if (res.ok) {
         const data = await res.json();
         if (Array.isArray(data)) {
-          setCategories(data.filter((c: any) => c.isActive !== false));
+          setCategories(data.filter((c: any) => c.isActive !== false && !isComboCategoryName(c.categoryName)));
         }
       }
     } catch (e) {
@@ -191,7 +192,8 @@ export const ProductManagementPage: React.FC = () => {
       if (prodRes.status === 'fulfilled' && prodRes.value.ok) {
         const data = await prodRes.value.json();
         if (Array.isArray(data)) {
-          productList = data.map((p: any) => ({
+          // Combos are managed only on Catalog > Combos: saving one here would drop its item list.
+          productList = data.filter((p: any) => !isComboCategoryName(p.category?.categoryName ?? p.categoryName) && !isComboProduct(p)).map((p: any) => ({
             ...p,
             stockQuantity: stockMap[p.id] !== undefined ? stockMap[p.id] : (p.stockQuantity ?? 0),
           }));

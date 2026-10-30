@@ -11,6 +11,7 @@ import type { UserAddress } from '../../services/addressService';
 import { WishlistService } from '../../services/wishlistService';
 import type { WishlistItem } from '../../services/wishlistService';
 import { RewardService } from '../../services/rewardService';
+import { REWARD_COINS_ENABLED } from '../../utils/features';
 import type { RewardSettingsInfo, RewardLedgerEntry } from '../../services/rewardService';
 import { ShippingService, DELIVERY_AREA_MESSAGE } from '../../services/shippingService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
@@ -213,7 +214,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
       }
 
       const mainTab = rawHash.split('/')[0];
-      if (['profile', 'orders', 'addresses', 'password', 'rewards'].includes(mainTab)) {
+      if (['profile', 'orders', 'addresses', 'password', ...(REWARD_COINS_ENABLED ? ['rewards'] : [])].includes(mainTab)) {
         setActiveTab(mainTab as any);
         if (mainTab !== 'orders') {
           setSelectedOrder(null);
@@ -230,7 +231,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   }, [initialTab]);
 
   useEffect(() => {
-    if (activeTab !== 'rewards' || !customer) return;
+    if (!REWARD_COINS_ENABLED || activeTab !== 'rewards' || !customer) return;
 
     let cancelled = false;
     setIsLoadingRewards(true);
@@ -624,6 +625,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
             >
               Security
             </button>
+            {/* Rewards tab - hidden while reward coins are off (utils/features.ts) */}
+            {REWARD_COINS_ENABLED && (
             <button
               type="button"
               className={`hiyaghar-nav-pill ${activeTab === 'rewards' ? 'is-active' : ''}`}
@@ -635,6 +638,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                 <path d="M12 6v12M15 9.5a3.5 3.5 0 0 0-5 0c0 2 5 2 5 4a3.5 3.5 0 0 1-5 0" />
               </svg>
             </button>
+            )}
             <button
               type="button"
               className="hiyaghar-nav-pill logout-pill"
@@ -1463,8 +1467,8 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               </div>
             )}
 
-            {/* TAB: REWARDS */}
-            {activeTab === 'rewards' && (
+            {/* TAB: REWARDS - hidden while reward coins are off (utils/features.ts) */}
+            {REWARD_COINS_ENABLED && activeTab === 'rewards' && (
               <div className="hiyaghar-panel animate-fade-in">
                 <div className="hiyaghar-panel-header">
                   <div>

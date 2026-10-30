@@ -11,6 +11,8 @@ import { AdminAuthService } from './services/adminAuthService';
 import { showToast } from './utils/alertService';
 import { Preloader } from './components/common/Preloader/Preloader';
 import { PageTransition } from './components/common/PageTransition/PageTransition';
+import { installScrollMemory, restoreScrollOnPopstate } from './utils/scrollMemory';
+import { REWARD_COINS_ENABLED } from './utils/features';
 import { FloatingWidgets } from './components/common/FloatingWidgets/FloatingWidgets';
 import { preloadCriticalImages } from './services/imagePreloaderService';
 import { SEO } from './components/common/SEO/SEO';
@@ -168,10 +170,19 @@ function App() {
       window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
     };
 
-    window.addEventListener('popstate', handleLocationChange);
+    // Back/Forward returns to where the shopper was on that page (see utils/scrollMemory).
+    installScrollMemory();
+    const handlePopstate = (e: PopStateEvent) => {
+      setCurrentRoute(getNormalizedRoute());
+      if (!restoreScrollOnPopstate(e)) {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopstate);
     window.addEventListener('hashchange', handleLocationChange);
     return () => {
-      window.removeEventListener('popstate', handleLocationChange);
+      window.removeEventListener('popstate', handlePopstate);
       window.removeEventListener('hashchange', handleLocationChange);
     };
   }, []);
@@ -788,7 +799,7 @@ function App() {
       const mainTab: 'profile' | 'orders' | 'addresses' | 'password' | 'rewards' =
         cleanTab.startsWith('orders')
           ? 'orders'
-          : cleanTab.startsWith('reward') || cleanTab === 'coins'
+          : REWARD_COINS_ENABLED && (cleanTab.startsWith('reward') || cleanTab === 'coins')
           ? 'rewards'
           : cleanTab === 'addresses'
           ? 'addresses'

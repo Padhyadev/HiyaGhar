@@ -3,6 +3,7 @@ import { CustomerAuthService } from '../../services/customerAuthService';
 import { showToast } from '../../utils/alertService';
 import './AuthPage.css';
 import { LOGO_URL } from '../../utils/brand';
+import { REWARD_COINS_ENABLED } from '../../utils/features';
 
 interface AuthPageProps {
   initialMode?: 'login' | 'signup';
@@ -558,6 +559,8 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                   />
                 </div>
 
+                {/* Referral codes earn reward coins - hidden while reward coins are off (utils/features.ts) */}
+                {REWARD_COINS_ENABLED && (
                 <div className="hiyaghar-input-group">
                   <label htmlFor="signup-referral-code">Referral Code</label>
                   <input
@@ -568,6 +571,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
                     onChange={(e) => setSignupReferralCode(e.target.value)}
                   />
                 </div>
+                )}
 
                 <div className="hiyaghar-input-group">
                   <label htmlFor="signup-email">Email Address *</label>

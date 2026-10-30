@@ -16,6 +16,10 @@ namespace Hiya2.Server.Models
         [MaxLength(150)]
         public string? DisplayName { get; set; }
 
+        // Order of this attribute's row on the product page (Packing before Weight, ...).
+        // Lower first; 0 = not set (shown after the ordered ones).
+        public int DisplayOrder { get; set; } = 0;
+
         public bool? IsActive { get; set; } = true;
 
         public bool? IsDeleted { get; set; } = false;

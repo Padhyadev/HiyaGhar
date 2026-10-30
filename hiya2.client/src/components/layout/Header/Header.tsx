@@ -15,6 +15,7 @@ import '../../../cart.css';
 import './Header.css';
 import { showNoImageOnError, NO_IMAGE, productPath } from '../../../utils/productFormat';
 import { LOGO_URL } from '../../../utils/brand';
+import { REWARD_COINS_ENABLED } from '../../../utils/features';
 
 export const Header: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(CartService.isCartOpen());
@@ -552,6 +553,8 @@ export const Header: React.FC = () => {
                       >
                         Saved Addresses
                       </a>
+                      {/* Reward Coins link - hidden while reward coins are off (utils/features.ts) */}
+                      {REWARD_COINS_ENABLED && (
                       <a
                         href="/rewards"
                         className="hiyaghar-dropdown-item"
@@ -564,6 +567,7 @@ export const Header: React.FC = () => {
                       >
                         Reward Coins
                       </a>
+                      )}
                       <button
                         type="button"
                         className="hiyaghar-dropdown-item btn-style logout"
