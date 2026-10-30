@@ -58,19 +58,12 @@ export const ShippingSettingsPage: React.FC = () => {
     if (form.standardShippingPrice < 0 || form.standardShippingPrice > 10000) {
       errors.standardShippingPrice = 'Standard shipping charge must be between ₹0 and ₹10,000.';
     }
-    if (form.expressShippingPrice < 0 || form.expressShippingPrice > 10000) {
-      errors.expressShippingPrice = 'Express shipping charge must be between ₹0 and ₹10,000.';
-    }
 
     // Section 3: Delivery Timeline Validation
     if (sectionName.includes('Delivery Duration') || sectionName.includes('Timeline')) {
       const cleanStd = (form.standardDeliveryDays || '').trim();
-      const cleanExp = (form.expressDeliveryDays || '').trim();
       if (!cleanStd || cleanStd.length < 2 || cleanStd.length > 50) {
         errors.standardDeliveryDays = 'Standard delivery text must be between 2 and 50 characters (e.g. 3–5 business days).';
-      }
-      if (!cleanExp || cleanExp.length < 2 || cleanExp.length > 50) {
-        errors.expressDeliveryDays = 'Express delivery text must be between 2 and 50 characters (e.g. 1–2 business days).';
       }
     }
 
@@ -419,25 +412,6 @@ export const ShippingSettingsPage: React.FC = () => {
                 </p>
               </div>
 
-              <div className="hiyaghar-form-group">
-                <label className="hiyaghar-form-label">
-                  Express Shipping Fee (₹)
-                </label>
-                <div className="hiyaghar-input-prefix-box">
-                  <span className="hiyaghar-input-prefix">₹</span>
-                  <input
-                    type="number"
-                    min="0"
-                    disabled={editingSection !== 'deliveryCharges'}
-                    value={form.expressShippingPrice}
-                    onChange={(e) => handleChange('expressShippingPrice', Number(e.target.value))}
-                    className={`hiyaghar-input-control has-prefix ${formErrors.expressShippingPrice ? 'input-error' : ''}`}
-                  />
-                </div>
-                <p className="hiyaghar-form-help">
-                  Fast-track priority shipping charge.
-                </p>
-              </div>
             </div>
 
 
@@ -453,16 +427,6 @@ export const ShippingSettingsPage: React.FC = () => {
                 <span>Enable Free Shipping Eligibility</span>
               </label>
 
-              <label className={`hiyaghar-toggle-label ${editingSection !== 'deliveryCharges' ? 'is-disabled' : ''}`}>
-                <input
-                  type="checkbox"
-                  disabled={editingSection !== 'deliveryCharges'}
-                  checked={form.enableExpressDelivery}
-                  onChange={(e) => handleChange('enableExpressDelivery', e.target.checked)}
-                  className="hiyaghar-toggle-checkbox"
-                />
-                <span>Offer Express Delivery Option</span>
-              </label>
             </div>
           </div>
 
@@ -526,24 +490,6 @@ export const ShippingSettingsPage: React.FC = () => {
                 )}
               </div>
 
-              <div className="hiyaghar-form-group">
-                <label className="hiyaghar-form-label">
-                  Express Delivery Timeline Text
-                </label>
-                <input
-                  type="text"
-                  maxLength={50}
-                  disabled={editingSection !== 'deliveryTimeline'}
-                  value={form.expressDeliveryDays}
-                  onChange={(e) => handleChange('expressDeliveryDays', e.target.value)}
-                  className={`hiyaghar-input-control ${formErrors.expressDeliveryDays ? 'input-error' : ''}`}
-                />
-                {formErrors.expressDeliveryDays && (
-                  <p className="hiyaghar-form-error" style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>
-                    {formErrors.expressDeliveryDays}
-                  </p>
-                )}
-              </div>
             </div>
           </div>
 

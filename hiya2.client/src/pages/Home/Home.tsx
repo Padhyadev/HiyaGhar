@@ -4,6 +4,7 @@ import { Hero } from '../../components/home/Hero/Hero';
 import { BestSellersSection } from '../../components/home/BestSellersSection/BestSellersSection';
 import { CombosSection } from '../../components/home/CombosSection/CombosSection';
 import { WhyHiyaSection } from '../../components/home/WhyHiyaSection/WhyHiyaSection';
+import { FeaturedStorySection } from '../../components/home/FeaturedStorySection/FeaturedStorySection';
 import { FounderStrip } from '../../components/story/FounderStrip/FounderStrip';
 import { GiftingHampersSection } from '../../components/home/GiftingHampersSection/GiftingHampersSection';
 import { ReviewsSection } from '../../components/home/ReviewsSection/ReviewsSection';
@@ -25,6 +26,7 @@ export const Home: React.FC = () => {
 
         <CombosSection />
         <WhyHiyaSection />
+        <FeaturedStorySection />
         {/* Founder Strip below product categories and above footer */}
         <FounderStrip />
         <GiftingHampersSection />
