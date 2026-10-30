@@ -33,7 +33,8 @@ export const navigateTo = (path: string) => {
       setTimeout(scrollTarget, 100);
       setTimeout(scrollTarget, 350);
     }
-  } else {
-    window.scrollTo(0, 0);
   }
+  // No scrollTo(0, 0) here: the popstate handler in App scrolls a same-page change to the
+  // top, and PageTransition does it for a new page when it swaps in - scrolling now would
+  // show the top of the old page (e.g. the home hero) behind the loading blur.
 };

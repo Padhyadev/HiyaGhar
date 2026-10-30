@@ -183,7 +183,7 @@ export const Footer: React.FC = () => {
           {/* Right Copyright */}
           <ScrollReveal variant="fade-up" delay={250} className="hiyaghar-footer-right-info">
             <p className="hiyaghar-footer-copyright">
-              © {new Date().getFullYear()} HIYAGHAR. All Rights Reserved.
+              © {new Date().getFullYear()} All Rights Reserved by Hridhay Connect.
             </p>
           </ScrollReveal>
         </div>

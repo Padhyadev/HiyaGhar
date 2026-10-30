@@ -37,10 +37,10 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
 
     prevHashRef.current = currentHash;
 
-    // Trigger Frosted Glass & Minimal Brand Spinner
+    // Trigger Frosted Glass & Minimal Brand Spinner. The old page stays where the shopper
+    // was (behind the blur) - scrolling to the top happens only when the new page swaps in.
     setIsTransitioning(true);
     setIsExiting(false);
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
     // Smooth timing: 280ms reveal swap, then fade out frosted glass
     const swapTimer = setTimeout(() => {

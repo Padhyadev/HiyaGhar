@@ -57,6 +57,8 @@ export const restoreScrollOnPopstate = (event: Event): boolean => {
   };
   timer = window.setInterval(() => {
     const elapsed = Date.now() - startedAt;
+    // Wait for PageTransition to swap the page in (280 ms), so the old page isn't moved.
+    if (elapsed < 300) return;
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     if (maxScroll >= target - 2 && Math.abs(window.scrollY - target) > 2) {
       window.scrollTo({ top: target, left: 0, behavior: 'instant' });

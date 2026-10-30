@@ -155,8 +155,15 @@ function prefetchChunk(importFn: () => Promise<unknown>) {
   }
 }
 
+// Page path without query/anchor - same rule PageTransition uses to decide on a transition.
+const routeBase = (route: string) => (route || '/').split('?')[0].split('#')[0] || '/';
+
 function App() {
   const [currentRoute, setCurrentRoute] = useState<string>(getNormalizedRoute());
+  const renderedRouteRef = useRef(currentRoute);
+  useEffect(() => {
+    renderedRouteRef.current = currentRoute;
+  }, [currentRoute]);
 
   useEffect(() => {
     preloadCriticalImages();
@@ -171,10 +178,15 @@ function App() {
     };
 
     // Back/Forward returns to where the shopper was on that page (see utils/scrollMemory).
+    // Moving to a different page: PageTransition scrolls to the top when the new page swaps
+    // in, so the old page stays put behind the loading blur. Same page (e.g. clicking the
+    // menu link of the page you're on): scroll to the top right away.
     installScrollMemory();
     const handlePopstate = (e: PopStateEvent) => {
-      setCurrentRoute(getNormalizedRoute());
-      if (!restoreScrollOnPopstate(e)) {
+      const next = getNormalizedRoute();
+      const isSamePage = routeBase(next) === routeBase(renderedRouteRef.current);
+      setCurrentRoute(next);
+      if (!restoreScrollOnPopstate(e) && isSamePage) {
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       }
     };
@@ -242,7 +254,10 @@ function App() {
     }
     window.history.pushState(null, '', clean);
     setCurrentRoute(clean);
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    // A different page scrolls to the top when PageTransition swaps it in.
+    if (routeBase(clean) === routeBase(currentRoute)) {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
   };
 
   const handleNavigateHome = () => { navigateTo('/'); };
