@@ -41,8 +41,8 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 export default defineConfig({
     plugins: [plugin()],
     define: {
-        // Default og:image falls back to the logo until public/image/og-default.jpg is added (see src/seo/routeSeo.ts).
-        __OG_DEFAULT_IMAGE_EXISTS__: JSON.stringify(fs.existsSync(fileURLToPath(new URL('./public/image/og-default.jpg', import.meta.url))))
+        // Default og:image falls back to the logo until public/image/og-default.webp is added (see src/seo/routeSeo.ts).
+        __OG_DEFAULT_IMAGE_EXISTS__: JSON.stringify(fs.existsSync(fileURLToPath(new URL('./public/image/og-default.webp', import.meta.url))))
     },
     resolve: {
         alias: {

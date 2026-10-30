@@ -116,7 +116,7 @@ export const GiftHamperManagementPage: React.FC = () => {
     setSelectedProductIds(item.products.map((p) => p.id));
     setTempProductId('');
     setBannerFile(null);
-    setBannerPreviewUrl(item.bannerImagePath || '/uploads/Noimage.png');
+    setBannerPreviewUrl(item.bannerImagePath || '/uploads/Noimage.webp');
     setBannerImagePath(item.bannerImagePath || '');
     setViewMode('form');
   };
@@ -255,8 +255,8 @@ export const GiftHamperManagementPage: React.FC = () => {
       render: (o) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <img
-            src={o.bannerImagePath || '/uploads/Noimage.png'}
-            onError={(e) => { (e.target as HTMLImageElement).src = '/uploads/Noimage.png'; }}
+            src={o.bannerImagePath || '/uploads/Noimage.webp'}
+            onError={(e) => { (e.target as HTMLImageElement).src = '/uploads/Noimage.webp'; }}
             alt={o.name}
             style={{ width: '44px', height: '44px', objectFit: 'contain', padding: '2px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
           />
@@ -411,7 +411,7 @@ export const GiftHamperManagementPage: React.FC = () => {
                     src={bannerPreviewUrl}
                     alt="Banner Preview"
                     style={{ width: '220px', height: '120px', objectFit: 'cover', borderRadius: '8px' }}
-                    onError={(e) => { (e.target as HTMLImageElement).src = '/uploads/Noimage.png'; }}
+                    onError={(e) => { (e.target as HTMLImageElement).src = '/uploads/Noimage.webp'; }}
                   />
                 </div>
               ) : (

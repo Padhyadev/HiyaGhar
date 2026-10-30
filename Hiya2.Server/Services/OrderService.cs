@@ -142,9 +142,23 @@ namespace Hiya2.Server.Services
             string? razorpayOrderId = null,
             string? razorpayPaymentId = null,
             string? razorpaySignature = null,
-            string deliveryType = "standard")
+            string deliveryType = "standard",
+            BuyNowItem? buyNowItem = null)
         {
-            var cartLines = await _cartRepository.GetCartAsync(customerId);
+            List<CartLine> cartLines;
+            if (buyNowItem != null)
+            {
+                var buyNowLine = await _cartRepository.BuildBuyNowLineAsync(customerId, buyNowItem);
+                if (buyNowLine.Line == null)
+                {
+                    return new OrderResult { IsSuccess = false, Message = buyNowLine.Message ?? "This product is no longer available." };
+                }
+                cartLines = new List<CartLine> { buyNowLine.Line };
+            }
+            else
+            {
+                cartLines = await _cartRepository.GetCartAsync(customerId);
+            }
             if (cartLines.Count == 0)
             {
                 return new OrderResult { IsSuccess = false, Message = "Your cart is empty." };
@@ -261,8 +275,11 @@ namespace Hiya2.Server.Services
                         continue;
                     }
 
-                    var conversion = await _stockService.ConvertToSoldAsync(
-                        customerId, line.Product.Id, line.Variant.Id, line.Item.Id, order.Id, line.Item.Quantity, customerId);
+                    var conversion = buyNowItem != null
+                        ? await _stockService.SellDirectAsync(
+                            customerId, line.Product.Id, line.Variant.Id, order.Id, line.Item.Quantity, customerId)
+                        : await _stockService.ConvertToSoldAsync(
+                            customerId, line.Product.Id, line.Variant.Id, line.Item.Id, order.Id, line.Item.Quantity, customerId);
 
                     if (!conversion.IsSuccess)
                     {
@@ -305,7 +322,11 @@ namespace Hiya2.Server.Services
                     await _rewardService.DebitCoinsAsync(customerId, order.CoinsUsed, order.Id);
                 }
 
-                await _cartRepository.ClearCartAsync(customerId);
+                // A Buy Now order never touched the cart, so the cart is kept as it is.
+                if (buyNowItem == null)
+                {
+                    await _cartRepository.ClearCartAsync(customerId);
+                }
 
                 await transaction.CommitAsync();
 

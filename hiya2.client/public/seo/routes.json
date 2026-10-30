@@ -3,7 +3,7 @@
   "siteUrl": "https://hiyaghar.com",
   "siteName": "HIYAGHAR",
   "locale": "en_IN",
-  "defaultImage": "/image/og-default.jpg",
+  "defaultImage": "/image/og-default.webp",
   "fallbackImage": "/image/HiyaGhar.webp",
   "productDescriptionTemplate": "Buy {name} from the HIYAGHAR {category}collection, handcrafted in small batches. See price, available sizes and stock, and order online.",
   "organization": {

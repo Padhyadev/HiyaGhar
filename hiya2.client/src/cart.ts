@@ -1,6 +1,7 @@
 import { CartApiService } from './services/cartApiService';
 import { NO_IMAGE } from './utils/productFormat';
 import { trackAddToCart } from './utils/analytics';
+import { navigateTo } from './utils/navigation';
 
 export interface CartItem {
   id: string; // Unique composite ID: productId + weight (e.g., 'royal-rose-paan-250g')
@@ -14,6 +15,7 @@ export interface CartItem {
 }
 
 const STORAGE_KEY = 'hiya_shopping_cart';
+const BUY_NOW_STORAGE_KEY = 'hiya_buy_now_item';
 
 export class CartService {
   private static listeners: Array<() => void> = [];
@@ -111,6 +113,52 @@ export class CartService {
     if (serverItems) {
       this.saveItems(serverItems);
     }
+  }
+
+  // "Buy Now" goes straight to checkout with just that product. It is kept in
+  // sessionStorage, never in the cart, so leaving checkout without paying
+  // leaves the cart exactly as it was.
+  public static buyNow(item: Omit<CartItem, 'id'>): void {
+    try {
+      sessionStorage.setItem(BUY_NOW_STORAGE_KEY, JSON.stringify({ ...item, id: `${item.productId}-${item.weight}` }));
+    } catch (e) {
+      console.error('Failed to save Buy Now item', e);
+      return;
+    }
+    navigateTo('/checkout?buyNow=1');
+  }
+
+  public static isBuyNowCheckout(): boolean {
+    return new URLSearchParams(window.location.search).has('buyNow');
+  }
+
+  private static getBuyNowItem(): CartItem | null {
+    try {
+      const data = sessionStorage.getItem(BUY_NOW_STORAGE_KEY);
+      return data ? JSON.parse(data) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  // Items the current checkout is for: just the Buy Now product, or the whole cart.
+  public static getCheckoutItems(): CartItem[] {
+    if (!this.isBuyNowCheckout()) return this.getItems();
+    const item = this.getBuyNowItem();
+    return item ? [item] : [];
+  }
+
+  // After an order is placed: a Buy Now order leaves the cart alone.
+  public static finishCheckout(): void {
+    if (this.isBuyNowCheckout()) {
+      try {
+        sessionStorage.removeItem(BUY_NOW_STORAGE_KEY);
+      } catch {
+        // ignore
+      }
+      return;
+    }
+    this.clearCart();
   }
 
   public static getTotalCount(): number {

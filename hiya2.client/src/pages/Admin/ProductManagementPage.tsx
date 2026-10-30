@@ -740,7 +740,7 @@ export const ProductManagementPage: React.FC = () => {
     bodyFormData.append('CategoryName', formData.categoryName.trim());
     bodyFormData.append('ShortDescription', formData.shortDescription.trim());
     bodyFormData.append('FullDescription', finalFullDescription);
-    bodyFormData.append('MainImagePath', primaryImg || '/uploads/Noimage.png');
+    bodyFormData.append('MainImagePath', primaryImg || '/uploads/Noimage.webp');
     bodyFormData.append('IsBestseller', formData.isBestseller ? 'true' : 'false');
     bodyFormData.append('IsActive', formData.isActive ? 'true' : 'false');
     bodyFormData.append('BasePrice', defaultBasePrice.toString());
@@ -795,9 +795,9 @@ export const ProductManagementPage: React.FC = () => {
       render: (p) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <img
-            src={p.mainImagePath || '/uploads/Noimage.png'}
+            src={p.mainImagePath || '/uploads/Noimage.webp'}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/uploads/Noimage.png';
+              (e.target as HTMLImageElement).src = '/uploads/Noimage.webp';
             }}
             alt={p.productName}
             style={{ width: '44px', height: '44px', objectFit: 'contain', padding: '2px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
@@ -1870,10 +1870,10 @@ export const ProductManagementPage: React.FC = () => {
                           style={{ width: '16px', height: '16px', accentColor: '#D19A27', cursor: 'pointer' }}
                         />
                         <img
-                          src={p.mainImagePath || '/uploads/Noimage.png'}
+                          src={p.mainImagePath || '/uploads/Noimage.webp'}
                           alt={p.productName}
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/uploads/Noimage.png';
+                            (e.target as HTMLImageElement).src = '/uploads/Noimage.webp';
                           }}
                           style={{ width: '40px', height: '40px', objectFit: 'contain', padding: '2px', borderRadius: '6px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
                         />

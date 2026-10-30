@@ -125,7 +125,7 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                       }
                     }}
                     onBuyNow={(prod, weight, price, originalPrice) => {
-                      const itemId = CartService.addItem({
+                      CartService.buyNow({
                         productId: prod.id,
                         name: prod.name,
                         image: prod.image,
@@ -134,9 +134,6 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                         weight: weight,
                         quantity: 1,
                       });
-                      if (itemId) {
-                        window.location.hash = '#checkout';
-                      }
                     }}
                   />
                 );

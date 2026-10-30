@@ -1,16 +1,16 @@
 .hg-arch-image-container {
   position: relative;
   width: 100%;
-  max-width: 360px;
+  max-width: 440px;
   margin: 0 auto;
 }
 
 .hg-arch-image-frame {
   position: relative;
   width: 100%;
-  height: var(--custom-frame-height, 440px);
+  height: var(--custom-frame-height, 480px);
   /* Classic architectural arch: round curve on top, flat base without cutting into head */
-  border-radius: 170px 170px 16px 16px;
+  border-radius: calc(var(--custom-frame-width, 380px) / 2) calc(var(--custom-frame-width, 380px) / 2) 16px 16px;
   overflow: hidden;
   border: 3.5px solid var(--gold, #C9982E);
   box-shadow: 0 16px 36px -10px rgba(20, 35, 60, 0.18);
@@ -38,7 +38,7 @@
   left: -10px;
   right: -10px;
   bottom: 0px;
-  border-radius: 180px 180px 24px 24px;
+  border-radius: calc(var(--custom-frame-width, 380px) / 2 + 10px) calc(var(--custom-frame-width, 380px) / 2 + 10px) 24px 24px;
   border: 1.5px dashed rgba(201, 152, 46, 0.45);
   pointer-events: none;
   z-index: 1;
@@ -66,16 +66,16 @@
 /* ─── MOBILE RESPONSIVE ADAPTATIONS (NO MORE CROPPING) ──────────────────── */
 @media (max-width: 768px) {
   .hg-arch-image-container {
-    max-width: 270px !important;
+    max-width: 290px !important;
   }
 
   .hg-arch-image-frame {
-    height: 350px !important;
-    border-radius: 135px 135px 16px 16px;
+    height: 370px !important;
+    border-radius: 145px 145px 16px 16px !important;
   }
 
   .hg-arch-image-halo {
-    border-radius: 145px 145px 24px 24px;
+    border-radius: 155px 155px 24px 24px !important;
   }
 
   .hg-arch-image-img {

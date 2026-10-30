@@ -12,7 +12,6 @@ import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/
 import { CartService } from '../../cart';
 import type { MukhwasProduct } from '../../types/mukhwas';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
-import { navigateTo } from '../../utils/navigation';
 import { formatVariantLabel, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
 import './MukhwasPage.css';
@@ -113,7 +112,7 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
   };
 
   const handleBuyNow = (product: MukhwasProduct, weight: string, price?: number, originalPrice?: number) => {
-    CartService.addItem({
+    CartService.buyNow({
       productId: product.id,
       name: product.name,
       image: product.image,
@@ -122,7 +121,6 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
       weight: weight,
       quantity: 1,
     });
-    navigateTo('/checkout');
   };
 
   const scrollToGrid = () => {

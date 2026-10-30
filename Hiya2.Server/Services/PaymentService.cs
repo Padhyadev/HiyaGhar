@@ -42,9 +42,23 @@ namespace Hiya2.Server.Services
             return (keyId, keySecret);
         }
 
-        public async Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard")
+        public async Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard", BuyNowItem? buyNowItem = null)
         {
-            var cartLines = await _cartRepository.GetCartAsync(customerId);
+            List<CartLine> cartLines;
+            if (buyNowItem != null)
+            {
+                // Also checks stock, so the customer isn't charged for something that can't be sold.
+                var buyNowLine = await _cartRepository.BuildBuyNowLineAsync(customerId, buyNowItem);
+                if (buyNowLine.Line == null)
+                {
+                    return new RazorpayOrderResult { IsSuccess = false, Message = buyNowLine.Message ?? "This product is no longer available." };
+                }
+                cartLines = new List<CartLine> { buyNowLine.Line };
+            }
+            else
+            {
+                cartLines = await _cartRepository.GetCartAsync(customerId);
+            }
             if (cartLines.Count == 0)
             {
                 return new RazorpayOrderResult { IsSuccess = false, Message = "Your cart is empty." };
@@ -201,7 +215,8 @@ namespace Hiya2.Server.Services
                 razorpayOrderId: request.RazorpayOrderId,
                 razorpayPaymentId: request.RazorpayPaymentId,
                 razorpaySignature: request.RazorpaySignature,
-                deliveryType: request.DeliveryType
+                deliveryType: request.DeliveryType,
+                buyNowItem: request.BuyNowItem
             );
         }
     }

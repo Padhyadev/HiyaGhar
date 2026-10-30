@@ -11,6 +11,7 @@ import { AddressService } from '../../services/addressService';
 import type { UserAddress } from '../../services/addressService';
 import { CustomerAuthService } from '../../services/customerAuthService';
 import { CouponService } from '../../services/couponService';
+import { CartApiService } from '../../services/cartApiService';
 import type { AutoOfferResult } from '../../services/couponService';
 import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
@@ -34,6 +35,18 @@ const EMPTY_NEW_ADDRESS_FORM = {
   isDefault: false,
 };
 
+type BuyNowItem = NonNullable<Awaited<ReturnType<typeof CartApiService.resolveBuyNowItem>>> & { quantity: number };
+
+const getItemsSubtotal = (items: CartItem[]) => items.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+// Sent with the order request so the server orders just the Buy Now product
+// (it is not in the server cart). Returns undefined for a normal whole-cart checkout.
+const resolveBuyNowItem = async (items: CartItem[]): Promise<BuyNowItem | undefined> => {
+  if (!CartService.isBuyNowCheckout() || items.length === 0) return undefined;
+  const line = await CartApiService.resolveBuyNowItem(items[0].productId, items[0].weight);
+  return line ? { ...line, quantity: items[0].quantity } : undefined;
+};
+
 interface CheckoutPageProps {
   onNavigateHome: () => void;
   onNavigateCart: () => void;
@@ -45,8 +58,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   onNavigateCart,
   onNavigateConfirmation,
 }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>(CartService.getItems());
-  const [subtotal, setSubtotal] = useState<number>(CartService.getSubtotal());
+  // "Buy Now" (/checkout?buyNow=...) orders only that one item; otherwise the whole cart.
+  const [cartItems, setCartItems] = useState<CartItem[]>(CartService.getCheckoutItems());
+  const [subtotal, setSubtotal] = useState<number>(getItemsSubtotal(CartService.getCheckoutItems()));
+  const loginRedirectPath = `/login?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`;
 
   // 3-Step Checkout Progress: 1 = Address, 2 = Payment, 3 = Review
   const [currentStep, setCurrentStep] = useState<1 | 2 | 3>(1);
@@ -162,8 +177,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   }, []);
 
   useEffect(() => {
-    const items = CartService.getItems();
-    const currentSubtotal = CartService.getSubtotal();
+    const items = CartService.getCheckoutItems();
+    const currentSubtotal = getItemsSubtotal(items);
     setCartItems(items);
     setSubtotal(currentSubtotal);
     trackBeginCheckout(items.map((i) => ({ productId: i.productId, name: i.name, price: i.price, quantity: i.quantity, variant: i.weight })));
@@ -229,7 +244,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     // Listen for shipping settings changes (e.g. admin updates in another tab)
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'hiyaghar_shipping_settings') {
-        const freshOpts = reloadDeliveryOptions(CartService.getSubtotal());
+        const freshOpts = reloadDeliveryOptions(getItemsSubtotal(CartService.getCheckoutItems()));
         setSelectedDelivery((prev) => {
           if (!prev) return freshOpts[0] || null;
           const updated = freshOpts.find((o) => o.id === prev.id);
@@ -277,7 +292,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
 
     setIsStartingGuest(true);
     setGuestNotice(null);
-    const itemCountBefore = CartService.getTotalCount();
+    const countItems = () => CartService.getCheckoutItems().reduce((acc, item) => acc + item.quantity, 0);
+    const itemCountBefore = countItems();
     const result = await CustomerAuthService.startGuestCheckout(form);
     setIsStartingGuest(false);
 
@@ -287,15 +303,15 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     }
 
     // The cart now comes from the server, which only holds what is in stock.
-    const items = CartService.getItems();
+    const items = CartService.getCheckoutItems();
     setCartItems(items);
-    setSubtotal(CartService.getSubtotal());
+    setSubtotal(getItemsSubtotal(items));
     if (items.length === 0) {
       showToast('Sorry, the items in your cart are no longer available.', 'error');
       onNavigateCart();
       return;
     }
-    if (CartService.getTotalCount() < itemCountBefore) {
+    if (countItems() < itemCountBefore) {
       showToast('Some items in your cart were updated to match available stock.', 'info');
     }
 
@@ -520,7 +536,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   };
 
   // Online Razorpay Payment handler
-  const handleOnlineRazorpayPayment = async (numericAddressId: number, customer: any) => {
+  const handleOnlineRazorpayPayment = async (numericAddressId: number, customer: any, buyNowItem: BuyNowItem | undefined) => {
     try {
       // 1. Create Razorpay order on backend
       const res = await fetch('/api/payment/create-order', {
@@ -530,6 +546,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           customerAddressId: numericAddressId,
           useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
           deliveryType: selectedDelivery?.id || 'standard',
+          buyNowItem,
         }),
       });
 
@@ -575,6 +592,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 customerAddressId: numericAddressId,
                 useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
                 deliveryType: selectedDelivery?.id || 'standard',
+                buyNowItem,
               }),
             });
 
@@ -605,7 +623,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 orderNumber: verifyData.orderNumber,
               });
 
-              CartService.clearCart();
+              CartService.finishCheckout();
               showToast('Payment successful! Your order has been placed.', 'success');
               onNavigateConfirmation(verifyData.orderNumber);
             } else {
@@ -639,7 +657,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   };
 
   // Cash on Delivery handler
-  const handleCodPayment = async (numericAddressId: number) => {
+  const handleCodPayment = async (numericAddressId: number, buyNowItem: BuyNowItem | undefined) => {
     try {
       const res = await fetch('/api/order/checkout', {
         method: 'POST',
@@ -648,6 +666,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           customerAddressId: numericAddressId,
           useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
           deliveryType: selectedDelivery?.id || 'standard',
+          buyNowItem,
         }),
       });
       const data = await res.json();
@@ -683,7 +702,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
         orderNumber: data.orderNumber,
       });
 
-      CartService.clearCart();
+      CartService.finishCheckout();
       showToast('Order placed successfully!', 'success');
       onNavigateConfirmation(data.orderNumber);
     } catch (err: any) {
@@ -720,10 +739,18 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     setIsSubmitting(true);
     setSubmitError(null);
 
+    // Never fall back to ordering the whole cart when this is a Buy Now checkout.
+    const buyNowItem = await resolveBuyNowItem(cartItems);
+    if (CartService.isBuyNowCheckout() && !buyNowItem) {
+      setIsSubmitting(false);
+      setSubmitError('Could not load this item. Please refresh the page and try again.');
+      return;
+    }
+
     if (selectedPaymentMethod === 'razorpay') {
-      await handleOnlineRazorpayPayment(numericAddressId, customer);
+      await handleOnlineRazorpayPayment(numericAddressId, customer, buyNowItem);
     } else {
-      await handleCodPayment(numericAddressId);
+      await handleCodPayment(numericAddressId, buyNowItem);
     }
   };
 
@@ -745,7 +772,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           onNavigateHome={onNavigateHome}
           breadcrumbCurrent="Checkout"
           title="Checkout"
-          bgImage="/image/Banner_image/Checkout.jfif"
+          bgImage="/image/Banner_image/Checkout.webp"
         />
 
         <div className="hiyaghar-container">
@@ -801,7 +828,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                     <button
                       type="button"
                       className="hiyaghar-guest-login-btn"
-                      onClick={() => navigateTo('/login?redirect=/checkout')}
+                      onClick={() => navigateTo(loginRedirectPath)}
                     >
                       Log In
                     </button>
@@ -889,7 +916,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                           <button
                             type="button"
                             className="hiyaghar-guest-login-btn"
-                            onClick={() => navigateTo('/login?redirect=/checkout')}
+                            onClick={() => navigateTo(loginRedirectPath)}
                           >
                             Log In
                           </button>

@@ -1,4 +1,5 @@
 using Hiya2.Server.Models;
+using Hiya2.Server.Repositories.Cart;
 
 namespace Hiya2.Server.Services
 {
@@ -27,7 +28,8 @@ namespace Hiya2.Server.Services
             string? razorpayOrderId = null,
             string? razorpayPaymentId = null,
             string? razorpaySignature = null,
-            string deliveryType = "standard");
+            string deliveryType = "standard",
+            BuyNowItem? buyNowItem = null);
         Task<List<Order>> GetOrdersByCustomerAsync(long customerId);
         Task<Order?> GetOrderByIdAsync(long orderId, long? customerId = null);
         Task<OrderResult> CancelOrderAsync(long orderId, long customerId, string reason);

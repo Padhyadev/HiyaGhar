@@ -1,5 +1,5 @@
 import React from 'react';
-import defaultFounderImage from '../../../assets/priti-shah.jpg';
+import defaultFounderImage from '../../../assets/priti-shah.webp';
 import './ArchImage.css';
 
 interface ArchImageProps {
@@ -15,8 +15,8 @@ interface ArchImageProps {
 export const ArchImage: React.FC<ArchImageProps> = ({
   src = defaultFounderImage,
   alt = 'Priti Shah, founder of HIYA Ghar',
-  width = 360,
-  height = 440,
+  width = 380,
+  height = 480,
   className = '',
   loading = 'lazy',
   badgeText,
@@ -24,6 +24,7 @@ export const ArchImage: React.FC<ArchImageProps> = ({
   const customStyles: React.CSSProperties = {
     maxWidth: typeof width === 'number' ? `${width}px` : width,
     ['--custom-frame-height' as string]: typeof height === 'number' ? `${height}px` : height,
+    ['--custom-frame-width' as string]: typeof width === 'number' ? `${width}px` : width,
   };
 
   return (

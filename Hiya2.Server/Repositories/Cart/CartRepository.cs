@@ -225,5 +225,60 @@ namespace Hiya2.Server.Repositories.Cart
 
             await _context.SaveChangesAsync();
         }
+
+        // Prices a "Buy Now" product the same way as a cart line, without saving it to the cart.
+        // The CartItem is in-memory only (Id = 0).
+        public async Task<BuyNowLineResult> BuildBuyNowLineAsync(long customerId, BuyNowItem buyNowItem)
+        {
+            if (buyNowItem.Quantity <= 0)
+            {
+                return new BuyNowLineResult { Message = "Please choose a valid quantity." };
+            }
+
+            var product = await _context.Products.FirstOrDefaultAsync(p =>
+                p.Id == buyNowItem.ProductId && p.IsActive && !p.IsDeleted);
+            if (product == null)
+            {
+                return new BuyNowLineResult { Message = "This product is no longer available." };
+            }
+
+            ProductVariant? variant = null;
+            if (buyNowItem.VariantId.HasValue)
+            {
+                variant = await _context.ProductVariants
+                    .Include(v => v.Images.Where(i => !i.IsDeleted))
+                    .FirstOrDefaultAsync(v => v.Id == buyNowItem.VariantId.Value && v.ProductId == product.Id && !v.IsDeleted);
+                if (variant == null)
+                {
+                    return new BuyNowLineResult { Message = "This product option is no longer available." };
+                }
+                if (variant.AvailableStock - variant.ReservedStock < buyNowItem.Quantity)
+                {
+                    return new BuyNowLineResult { Message = $"Sorry, '{product.ProductName}' does not have enough stock available." };
+                }
+            }
+
+            var unitPrice = ResolveUnitPrice(product, variant);
+            var item = new CartItem
+            {
+                CustomerId = customerId,
+                ProductId = product.Id,
+                VariantId = variant?.Id,
+                PackingType = buyNowItem.PackingType,
+                Quantity = buyNowItem.Quantity
+            };
+
+            return new BuyNowLineResult
+            {
+                Line = new CartLine
+                {
+                    Item = item,
+                    Product = product,
+                    Variant = variant,
+                    UnitPrice = unitPrice,
+                    LineTotal = unitPrice * buyNowItem.Quantity
+                }
+            };
+        }
     }
 }

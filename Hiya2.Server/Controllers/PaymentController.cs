@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Hiya2.Server.Services;
+using Hiya2.Server.Repositories.Cart;
 
 namespace Hiya2.Server.Controllers
 {
@@ -11,6 +12,8 @@ namespace Hiya2.Server.Controllers
         public string? CouponCode { get; set; }
         public int UseRewardCoins { get; set; } = 0;
         public string DeliveryType { get; set; } = "standard";
+        /// <summary>Set for "Buy Now": charge for only this cart line.</summary>
+        public BuyNowItem? BuyNowItem { get; set; }
     }
 
     [ApiController]
@@ -42,7 +45,7 @@ namespace Hiya2.Server.Controllers
                 return BadRequest(new { isSuccess = false, message = "Please select a delivery address." });
             }
 
-            var result = await _paymentService.CreateRazorpayOrderAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, dto.DeliveryType);
+            var result = await _paymentService.CreateRazorpayOrderAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, dto.DeliveryType, dto.BuyNowItem);
             if (!result.IsSuccess)
             {
                 return BadRequest(new { isSuccess = false, message = result.Message });

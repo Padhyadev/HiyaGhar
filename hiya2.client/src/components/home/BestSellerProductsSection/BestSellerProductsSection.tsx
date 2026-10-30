@@ -102,7 +102,7 @@ export const BestSellerProductsSection: React.FC = () => {
   };
 
   const handleBuyNow = (product: MukhwasProduct, weight: string, price?: number, originalPrice?: number) => {
-    CartService.addItem({
+    CartService.buyNow({
       productId: product.id,
       name: product.name,
       image: product.image,
@@ -111,7 +111,6 @@ export const BestSellerProductsSection: React.FC = () => {
       weight: weight,
       quantity: 1,
     });
-    navigateTo('/checkout');
   };
 
   const handleNavigateToDetail = (productId: string) => {

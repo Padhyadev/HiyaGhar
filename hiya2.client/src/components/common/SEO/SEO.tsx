@@ -2,7 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { canonicalUrl, DEFAULT_IMAGE, seoConfig, toAbsoluteUrl } from '../../../seo/routeSeo';
 
-// TODO(brand): add the 1200x630 share image at public/image/og-default.jpg. Until it exists the
+// TODO(brand): add the 1200x630 share image at public/image/og-default.webp. Until it exists the
 // default og:image falls back to the logo (decided at build time, see vite.config.ts).
 
 interface SEOProps {

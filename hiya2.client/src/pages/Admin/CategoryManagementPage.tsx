@@ -84,7 +84,7 @@ export const CategoryManagementPage: React.FC = () => {
       isActive: item.isActive !== false,
     });
     setImageFile(null);
-    setImagePreviewUrl(item.imagePath || '/uploads/Noimage.png');
+    setImagePreviewUrl(item.imagePath || '/uploads/Noimage.webp');
     setViewMode('form');
   };
 
@@ -155,7 +155,7 @@ export const CategoryManagementPage: React.FC = () => {
     bodyFormData.append('CategoryName', formData.categoryName.trim());
     bodyFormData.append('SKU', formData.sku.trim() || `CAT-${Date.now()}`);
     bodyFormData.append('Description', formData.description.trim());
-    bodyFormData.append('ImagePath', formData.imagePath || (imagePreviewUrl && !imageFile ? imagePreviewUrl : '/uploads/Noimage.png'));
+    bodyFormData.append('ImagePath', formData.imagePath || (imagePreviewUrl && !imageFile ? imagePreviewUrl : '/uploads/Noimage.webp'));
     bodyFormData.append('IsActive', formData.isActive ? 'true' : 'false');
 
     if (imageFile) {
@@ -197,9 +197,9 @@ export const CategoryManagementPage: React.FC = () => {
       render: (c) => (
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <img
-            src={c.imagePath || '/uploads/Noimage.png'}
+            src={c.imagePath || '/uploads/Noimage.webp'}
             onError={(e) => {
-              (e.target as HTMLImageElement).src = '/uploads/Noimage.png';
+              (e.target as HTMLImageElement).src = '/uploads/Noimage.webp';
             }}
             alt={c.categoryName}
             style={{ width: '44px', height: '44px', objectFit: 'contain', padding: '2px', borderRadius: '8px', border: '1px solid #e2e8f0', background: '#F7F3E9' }}
@@ -412,7 +412,7 @@ export const CategoryManagementPage: React.FC = () => {
                     alt="Category Preview"
                     style={{ width: '140px', height: '140px', objectFit: 'cover', borderRadius: '8px' }}
                     onError={(e) => {
-                      (e.target as HTMLImageElement).src = '/uploads/Noimage.png';
+                      (e.target as HTMLImageElement).src = '/uploads/Noimage.webp';
                     }}
                   />
                   <button
@@ -457,7 +457,7 @@ export const CategoryManagementPage: React.FC = () => {
                   }}
                 >
                   <img
-                    src="/uploads/Noimage.png"
+                    src="/uploads/Noimage.webp"
                     alt="No Category Image Selected"
                     style={{ width: '80px', height: '80px', objectFit: 'contain', opacity: 0.8, borderRadius: '8px' }}
                   />

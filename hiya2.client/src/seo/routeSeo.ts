@@ -3,7 +3,7 @@
 // 404 allow-list and sitemap, so the client and the server always emit the same meta.
 import config from './routes.json';
 
-// Set in vite.config.ts: true when public/image/og-default.jpg exists at build time
+// Set in vite.config.ts: true when public/image/og-default.webp exists at build time
 // (the server applies the same check against wwwroot).
 declare const __OG_DEFAULT_IMAGE_EXISTS__: boolean;
 

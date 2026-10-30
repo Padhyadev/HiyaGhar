@@ -1,5 +1,5 @@
 // The one placeholder shown wherever a product has no photo (or its photo fails to load).
-export const NO_IMAGE = '/image/Noimage.png';
+export const NO_IMAGE = '/image/Noimage.webp';
 
 // <img onError> handler: swap to the placeholder once (no loop if the placeholder itself fails).
 export function showNoImageOnError(e: { currentTarget: HTMLImageElement }): void {

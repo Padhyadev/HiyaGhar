@@ -145,6 +145,11 @@ export class CartApiService {
     }
   }
 
+  // The server cart line a "Buy Now" checkout is for (sent with the order request).
+  public static async resolveBuyNowItem(productId: string | number, weight: string): Promise<ResolvedLine | null> {
+    return resolveLine(productId, weight);
+  }
+
   // Fetch the authoritative server cart, shaped to match the local CartItem type.
   public static async fetchServerCart(): Promise<Array<{
     id: string;

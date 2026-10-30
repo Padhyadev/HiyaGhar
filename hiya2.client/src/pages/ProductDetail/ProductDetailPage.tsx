@@ -545,7 +545,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       return;
     }
 
-    const itemId = CartService.addItem({
+    CartService.buyNow({
       productId: product.id,
       name: product.name,
       image: selectedImage || product.image,
@@ -554,8 +554,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       weight: selectedWeight,
       quantity: quantity,
     });
-    if (!itemId) return; // blocked (not logged in) - CartService already showed why
-    navigateTo('/checkout');
   };
 
   // Frequently Bought Together Total & Add Handler

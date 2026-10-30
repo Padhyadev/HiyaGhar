@@ -1,3 +1,5 @@
+using Hiya2.Server.Repositories.Cart;
+
 namespace Hiya2.Server.Services
 {
     public class RazorpayOrderResult
@@ -20,11 +22,12 @@ namespace Hiya2.Server.Services
         public string? CouponCode { get; set; }
         public int UseRewardCoins { get; set; } = 0;
         public string DeliveryType { get; set; } = "standard";
+        public BuyNowItem? BuyNowItem { get; set; }
     }
 
     public interface IPaymentService
     {
-        Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard");
+        Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard", BuyNowItem? buyNowItem = null);
         bool VerifyRazorpaySignature(string razorpayOrderId, string razorpayPaymentId, string razorpaySignature);
         Task<OrderResult> ProcessSuccessfulOnlineOrderAsync(long customerId, RazorpayVerifyRequest request);
     }

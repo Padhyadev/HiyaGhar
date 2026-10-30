@@ -5,7 +5,6 @@ import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
 import type { MukhwasProduct } from '../../types/mukhwas';
 import { CartService } from '../../cart';
-import { navigateTo } from '../../utils/navigation';
 import { GiftHamperService, type GiftHamperOccasion, type GiftHamperProduct as ApiGiftHamperProduct } from '../../services/giftHamperService';
 import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
@@ -170,7 +169,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
   };
 
   const handleBuyNow = (product: MukhwasProduct, weight: string, price?: number, originalPrice?: number) => {
-    CartService.addItem({
+    CartService.buyNow({
       productId: product.id,
       name: product.name,
       image: product.image,
@@ -179,7 +178,6 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
       weight: weight,
       quantity: 1,
     });
-    navigateTo('/checkout');
   };
 
   const featuredOccasion = occasions[0];
@@ -239,7 +237,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
                     {activeCategory === featuredOccasion.slug.toLowerCase() && (
                       <div className="hiyaghar-card-active-badge"><span>✓ Selected</span></div>
                     )}
-                    <img src={featuredOccasion.bannerImagePath || '/uploads/Noimage.png'} alt={featuredOccasion.name} className="card-bg-image" />
+                    <img src={featuredOccasion.bannerImagePath || '/uploads/Noimage.webp'} alt={featuredOccasion.name} className="card-bg-image" />
                     <div className="card-overlay" />
                     <div className="card-content">
                       <h3 className="card-title"><a href={occasionPath(featuredOccasion.slug)} onClick={(e) => e.preventDefault()} style={occasionLinkStyle}>{featuredOccasion.name}</a></h3>
@@ -260,7 +258,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
                           tabIndex={0}
                         >
                           {isActive && <div className="hiyaghar-card-active-badge"><span>✓ Selected</span></div>}
-                          <img src={o.bannerImagePath || '/uploads/Noimage.png'} alt={o.name} className="card-bg-image" />
+                          <img src={o.bannerImagePath || '/uploads/Noimage.webp'} alt={o.name} className="card-bg-image" />
                           <div className="card-overlay" />
                           <div className="card-content">
                             <h3 className="card-title"><a href={occasionPath(o.slug)} onClick={(e) => e.preventDefault()} style={occasionLinkStyle}>{o.name}</a></h3>

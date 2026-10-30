@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Services;
+using Hiya2.Server.Repositories.Cart;
 
 namespace Hiya2.Server.Controllers
 {
@@ -15,6 +16,8 @@ namespace Hiya2.Server.Controllers
         public int UseRewardCoins { get; set; } = 0;
         /// <summary>"standard" or "express" - controls which shipping rate is used.</summary>
         public string DeliveryType { get; set; } = "standard";
+        /// <summary>Set for "Buy Now": order only this cart line and keep the rest of the cart.</summary>
+        public BuyNowItem? BuyNowItem { get; set; }
     }
 
     public class CancelOrderRequestDto
@@ -129,7 +132,7 @@ namespace Hiya2.Server.Controllers
                 return BadRequest(new { isSuccess = false, message = "Please select a delivery address." });
             }
 
-            var result = await _orderService.CreateOrderFromCartAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, deliveryType: dto.DeliveryType);
+            var result = await _orderService.CreateOrderFromCartAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, deliveryType: dto.DeliveryType, buyNowItem: dto.BuyNowItem);
 
             if (!result.IsSuccess)
             {

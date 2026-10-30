@@ -32,6 +32,9 @@ namespace Hiya2.Server.Repositories.Stock
         Task<StockOperationResult> ReleaseAsync(long customerId, int productId, int variantId, long? cartItemId, int quantity, long? actorId = null);
 
         // Order-driven flows. Called from WITHIN OrderService's existing transaction.
+        // "Buy Now" orders never went through the cart, so there is no reservation to
+        // convert - sells straight from unreserved stock.
+        Task<StockOperationResult> SellDirectAsync(long customerId, int productId, int variantId, long orderId, int quantity, long? actorId = null);
         Task<StockOperationResult> ConvertToSoldAsync(long customerId, int productId, int variantId, long? cartItemId, long orderId, int quantity, long? actorId = null);
         Task RestockForCancelOrReturnAsync(int productId, int variantId, int quantity, long orderId, bool isReturn, long? actorId = null);
 

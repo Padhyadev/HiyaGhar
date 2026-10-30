@@ -11,7 +11,6 @@ import { PremiumSidebar } from '../../components/common/PremiumSidebar/PremiumSi
 import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/CategoriesMobileTrigger';
 import { CartService } from '../../cart';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
-import { navigateTo } from '../../utils/navigation';
 import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
 // Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
@@ -161,7 +160,7 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
   };
 
   const handleBuyNowCard = (product: TeaMasalaProduct, weight: string, price?: number, originalPrice?: number) => {
-    CartService.addItem({
+    CartService.buyNow({
       productId: product.id,
       name: `${product.name} (${weight})`,
       image: product.image,
@@ -170,7 +169,6 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
       weight: weight,
       quantity: 1,
     });
-    navigateTo('/checkout');
   };
 
   return (

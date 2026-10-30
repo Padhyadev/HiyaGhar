@@ -27,16 +27,18 @@ export const CombosSection: React.FC = () => {
 
   if (combos.length === 0) return null;
 
+  const toCartItem = (product: ComboCard, weight: string, price?: number, originalPrice?: number) => ({
+    productId: product.id,
+    name: product.name,
+    image: product.image,
+    price: typeof price === 'number' ? price : product.price,
+    originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
+    weight,
+    quantity: 1,
+  });
+
   const addToCart = (product: ComboCard, weight: string, price?: number, originalPrice?: number) =>
-    CartService.addItem({
-      productId: product.id,
-      name: product.name,
-      image: product.image,
-      price: typeof price === 'number' ? price : product.price,
-      originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
-      weight,
-      quantity: 1,
-    });
+    CartService.addItem(toCartItem(product, weight, price, originalPrice));
 
   return (
     <section className="hiyaghar-combos-section" aria-labelledby="home-combos-title">
@@ -57,7 +59,7 @@ export const CombosSection: React.FC = () => {
                 if (addToCart(prod as ComboCard, weight, price, origPrice)) showToast(`Added ${prod.name} to your cart!`);
               }}
               onBuyNow={(prod, weight, price, origPrice) => {
-                if (addToCart(prod as ComboCard, weight, price, origPrice)) navigateTo('/checkout');
+                CartService.buyNow(toCartItem(prod as ComboCard, weight, price, origPrice));
               }}
             />
           ))}

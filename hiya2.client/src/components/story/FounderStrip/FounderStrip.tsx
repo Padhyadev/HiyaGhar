@@ -9,12 +9,12 @@ export const FounderStrip: React.FC = () => {
     <section className="hg-founder-strip" aria-label="Meet the Founder">
       <div className="hg-founder-strip-container">
         <div className="hg-founder-strip-grid">
-          {/* Left Column: Arch-shaped portrait (~300px wide) */}
+          {/* Left Column: Arch-shaped portrait */}
           <ScrollReveal variant="fade-right" className="hg-founder-strip-photo-col">
             <ArchImage
               alt="Priti Shah, founder of HIYA Ghar"
-              width={300}
-              height={380}
+              width={380}
+              height={480}
               loading="lazy"
               badgeText="Handmade in Ahmedabad"
             />

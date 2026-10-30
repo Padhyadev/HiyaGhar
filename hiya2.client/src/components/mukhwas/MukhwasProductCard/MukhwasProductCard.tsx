@@ -240,8 +240,8 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
             const target = e.currentTarget;
             if (target.src !== window.location.origin + '/image/TEA MASALA.webp' && product.name.toLowerCase().includes('tea')) {
               target.src = '/image/TEA MASALA.webp';
-            } else if (!target.src.includes('Noimage.png')) {
-              target.src = '/image/Noimage.png';
+            } else if (!target.src.includes('Noimage.webp')) {
+              target.src = '/image/Noimage.webp';
             }
           }}
         />

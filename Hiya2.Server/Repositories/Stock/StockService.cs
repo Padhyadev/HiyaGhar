@@ -171,6 +171,43 @@ WHERE Id = @variantId";
             return StockOperationResult.Success();
         }
 
+        public async Task<StockOperationResult> SellDirectAsync(long customerId, int productId, int variantId, long orderId, int quantity, long? actorId = null)
+        {
+            if (quantity <= 0) return StockOperationResult.Success();
+
+            var before = await ReadVariantAsync(variantId);
+            if (before == null || before.IsDeleted || before.ProductId != productId) return StockOperationResult.Fail("Product variant not found.");
+
+            // Only stock nobody else is holding in their cart may be sold.
+            var affected = await ApplyStockDeltaAsync(variantId, -quantity, 0, true, false, quantity);
+            if (affected == 0 && await ReleaseExpiredReservationsAsync(variantId) > 0)
+            {
+                affected = await ApplyStockDeltaAsync(variantId, -quantity, 0, true, false, quantity);
+            }
+            if (affected == 0)
+            {
+                return StockOperationResult.Fail("Product is currently out of stock.");
+            }
+
+            var after = await ReadVariantAsync(variantId);
+
+            await _context.ProductStockHistories.AddAsync(new ProductStockHistory
+            {
+                ProductId = productId,
+                VariantId = variantId,
+                ChangeType = StockChangeType.Sold,
+                QuantityChanged = -quantity,
+                PreviousStock = before.AvailableStock,
+                NewStock = after?.AvailableStock ?? before.AvailableStock - quantity,
+                ReferenceId = orderId,
+                ReferenceType = "Order",
+                ChangedBy = actorId ?? customerId,
+                ChangedDate = DateTime.Now
+            });
+
+            return StockOperationResult.Success();
+        }
+
         public async Task<StockOperationResult> ConvertToSoldAsync(long customerId, int productId, int variantId, long? cartItemId, long orderId, int quantity, long? actorId = null)
         {
             if (quantity <= 0) return StockOperationResult.Success();

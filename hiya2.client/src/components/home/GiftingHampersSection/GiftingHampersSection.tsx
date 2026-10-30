@@ -63,7 +63,7 @@ export const GiftingHampersSection: React.FC = () => {
                   <div className="hiyaghar-gifting-image-wrapper">
                     <div className="hiyaghar-gifting-image-bg" style={{ backgroundColor: badgeBg }} />
                     <img
-                      src={occasion.bannerImagePath || '/uploads/Noimage.png'}
+                      src={occasion.bannerImagePath || '/uploads/Noimage.webp'}
                       alt={occasion.name}
                       className="hiyaghar-gifting-img"
                       loading="lazy"
