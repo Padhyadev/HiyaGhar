@@ -5,7 +5,6 @@ import { ScrollReveal } from '../../components/common/ScrollReveal/ScrollReveal'
 import { showToast } from '../../utils/alertService';
 import { ContactQueryService } from '../../services/contactQueryService';
 import { ShippingService, type ShippingSettings } from '../../services/shippingService';
-import { navigateTo } from '../../utils/navigation';
 import './ContactUsPage.css';
 
 export const ContactUsPage: React.FC = () => {
