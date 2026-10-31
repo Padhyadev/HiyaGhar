@@ -151,18 +151,7 @@ export const FaqPage: React.FC = () => {
             <div className="hiyaghar-faq-hero-overlay" />
 
             <div className="hiyaghar-faq-hero-inner">
-              {/* Breadcrumb Navigation */}
-              <nav className="hiyaghar-faq-banner-breadcrumb" aria-label="Breadcrumb">
-                <ol className="hiyaghar-faq-breadcrumb-list">
-                  <li>
-                    <a href="#/" onClick={(e) => { e.preventDefault(); navigateTo('/'); }}>
-                      Home
-                    </a>
-                  </li>
-                  <li className="sep">/</li>
-                  <li className="current">FAQs</li>
-                </ol>
-              </nav>
+              
 
               <span className="hiyaghar-faq-badge">HELP & SUPPORT CENTER</span>
               <h1 className="hiyaghar-faq-title">Frequently Asked Questions</h1>

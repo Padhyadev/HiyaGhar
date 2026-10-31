@@ -743,28 +743,6 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                   </svg>
                   <span>Back to {catName}</span>
                 </button>
-
-                <nav className="hiyaghar-detail-breadcrumb" aria-label="Breadcrumb navigation">
-                  <ul className="hiyaghar-detail-breadcrumb-list">
-                    <li>
-                      <a href="/" onClick={(e) => { e.preventDefault(); onNavigateHome(); }}>Home</a>
-                    </li>
-                    <li className="sep">/</li>
-                    <li>
-                      <a
-                        href={catPath}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo(catPath);
-                        }}
-                      >
-                        {catName}
-                      </a>
-                    </li>
-                    <li className="sep">/</li>
-                    <li className="current">{product.name}</li>
-                  </ul>
-                </nav>
               </div>
             );
           })()}

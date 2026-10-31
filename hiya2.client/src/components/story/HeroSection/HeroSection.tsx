@@ -25,16 +25,7 @@ export const HeroSection: React.FC = () => {
         <div className="hg-hero-inner-container">
           <div className="hg-hero-content-wrap">
             <ScrollReveal variant="fade-up">
-              {/* Breadcrumb Navigation */}
-              <nav className="hg-hero-breadcrumb" aria-label="Breadcrumb">
-                <ol>
-                  <li>
-                    <Link to="/">Home</Link>
-                  </li>
-                  <li className="sep" aria-hidden="true">/</li>
-                  <li className="current" aria-current="page">Our Story</li>
-                </ol>
-              </nav>
+              
 
               <h1 className="hg-hero-title">
                 Every Goodness Has A Heartfelt Story

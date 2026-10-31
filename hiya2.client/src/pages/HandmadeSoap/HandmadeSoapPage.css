@@ -1,11 +1,13 @@
 /* Handmade Soap Page Specific Styles */
-.hiyaghar-soap-page-layout {
+.hiyaghar-soap-page-layout,
+.hiyaghar-handmade-soap-page-layout {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.hiyaghar-soap-listing-view {
+.hiyaghar-soap-listing-view,
+.hiyaghar-handmade-soap-listing-view {
   width: 100%;
 }
 
@@ -15,4 +17,27 @@
   margin: 0 auto;
   padding-left: 20px;
   padding-right: 20px;
+}
+
+/* Dark botanical typography over light cream banner */
+.hiyaghar-handmade-soap-page-layout .hiyaghar-mukhwas-banner-title {
+  color: #1A3022 !important;
+  text-shadow: none !important;
+}
+
+/* Mobile: Position title cleanly above the products in the sunlit wall space */
+@media (max-width: 768px) {
+  .hiyaghar-handmade-soap-page-layout .hiyaghar-mukhwas-banner-card {
+    align-items: flex-start;
+    padding-top: 82px;
+  }
+
+  .hiyaghar-handmade-soap-page-layout .hiyaghar-mukhwas-banner-content {
+    padding: 0 16px;
+  }
+
+  .hiyaghar-handmade-soap-page-layout .hiyaghar-mukhwas-banner-title {
+    font-size: 24px;
+    margin-bottom: 0;
+  }
 }

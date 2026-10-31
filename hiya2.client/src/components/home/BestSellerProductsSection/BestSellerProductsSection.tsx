@@ -14,7 +14,7 @@ function mapApiToMukhwas(p: ApiProduct): MukhwasProduct {
   const defaultVariant = p.variants?.find((v: ProductVariant) => v.isDefault) || p.variants?.[0];
   const weightOpts = p.variants?.map((v: ProductVariant) => formatVariantLabel(v.variantName)) || [];
   const currentPrice = defaultVariant ? defaultVariant.price : p.basePrice;
-  const origPrice = defaultVariant?.originalPrice || p.discountPrice || Math.round(currentPrice * 1.15);
+  const origPrice = defaultVariant?.originalPrice || (p.basePrice > currentPrice ? p.basePrice : Math.round(currentPrice * 1.25));
 
   return {
     id: p.id.toString(),

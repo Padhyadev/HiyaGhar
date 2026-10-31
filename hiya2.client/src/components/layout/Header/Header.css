@@ -1115,6 +1115,7 @@
   }
 
   .hiyaghar-mobile-hamburger-btn {
+    position: relative;
     width: 32px;
     height: 32px;
     min-width: 32px;
@@ -1133,9 +1134,26 @@
   .hiyaghar-account-icon-btn,
   .hiyaghar-wishlist-icon-btn,
   .hiyaghar-cart-cyan-pill {
+    position: relative;
     width: 32px;
     height: 32px;
     min-width: 32px;
     min-height: 32px;
+  }
+
+  .hiyaghar-mobile-hamburger-btn::after,
+  .hiyaghar-search-icon-btn::after,
+  .hiyaghar-account-icon-btn::after,
+  .hiyaghar-wishlist-icon-btn::after,
+  .hiyaghar-cart-cyan-pill::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 44px;
+    min-height: 44px;
+    width: 100%;
+    height: 100%;
   }
 }

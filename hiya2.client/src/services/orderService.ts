@@ -466,7 +466,7 @@ export class OrderService {
         <div style="clear: both;"></div>
 
         <div style="margin-top: 40px; text-align: center; font-size: 12px; color: var(--hiya-muted, #475467); border-top: 1px solid #eee; padding-top: 15px; line-height: 1.5;">
-          Thank you for choosing HIYAGHAR. For customer care, email support@hiyaghar.com or call +91 98765 43210.<br/>
+          Thank you for choosing HIYAGHAR. For customer care, email support@hiyaghar.com or call +91 92744 43617.<br/>
           This is a computer-generated tax invoice and requires no signature.
         </div>
       </div>
@@ -705,7 +705,7 @@ export class OrderService {
       doc.setFontSize(7);
       doc.setTextColor(148, 163, 184);
       doc.text(
-        'Thank you for shopping with HIYAGHAR! Customer Care: support@hiyaghar.com | +91 98765 43210',
+        'Thank you for shopping with HIYAGHAR! Customer Care: support@hiyaghar.com | +91 92744 43617',
         105,
         footerY,
         { align: 'center' }

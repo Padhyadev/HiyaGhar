@@ -6,7 +6,7 @@
   padding-top: var(--space-8, 16px);
   padding-bottom: var(--space-6, 12px);
   position: relative;
-  z-index: 2000;
+  z-index: 20;
   box-shadow: var(--shadow-sm);
 }
 

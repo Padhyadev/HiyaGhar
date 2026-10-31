@@ -481,7 +481,7 @@ export const OrderManagementPage: React.FC = () => {
       doc.setFontSize(7);
       doc.setTextColor(148, 163, 184);
       doc.text(
-        'Thank you for choosing HIYAGHAR! For support, email support@hiyaghar.com or call +91 98765 43210.',
+        'Thank you for choosing HIYAGHAR! For support, email support@hiyaghar.com or call +91 92744 43617.',
         105,
         footerY,
         { align: 'center' }

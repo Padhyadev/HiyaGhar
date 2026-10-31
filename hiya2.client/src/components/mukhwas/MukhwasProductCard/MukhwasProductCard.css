@@ -193,12 +193,12 @@
   backdrop-filter: blur(4px);
   color: var(--hiya-white);
   padding: 8px 12px;
-  font-size: var(--font-size-xs);
+  font-size: 14px;
   font-weight: var(--font-weight-bold);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-4);
+  gap: 8px;
   transition: bottom var(--motion-duration-fast) ease;
 }
 
@@ -222,7 +222,7 @@
 }
 
 .hiyaghar-mukhwas-card-cat-label {
-  font-size: var(--font-size-xs);
+  font-size: 14px;
   color: var(--hiya-gold-dark);
   font-weight: var(--font-weight-semibold);
   text-transform: uppercase;
@@ -233,7 +233,7 @@
   display: flex;
   align-items: center;
   gap: 3px;
-  font-size: var(--font-size-xs);
+  font-size: 14px;
 }
 
 .hiyaghar-star {
@@ -247,7 +247,7 @@
 }
 
 .hiyaghar-reviews-count {
-  color: var(--color-text-tertiary);
+  color: #98A2B3;
 }
 
 .hiyaghar-mukhwas-card-title {
@@ -264,7 +264,7 @@
 }
 
 .hiyaghar-mukhwas-card-desc {
-  font-size: var(--font-size-xs);
+  font-size: 14px;
   color: var(--color-text-secondary);
   line-height: 1.4;
   margin-bottom: var(--space-6);
@@ -280,7 +280,7 @@
 .hiyaghar-mukhwas-weight-selector {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: 8px;
   margin-bottom: var(--space-6);
   background-color: var(--hiya-soft-cream);
   padding: 4px 8px;
@@ -288,8 +288,8 @@
 }
 
 .hiyaghar-weight-label {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
+  font-size: 14px;
+  color: #98A2B3;
   font-weight: var(--font-weight-medium);
 }
 
@@ -340,11 +340,11 @@
 .hiyaghar-price-group {
   display: flex;
   align-items: baseline;
-  gap: var(--space-4);
+  gap: 8px;
 }
 
 .hiyaghar-current-price {
-  font-size: var(--font-size-xl);
+  font-size: 22px;
   font-weight: var(--font-weight-heavy);
   color: var(--hiya-navy);
 }
@@ -363,8 +363,8 @@
 }
 
 .hiyaghar-original-price {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-tertiary);
+  font-size: 14px;
+  color: #98A2B3;
   text-decoration: line-through;
 }
 
@@ -381,7 +381,7 @@
 .hiyaghar-mukhwas-card-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
+  gap: 8px;
 }
 
 .hiyaghar-btn-add-cart {
@@ -390,7 +390,7 @@
   border: 1px solid var(--hiya-navy);
   background-color: var(--hiya-white);
   color: var(--hiya-navy);
-  font-size: var(--font-size-xs);
+  font-size: 14px;
   font-weight: var(--font-weight-bold);
   display: flex;
   align-items: center;
@@ -412,7 +412,7 @@
   border: none;
   background-color: var(--hiya-gold);
   color: var(--hiya-navy);
-  font-size: var(--font-size-xs);
+  font-size: 14px;
   font-weight: var(--font-weight-bold);
   transition: all var(--motion-duration-fast) ease;
   cursor: pointer;
@@ -528,7 +528,7 @@
   }
 
   .hiyaghar-current-price {
-    font-size: 14px;
+    font-size: 17px;
   }
 
   .hiyaghar-original-price {

@@ -952,7 +952,7 @@
 
 @media (max-width: 768px) {
   .hiyaghar-product-detail-layout {
-    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   .hiyaghar-detail-hero-grid {

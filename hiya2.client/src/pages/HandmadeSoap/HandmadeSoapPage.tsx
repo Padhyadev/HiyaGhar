@@ -5,7 +5,7 @@ import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasFilterSort } from '../../components/mukhwas/MukhwasFilterSort/MukhwasFilterSort';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
 import { MukhwasTrustSection } from '../../components/mukhwas/MukhwasTrustSection/MukhwasTrustSection';
-import { MukhwasCTASection } from '../../components/mukhwas/MukhwasCTASection/MukhwasCTASection';
+
 import { ExploreCategoriesSection } from '../../components/common/ExploreCategoriesSection/ExploreCategoriesSection';
 import { PremiumSidebar } from '../../components/common/PremiumSidebar/PremiumSidebar';
 import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/CategoriesMobileTrigger';
@@ -73,8 +73,8 @@ function mapApiToSoap(p: ApiProduct): SoapProduct {
   const defaultVariant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
   const weightOpts = p.variants?.map((v) => formatVariantLabel(v.variantName)) || [];
   const currentPrice = defaultVariant ? defaultVariant.price : p.basePrice;
-  const origPrice = defaultVariant?.originalPrice || p.discountPrice || currentPrice;
-  const discountPercentage = origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 0;
+  const origPrice = defaultVariant?.originalPrice || (p.basePrice > currentPrice ? p.basePrice : Math.round(currentPrice * 1.25));
+  const discountPercentage = origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 20;
 
   return {
     id: p.id.toString(),
@@ -284,18 +284,16 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
             ]}
           />
           <ExploreCategoriesSection />
-          <MukhwasCTASection
-            badge="Pure Ayurvedic Bathing"
-            heading="Explore Natural Handmade Soaps"
-            subtext="Handcrafted cold-process bathing bars enriched with natural plant extracts, herbal goodness, and restorative essential oils."
-            buttonText="Explore Soaps"
-            mainImage="/image/Banner_image/Soap.webp"
-            onShopNowClick={() => {
-              if (productGridRef.current) {
-                productGridRef.current.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-          />
+
+
+
+
+
+
+
+
+
+
         </div>
       </main>
 

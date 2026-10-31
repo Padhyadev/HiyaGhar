@@ -95,7 +95,8 @@ export const ContactUsPage: React.FC = () => {
     }
 
     // Google reCAPTCHA verification check
-    if (!recaptchaToken) {
+    const isRecaptchaAvailable = typeof window !== 'undefined' && !!(window as any).grecaptcha;
+    if (isRecaptchaAvailable && !recaptchaToken) {
       setErrors({ captcha: 'Please verify that you are not a robot.' });
       return;
     }
@@ -157,18 +158,7 @@ export const ContactUsPage: React.FC = () => {
 
             <div className="hiyaghar-contact-hero-container">
               <ScrollReveal variant="fade-up">
-                {/* Breadcrumbs */}
-                <nav className="hiyaghar-contact-banner-breadcrumb" aria-label="Breadcrumb">
-                  <ol className="hiyaghar-contact-breadcrumb-list">
-                    <li>
-                      <a href="#/" onClick={(e) => { e.preventDefault(); navigateTo('/'); }}>
-                        Home
-                      </a>
-                    </li>
-                    <li className="sep">/</li>
-                    <li className="current">Contact Us</li>
-                  </ol>
-                </nav>
+                
 
                 <span className="hiyaghar-contact-eyebrow">GET IN TOUCH & CONNECT</span>
                 <h1 className="hiyaghar-contact-hero-title">We’d Love To Hear From You</h1>

@@ -5,7 +5,7 @@ import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasFilterSort } from '../../components/mukhwas/MukhwasFilterSort/MukhwasFilterSort';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
 import { MukhwasTrustSection } from '../../components/mukhwas/MukhwasTrustSection/MukhwasTrustSection';
-import { MukhwasCTASection } from '../../components/mukhwas/MukhwasCTASection/MukhwasCTASection';
+
 import { ExploreCategoriesSection } from '../../components/common/ExploreCategoriesSection/ExploreCategoriesSection';
 import { PremiumSidebar } from '../../components/common/PremiumSidebar/PremiumSidebar';
 import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/CategoriesMobileTrigger';
@@ -82,8 +82,8 @@ function mapApiToHairOil(p: ApiProduct): HairOilProduct {
   const defaultVariant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
   const weightOpts = p.variants?.map((v) => formatVariantLabel(v.variantName)) || [];
   const currentPrice = defaultVariant ? defaultVariant.price : p.basePrice;
-  const origPrice = defaultVariant?.originalPrice || p.discountPrice || currentPrice;
-  const discountPercentage = origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 0;
+  const origPrice = defaultVariant?.originalPrice || (p.basePrice > currentPrice ? p.basePrice : Math.round(currentPrice * 1.25));
+  const discountPercentage = origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 20;
 
   return {
     id: p.id.toString(),
@@ -186,9 +186,9 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
         <div className="hiyaghar-hair-oil-listing-view animate-fade-in">
           <MukhwasHero
             onNavigateHome={onNavigateHome}
-            breadcrumbCurrent="Hair Oil"
             title="Hair Oil"
             bgImage="/image/Banner_image/Hair_Oil.webp"
+            bgPosition="right 60%"
           />
 
           <MukhwasFilterSort
@@ -293,18 +293,16 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
             ]}
           />
           <ExploreCategoriesSection />
-          <MukhwasCTASection
-            badge="Ayurvedic Scalp & Hair Therapy"
-            heading="Discover Pure Herbal Hair Oil"
-            subtext="Handcrafted with time-honored Ayurvedic botanical infusions to nourish your scalp, strengthen hair roots, and promote natural shine."
-            buttonText="Explore Hair Oil"
-            mainImage="/image/Banner_image/Hair_Oil.webp"
-            onShopNowClick={() => {
-              if (productGridRef.current) {
-                productGridRef.current.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-          />
+
+
+
+
+
+
+
+
+
+
         </div>
       </main>
 

@@ -941,9 +941,16 @@ export const Header: React.FC = () => {
                 <input
                   ref={searchInputRef}
                   type="text"
+                  aria-label="Search all products by name or category"
                   placeholder="Search mukhwas, tea masala, soap, hair oil..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Escape') {
+                      e.preventDefault();
+                      setIsSearchOpen(false);
+                    }
+                  }}
                   className="hiyaghar-search-input-field"
                 />
               </div>

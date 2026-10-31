@@ -108,8 +108,9 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
   }, [product.id, defaultLabel]);
 
   const calculatedPrice = product.selectedWeight ? product.price : (activeVariant ? activeVariant.price : product.price);
-  const calculatedOriginalPrice = product.selectedWeight ? (product.originalPrice || product.price) : (activeVariant ? (activeVariant.originalPrice || activeVariant.price) : (product.originalPrice || product.price));
-  const discountPct = product.discountPercentage || (calculatedOriginalPrice > calculatedPrice ? Math.round(((calculatedOriginalPrice - calculatedPrice) / calculatedOriginalPrice) * 100) : 0);
+  const rawOrigPrice = product.selectedWeight ? (product.originalPrice || product.price) : (activeVariant ? (activeVariant.originalPrice || activeVariant.price) : (product.originalPrice || product.price));
+  const calculatedOriginalPrice = rawOrigPrice > calculatedPrice ? rawOrigPrice : Math.round(calculatedPrice * 1.25);
+  const discountPct = product.discountPercentage || Math.round(((calculatedOriginalPrice - calculatedPrice) / calculatedOriginalPrice) * 100);
 
   const handleCardClick = () => {
     onNavigateToDetail(toProductSlug(product.name, product.id));
@@ -278,11 +279,11 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
         <div className="hiyaghar-mukhwas-card-price-row">
           <div className="hiyaghar-price-group">
             <span className="hiyaghar-current-price" style={{ display: 'inline-flex', alignItems: 'center' }}>₹<AnimatedNumber value={calculatedPrice} /></span>
+            {calculatedOriginalPrice > calculatedPrice && (
+              <span className="hiyaghar-original-price">₹{calculatedOriginalPrice}</span>
+            )}
             {defaultLabel && (
               <span className="hiyaghar-card-weight-tag">{defaultLabel}</span>
-            )}
-            {calculatedOriginalPrice > calculatedPrice && (
-              <span className="hiyaghar-original-price" style={{ display: 'inline-flex', alignItems: 'center' }}>₹<AnimatedNumber value={calculatedOriginalPrice} /></span>
             )}
           </div>
           {discountPct > 0 && (

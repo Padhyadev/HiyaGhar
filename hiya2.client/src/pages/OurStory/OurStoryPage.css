@@ -9,7 +9,7 @@
   background-color: var(--cream, #FBF6EC);
   color: var(--navy, #14233C);
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 .hg-story-main {

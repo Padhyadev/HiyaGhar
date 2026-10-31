@@ -19,7 +19,7 @@ export const MukhwasCTASection: React.FC<MukhwasCTASectionProps> = ({
   subtext = 'From sweet Gulkand rose paan to fiery spiced kharek & organic jamun drops — bring home authentic Gujarati digestive taste and health in every bite.',
   buttonText = 'Shop All Mukhwas',
   mainImage = '/image/Ambodiya.webp',
-  subImage = '/image/Shahi_Kharek.webp',
+  subImage,
 }) => {
   return (
     <section className="hiyaghar-mukhwas-cta-section" aria-label="Explore Collection CTA">
@@ -49,7 +49,7 @@ export const MukhwasCTASection: React.FC<MukhwasCTASectionProps> = ({
           </ScrollReveal>
 
           <ScrollReveal variant="fade-left" delay={200} className="hiyaghar-cta-image-wrapper">
-            <div className="hiyaghar-cta-image-group">
+            <div className={`hiyaghar-cta-image-group ${!subImage ? 'is-single' : ''}`}>
               {/* Decorative spotlight behind images */}
               <div className="hiyaghar-cta-spotlight" />
               

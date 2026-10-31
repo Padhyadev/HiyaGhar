@@ -53,26 +53,7 @@ export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
             <div className="hiyaghar-legal-hero-banner-overlay" />
             <div className="hiyaghar-legal-hero-container">
               <ScrollReveal variant="fade-up">
-                {/* Breadcrumbs */}
-                <nav className="hiyaghar-legal-banner-breadcrumb" aria-label="Breadcrumb">
-                  <ol className="hiyaghar-legal-breadcrumb-list">
-                    <li>
-                      <a
-                        href="#/"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          navigateTo('/');
-                        }}
-                      >
-                        Home
-                      </a>
-                    </li>
-                    <li className="sep">/</li>
-                    <li className="current">Policies & Trust</li>
-                    <li className="sep">/</li>
-                    <li className="current-sub">{title}</li>
-                  </ol>
-                </nav>
+                
 
                 <span className="hiyaghar-legal-hero-eyebrow">POLICIES & LEGAL TRANSPARENCY</span>
                 <h1 className="hiyaghar-legal-hero-title">{title}</h1>

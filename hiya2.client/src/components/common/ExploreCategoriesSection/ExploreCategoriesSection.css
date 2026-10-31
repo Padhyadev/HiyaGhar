@@ -40,13 +40,13 @@
 
 .hiyaghar-explore-card {
   position: relative;
-  height: 360px;
+  height: 380px;
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
   transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-  background-color: #fff;
+  background-color: #f7f5f0;
   isolation: isolate;
 }
 
@@ -62,7 +62,7 @@
   width: 100%;
   height: 100%;
   background-size: cover;
-  background-position: center;
+  background-position: center 25%;
   transition: transform 0.8s ease;
   z-index: 1;
 }
@@ -77,13 +77,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to top, rgba(17, 34, 58, 0.9) 0%, rgba(17, 34, 58, 0.2) 60%, transparent 100%);
+  background: linear-gradient(to top, rgba(17, 34, 58, 0.92) 0%, rgba(17, 34, 58, 0.45) 30%, transparent 60%);
   z-index: 2;
   transition: background 0.5s ease;
 }
 
 .hiyaghar-explore-card:hover .hiyaghar-explore-card-overlay {
-  background: linear-gradient(to top, rgba(17, 34, 58, 0.95) 0%, rgba(17, 34, 58, 0.4) 60%, rgba(0,0,0,0.1) 100%);
+  background: linear-gradient(to top, rgba(17, 34, 58, 0.96) 0%, rgba(17, 34, 58, 0.6) 35%, transparent 65%);
 }
 
 .hiyaghar-explore-card-content {
@@ -103,60 +103,52 @@
   font-size: 24px;
   font-weight: 700;
   margin: 0 0 8px 0;
-  text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
 }
 
 .hiyaghar-explore-card-count {
-  color: var(--hiya-gold-text, #855F0F);
-  font-size: 14px;
-  font-weight: 600;
+  color: #F7D070;
+  font-size: 13px;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .hiyaghar-explore-card-arrow {
   position: absolute;
-  bottom: 32px;
   right: 24px;
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(4px);
+  bottom: 32px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  transition: all 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  transform: translateX(-10px);
-  opacity: 0;
+  color: #ffffff;
+  transition: all 0.4s ease;
 }
 
 .hiyaghar-explore-card:hover .hiyaghar-explore-card-arrow {
-  transform: translateX(0);
-  opacity: 1;
-  background: var(--hiya-gold, #CB992C);
-  border-color: var(--hiya-gold-text, #855F0F);
+  background-color: var(--hiya-gold, #C59A3F);
+  color: #ffffff;
+  transform: translateX(4px);
 }
 
-@media (max-width: 1199px) {
+@media (max-width: 1024px) {
   .hiyaghar-explore-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 640px) {
   .hiyaghar-explore-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
-  
+
   .hiyaghar-explore-card {
-    height: 280px;
-  }
-  
-  .hiyaghar-explore-card-arrow {
-    opacity: 1;
-    transform: translateX(0);
+    height: 320px;
   }
 }

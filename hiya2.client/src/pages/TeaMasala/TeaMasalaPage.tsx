@@ -5,7 +5,7 @@ import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasFilterSort } from '../../components/mukhwas/MukhwasFilterSort/MukhwasFilterSort';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
 import { MukhwasTrustSection } from '../../components/mukhwas/MukhwasTrustSection/MukhwasTrustSection';
-import { MukhwasCTASection } from '../../components/mukhwas/MukhwasCTASection/MukhwasCTASection';
+
 import { ExploreCategoriesSection } from '../../components/common/ExploreCategoriesSection/ExploreCategoriesSection';
 import { PremiumSidebar } from '../../components/common/PremiumSidebar/PremiumSidebar';
 import { CategoriesMobileTrigger } from '../../components/common/PremiumSidebar/CategoriesMobileTrigger';
@@ -73,8 +73,8 @@ function mapApiToTeaMasala(p: ApiProduct): TeaMasalaProduct {
   const defaultVariant = p.variants?.find((v) => v.isDefault) || p.variants?.[0];
   const weightOpts = p.variants?.map((v) => formatVariantLabel(v.variantName)) || [];
   const currentPrice = defaultVariant ? defaultVariant.price : p.basePrice;
-  const origPrice = defaultVariant?.originalPrice || p.discountPrice || currentPrice;
-  const discountPercentage = origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 0;
+  const origPrice = defaultVariant?.originalPrice || (p.basePrice > currentPrice ? p.basePrice : Math.round(currentPrice * 1.25));
+  const discountPercentage = origPrice > currentPrice ? Math.round(((origPrice - currentPrice) / origPrice) * 100) : 20;
 
   return {
     id: p.id.toString(),
@@ -179,9 +179,8 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
         <div className="hiyaghar-tea-masala-listing-view animate-fade-in">
           <MukhwasHero
             onNavigateHome={onNavigateHome}
-            breadcrumbCurrent="Tea Masala"
             title="Tea Masala"
-            bgImage="/image/Banner_image/Tea-Masala.webp"
+            bgImage="/image/Banner_image/Tea-Masala3.webp"
           />
 
           <MukhwasFilterSort
@@ -286,18 +285,16 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
             ]}
           />
           <ExploreCategoriesSection />
-          <MukhwasCTASection
-            badge="Royal Chai Experience"
-            heading="Discover Authentic Tea Masala"
-            subtext="Handcrafted with premium warming spices to bring an unforgettable aroma and comforting warmth to your daily chai."
-            buttonText="Explore Tea Masala"
-            mainImage="/image/TEA MASALA.webp"
-            onShopNowClick={() => {
-              if (productGridRef.current) {
-                productGridRef.current.scrollIntoView({ behavior: 'smooth' });
-              }
-            }}
-          />
+
+
+
+
+
+
+
+
+
+
         </div>
       </main>
 

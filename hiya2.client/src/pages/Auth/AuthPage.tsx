@@ -358,7 +358,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
       <div className="hiyaghar-auth-image-panel">
         <div
           className="hiyaghar-auth-image-bg"
-          style={{ backgroundImage: `url('/image/hiya_mukhwas_auth_lifestyle.webp')` }}
+          style={{ backgroundImage: `url('${mode === 'signup' ? '/image/auth_signup_lifestyle.webp' : '/image/auth_login_showcase.webp'}')` }}
         />
         <div className="hiyaghar-auth-image-overlay-gradient" />
 
@@ -374,9 +374,13 @@ export const AuthPage: React.FC<AuthPageProps> = ({
           <div className="hiyaghar-image-logo-placeholder" />
 
           <div className="hiyaghar-image-text-block">
-            <h2 className="hiyaghar-image-headline">A little tradition in every bite.</h2>
+            <h2 className="hiyaghar-image-headline">
+              {mode === 'signup' ? 'Begin Your Natural Living Journey' : 'A little tradition in every bite.'}
+            </h2>
             <p className="hiyaghar-image-subline">
-              Authentic flavours. Thoughtfully crafted. Made for every day.
+              {mode === 'signup'
+                ? 'Pure, handcrafted & made for everyday wellness.'
+                : 'Authentic flavours. Thoughtfully crafted across our entire range.'}
             </p>
           </div>
         </div>

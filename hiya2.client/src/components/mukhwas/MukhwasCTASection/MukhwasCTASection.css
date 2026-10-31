@@ -208,6 +208,11 @@
   position: relative;
 }
 
+.hiyaghar-cta-image-group.is-single .hiyaghar-cta-img-main {
+  width: clamp(200px, 24vw, 300px);
+  max-height: 290px;
+}
+
 .hiyaghar-cta-img-sub {
   position: absolute;
   bottom: 0;
@@ -242,4 +247,3 @@
     margin-top: var(--space-8);
   }
 }
-
