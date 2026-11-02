@@ -52,24 +52,17 @@ export default defineConfig({
     build: {
         rollupOptions: {
             output: {
+                // Only libraries every page loads get their own long-cached chunk. Libraries used
+                // on a few pages (gsap on Home, jsPDF/html2canvas for invoices) are left to the
+                // bundler so they load with those pages: a manual chunk for them also picks up
+                // shared helpers the main script imports, which made every page download the
+                // whole PDF library.
                 manualChunks(id) {
                     if (id.includes('node_modules/react/') || id.includes('node_modules/react-dom/')) {
                         return 'vendor-react';
                     }
-                    if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/gsap/')) {
+                    if (id.includes('node_modules/framer-motion/') || id.includes('node_modules/motion-')) {
                         return 'vendor-animation';
-                    }
-                    if (id.includes('node_modules/jspdf') || id.includes('node_modules/jspdf-autotable')) {
-                        return 'vendor-pdf';
-                    }
-                    if (id.includes('node_modules/html2canvas')) {
-                        return 'vendor-html2canvas';
-                    }
-                    if (id.includes('node_modules/lottie-react') || id.includes('node_modules/lottie-web')) {
-                        return 'vendor-lottie';
-                    }
-                    if (id.includes('node_modules/@xenova')) {
-                        return 'vendor-ai';
                     }
                 }
             }

@@ -5,9 +5,6 @@
  */
 
 const CRITICAL_IMAGE_URLS = [
-  '/image/mukhwas/tea%20masala%20banner.webp',
-  '/image/mukhwas/hair%20oil%20banner.webp',
-  '/image/mukhwas/soap%20banner.webp',
   '/image/gifting_hero_banner.webp',
   '/image/hiya_ghar_story_banner.webp',
   '/image/HerosectionImage1.webp',
@@ -18,34 +15,42 @@ const CRITICAL_IMAGE_URLS = [
   '/image/lifestyle_kitchen.webp',
   '/image/jamunbottole_clean.webp',
   '/image/Jamun_Pop.webp',
-  '/image/ImageforMukhwash/Amla%20Madhur.webp',
-  '/image/ImageforMukhwash/Choco%20Masti.webp',
-  '/image/ImageforMukhwash/Digest%20Ease.webp',
-  '/image/ImageforMukhwash/Dil%20Bahaar.webp',
-  '/image/ImageforMukhwash/Dil%20RAJA.webp',
-  '/image/ImageforMukhwash/Hing%20Hajma.webp',
-  '/image/ImageforMukhwash/Jamun%20Pop.webp',
-  '/image/ImageforMukhwash/Kalkatti-Pan%201.webp',
-  '/image/ImageforMukhwash/Mango%20Slice%201.webp',
-  '/image/ImageforMukhwash/Paan%20Pop.webp',
-  '/image/ImageforMukhwash/Seed%20Mix.webp',
-  '/image/ImageforMukhwash/Shahi%20Kharek.webp',
-  '/image/ImageforMukhwash/Shahi%20Pan.webp',
-  '/image/ImageforMukhwash/Spice%20Ambodia.webp',
-  '/image/ImageforMukhwash/Til%20Crunch.webp',
 ];
 
-export const preloadCriticalImages = (): Promise<void[]> => {
-  if (typeof window === 'undefined') return Promise.resolve([]);
+const PARALLEL_DOWNLOADS = 3;
 
-  const promises = CRITICAL_IMAGE_URLS.map((url) => {
-    return new Promise<void>((resolve) => {
-      const img = new Image();
-      img.onload = () => resolve();
-      img.onerror = () => resolve(); // Resolve on error so failing one doesn't block
-      img.src = url;
-    });
+const loadImage = (url: string) =>
+  new Promise<void>((resolve) => {
+    const img = new Image();
+    img.fetchPriority = 'low';
+    img.onload = () => resolve();
+    img.onerror = () => resolve(); // Resolve on error so failing one doesn't block
+    img.src = url;
   });
 
-  return Promise.all(promises);
+// Shoppers on data saver or a slow connection only download the images they actually see.
+const isSlowConnection = () => {
+  const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  return !!connection && (connection.saveData === true || /(^|-)(2g|3g)$/.test(connection.effectiveType || ''));
+};
+
+// Warms the cache for other pages without slowing down the page being opened: starts only once
+// that page has fully loaded and the browser is idle, then fetches a few images at a time.
+export const preloadCriticalImages = (): void => {
+  if (typeof window === 'undefined' || isSlowConnection()) return;
+
+  const run = async () => {
+    const queue = [...CRITICAL_IMAGE_URLS];
+    const worker = async () => {
+      for (let url = queue.shift(); url; url = queue.shift()) await loadImage(url);
+    };
+    await Promise.all(Array.from({ length: PARALLEL_DOWNLOADS }, worker));
+  };
+  const whenIdle = () => {
+    if ('requestIdleCallback' in window) window.requestIdleCallback(() => void run(), { timeout: 4000 });
+    else setTimeout(() => void run(), 1500);
+  };
+
+  if (document.readyState === 'complete') whenIdle();
+  else window.addEventListener('load', whenIdle, { once: true });
 };

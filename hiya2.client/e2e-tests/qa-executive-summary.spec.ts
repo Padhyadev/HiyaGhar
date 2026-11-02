@@ -59,21 +59,6 @@ test.describe('HIYAGHAR - Orders & Coupons Complete QA Journey Audit', () => {
 
     // [OC-03]: Verify 19 static images/banners return HTTP 200 (no 404s)
     const assetList = [
-      '/image/ImageforMukhwash/Amla Madhur.webp',
-      '/image/ImageforMukhwash/Choco Masti.webp',
-      '/image/ImageforMukhwash/Digest Ease.webp',
-      '/image/ImageforMukhwash/Dil Bahaar.webp',
-      '/image/ImageforMukhwash/Dil RAJA.webp',
-      '/image/ImageforMukhwash/Hing Hajma.webp',
-      '/image/ImageforMukhwash/Jamun Pop.webp',
-      '/image/ImageforMukhwash/Kalkatti-Pan 1.webp',
-      '/image/ImageforMukhwash/Mango Slice 1.webp',
-      '/image/ImageforMukhwash/Paan Pop.webp',
-      '/image/ImageforMukhwash/Seed Mix.webp',
-      '/image/ImageforMukhwash/Shahi Kharek.webp',
-      '/image/ImageforMukhwash/Shahi Pan.webp',
-      '/image/ImageforMukhwash/Spice Ambodia.webp',
-      '/image/ImageforMukhwash/Til Crunch.webp',
       '/image/mukhwas/tea masala banner.webp',
       '/image/mukhwas/hair oil banner.webp',
       '/image/mukhwas/soap banner.webp',

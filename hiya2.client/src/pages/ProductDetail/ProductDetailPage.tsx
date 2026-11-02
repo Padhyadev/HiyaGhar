@@ -254,8 +254,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       } else if (staticMatch) {
         setProductData(staticMatch);
         setProductNotFound(false);
-        const defaultImg = staticMatch.image || '/image/ImageforMukhwash/Kalkatti-Pan 1.webp';
-        const secondImg = staticMatch.secondaryImage || '/image/ImageforMukhwash/Shahi Pan.webp';
+        const defaultImg = staticMatch.image || NO_IMAGE;
+        const secondImg = staticMatch.secondaryImage || defaultImg;
         const imgs = defaultImg === secondImg ? [defaultImg] : [defaultImg, secondImg];
         setSelectedImage(defaultImg);
         setGalleryImages(imgs);

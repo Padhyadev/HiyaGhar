@@ -132,7 +132,7 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
         <MukhwasHero
           onNavigateHome={onNavigateHome}
           totalProductsCount={productsList.length}
-          bgImage="/image/Banner_image/Mukhwas_Banner.png"
+          bgImage="/image/Banner_image/Mukhwas_Banner.webp"
         />
 
         {/* 2. Filter & Sort Bar */}
