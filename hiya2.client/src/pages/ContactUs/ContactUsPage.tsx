@@ -84,6 +84,34 @@ export const ContactUsPage: React.FC = () => {
     }
   };
 
+  // Same rules as ContactQueryController.Submit, so every problem shows at once before sending.
+  const validateForm = (): Record<string, string> => {
+    const found: Record<string, string> = {};
+    const name = formData.fullName.trim();
+    const email = formData.email.trim();
+    const phone = formData.phone.trim();
+    const message = formData.message.trim();
+
+    if (!name) found.fullName = 'Please enter your full name.';
+    else if (name.length < 2) found.fullName = 'Please enter at least 2 characters for your full name.';
+    else if (name.length > 100) found.fullName = 'Please enter a full name under 100 characters.';
+
+    if (!email) found.email = 'Please enter your email address.';
+    else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) found.email = 'Please enter a valid email address (e.g. name@domain.com).';
+
+    if (phone && (phone.length < 10 || phone.length > 15)) found.phone = 'Please enter a valid 10-digit phone or WhatsApp number.';
+
+    if (!message) found.message = 'Please enter your message or query.';
+    else if (message.length < 5) found.message = 'Please enter at least 5 characters in your message.';
+    else if (message.length > 2000) found.message = 'Please keep your message under 2000 characters.';
+
+    // Google reCAPTCHA verification check
+    const isRecaptchaAvailable = typeof window !== 'undefined' && !!(window as any).grecaptcha;
+    if (isRecaptchaAvailable && !recaptchaToken) found.captcha = 'Please verify that you are not a robot.';
+
+    return found;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
@@ -93,10 +121,16 @@ export const ContactUsPage: React.FC = () => {
       return;
     }
 
-    // Google reCAPTCHA verification check
-    const isRecaptchaAvailable = typeof window !== 'undefined' && !!(window as any).grecaptcha;
-    if (isRecaptchaAvailable && !recaptchaToken) {
-      setErrors({ captcha: 'Please verify that you are not a robot.' });
+    const validationErrors = validateForm();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      // Bring the first problem field into view
+      const firstField = Object.keys(validationErrors)[0];
+      const el = document.querySelector<HTMLElement>(`.hiyaghar-contact-form [name="${firstField}"]`);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        el.focus({ preventScroll: true });
+      }
       return;
     }
 
@@ -157,13 +191,7 @@ export const ContactUsPage: React.FC = () => {
 
             <div className="hiyaghar-contact-hero-container">
               <ScrollReveal variant="fade-up">
-                
-
-                <span className="hiyaghar-contact-eyebrow">GET IN TOUCH & CONNECT</span>
-                <h1 className="hiyaghar-contact-hero-title">We’d Love To Hear From You</h1>
-                <p className="hiyaghar-contact-hero-subtitle">
-                  Have questions about our handcrafted natural mukhwas, custom combo boxes, corporate gift hampers, or your delivery? We’re always here to assist you.
-                </p>
+                <h1 className="hiyaghar-contact-hero-title">Contact Us</h1>
               </ScrollReveal>
             </div>
           </div>

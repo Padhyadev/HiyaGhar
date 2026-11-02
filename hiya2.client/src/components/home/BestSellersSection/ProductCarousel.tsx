@@ -4,9 +4,63 @@ import type { CategoryItem } from './CategoryCard';
 import { CategoryService, type ApiCategory } from '../../../services/categoryService';
 import { ProductService, type Product as ApiProduct } from '../../../services/productService';
 import { HomePageService } from '../../../services/homePageService';
-import { formatVariantLabel, getVariantImages, NO_IMAGE } from '../../../utils/productFormat';
+import { MukhwasProductCard } from '../../mukhwas/MukhwasProductCard/MukhwasProductCard';
+import type { MukhwasProduct } from '../../../types/mukhwas';
+import { CartService } from '../../../cart';
+import { navigateTo } from '../../../utils/navigation';
+import { showToast } from '../../../utils/alertService';
+import { formatVariantLabel, getVariantImages, NO_IMAGE, productPath } from '../../../utils/productFormat';
 
 const standardIngredients: { src: string; alt: string; className: string }[] = [];
+
+type CarouselItem = CategoryItem & { card?: MukhwasProduct };
+
+/** A bestseller as the same listing card the combo and category pages use, fixed to the admin-picked variant. */
+function toProductItem(prod: ApiProduct, variant: NonNullable<ApiProduct['variants']>[number] | undefined, idx: number): CarouselItem {
+  const variantLabel = variant ? formatVariantLabel(variant.variantName) : '';
+  const price = variant?.price ?? (prod.discountPrice || prod.basePrice);
+  const originalPrice = Math.max(variant?.originalPrice || 0, prod.basePrice || 0, price);
+  const images = getVariantImages(prod, variant);
+
+  return {
+    id: `product/${prod.id}`,
+    title: prod.productName,
+    image: images[0] || NO_IMAGE,
+    bgColor: idx % 2 === 0 ? '#F7F3E9' : '#F0F7F3',
+    accentColor: idx % 2 === 0 ? '#CB992C' : '#2D6A4F',
+    floatingIngredients: standardIngredients,
+    card: {
+      id: prod.id.toString(),
+      name: prod.productName,
+      category: 'special',
+      categoryLabel: '',
+      price,
+      originalPrice,
+      discountPercentage: originalPrice > price ? Math.round(((originalPrice - price) / originalPrice) * 100) : 0,
+      rating: prod.rating || 0,
+      reviewsCount: prod.reviewCount || 0,
+      image: images[0] || NO_IMAGE,
+      secondaryImage: images[1],
+      shortDescription: prod.shortDescription || '',
+      longDescription: prod.shortDescription || '',
+      weightOptions: variantLabel ? [variantLabel] : [],
+      selectedWeight: variantLabel || undefined,
+      variants: prod.variants || [],
+      isBestSeller: prod.isFeatured,
+      nutritionalInfo: { energy: '', carbs: '', protein: '', fat: '', fiber: '' },
+    },
+  };
+}
+
+const toCartItem = (product: MukhwasProduct, weight: string, price?: number, originalPrice?: number) => ({
+  productId: product.id,
+  name: product.name,
+  image: product.image,
+  price: typeof price === 'number' ? price : product.price,
+  originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
+  weight,
+  quantity: 1,
+});
 
 interface ProductCarouselProps {
   componentKey?: 'Category' | 'Bestsellers' | string;
@@ -27,7 +81,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
   const trackRef = useRef<HTMLDivElement>(null);
   const isHoveredRef = useRef<boolean>(false);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
-  const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
+  const [categoriesList, setCategoriesList] = useState<CarouselItem[]>([]);
 
   useEffect(() => {
     let isMounted = true;
@@ -73,7 +127,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
 
         if (item && item.refId) {
           const pairs = HomePageService.parseProductVariantRefIds(item.refId);
-          const mappedItems: CategoryItem[] = [];
+          const mappedItems: CarouselItem[] = [];
 
           pairs.forEach((pair, idx) => {
             const prod = allProducts.find((p) => p.id === pair.productId);
@@ -81,29 +135,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
               const matchedVar = pair.variantId
                 ? prod.variants?.find((v) => v.id === pair.variantId) || prod.variants?.[0]
                 : prod.variants?.[0];
-              const variantLabel = matchedVar ? formatVariantLabel(matchedVar.variantName) : '';
-              const priceVal = matchedVar?.price ?? prod.basePrice;
-              const priceTag = variantLabel ? `₹${priceVal} • ${variantLabel}` : `₹${priceVal}`;
-              const desc = prod.shortDescription || (prod as any).description || '';
-              const rawOrig = matchedVar?.originalPrice && matchedVar.originalPrice > priceVal
-                ? matchedVar.originalPrice
-                : (prod.discountPrice && prod.basePrice > prod.discountPrice ? prod.basePrice : Math.round(priceVal * 1.25));
-
-              mappedItems.push({
-                id: `product/${prod.id}`,
-                productId: prod.id.toString(),
-                price: priceVal,
-                originalPrice: rawOrig,
-                weight: variantLabel,
-                isProduct: true,
-                title: prod.productName,
-                tagline: priceTag,
-                description: desc,
-                image: getVariantImages(prod, matchedVar)[0] || NO_IMAGE,
-                bgColor: idx % 2 === 0 ? '#F7F3E9' : '#F0F7F3',
-                accentColor: idx % 2 === 0 ? '#CB992C' : '#2D6A4F',
-                floatingIngredients: standardIngredients,
-              });
+              mappedItems.push(toProductItem(prod, matchedVar, idx));
             }
           });
 
@@ -120,32 +152,9 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
           ? allProducts.filter((p) => p.isFeatured)
           : allProducts.slice(0, 8);
 
-        const mappedFallback: CategoryItem[] = bestSellerProducts.map((prod, idx) => {
-          const matchedVar = prod.variants?.[0];
-          const variantLabel = matchedVar ? formatVariantLabel(matchedVar.variantName) : '';
-          const priceVal = matchedVar?.price ?? prod.basePrice;
-          const priceTag = variantLabel ? `₹${priceVal} • ${variantLabel}` : `₹${priceVal}`;
-          const desc = prod.shortDescription || (prod as any).description || '';
-          const rawOrig = matchedVar?.originalPrice && matchedVar.originalPrice > priceVal
-            ? matchedVar.originalPrice
-            : (prod.discountPrice && prod.basePrice > prod.discountPrice ? prod.basePrice : Math.round(priceVal * 1.25));
-
-          return {
-            id: `product/${prod.id}`,
-            productId: prod.id.toString(),
-            price: priceVal,
-            originalPrice: rawOrig,
-            weight: variantLabel,
-            isProduct: true,
-            title: prod.productName,
-            tagline: priceTag,
-            description: desc,
-            image: getVariantImages(prod, matchedVar)[0] || NO_IMAGE,
-            bgColor: idx % 2 === 0 ? '#F7F3E9' : '#F0F7F3',
-            accentColor: idx % 2 === 0 ? '#CB992C' : '#2D6A4F',
-            floatingIngredients: standardIngredients,
-          };
-        });
+        const mappedFallback: CarouselItem[] = bestSellerProducts.map((prod, idx) =>
+          toProductItem(prod, prod.variants?.[0], idx)
+        );
 
         setCategoriesList(mappedFallback);
       }
@@ -285,19 +294,33 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
         role="region"
         aria-label="Product Showcase Carousel"
       >
-        {infiniteCategoriesData.map((category) => (
+        {infiniteCategoriesData.map((category, i) => (
           <div
             key={category.uniqueKey}
             className="hiyaghar-carousel-item"
             aria-hidden={category._clone ? 'true' : undefined}
             inert={category._clone ? true : undefined}
           >
-            <CategoryCard
-              category={category}
-              isActive={!category._clone && activeCategoryId === category.id}
-              onActivate={() => !category._clone && setActiveCategoryId(category.id)}
-              onDeactivate={() => setActiveCategoryId(null)}
-            />
+            {category.card ? (
+              <MukhwasProductCard
+                product={category.card}
+                index={i % categoriesList.length}
+                onNavigateToDetail={() => navigateTo(productPath(category.card!.name, category.card!.id))}
+                onAddToCart={(prod, weight, _qty, price, origPrice) => {
+                  if (CartService.addItem(toCartItem(prod, weight, price, origPrice))) showToast(`Added ${prod.name} to your cart!`);
+                }}
+                onBuyNow={(prod, weight, price, origPrice) => {
+                  CartService.buyNow(toCartItem(prod, weight, price, origPrice));
+                }}
+              />
+            ) : (
+              <CategoryCard
+                category={category}
+                isActive={!category._clone && activeCategoryId === category.id}
+                onActivate={() => !category._clone && setActiveCategoryId(category.id)}
+                onDeactivate={() => setActiveCategoryId(null)}
+              />
+            )}
           </div>
         ))}
       </div>

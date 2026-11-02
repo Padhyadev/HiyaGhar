@@ -79,7 +79,7 @@ export const GiftingHampersSection: React.FC = () => {
                     <p className="hiyaghar-gifting-card-desc">{occasion.description || 'Curated gift hampers for this occasion.'}</p>
                     <div className="hiyaghar-gifting-card-cta">
                       <span className="hiyaghar-gifting-cta-text" style={{ color: accentColor }}>
-                        Gift Hampers →
+                        Gift Hampers
                       </span>
                       <svg
                         className="hiyaghar-gifting-cta-arrow"

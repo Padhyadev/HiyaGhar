@@ -26,9 +26,9 @@
 .hiyaghar-contact-hero-banner-card {
   position: relative;
   width: 100%;
-  min-height: 440px;
+  min-height: 300px;
   padding-top: 100px;
-  padding-bottom: 50px;
+  padding-bottom: 40px;
   background-image: url('/image/contact_story_warm_banner.webp');
   background-size: cover;
   background-position: center 30%;
@@ -116,7 +116,7 @@
   font-weight: 700;
   line-height: 1.15;
   color: #ffffff;
-  margin: 0 0 16px 0;
+  margin: 0;
   letter-spacing: -0.02em;
   text-shadow: 0 2px 14px rgba(0, 0, 0, 0.4);
 }
@@ -517,7 +517,7 @@
   }
 
   .hiyaghar-contact-hero-banner-card {
-    min-height: 350px;
+    min-height: 240px;
     padding-top: 80px;
     padding-bottom: 36px;
     border-radius: 0 0 24px 24px;

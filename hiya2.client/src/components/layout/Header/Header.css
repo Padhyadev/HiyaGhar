@@ -622,6 +622,41 @@
   width: 100%;
 }
 
+
+.hiyaghar-mobile-direct-logout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 16px;
+  margin-top: 14px;
+  background-color: #FDEDEC;
+  color: #C0392B;
+  border: 1.5px solid rgba(192, 57, 43, 0.25);
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 200ms ease;
+  box-sizing: border-box;
+}
+
+.hiyaghar-mobile-direct-logout:hover,
+.hiyaghar-mobile-direct-logout:active {
+  background-color: #FADBD8;
+  color: #962D22;
+  border-color: rgba(192, 57, 43, 0.45);
+  transform: translateY(-1px);
+}
+
+.hiyaghar-mobile-direct-logout svg {
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
 .hiyaghar-mobile-sublink.btn-style.logout {
   color: #C0392B;
   background-color: #FDEDEC;
@@ -1055,20 +1090,21 @@
   }
 
   .hiyaghar-mobile-hamburger-btn {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
-    min-height: 36px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
   }
 
   .hiyaghar-mobile-hamburger-btn svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
   }
 
+  /* The logo is about 8:3, so it needs ~81px of width to reach the full 30px height */
   .hiyaghar-logo-img {
-    max-width: 68px;
-    height: 26px;
+    max-width: 100px;
+    height: 30px;
   }
 
   .hiyaghar-header-right {
@@ -1079,18 +1115,18 @@
   .hiyaghar-account-icon-btn,
   .hiyaghar-wishlist-icon-btn,
   .hiyaghar-cart-cyan-pill {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    min-height: 34px;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
   }
 
   .hiyaghar-search-icon-btn svg,
   .hiyaghar-account-icon-btn svg,
   .hiyaghar-wishlist-icon-btn svg,
   .hiyaghar-cart-cyan-pill svg {
-    width: 16px;
-    height: 16px;
+    width: 20px;
+    height: 20px;
   }
 
   .hiyaghar-wishlist-badge-count,

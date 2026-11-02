@@ -88,6 +88,9 @@ export default defineConfig({
             }
         },
         port: parseInt(env.DEV_SERVER_PORT || '59978'),
+        // Listen on 127.0.0.1 too and accept VS Code port-forwarding (dev tunnel) hosts
+        host: true,
+        allowedHosts: true,
         https: {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
