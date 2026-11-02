@@ -180,6 +180,7 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
             breadcrumbCurrent="Handmade Soap"
             title="Handmade Soap"
             bgImage="/image/Banner_image/Soap.webp"
+            textShade="light"
           />
 
           <MukhwasFilterSort

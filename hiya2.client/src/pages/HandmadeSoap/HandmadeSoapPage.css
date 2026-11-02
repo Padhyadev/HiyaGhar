@@ -25,15 +25,16 @@
   text-shadow: none !important;
 }
 
-/* Mobile: Position title cleanly above the products in the sunlit wall space */
+/* Mobile: the soap boxes fill the middle of the banner, so the title sits in the
+   bottom-left corner below them, where it covers only leaves and the marble */
 @media (max-width: 768px) {
   .hiyaghar-handmade-soap-page-layout .hiyaghar-mukhwas-banner-card {
-    align-items: flex-start;
-    padding-top: 82px;
+    align-items: flex-end;
+    padding-top: 74px;
   }
 
   .hiyaghar-handmade-soap-page-layout .hiyaghar-mukhwas-banner-content {
-    padding: 0 16px;
+    padding: 0 16px 14px;
   }
 
   .hiyaghar-handmade-soap-page-layout .hiyaghar-mukhwas-banner-title {

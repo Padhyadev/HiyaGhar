@@ -116,6 +116,13 @@
 /* Category Card Styling */
 .hiyaghar-category-card {
   height: 420px;
+}
+
+.hiyaghar-category-card.is-product-card {
+  height: auto;
+  min-height: 435px;
+  justify-content: flex-start;
+  padding: 20px 14px 18px 14px;
   width: 100%;
   max-width: 100%;
   box-sizing: border-box;
@@ -396,23 +403,134 @@
   transition: background-color 300ms ease, transform 300ms ease, box-shadow 300ms ease;
 }
 
+/* Product Description */
+.hiyaghar-category-card-desc {
+  font-size: 12px;
+  color: #554D40;
+  margin: 3px 0 6px 0;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  width: 100%;
+}
+
+/* Product Price Row (Current + Strikethrough Original + Weight + Discount Pill) */
+.hiyaghar-category-price-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 4px 0 10px 0;
+  width: 100%;
+}
+
+.hiyaghar-category-price-row .hiyaghar-price-group {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hiyaghar-category-price-row .hiyaghar-current-price {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-category-price-row .hiyaghar-original-price {
+  font-size: 13px;
+  color: #98A2B3;
+  text-decoration: line-through;
+}
+
+.hiyaghar-category-price-row .hiyaghar-card-weight-tag {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--hiya-gold-text, #855F0F);
+  background-color: var(--hiya-soft-cream, #FFFDF0);
+  border: 1px solid rgba(203, 153, 44, 0.4);
+  padding: 1px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.hiyaghar-category-price-row .hiyaghar-discount-pill {
+  font-size: 11px;
+  font-weight: 700;
+  color: #b42318;
+  background-color: #fef3f2;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+/* Two Action Buttons: Add to Cart & Buy Now */
+.hiyaghar-category-card-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+  margin-top: auto;
+}
+
 .hiyaghar-category-add-cart-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 9px 20px;
-  background-color: #11223A;
-  border: none;
+  gap: 5px;
+  padding: 8px 10px;
+  background-color: #ffffff;
+  border: 1.5px solid var(--hiya-navy, #11223A);
   border-radius: var(--radius-full, 9999px);
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
-  color: #ffffff;
-  letter-spacing: 0.02em;
+  color: var(--hiya-navy, #11223A);
+  letter-spacing: 0.01em;
   cursor: pointer;
-  box-shadow: 0 4px 14px rgba(17, 34, 58, 0.2);
-  transition: background-color 250ms ease, transform 200ms ease, box-shadow 250ms ease;
+  box-shadow: 0 2px 8px rgba(17, 34, 58, 0.08);
+  transition: all 200ms ease;
+  white-space: nowrap;
+}
+
+.hiyaghar-category-add-cart-btn:hover {
+  background-color: #F4F1EA;
+  border-color: var(--hiya-navy, #11223A);
+  color: var(--hiya-navy, #11223A);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(17, 34, 58, 0.15);
+}
+
+.hiyaghar-category-buy-now-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  background-color: var(--hiya-gold, #CB992C);
+  border: 1.5px solid var(--hiya-gold, #CB992C);
+  border-radius: var(--radius-full, 9999px);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(203, 153, 44, 0.2);
+  transition: all 200ms ease;
+  white-space: nowrap;
+}
+
+.hiyaghar-category-buy-now-btn:hover {
+  background-color: #B28320;
+  border-color: #B28320;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(178, 131, 32, 0.35);
 }
 
 .hiyaghar-category-add-cart-btn:hover {
@@ -555,6 +673,42 @@
     border-radius: 18px;
   }
 
+  .hiyaghar-category-card.is-product-card {
+    height: auto;
+    min-height: 375px;
+    padding: 12px 8px 12px 8px;
+  }
+
+  .hiyaghar-category-card.is-product-card .hiyaghar-category-card-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+  }
+
+  .hiyaghar-category-card.is-product-card .hiyaghar-category-add-cart-btn,
+  .hiyaghar-category-card.is-product-card .hiyaghar-category-buy-now-btn {
+    width: 100%;
+    padding: 7px 6px;
+    font-size: 11.5px;
+    border-radius: 6px;
+    min-height: 34px;
+  }
+
+  .hiyaghar-category-price-row .hiyaghar-current-price {
+    font-size: 15px;
+  }
+
+  .hiyaghar-category-price-row .hiyaghar-original-price {
+    font-size: 11px;
+  }
+
+  .hiyaghar-category-card-desc {
+    font-size: 11px;
+    -webkit-line-clamp: 1;
+    margin: 2px 0 4px 0;
+  }
+
   .hiyaghar-category-card-title {
     font-size: 13px;
     margin-bottom: 2px;
@@ -658,4 +812,38 @@
   .hiyaghar-category-card.is-active .hiyaghar-floating-ingredient.pos-bottom-right {
     animation: none !important;
   }
+}
+/* Wishlist Heart Button on Product Cards */
+.hiyaghar-category-wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(17, 34, 58, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475467;
+  transition: all 200ms ease;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  z-index: 10;
+}
+
+.hiyaghar-category-wishlist-btn:hover {
+  background-color: #ffffff;
+  color: #ef4444;
+  transform: scale(1.1);
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.2);
+}
+
+.hiyaghar-category-wishlist-btn.is-active {
+  background-color: #fff1f2;
+  border-color: #fecdd3;
+  color: #ef4444;
+  transform: scale(1.08);
 }

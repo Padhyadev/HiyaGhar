@@ -795,6 +795,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           breadcrumbCurrent="Checkout"
           title="Checkout"
           bgImage="/image/Banner_image/Checkout.webp"
+          textShade="dark"
         />
 
         <div className="hiyaghar-container">

@@ -10,6 +10,9 @@ interface MukhwasHeroProps {
   breadcrumbCurrent?: string;
   bgImage?: string;
   bgPosition?: string;
+  /** Phone-only shade behind the title, for banners whose busy or matching colours hide it:
+   *  'dark' for white titles, 'light' for dark titles. */
+  textShade?: 'dark' | 'light';
 }
 
 export const MukhwasHero: React.FC<MukhwasHeroProps> = ({
@@ -18,11 +21,12 @@ export const MukhwasHero: React.FC<MukhwasHeroProps> = ({
   description = "",
   bgImage = "/image/mukhwas_hero_bg.webp",
   bgPosition,
+  textShade,
 }) => {
   return (
     <section className="hiyaghar-mukhwas-hero-fullwidth" aria-label={`${title} Hero Banner`}>
       <div
-        className="hiyaghar-mukhwas-banner-card"
+        className={`hiyaghar-mukhwas-banner-card${textShade ? ` hiyaghar-mukhwas-banner-card--shade-${textShade}` : ''}`}
         style={{
           backgroundImage: `url('${encodeURI(bgImage)}')`,
           ...(bgPosition ? { backgroundPosition: bgPosition } : {})

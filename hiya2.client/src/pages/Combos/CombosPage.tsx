@@ -56,6 +56,7 @@ export const CombosPage: React.FC<CombosPageProps> = ({ onNavigateHome, onNaviga
           breadcrumbCurrent="Combo Packs"
           title="Combo Packs"
           bgImage="/image/Banner_image/Combos_Banner.webp"
+          textShade="dark"
         />
 
         <section className="hiyaghar-mukhwas-grid-section" aria-label="Combo Packs">

@@ -105,6 +105,7 @@ export const CartPage: React.FC<CartPageProps> = ({
           breadcrumbCurrent="Shopping Cart"
           title="Shopping Cart"
           bgImage="/image/hiya_mukhwas_auth_lifestyle.webp"
+          textShade="dark"
         />
 
         <div className="hiyaghar-container">

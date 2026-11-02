@@ -306,6 +306,12 @@
 }
 
 @media (max-width: 480px) {
+  /* Just enough room below the copyright for the back-to-top and WhatsApp buttons
+     (126px stack, see FloatingWidgets.css) so they don't cover its text */
+  .hiyaghar-footer-section {
+    padding-bottom: 124px;
+  }
+
   .hiyaghar-footer-nav-grid {
     grid-template-columns: 1fr;
     gap: 20px;
@@ -315,7 +321,6 @@
     flex-direction: column;
     gap: 16px;
     text-align: center;
-    padding-bottom: 110px;
   }
 
   .hiyaghar-footer-socials,

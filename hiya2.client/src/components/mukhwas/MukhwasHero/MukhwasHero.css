@@ -39,12 +39,12 @@
   }
 }
 
-/* 25% dark layer over the image so the banner text stays readable */
+/* 15% dark layer over the image so the banner text stays readable */
 .hiyaghar-mukhwas-banner-card::before {
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.25);
+  background: rgba(0, 0, 0, 0.15);
   pointer-events: none;
   z-index: 1;
 }
@@ -107,13 +107,31 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(
-      180deg,
-      rgba(17, 34, 58, 0.35) 0%,
-      rgba(17, 34, 58, 0.60) 100%
-    );
+    background: rgba(0, 0, 0, 0.15);
     z-index: 1;
     pointer-events: none;
+  }
+
+  /* Banners where the title lands on busy or same-coloured products: shade the left side,
+     where the title sits, and let the products on the right fade back to the normal 15%. */
+  .hiyaghar-mukhwas-banner-card--shade-dark::before {
+    background: linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.6) 0%,
+      rgba(0, 0, 0, 0.45) 60%,
+      rgba(0, 0, 0, 0.15) 100%
+    );
+  }
+
+  /* Light shade for a dark title placed in the bottom-left corner: it stays in that corner
+     so the products above and to the right keep their full colour. */
+  .hiyaghar-mukhwas-banner-card--shade-light::before {
+    background: radial-gradient(
+      65% 45% at 0% 100%,
+      rgba(250, 245, 236, 0.85) 0%,
+      rgba(250, 245, 236, 0.6) 60%,
+      rgba(250, 245, 236, 0) 100%
+    );
   }
 
   .hiyaghar-mukhwas-banner-content {

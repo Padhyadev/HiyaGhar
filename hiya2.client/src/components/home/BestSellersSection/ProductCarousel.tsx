@@ -84,16 +84,21 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
               const variantLabel = matchedVar ? formatVariantLabel(matchedVar.variantName) : '';
               const priceVal = matchedVar?.price ?? prod.basePrice;
               const priceTag = variantLabel ? `₹${priceVal} • ${variantLabel}` : `₹${priceVal}`;
+              const desc = prod.shortDescription || (prod as any).description || '';
+              const rawOrig = matchedVar?.originalPrice && matchedVar.originalPrice > priceVal
+                ? matchedVar.originalPrice
+                : (prod.discountPrice && prod.basePrice > prod.discountPrice ? prod.basePrice : Math.round(priceVal * 1.25));
 
               mappedItems.push({
                 id: `product/${prod.id}`,
                 productId: prod.id.toString(),
                 price: priceVal,
-                originalPrice: matchedVar?.originalPrice,
+                originalPrice: rawOrig,
                 weight: variantLabel,
                 isProduct: true,
                 title: prod.productName,
                 tagline: priceTag,
+                description: desc,
                 image: getVariantImages(prod, matchedVar)[0] || NO_IMAGE,
                 bgColor: idx % 2 === 0 ? '#F7F3E9' : '#F0F7F3',
                 accentColor: idx % 2 === 0 ? '#CB992C' : '#2D6A4F',
@@ -120,15 +125,21 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
           const variantLabel = matchedVar ? formatVariantLabel(matchedVar.variantName) : '';
           const priceVal = matchedVar?.price ?? prod.basePrice;
           const priceTag = variantLabel ? `₹${priceVal} • ${variantLabel}` : `₹${priceVal}`;
+          const desc = prod.shortDescription || (prod as any).description || '';
+          const rawOrig = matchedVar?.originalPrice && matchedVar.originalPrice > priceVal
+            ? matchedVar.originalPrice
+            : (prod.discountPrice && prod.basePrice > prod.discountPrice ? prod.basePrice : Math.round(priceVal * 1.25));
+
           return {
             id: `product/${prod.id}`,
             productId: prod.id.toString(),
             price: priceVal,
-            originalPrice: matchedVar?.originalPrice,
+            originalPrice: rawOrig,
             weight: variantLabel,
             isProduct: true,
             title: prod.productName,
             tagline: priceTag,
+            description: desc,
             image: getVariantImages(prod, matchedVar)[0] || NO_IMAGE,
             bgColor: idx % 2 === 0 ? '#F7F3E9' : '#F0F7F3',
             accentColor: idx % 2 === 0 ? '#CB992C' : '#2D6A4F',

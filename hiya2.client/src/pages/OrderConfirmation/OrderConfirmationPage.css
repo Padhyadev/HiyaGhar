@@ -122,6 +122,31 @@
   .hiyaghar-order-meta-banner {
     grid-template-columns: 1fr;
   }
+
+  .hiyaghar-conf-items-section,
+  .hiyaghar-conf-info-box,
+  .hiyaghar-conf-guest-account {
+    padding: 16px;
+  }
+
+  .hiyaghar-conf-invoice-actions {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .hiyaghar-btn-invoice-download,
+  .hiyaghar-btn-invoice-print {
+    width: 100%;
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 16px;
+    font-size: 14px;
+    box-sizing: border-box;
+    text-align: center;
+  }
 }
 
 .hiyaghar-conf-info-box {
