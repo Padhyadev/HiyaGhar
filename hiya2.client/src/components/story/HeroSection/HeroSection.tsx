@@ -10,13 +10,13 @@ export const HeroSection: React.FC = () => {
         {/* Full-width hero background banner on both desktop & mobile */}
         <div className="hg-hero-bg-container">
           <img
-            src="/image/hiya_ghar_story_banner.webp"
-            alt="HIYA Dil Rajan Mukhwas in a glass bottle with traditional brass bowls"
+            src="/image/Banner_image/our_story.png"
+            alt="HIYAGHAR handcrafted heritage kitchen and artisanal wellness story banner"
             className="hg-hero-bg-img"
             loading="eager"
             fetchPriority="high"
-            width={1664}
-            height={894}
+            width={2172}
+            height={724}
           />
           <div className="hg-hero-overlay" />
         </div>
@@ -51,4 +51,3 @@ export const HeroSection: React.FC = () => {
     </section>
   );
 };
-

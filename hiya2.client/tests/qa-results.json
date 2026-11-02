@@ -1,0 +1,4001 @@
+{
+  "testedAt": "2026-11-02T09:49:55.858Z",
+  "target": "https://localhost:59978",
+  "summary": {
+    "totalPagesTested": 23,
+    "viewportsTested": 7,
+    "breakpointsTested": 11,
+    "totalChecksPerformed": 297,
+    "passedChecks": 205,
+    "failedChecks": 0,
+    "warnings": 92
+  },
+  "overflowIssues": [],
+  "touchTargetIssues": [
+    {
+      "page": "Home",
+      "path": "/",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 49,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Mukhwas Category",
+      "path": "/mukhwas",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 50,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Tea Masala Category",
+      "path": "/tea-masala",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Handmade Soap Category",
+      "path": "/handmade-soap",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Hair Oil Category",
+      "path": "/hair-oil",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Combo Packs",
+      "path": "/combos",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 16,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Gift Hampers",
+      "path": "/gift-hampers",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 26,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 1 (Drakshawati Mukhwas)",
+      "path": "/product/drakshawati-mukhwas",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 2 (Tea Masala)",
+      "path": "/product/tea-masala",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 15,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 3 (Glow Craft Detan Soap)",
+      "path": "/product/glow-craft-detan-soap",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Shopping Cart",
+      "path": "/cart",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Checkout (Step 1-3)",
+      "path": "/checkout",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Wishlist",
+      "path": "/wishlist",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Login",
+      "path": "/login",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 4,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".hiyaghar-remember-checkbox",
+          "text": "Remember me",
+          "width": 17,
+          "height": 17
+        },
+        {
+          "selector": ".forgot-pass-link",
+          "text": "Forgot Password?",
+          "width": 108,
+          "height": 17
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "Create Account →",
+          "width": 116,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Signup",
+      "path": "/signup",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 2,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "← Sign In",
+          "width": 62,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Our Story",
+      "path": "/our-story",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "path": "/contact-us",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "FAQ",
+      "path": "/faq",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 13,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Terms & Conditions",
+      "path": "/terms-conditions",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Refund Policy",
+      "path": "/refund-policy",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 14,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Shipping Policy",
+      "path": "/shipping-policy",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "404 Error Page",
+      "path": "/this-page-does-not-exist-404-test",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Home",
+      "path": "/",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 49,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Mukhwas Category",
+      "path": "/mukhwas",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 50,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Tea Masala Category",
+      "path": "/tea-masala",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Handmade Soap Category",
+      "path": "/handmade-soap",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Hair Oil Category",
+      "path": "/hair-oil",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Combo Packs",
+      "path": "/combos",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 16,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Gift Hampers",
+      "path": "/gift-hampers",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 26,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 1 (Drakshawati Mukhwas)",
+      "path": "/product/drakshawati-mukhwas",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 2 (Tea Masala)",
+      "path": "/product/tea-masala",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 15,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 3 (Glow Craft Detan Soap)",
+      "path": "/product/glow-craft-detan-soap",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Shopping Cart",
+      "path": "/cart",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Checkout (Step 1-3)",
+      "path": "/checkout",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Wishlist",
+      "path": "/wishlist",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Login",
+      "path": "/login",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 4,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".hiyaghar-remember-checkbox",
+          "text": "Remember me",
+          "width": 17,
+          "height": 17
+        },
+        {
+          "selector": ".forgot-pass-link",
+          "text": "Forgot Password?",
+          "width": 108,
+          "height": 17
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "Create Account →",
+          "width": 116,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Signup",
+      "path": "/signup",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 2,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "← Sign In",
+          "width": 62,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Our Story",
+      "path": "/our-story",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "path": "/contact-us",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "FAQ",
+      "path": "/faq",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 15,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Terms & Conditions",
+      "path": "/terms-conditions",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Refund Policy",
+      "path": "/refund-policy",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 14,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Shipping Policy",
+      "path": "/shipping-policy",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 13,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "404 Error Page",
+      "path": "/this-page-does-not-exist-404-test",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Home",
+      "path": "/",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 67,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Mukhwas Category",
+      "path": "/mukhwas",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 50,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Tea Masala Category",
+      "path": "/tea-masala",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Handmade Soap Category",
+      "path": "/handmade-soap",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Hair Oil Category",
+      "path": "/hair-oil",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Combo Packs",
+      "path": "/combos",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 16,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Gift Hampers",
+      "path": "/gift-hampers",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 26,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 1 (Drakshawati Mukhwas)",
+      "path": "/product/drakshawati-mukhwas",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 2 (Tea Masala)",
+      "path": "/product/tea-masala",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 15,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 3 (Glow Craft Detan Soap)",
+      "path": "/product/glow-craft-detan-soap",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Shopping Cart",
+      "path": "/cart",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Checkout (Step 1-3)",
+      "path": "/checkout",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Wishlist",
+      "path": "/wishlist",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Login",
+      "path": "/login",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 4,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".hiyaghar-remember-checkbox",
+          "text": "Remember me",
+          "width": 17,
+          "height": 17
+        },
+        {
+          "selector": ".forgot-pass-link",
+          "text": "Forgot Password?",
+          "width": 108,
+          "height": 17
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "Create Account →",
+          "width": 116,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Signup",
+      "path": "/signup",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 2,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "← Sign In",
+          "width": 62,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Our Story",
+      "path": "/our-story",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "path": "/contact-us",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "FAQ",
+      "path": "/faq",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 15,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Terms & Conditions",
+      "path": "/terms-conditions",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Refund Policy",
+      "path": "/refund-policy",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 14,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Shipping Policy",
+      "path": "/shipping-policy",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "404 Error Page",
+      "path": "/this-page-does-not-exist-404-test",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-mobile-hamburger-btn",
+          "text": "Open menu",
+          "width": 36,
+          "height": 36
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 34,
+          "height": 34
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 34,
+          "height": 34
+        }
+      ]
+    },
+    {
+      "page": "Home",
+      "path": "/",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 68,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": "a",
+          "text": "Mukhwas",
+          "width": 59,
+          "height": 17
+        }
+      ]
+    },
+    {
+      "page": "Mukhwas Category",
+      "path": "/mukhwas",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 49,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        }
+      ]
+    },
+    {
+      "page": "Tea Masala Category",
+      "path": "/tea-masala",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        }
+      ]
+    },
+    {
+      "page": "Handmade Soap Category",
+      "path": "/handmade-soap",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 11,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        }
+      ]
+    },
+    {
+      "page": "Hair Oil Category",
+      "path": "/hair-oil",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 9,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        }
+      ]
+    },
+    {
+      "page": "Combo Packs",
+      "path": "/combos",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 19,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        }
+      ]
+    },
+    {
+      "page": "Gift Hampers",
+      "path": "/gift-hampers",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 25,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": "a",
+          "text": "Wedding",
+          "width": 86,
+          "height": 25
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 1 (Drakshawati Mukhwas)",
+      "path": "/product/drakshawati-mukhwas",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 2 (Tea Masala)",
+      "path": "/product/tea-masala",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 14,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Tea Masala",
+          "width": 185,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "page": "Product Detail 3 (Glow Craft Detan Soap)",
+      "path": "/product/glow-craft-detan-soap",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Handmade Soap",
+          "width": 219,
+          "height": 36
+        }
+      ]
+    },
+    {
+      "page": "Shopping Cart",
+      "path": "/cart",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Checkout (Step 1-3)",
+      "path": "/checkout",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Wishlist",
+      "path": "/wishlist",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Login",
+      "path": "/login",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 4,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".hiyaghar-remember-checkbox",
+          "text": "Remember me",
+          "width": 17,
+          "height": 17
+        },
+        {
+          "selector": ".forgot-pass-link",
+          "text": "Forgot Password?",
+          "width": 108,
+          "height": 17
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "Create Account →",
+          "width": 116,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Signup",
+      "path": "/signup",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 2,
+      "examples": [
+        {
+          "selector": ".hiyaghar-back-home-floating-btn",
+          "text": "← Back to Store",
+          "width": 134,
+          "height": 39
+        },
+        {
+          "selector": ".switch-link-btn",
+          "text": "← Sign In",
+          "width": 62,
+          "height": 19
+        }
+      ]
+    },
+    {
+      "page": "Our Story",
+      "path": "/our-story",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 132,
+          "height": 17
+        }
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "path": "/contact-us",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "FAQ",
+      "path": "/faq",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 8,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-faq-search-input",
+          "text": "Search frequently asked q",
+          "width": 480,
+          "height": 20
+        }
+      ]
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 14,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        }
+      ]
+    },
+    {
+      "page": "Terms & Conditions",
+      "path": "/terms-conditions",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 11,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        }
+      ]
+    },
+    {
+      "page": "Refund Policy",
+      "path": "/refund-policy",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 13,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        }
+      ]
+    },
+    {
+      "page": "Shipping Policy",
+      "path": "/shipping-policy",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 12,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        }
+      ]
+    },
+    {
+      "page": "404 Error Page",
+      "path": "/this-page-does-not-exist-404-test",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-search-icon-btn",
+          "text": "Search Products",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-account-icon-btn",
+          "text": "Account Menu",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-wishlist-icon-btn",
+          "text": "Wishlist with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-cart-cyan-pill",
+          "text": "Cart with 0 items",
+          "width": 38,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
+        }
+      ]
+    }
+  ],
+  "consoleErrors": [
+    {
+      "page": "Contact Us",
+      "viewport": "Mobile Small (360x740 Android)",
+      "errors": [
+        "requestStorageAccess: Permission denied."
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "errors": [
+        "requestStorageAccess: Permission denied."
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "errors": [
+        "requestStorageAccess: Permission denied."
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "viewport": "Desktop Laptop (1280x800)",
+      "errors": [
+        "requestStorageAccess: Permission denied."
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "viewport": "Desktop Full HD (1920x1080)",
+      "errors": [
+        "requestStorageAccess: Permission denied."
+      ]
+    }
+  ],
+  "brokenImages": [],
+  "functionalTests": [
+    {
+      "journey": "Mobile Navigation Drawer",
+      "status": "WARN",
+      "notes": "Hamburger found: false, Drawer opened cleanly: false"
+    },
+    {
+      "journey": "Category Listing & Sorting (/mukhwas)",
+      "status": "PASS",
+      "notes": "Found 21 products on /mukhwas. Sort selector interactive: false"
+    },
+    {
+      "journey": "Product Detail & Add to Cart (/product/drakshawati-mukhwas)",
+      "status": "FAIL",
+      "notes": "Variant pills: 0, Qty counter: false, Cart badge updated: false"
+    },
+    {
+      "journey": "Wishlist Toggle & Listing (/wishlist)",
+      "status": "PASS",
+      "notes": "Wishlist button on product: true, Items rendered on /wishlist: 0"
+    },
+    {
+      "journey": "Cart Page & Delivery Verification (/cart)",
+      "status": "WARN",
+      "notes": "Cart items: 0, Pincode checker visible: false, Delivery check triggered: false"
+    },
+    {
+      "journey": "Checkout Flow (Stopped at Payment Gate)",
+      "status": "WARN",
+      "notes": "Landed on /checkout: false, Contact inputs present: false, Payment options configured: false. Note: Strictly halted before placing order."
+    },
+    {
+      "journey": "FAQ Accordion Interaction (/faq)",
+      "status": "WARN",
+      "notes": "FAQ item interactive: true, Accordion expands: false"
+    },
+    {
+      "journey": "404 Error Page Fallback",
+      "status": "PASS",
+      "notes": "Page heading: \"Oops! Page Not Found\", Return Home link present: true"
+    }
+  ],
+  "breakpointIssues": []
+}
