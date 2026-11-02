@@ -2,6 +2,7 @@ import React from 'react';
 import { ScrollReveal } from '../../common/ScrollReveal/ScrollReveal';
 import { ArchImage } from '../ArchImage/ArchImage';
 import { Link } from '../../common/Link/Link';
+import '../storyShared.css';
 import './FounderStrip.css';
 
 export const FounderStrip: React.FC = () => {

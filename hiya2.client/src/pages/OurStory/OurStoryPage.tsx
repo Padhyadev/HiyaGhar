@@ -6,6 +6,7 @@ import { HeroSection } from '../../components/story/HeroSection/HeroSection';
 import { FounderSection } from '../../components/story/FounderSection/FounderSection';
 import { StorySection } from '../../components/story/StorySection/StorySection';
 import { HowWeMakeSection } from '../../components/story/HowWeMakeSection/HowWeMakeSection';
+import '../../components/story/storyShared.css';
 import './OurStoryPage.css';
 
 interface OurStoryPageProps {
