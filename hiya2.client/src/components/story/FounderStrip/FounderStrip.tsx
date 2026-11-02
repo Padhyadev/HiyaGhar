@@ -6,7 +6,7 @@ import './FounderStrip.css';
 
 export const FounderStrip: React.FC = () => {
   return (
-    <section className="hg-founder-strip" aria-label="Meet the Founder">
+    <section className="hg-founder-strip" aria-label="Meet the Founder" data-scroll-anchor="founder">
       <div className="hg-founder-strip-container">
         <div className="hg-founder-strip-grid">
           {/* Left Column: Arch-shaped portrait */}

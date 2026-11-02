@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import './PageTransition.css';
 import { LOGO_URL } from '../../../utils/brand';
+import { scrollAfterPageSwap } from '../../../utils/scrollMemory';
 
 interface PageTransitionProps {
   currentHash: string;
@@ -14,6 +15,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
   const [displayChildren, setDisplayChildren] = useState<React.ReactNode>(children);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const [isExiting, setIsExiting] = useState<boolean>(false);
+  const [swapCount, setSwapCount] = useState<number>(0);
 
   const prevHashRef = useRef<string>(currentHash);
 
@@ -45,10 +47,7 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
     // Smooth timing: 280ms reveal swap, then fade out frosted glass
     const swapTimer = setTimeout(() => {
       setDisplayChildren(children);
-      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-      });
+      setSwapCount((count) => count + 1);
       setIsExiting(true);
 
       const finishTimer = setTimeout(() => {
@@ -63,6 +62,16 @@ export const PageTransition: React.FC<PageTransitionProps> = ({
       clearTimeout(swapTimer);
     };
   }, [currentHash, children]);
+
+  // Runs once the new page has rendered but before it is painted: Back/Forward lands
+  // straight on the remembered spot (see utils/scrollMemory), anything else at the top.
+  useLayoutEffect(() => {
+    if (swapCount === 0 || scrollAfterPageSwap()) return;
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    });
+  }, [swapCount]);
 
   return (
     <div className="hiyaghar-page-container-root">

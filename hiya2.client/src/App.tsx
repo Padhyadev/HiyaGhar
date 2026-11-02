@@ -186,7 +186,7 @@ function App() {
       const next = getNormalizedRoute();
       const isSamePage = routeBase(next) === routeBase(renderedRouteRef.current);
       setCurrentRoute(next);
-      if (!restoreScrollOnPopstate(e) && isSamePage) {
+      if (!restoreScrollOnPopstate(e, !isSamePage) && isSamePage) {
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
       }
     };
