@@ -39,9 +39,14 @@
   }
 }
 
-/* Overlay removed: Shows original, natural image with zero added color tint/effects */
-.hiyaghar-mukhwas-banner-overlay {
-  display: none;
+/* Very light 2% dark layer over the image so the banner text stays readable */
+.hiyaghar-mukhwas-banner-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.02);
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* Centered Banner Content */
@@ -90,19 +95,49 @@
   }
 
   .hiyaghar-mukhwas-banner-card {
-    min-height: 290px;
+    min-height: clamp(190px, 52vw, 240px);
     padding-top: 74px;
     border-radius: 0 0 24px 24px;
-    background-position: right center;
+    background-position: center center;
+    background-size: cover;
+    position: relative;
+  }
+
+  .hiyaghar-mukhwas-banner-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(17, 34, 58, 0.35) 0%,
+      rgba(17, 34, 58, 0.60) 100%
+    );
+    z-index: 1;
+    pointer-events: none;
   }
 
   .hiyaghar-mukhwas-banner-content {
-    padding: 24px 16px;
+    position: relative;
+    z-index: 2;
+    padding: 16px 16px;
+    max-width: 100%;
   }
 
   .hiyaghar-mukhwas-banner-title {
-    font-size: clamp(24px, 6vw, 32px);
-    max-width: 200px;
+    font-size: clamp(22px, 5.5vw, 30px);
+    max-width: 100%;
     line-height: 1.2;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, 0.7);
+  }
+
+  .hiyaghar-mukhwas-banner-subtitle {
+    font-size: 10.5px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+
+  .hiyaghar-mukhwas-banner-desc {
+    font-size: 13px;
+    line-height: 1.45;
   }
 }
