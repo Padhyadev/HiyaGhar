@@ -259,6 +259,25 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     return () => window.removeEventListener('storage', handleStorageChange);
   }, []);
 
+  // Show today's prices if any changed since the items were added (the server charges those).
+  useEffect(() => {
+    let cancelled = false;
+    CartService.refreshPrices(true).then((changed) => {
+      if (cancelled || !changed) return;
+      const items = CartService.getCheckoutItems();
+      const currentSubtotal = getItemsSubtotal(items);
+      setCartItems(items);
+      setSubtotal(currentSubtotal);
+      const freshOpts = reloadDeliveryOptions(currentSubtotal);
+      setSelectedDelivery((prev) => {
+        if (!prev) return freshOpts[0] || null;
+        const updated = freshOpts.find((o) => o.id === prev.id);
+        return updated || freshOpts[0] || null;
+      });
+    });
+    return () => { cancelled = true; };
+  }, [reloadDeliveryOptions]);
+
   // Re-price the offer when the cart changes or a guest session starts (the token decides
   // first-order-only and per-customer limits).
   useEffect(() => {

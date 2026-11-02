@@ -115,6 +115,47 @@ export class CartService {
     }
   }
 
+  // Prices are saved with each item when it is added, so a price changed in admin afterwards
+  // would keep showing the old amount (the order itself is always charged today's price by the
+  // server). This brings the saved prices up to date; returns true when any of them changed.
+  // Called on page load, when the cart opens (at most once a minute) and on checkout.
+  private static lastPriceRefresh = 0;
+
+  public static async refreshPrices(force = false): Promise<boolean> {
+    if (!force && Date.now() - this.lastPriceRefresh < 60_000) return false;
+    this.lastPriceRefresh = Date.now();
+
+    const buyNow = this.getBuyNowItem();
+    const lines = [...this.getItems(), ...(buyNow ? [buyNow] : [])];
+    if (lines.length === 0) return false;
+    const prices = await CartApiService.fetchCurrentPrices(lines);
+
+    const reprice = (item: CartItem): boolean => {
+      const current = prices.get(`${item.productId}::${item.weight}`);
+      if (!current || (current.price === item.price && current.originalPrice === item.originalPrice)) return false;
+      item.price = current.price;
+      item.originalPrice = current.originalPrice;
+      return true;
+    };
+
+    // Re-read: the cart may have changed while the prices were loading.
+    const items = this.getItems();
+    const cartChanged = items.map(reprice).some(Boolean);
+    if (cartChanged) this.saveItems(items);
+
+    let buyNowChanged = false;
+    const latestBuyNow = this.getBuyNowItem();
+    if (latestBuyNow && reprice(latestBuyNow)) {
+      buyNowChanged = true;
+      try {
+        sessionStorage.setItem(BUY_NOW_STORAGE_KEY, JSON.stringify(latestBuyNow));
+      } catch {
+        // ignore
+      }
+    }
+    return cartChanged || buyNowChanged;
+  }
+
   // "Buy Now" goes straight to checkout with just that product. It is kept in
   // sessionStorage, never in the cart, so leaving checkout without paying
   // leaves the cart exactly as it was.
@@ -178,6 +219,7 @@ export class CartService {
     this.cartOpen = true;
     this.hidePill();
     this.notifyListeners();
+    void this.refreshPrices();
   }
 
   public static closeCart(): void {
@@ -189,6 +231,7 @@ export class CartService {
     this.cartOpen = !this.cartOpen;
     if (this.cartOpen) {
       this.hidePill();
+      void this.refreshPrices();
     }
     this.notifyListeners();
   }

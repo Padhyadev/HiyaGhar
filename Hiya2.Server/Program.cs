@@ -654,10 +654,10 @@ app.UseStaticFiles(new StaticFileOptions
         }
         else if (reqPath.StartsWithSegments("/image"))
         {
-            // Site images keep their file names when replaced (e.g. the logo), so cache for one day:
-            // a new image reaches every browser within a day. Use a ?v= URL for an instant change
-            // (see src/utils/brand.ts).
-            ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=86400"); // 1 day
+            // Site images (banners, logo) keep their file names when replaced on a publish, so the
+            // browser keeps its copy but asks every time whether it changed: an unchanged image costs
+            // a tiny 304 reply (ETag/Last-Modified), a replaced one is downloaded straight away.
+            ctx.Context.Response.Headers.Append("Cache-Control", "public,no-cache");
         }
         else if (fileName.EndsWith(".html"))
         {

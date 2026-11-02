@@ -1,5 +1,5 @@
 import { CustomerAuthService } from './customerAuthService';
-import { ProductService } from './productService';
+import { ProductService, type Product, type ProductVariant } from './productService';
 import { formatVariantLabel } from '../utils/productFormat';
 
 // Bridges the client's guest cart (keyed by productId + a display "weight"
@@ -15,6 +15,16 @@ interface ResolvedLine {
 
 const variantResolutionCache = new Map<string, ResolvedLine>();
 
+// The variant whose name matches a cart line's weight label, or undefined.
+function findVariantByLabel(variants: ProductVariant[], weight: string): ProductVariant | undefined {
+  const cleanWeight = (weight || '').toLowerCase().replace(/[\s\-\>:]+/g, '');
+  return (
+    variants.find((v) => v.variantName === weight) ||
+    variants.find((v) => formatVariantLabel(v.variantName) === weight) ||
+    variants.find((v) => cleanWeight && ((v.variantName || '').toLowerCase().replace(/[\s\-\>:]+/g, '').includes(cleanWeight) || cleanWeight.includes((v.variantName || '').toLowerCase().replace(/[\s\-\>:]+/g, ''))))
+  );
+}
+
 async function resolveLine(productIdRaw: string | number, weight: string): Promise<ResolvedLine | null> {
   const productId = Number(productIdRaw);
   if (!productId || Number.isNaN(productId)) return null;
@@ -26,12 +36,9 @@ async function resolveLine(productIdRaw: string | number, weight: string): Promi
   const product = await ProductService.getProductById(productId);
   if (!product) return null;
 
-  const cleanWeight = (weight || '').toLowerCase().replace(/[\s\-\>:]+/g, '');
   const variants = product.variants || [];
   const matched =
-    variants.find((v) => v.variantName === weight) ||
-    variants.find((v) => formatVariantLabel(v.variantName) === weight) ||
-    variants.find((v) => cleanWeight && ((v.variantName || '').toLowerCase().replace(/[\s\-\>:]+/g, '').includes(cleanWeight) || cleanWeight.includes((v.variantName || '').toLowerCase().replace(/[\s\-\>:]+/g, '')))) ||
+    findVariantByLabel(variants, weight) ||
     variants.find((v) => (v.sellableStock !== undefined ? v.sellableStock > 0 : (v.stockQuantity !== undefined ? v.stockQuantity > 0 : true))) ||
     variants.find((v) => v.isDefault) ||
     variants[0] ||
@@ -148,6 +155,44 @@ export class CartApiService {
   // The server cart line a "Buy Now" checkout is for (sent with the order request).
   public static async resolveBuyNowItem(productId: string | number, weight: string): Promise<ResolvedLine | null> {
     return resolveLine(productId, weight);
+  }
+
+  // Today's price of each cart line, keyed `${productId}::${weight}`, read fresh from the catalog
+  // (not ProductService's in-memory list) so a price changed in admin shows without a reload.
+  // Priced the same way the server prices an order (CartRepository.ResolveUnitPrice). Lines that
+  // can't be matched to a variant by name, or whose product can't be loaded, are left out.
+  public static async fetchCurrentPrices(
+    items: Array<{ productId: string; weight: string }>
+  ): Promise<Map<string, { price: number; originalPrice?: number }>> {
+    const prices = new Map<string, { price: number; originalPrice?: number }>();
+    const productIds = [...new Set(items.map((i) => Number(i.productId)).filter((id) => id > 0))];
+
+    const products = await Promise.all(
+      productIds.map(async (id) => {
+        try {
+          const res = await fetch(`/api/product/${id}`, { cache: 'no-store' });
+          return res.ok ? ((await res.json()) as Product) : null;
+        } catch {
+          return null;
+        }
+      })
+    );
+
+    for (const item of items) {
+      const product = products.find((p) => p && p.id === Number(item.productId));
+      if (!product) continue;
+      const variants = product.variants || [];
+      if (variants.length > 0) {
+        const variant = findVariantByLabel(variants, item.weight);
+        if (variant) prices.set(`${item.productId}::${item.weight}`, { price: variant.price, originalPrice: variant.originalPrice ?? undefined });
+      } else {
+        const price = product.discountPrice ?? product.basePrice;
+        if (typeof price === 'number') {
+          prices.set(`${item.productId}::${item.weight}`, { price, originalPrice: product.discountPrice != null ? product.basePrice : undefined });
+        }
+      }
+    }
+    return prices;
   }
 
   // Fetch the authoritative server cart, shaped to match the local CartItem type.

@@ -5,9 +5,13 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './styles/globals/global.css';
 import App from './App.tsx';
 import { startVersionWatch } from './utils/appVersion';
+import { CartService } from './cart';
 
 // Reload tabs that are still running a version from before the last publish (see appVersion.ts).
 startVersionWatch();
+
+// Bring prices saved in the cart up to today's catalog prices (see CartService.refreshPrices).
+void CartService.refreshPrices(true);
 
 // This site does not use a service worker. A service worker left in a browser by an earlier
 // version of the site answers normal reloads with its saved copy of the OLD site (only a hard
