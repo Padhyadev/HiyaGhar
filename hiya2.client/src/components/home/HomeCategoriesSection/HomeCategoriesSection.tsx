@@ -23,10 +23,11 @@ export const HomeCategoriesSection: React.FC = () => {
   const [badgeText, setBadgeText] = useState('EXPLORE CATEGORIES');
   const [headingText, setHeadingText] = useState('Squeeze in Some Goodness');
   const [categories, setCategories] = useState<HomeCategory[]>([]);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(false);
-  const [pageCount, setPageCount] = useState(1);
-  const [activePage, setActivePage] = useState(0);
+  // True when the categories don't all fit on screen: the row then loops forever (3 copies,
+  // kept on the middle one) and auto-advances. When they all fit, it's a plain still row.
+  const [isLooping, setIsLooping] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const activeIndexRef = useRef(0);
   const trackRef = useRef<HTMLUListElement>(null);
   const isInteractingRef = useRef(false);
 
@@ -64,6 +65,8 @@ export const HomeCategoriesSection: React.FC = () => {
     };
   }, []);
 
+  const count = categories.length;
+
   // One "step" is one card plus the gap between cards.
   const getStep = () => {
     const track = trackRef.current;
@@ -73,31 +76,64 @@ export const HomeCategoriesSection: React.FC = () => {
     return card.offsetWidth + gap;
   };
 
-  const updateScrollState = useCallback(() => {
+  // Instant (not animated) scroll, used for the invisible jumps between identical copies.
+  const jumpTo = (left: number) => {
     const track = trackRef.current;
     if (!track) return;
-    const maxScroll = track.scrollWidth - track.clientWidth;
+    track.style.scrollBehavior = 'auto';
+    track.scrollLeft = left;
+    track.style.scrollBehavior = '';
+  };
+
+  // Loop or not: do all categories fit on screen at this width?
+  const measureFit = useCallback(() => {
+    const track = trackRef.current;
     const step = getStep();
-    setCanPrev(track.scrollLeft > 4);
-    setCanNext(track.scrollLeft < maxScroll - 4);
-    if (step > 0) {
-      setPageCount(Math.max(1, Math.round(maxScroll / step) + 1));
-      setActivePage(Math.round(track.scrollLeft / step));
-    }
-  }, []);
+    if (!track || step <= 0 || count <= 1) return;
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    setIsLooping(count * step - gap > track.clientWidth + 4);
+  }, [count]);
+
+  // When looping, keep the scroll position inside the middle copy: a move that ended in the
+  // first or last copy is shifted by one copy's width to the identical spot (no visible change).
+  const settleLoop = useCallback(() => {
+    const track = trackRef.current;
+    const step = getStep();
+    if (!track || step <= 0) return;
+    const index = Math.round(track.scrollLeft / step);
+    const normalized = ((index % count) + count) % count;
+    activeIndexRef.current = normalized;
+    setActiveIndex(normalized);
+    if (!isLooping) return;
+    if (index < count || index >= 2 * count) jumpTo((count + normalized) * step);
+  }, [count, isLooping]);
 
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    updateScrollState();
-    track.addEventListener('scroll', updateScrollState, { passive: true });
-    const observer = new ResizeObserver(updateScrollState);
+
+    // Start on (or stay on) the current category in the middle copy.
+    const place = () => {
+      measureFit();
+      const step = getStep();
+      if (step > 0) jumpTo(((isLooping ? count : 0) + activeIndexRef.current) * step);
+    };
+    place();
+
+    let settleTimer: number | undefined;
+    const onScroll = () => {
+      if (settleTimer) window.clearTimeout(settleTimer);
+      settleTimer = window.setTimeout(settleLoop, 120);
+    };
+    track.addEventListener('scroll', onScroll, { passive: true });
+    const observer = new ResizeObserver(place);
     observer.observe(track);
     return () => {
-      track.removeEventListener('scroll', updateScrollState);
+      if (settleTimer) window.clearTimeout(settleTimer);
+      track.removeEventListener('scroll', onScroll);
       observer.disconnect();
     };
-  }, [categories, updateScrollState]);
+  }, [categories, count, isLooping, measureFit, settleLoop]);
 
   // Touch and hover pause handling for smooth auto-scroll
   useEffect(() => {
@@ -136,42 +172,40 @@ export const HomeCategoriesSection: React.FC = () => {
       track.removeEventListener('mouseenter', pause);
       track.removeEventListener('mouseleave', resume);
     };
-  }, []);
+    // Re-attach once the track exists (it only renders after the categories load).
+  }, [categories]);
 
-  // Continuous gentle auto-scrolling when carousel has overflowing cards (mobile & tablet)
+  // Auto-advance one card every 3.2 s, forever (the loop above makes "after the last" the first
+  // again). Paused while touched/hovered, in a hidden tab, and for reduced-motion visitors.
   useEffect(() => {
-    if (categories.length <= 1) return;
+    if (!isLooping) return;
     if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
     }
 
     const interval = setInterval(() => {
       const track = trackRef.current;
-      if (!track || isInteractingRef.current) return;
-
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      if (maxScroll <= 8) return; // All cards already fit without scrolling (e.g. desktop full grid)
-
+      if (!track || isInteractingRef.current || document.visibilityState !== 'visible') return;
       const step = getStep();
-      if (step <= 0) return;
-
-      if (track.scrollLeft >= maxScroll - 12) {
-        track.scrollTo({ left: 0, behavior: 'smooth' });
-      } else {
-        track.scrollBy({ left: step, behavior: 'smooth' });
-      }
+      if (step > 0) track.scrollBy({ left: step });
     }, 3200);
 
     return () => clearInterval(interval);
-  }, [categories]);
+  }, [isLooping]);
 
-  const scrollToPage = (page: number) => {
-    trackRef.current?.scrollTo({ left: page * getStep() });
+  const scrollToCategory = (index: number) => {
+    trackRef.current?.scrollTo({ left: ((isLooping ? count : 0) + index) * getStep() });
   };
 
   const scrollByCards = (direction: -1 | 1) => {
     trackRef.current?.scrollBy({ left: direction * getStep() });
   };
+
+  // Three identical copies when looping; only the middle one is announced to screen readers
+  // and reachable with Tab (the copies stay clickable, since they can be on screen).
+  const loopItems = isLooping
+    ? [0, 1, 2].flatMap((copy) => categories.map((cat, idx) => ({ cat, idx, copy })))
+    : categories.map((cat, idx) => ({ cat, idx, copy: 1 }));
 
   return (
     <section className="hiyaghar-homecat-section" aria-labelledby="hiyaghar-homecat-title">
@@ -187,10 +221,15 @@ export const HomeCategoriesSection: React.FC = () => {
         {categories.length > 0 && (
           <ScrollReveal variant="fade-up" delay={120}>
             <ul ref={trackRef} className="hiyaghar-homecat-track" aria-label="Product categories">
-              {categories.map((cat, idx) => (
-                <li key={cat.id} className={`hiyaghar-homecat-card ${idx % 2 === 0 ? 'is-cream' : 'is-sage'}`}>
+              {loopItems.map(({ cat, idx, copy }) => (
+                <li
+                  key={`${copy}-${cat.id}`}
+                  className={`hiyaghar-homecat-card ${idx % 2 === 0 ? 'is-cream' : 'is-sage'}`}
+                  aria-hidden={copy !== 1 ? 'true' : undefined}
+                >
                   <a
                     href={cat.href}
+                    tabIndex={copy !== 1 ? -1 : undefined}
                     className="hiyaghar-homecat-link"
                     onClick={(e) => {
                       if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
@@ -237,13 +276,12 @@ export const HomeCategoriesSection: React.FC = () => {
               ))}
             </ul>
 
-            {pageCount > 1 && (
+            {isLooping && (
               <div className="hiyaghar-homecat-controls">
                 <button
                   type="button"
                   className="hiyaghar-homecat-arrow"
                   onClick={() => scrollByCards(-1)}
-                  disabled={!canPrev}
                   aria-label="Previous categories"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -253,14 +291,14 @@ export const HomeCategoriesSection: React.FC = () => {
                 </button>
 
                 <div className="hiyaghar-homecat-dots">
-                  {Array.from({ length: pageCount }).map((_, i) => (
+                  {categories.map((cat, i) => (
                     <button
-                      key={i}
+                      key={cat.id}
                       type="button"
-                      className={`hiyaghar-homecat-dot ${i === activePage ? 'is-active' : ''}`}
-                      onClick={() => scrollToPage(i)}
-                      aria-label={`Go to slide ${i + 1} of ${pageCount}`}
-                      aria-current={i === activePage ? 'true' : undefined}
+                      className={`hiyaghar-homecat-dot ${i === activeIndex ? 'is-active' : ''}`}
+                      onClick={() => scrollToCategory(i)}
+                      aria-label={`Go to ${cat.name}`}
+                      aria-current={i === activeIndex ? 'true' : undefined}
                     />
                   ))}
                 </div>
@@ -269,7 +307,6 @@ export const HomeCategoriesSection: React.FC = () => {
                   type="button"
                   className="hiyaghar-homecat-arrow"
                   onClick={() => scrollByCards(1)}
-                  disabled={!canNext}
                   aria-label="Next categories"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
