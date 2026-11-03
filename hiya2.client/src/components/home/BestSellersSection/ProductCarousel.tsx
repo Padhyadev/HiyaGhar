@@ -82,6 +82,18 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
   const isHoveredRef = useRef<boolean>(false);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [categoriesList, setCategoriesList] = useState<CarouselItem[]>([]);
+  const [isMobile, setIsMobile] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return window.innerWidth <= 768;
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     let isMounted = true;
@@ -167,16 +179,20 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
     };
   }, [componentKey]);
 
-  // Build infinite 3-set list from dynamic categoriesList.
-  // Only Set 2 (middle) is accessible; Set 1 and Set 3 are decorative clones for
-  // seamless looping — they are hidden from the accessibility tree via aria-hidden+inert.
+  // Build infinite 3-set list for desktop looping.
+  // On mobile, only single set is rendered in a 2-column grid.
   const set1 = categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set1-${item.id}-${idx}`, _clone: true }));
   const set2 = categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set2-${item.id}-${idx}`, _clone: false }));
   const set3 = categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set3-${item.id}-${idx}`, _clone: true }));
   const infiniteCategoriesData = [...set1, ...set2, ...set3];
 
-  // Initialize track scroll to middle set (Set 2) and attach seamless bidirectional infinite boundary listener
+  const itemsToRender = isMobile
+    ? categoriesList.map((item, idx) => ({ ...item, uniqueKey: `mobile-${item.id}-${idx}`, _clone: false }))
+    : infiniteCategoriesData;
+
+  // Initialize track scroll to middle set (Set 2) and attach seamless bidirectional infinite boundary listener (Desktop only)
   useEffect(() => {
+    if (isMobile) return;
     const track = trackRef.current;
     if (!track || infiniteCategoriesData.length === 0) return;
 
@@ -215,10 +231,11 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
       clearTimeout(timer);
       track.removeEventListener('scroll', handleScroll);
     };
-  }, [categoriesList]);
+  }, [isMobile, categoriesList]);
 
-  // Original Gentle Continuous Autoplay Timer (Every 3.2 seconds smoothly)
+  // Gentle Continuous Autoplay Timer (Every 3.2 seconds smoothly) - Disabled on mobile view
   useEffect(() => {
+    if (isMobile) return;
     const interval = setInterval(() => {
       if (isHoveredRef.current || !trackRef.current || categoriesList.length === 0) return;
 
@@ -238,7 +255,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
     }, 3200);
 
     return () => clearInterval(interval);
-  }, [categoriesList]);
+  }, [isMobile, categoriesList]);
 
   const scroll = (direction: 'left' | 'right') => {
     if (trackRef.current) {
@@ -280,21 +297,21 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
 
   return (
     <div
-      className="hiyaghar-carousel-wrapper"
+      className={`hiyaghar-carousel-wrapper ${isMobile ? 'is-mobile-view' : ''}`}
       onMouseEnter={() => { isHoveredRef.current = true; }}
       onMouseLeave={() => { isHoveredRef.current = false; setActiveCategoryId(null); }}
       onPointerEnter={() => { isHoveredRef.current = true; }}
       onPointerLeave={() => { isHoveredRef.current = false; setActiveCategoryId(null); }}
     >
       <div
-        className="hiyaghar-carousel-track"
+        className={`hiyaghar-carousel-track ${isMobile ? 'is-mobile-grid' : ''}`}
         ref={trackRef}
-        tabIndex={0}
-        onKeyDown={handleKeyDown}
+        tabIndex={isMobile ? -1 : 0}
+        onKeyDown={isMobile ? undefined : handleKeyDown}
         role="region"
         aria-label="Product Showcase Carousel"
       >
-        {infiniteCategoriesData.map((category, i) => (
+        {itemsToRender.map((category, i) => (
           <div
             key={category.uniqueKey}
             className="hiyaghar-carousel-item"
@@ -325,31 +342,35 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
         ))}
       </div>
 
-      <button
-        type="button"
-        className="hiyaghar-carousel-btn prev"
-        onClick={() => scroll('left')}
-        aria-label="Previous cards"
-        title="Previous"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="19" y1="12" x2="5" y2="12" />
-          <polyline points="12 19 5 12 12 5" />
-        </svg>
-      </button>
+      {!isMobile && (
+        <>
+          <button
+            type="button"
+            className="hiyaghar-carousel-btn prev"
+            onClick={() => scroll('left')}
+            aria-label="Previous cards"
+            title="Previous"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12" />
+              <polyline points="12 19 5 12 12 5" />
+            </svg>
+          </button>
 
-      <button
-        type="button"
-        className="hiyaghar-carousel-btn next"
-        onClick={() => scroll('right')}
-        aria-label="Next cards"
-        title="Next"
-      >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12" />
-          <polyline points="12 5 19 12 12 19" />
-        </svg>
-      </button>
+          <button
+            type="button"
+            className="hiyaghar-carousel-btn next"
+            onClick={() => scroll('right')}
+            aria-label="Next cards"
+            title="Next"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </button>
+        </>
+      )}
     </div>
   );
 };

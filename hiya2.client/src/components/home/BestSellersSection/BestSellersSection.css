@@ -654,17 +654,35 @@
   }
 }
 
-/* Mobile (< 768px): 2 Cards Visible Simultaneously */
+/* Mobile (< 768px): Show All Products in a 2-Column Grid (No Autoplay) */
 @media (max-width: 767px) {
-  .hiyaghar-carousel-track {
-    padding: 12px 0 24px 0;
-    gap: 10px;
+  .hiyaghar-carousel-wrapper {
+    padding: 0 10px;
   }
 
-  .hiyaghar-carousel-item {
-    flex: 0 0 calc((100% - 10px) / 2);
-    min-width: calc((100% - 10px) / 2);
-    max-width: none;
+  .hiyaghar-carousel-track,
+  .hiyaghar-carousel-track.is-mobile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px 10px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding: 8px 0 24px 0;
+  }
+
+  .hiyaghar-carousel-item,
+  .hiyaghar-carousel-track.is-mobile-grid .hiyaghar-carousel-item {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    scroll-snap-align: none;
+    display: flex;
+  }
+
+  .hiyaghar-carousel-item > * {
+    width: 100%;
+    height: 100%;
   }
 
   .hiyaghar-category-card {
@@ -750,14 +768,22 @@
 }
 
 @media (max-width: 420px) {
-  .hiyaghar-carousel-track {
-    padding: 10px 0 20px 0;
-    gap: 8px;
+  .hiyaghar-carousel-wrapper {
+    padding: 0 6px;
   }
 
-  .hiyaghar-carousel-item {
-    flex: 0 0 calc((100% - 8px) / 2);
-    min-width: calc((100% - 8px) / 2);
+  .hiyaghar-carousel-track,
+  .hiyaghar-carousel-track.is-mobile-grid {
+    gap: 10px 8px;
+    padding: 6px 0 20px 0;
+  }
+
+  .hiyaghar-carousel-item,
+  .hiyaghar-carousel-track.is-mobile-grid .hiyaghar-carousel-item {
+    flex: none;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
   }
 
   .hiyaghar-category-card {
