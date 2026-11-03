@@ -11,7 +11,7 @@ export const PrivacyPolicyPage: React.FC = () => {
       {(storeSettings) => (
         <>
           <p>
-            At <strong>Hiya Ghar</strong> (operated under Padhya Software Technologies / Hiya Enterprises and accessible at <code>hiyaghar.com</code>), we hold customer privacy and transparency as fundamental values. This Privacy Policy describes in comprehensive detail how your personal data is collected, stored, processed, and safeguarded when you visit our website, register an account, or order handcrafted natural foods and wellness products.
+            At <strong>Hiya Ghar</strong> (accessible at <code>hiyaghar.com</code>), we hold customer privacy and transparency as fundamental values. This Privacy Policy describes in comprehensive detail how your personal data is collected, stored, processed, and safeguarded when you visit our website, register an account, or order handcrafted natural foods and wellness products.
           </p>
 
           <h2>1. Information We Collect</h2>
@@ -53,7 +53,7 @@ export const PrivacyPolicyPage: React.FC = () => {
             For any privacy inquiries, data removal requests, or clarifications regarding our privacy practices, please contact us:
           </p>
           <div className="hiyaghar-trust-badge-card">
-            <p><strong>Hiya Ghar (Padhya Software Technologies / Hiya Enterprises)</strong></p>
+            <p><strong>Hiya Ghar</strong></p>
             <p>Email: <a href={`mailto:${storeSettings.contactEmail || 'support@hiyaghar.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactEmail || 'support@hiyaghar.com'}</a></p>
             <p>Phone / WhatsApp: <a href={`tel:${storeSettings.contactPhone || '+91 92744 43617'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactPhone || '+91 92744 43617'}</a></p>
             <p>Operating Address: {storeSettings.contactAddress || '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India'}</p>
@@ -288,7 +288,7 @@ export const OurStoryPage: React.FC = () => (
 
     <div className="hiyaghar-trust-badge-card">
       <h2>Certified Purity & Quality</h2>
-      <p><strong>Brand:</strong> Hiya Ghar (Hiya Enterprises)</p>
+      <p><strong>Brand:</strong> Hiya Ghar</p>
       <p><strong>Origin:</strong> Ahmedabad, Gujarat, India</p>
       <p><strong>FSSAI Registration / Lic No:</strong> 10723026001148</p>
       <p><strong>Support Email:</strong> support@hiyaghar.com</p>

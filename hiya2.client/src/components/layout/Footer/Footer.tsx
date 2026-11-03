@@ -55,16 +55,16 @@ export const Footer: React.FC = () => {
       title: 'Hiya',
       links: [
         { label: 'Our Story', type: 'route', href: '/our-story' },
-        { label: 'FAQs & Help', type: 'route', href: '/faq' },
         { label: 'Contact Us', type: 'route', href: '/contact-us' },
+        { label: 'My Account', type: 'route', href: '/profile' },
       ],
     },
     {
       title: 'Help & Support',
       links: [
+        { label: 'FAQs & Help', type: 'route', href: '/faq' },
         { label: 'Shipping Policy', type: 'route', href: '/shipping-policy' },
         { label: 'Return & Refund Policy', type: 'route', href: '/refund-policy' },
-        { label: 'My Account', type: 'route', href: '/profile' },
       ],
     },
     {

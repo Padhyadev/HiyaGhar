@@ -53,12 +53,7 @@ export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
             <div className="hiyaghar-legal-hero-banner-overlay" />
             <div className="hiyaghar-legal-hero-container">
               <ScrollReveal variant="fade-up">
-                
-
                 <h1 className="hiyaghar-legal-hero-title">{title}</h1>
-                <p className="hiyaghar-legal-hero-subtitle">
-                  We value your trust. Learn about how we handle orders, privacy protection, and transparent customer care at HIYAGHAR.
-                </p>
               </ScrollReveal>
             </div>
           </div>
@@ -96,6 +91,10 @@ export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
                 </div>
                 <span className="hiyaghar-legal-last-updated">Last Updated: October 2026</span>
               </div>
+
+              <p className="hiyaghar-legal-trust-intro">
+                We value your trust. Learn about how we handle orders, privacy protection, and transparent customer care at HIYAGHAR.
+              </p>
 
               <div className="hiyaghar-legal-content">
                 {typeof children === 'function' ? children(storeSettings) : children}
