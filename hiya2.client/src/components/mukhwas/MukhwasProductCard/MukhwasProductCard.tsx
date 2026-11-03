@@ -75,14 +75,19 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
   const firstInStockVar = variants.find(isVariantHasTotalStock);
   const firstAvailableVar = variants.find(isVariantAvailable);
 
+  const cleanSelectedWeight = product.selectedWeight ? formatVariantLabel(product.selectedWeight) : '';
+
   // Automatically pick an in-stock variant (if default has 0 stock, pick the variant with stock like 200g)
   const activeVariant = product.selectedWeight && variants.length > 0
-    ? (variants.find((v: any) => formatVariantLabel(v.variantName) === product.selectedWeight || v.variantName === product.selectedWeight) || defaultVar)
+    ? (variants.find((v: any) => {
+        const fName = formatVariantLabel(v.variantName);
+        return fName === cleanSelectedWeight || fName === product.selectedWeight || v.variantName === product.selectedWeight;
+      }) || defaultVar)
     : (defaultVar && isVariantHasTotalStock(defaultVar)
         ? (isVariantAvailable(defaultVar) ? defaultVar : (firstAvailableVar || defaultVar))
         : (firstAvailableVar || firstInStockVar || defaultVar));
 
-  const defaultLabel = product.selectedWeight || (activeVariant ? formatVariantLabel(activeVariant.variantName) : (product.weightOptions?.[0] || ''));
+  const defaultLabel = cleanSelectedWeight || (activeVariant ? formatVariantLabel(activeVariant.variantName) : (product.weightOptions?.[0] ? formatVariantLabel(product.weightOptions[0]) : ''));
 
   const activeVariantStock = getVariantStock(activeVariant);
   const isOutOfStock = !hasAnyTotalStock || activeVariantStock.total <= 0;

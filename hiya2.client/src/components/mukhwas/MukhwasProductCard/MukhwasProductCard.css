@@ -186,7 +186,10 @@
 /* Quick View Overlay on Hover */
 .hiyaghar-mukhwas-quick-view-overlay {
   position: absolute;
-  bottom: -40px;
+  bottom: 0;
+  transform: translateY(105%);
+  opacity: 0;
+  pointer-events: none;
   left: 0;
   right: 0;
   background: rgba(17, 34, 58, 0.85);

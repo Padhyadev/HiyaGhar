@@ -17,11 +17,13 @@ import './WishlistPage.css';
 interface WishlistPageProps {
   onNavigateHome: () => void;
   onNavigateMukhwas: () => void;
+  onNavigateToDetail?: (productId: string) => void;
 }
 
 export const WishlistPage: React.FC<WishlistPageProps> = ({
   onNavigateHome,
   onNavigateMukhwas,
+  onNavigateToDetail,
 }) => {
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>(WishlistService.getItems());
   const [apiProducts, setApiProducts] = useState<ApiProduct[]>([]);
@@ -44,7 +46,6 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
       <Header />
 
       <main id="main-content" tabIndex={-1} className="hiyaghar-wishlist-main">
-
         <MukhwasHero
           onNavigateHome={onNavigateHome}
           breadcrumbCurrent="Wishlist"
@@ -69,22 +70,29 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
             <div className="hiyaghar-wishlist-grid">
               {wishlistItems.map((item, index) => {
                 const liveApiMatch = apiProducts.find((p) => p.id.toString() === item.productId.toString());
-                // Today's price and photo for the saved size; the values stored with the item are
-                // only a fallback (they are from the day it was saved).
+                const cleanWeight = formatVariantLabel(item.weight);
                 const liveVariant = liveApiMatch?.variants?.length
-                  ? findVariantByLabel(liveApiMatch.variants, item.weight || '')
+                  ? (findVariantByLabel(liveApiMatch.variants, cleanWeight) || findVariantByLabel(liveApiMatch.variants, item.weight || ''))
                   : undefined;
-                const livePrice = liveVariant?.price ?? (liveApiMatch && !liveApiMatch.variants?.length
-                  ? liveApiMatch.discountPrice ?? liveApiMatch.basePrice
-                  : undefined);
-                const liveOriginalPrice = liveVariant
-                  ? liveVariant.originalPrice ?? undefined
-                  : (liveApiMatch && !liveApiMatch.variants?.length && liveApiMatch.discountPrice != null ? liveApiMatch.basePrice : undefined);
-                const liveImage = liveApiMatch ? getVariantImages(liveApiMatch, liveVariant)[0] : undefined;
+                const defaultVariant = liveApiMatch?.variants?.find((v) => v.isDefault) || liveApiMatch?.variants?.[0];
+                const activeVar = liveVariant || defaultVariant;
 
-                const weightOpts = liveApiMatch?.variants
+                const livePrice = activeVar
+                  ? activeVar.price
+                  : (liveApiMatch?.discountPrice ?? liveApiMatch?.basePrice ?? item.price);
+                const liveOriginalPrice = activeVar
+                  ? (activeVar.originalPrice || activeVar.price)
+                  : (liveApiMatch?.discountPrice != null && liveApiMatch.basePrice > livePrice ? liveApiMatch.basePrice : (item.originalPrice || Math.round(livePrice * 1.25)));
+                const discountPercentage = liveOriginalPrice > livePrice
+                  ? Math.round(((liveOriginalPrice - livePrice) / liveOriginalPrice) * 100)
+                  : 0;
+
+                const weightOpts = liveApiMatch?.variants?.length
                   ? liveApiMatch.variants.map((v) => formatVariantLabel(v.variantName))
-                  : [item.weight || '100g'];
+                  : [cleanWeight || '100g'];
+
+                const mainImg = liveApiMatch ? (getVariantImages(liveApiMatch, activeVar)[0] || liveApiMatch.mainImagePath) : item.image;
+                const secImg = liveApiMatch ? getVariantImages(liveApiMatch, activeVar)[1] : undefined;
 
                 const productObj: MukhwasProduct = {
                   id: item.productId,
@@ -93,19 +101,18 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                   categoryLabel: liveApiMatch?.category?.categoryName || 'Speciality Product',
                   shortDescription: liveApiMatch?.shortDescription || '',
                   longDescription: liveApiMatch?.fullDescription || '',
-                  price: livePrice ?? item.price,
-                  originalPrice: livePrice != null
-                    ? Math.max(liveOriginalPrice || 0, livePrice)
-                    : item.originalPrice || liveApiMatch?.discountPrice || item.price,
-                  discountPercentage: 0,
-                  weightOptions: weightOpts.length > 0 ? weightOpts : [item.weight || '100g'],
+                  price: livePrice,
+                  originalPrice: liveOriginalPrice,
+                  discountPercentage: discountPercentage,
+                  weightOptions: weightOpts.length > 0 ? weightOpts : [cleanWeight || '100g'],
                   variants: liveApiMatch?.variants || [],
-                  selectedWeight: item.weight || undefined,
-                  image: liveImage || item.image || NO_IMAGE,
+                  selectedWeight: cleanWeight || undefined,
+                  image: mainImg || NO_IMAGE,
+                  secondaryImage: secImg,
                   rating: liveApiMatch?.rating || 4.9,
                   reviewsCount: liveApiMatch?.reviewCount || 50,
                   isBestSeller: liveApiMatch?.isFeatured || false,
-                  badge: undefined,
+                  badge: liveApiMatch?.isFeatured ? 'Best Seller' : undefined,
                   benefits: [],
                   ingredients: [],
                   nutritionalInfo: {
@@ -123,7 +130,11 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                     product={productObj}
                     index={index}
                     onNavigateToDetail={(productId) => {
-                      navigateTo('/product/' + productId);
+                      if (onNavigateToDetail) {
+                        onNavigateToDetail(productId);
+                      } else {
+                        navigateTo('/product/' + productId);
+                      }
                     }}
                     onAddToCart={(prod, weight, qty, price, originalPrice) => {
                       const itemId = CartService.addItem({

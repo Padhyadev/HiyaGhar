@@ -804,6 +804,7 @@ function App() {
         <WishlistPage
           onNavigateHome={handleNavigateHome}
           onNavigateMukhwas={handleNavigateMukhwas}
+          onNavigateToDetail={handleNavigateToDetail}
         />
       );
     }
