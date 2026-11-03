@@ -206,6 +206,13 @@
   bottom: 0;
 }
 
+/* Touch screens keep "hover" after a tap, which left this bar covering the product photo */
+@media (hover: none) {
+  .hiyaghar-mukhwas-quick-view-overlay {
+    display: none;
+  }
+}
+
 /* Card Body */
 .hiyaghar-mukhwas-card-body {
   padding: var(--space-8) var(--space-8) var(--space-9) var(--space-8);
@@ -331,8 +338,10 @@
 
 .hiyaghar-price-group {
   display: flex;
+  flex-wrap: wrap; /* narrow cards: the size tag moves to its own line instead of being cut off */
   align-items: baseline;
-  gap: 8px;
+  gap: 4px 8px;
+  min-width: 0;
 }
 
 .hiyaghar-current-price {
@@ -352,6 +361,10 @@
   letter-spacing: 0.2px;
   white-space: nowrap;
   align-self: center;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
 }
 
 .hiyaghar-original-price {
@@ -435,11 +448,19 @@
   .hiyaghar-mukhwas-card {
     min-width: 0;
     width: 100%;
+    border-radius: 16px; /* same as the home category cards */
   }
 
+  /* Square photo across the full card width, like the home category cards. "contain" (not
+     cover) so a bottle or soap box is never cropped; the photo sits on the card's own tone. */
   .hiyaghar-mukhwas-card-image-box {
-    height: 190px;
+    height: auto;
+    aspect-ratio: 1 / 1;
     padding: 0;
+  }
+
+  .hiyaghar-mukhwas-card-img {
+    object-position: center;
   }
 
   .hiyaghar-mukhwas-card-top-bar {
@@ -482,9 +503,11 @@
   }
 
   .hiyaghar-mukhwas-card-title {
-    font-size: 13px;
-    margin: 0 0 4px 0;
+    font-size: 14px;
+    margin: 0 0 6px 0;
     line-height: 1.25;
+    min-height: 35px; /* two lines, so prices and buttons line up across a row */
+    text-align: center;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -512,24 +535,46 @@
     font-size: 12px;
   }
 
+  /* Two lines:  ₹75 ₹94 ........ 20% OFF
+                  [150 g • Bottle]                                    */
   .hiyaghar-mukhwas-card-price-row {
-    margin-bottom: 8px;
-    flex-wrap: wrap;
-    gap: 4px;
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
     align-items: center;
+    column-gap: 6px;
+    row-gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .hiyaghar-mukhwas-card-price-row .hiyaghar-price-group {
+    display: contents; /* its price and size tag are placed on the grid directly */
   }
 
   .hiyaghar-current-price {
     font-size: 17px;
+    grid-row: 1;
+    grid-column: 1;
   }
 
   .hiyaghar-original-price {
     font-size: 12px;
+    grid-row: 1;
+    grid-column: 2;
   }
 
   .hiyaghar-discount-pill {
     font-size: 12px;
     padding: 1px 4px;
+    grid-row: 1;
+    grid-column: 4;
+    justify-self: end;
+    white-space: nowrap;
+  }
+
+  .hiyaghar-mukhwas-card-price-row .hiyaghar-card-weight-tag {
+    grid-row: 2;
+    grid-column: 1 / -1;
+    justify-self: start;
   }
 
   .hiyaghar-mukhwas-card-actions {

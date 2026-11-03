@@ -28,6 +28,7 @@ export const HomeCategoriesSection: React.FC = () => {
   const [pageCount, setPageCount] = useState(1);
   const [activePage, setActivePage] = useState(0);
   const trackRef = useRef<HTMLUListElement>(null);
+  const isInteractingRef = useRef(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -97,6 +98,72 @@ export const HomeCategoriesSection: React.FC = () => {
       observer.disconnect();
     };
   }, [categories, updateScrollState]);
+
+  // Touch and hover pause handling for smooth auto-scroll
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    let resumeTimer: number | undefined;
+
+    const pause = () => {
+      isInteractingRef.current = true;
+      if (resumeTimer) window.clearTimeout(resumeTimer);
+    };
+
+    const resume = () => {
+      if (resumeTimer) window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(() => {
+        isInteractingRef.current = false;
+      }, 3500);
+    };
+
+    track.addEventListener('pointerdown', pause, { passive: true });
+    track.addEventListener('pointerup', resume, { passive: true });
+    track.addEventListener('pointercancel', resume, { passive: true });
+    track.addEventListener('touchstart', pause, { passive: true });
+    track.addEventListener('touchend', resume, { passive: true });
+    track.addEventListener('mouseenter', pause);
+    track.addEventListener('mouseleave', resume);
+
+    return () => {
+      if (resumeTimer) window.clearTimeout(resumeTimer);
+      track.removeEventListener('pointerdown', pause);
+      track.removeEventListener('pointerup', resume);
+      track.removeEventListener('pointercancel', resume);
+      track.removeEventListener('touchstart', pause);
+      track.removeEventListener('touchend', resume);
+      track.removeEventListener('mouseenter', pause);
+      track.removeEventListener('mouseleave', resume);
+    };
+  }, []);
+
+  // Continuous gentle auto-scrolling when carousel has overflowing cards (mobile & tablet)
+  useEffect(() => {
+    if (categories.length <= 1) return;
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
+    const interval = setInterval(() => {
+      const track = trackRef.current;
+      if (!track || isInteractingRef.current) return;
+
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      if (maxScroll <= 8) return; // All cards already fit without scrolling (e.g. desktop full grid)
+
+      const step = getStep();
+      if (step <= 0) return;
+
+      if (track.scrollLeft >= maxScroll - 12) {
+        track.scrollTo({ left: 0, behavior: 'smooth' });
+      } else {
+        track.scrollBy({ left: step, behavior: 'smooth' });
+      }
+    }, 3200);
+
+    return () => clearInterval(interval);
+  }, [categories]);
 
   const scrollToPage = (page: number) => {
     trackRef.current?.scrollTo({ left: page * getStep() });

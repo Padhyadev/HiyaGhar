@@ -10,6 +10,7 @@ import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { AttributeOrderService, type AttributeOrder } from '../../services/attributeOrderService';
 import { ProductReviews } from '../../components/ProductReviews/ProductReviews';
+import { YouMayAlsoLike } from '../../components/product/YouMayAlsoLike/YouMayAlsoLike';
 import { navigateTo } from '../../utils/navigation';
 import { cameDirectlyFrom } from '../../utils/scrollMemory';
 import { formatVariantLabel, getVariantImages, NO_IMAGE, productPath } from '../../utils/productFormat';
@@ -1269,6 +1270,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
               ))}
             </section>
           )}
+
+          <YouMayAlsoLike productId={product.id} />
         </div>
         )}
       </main>

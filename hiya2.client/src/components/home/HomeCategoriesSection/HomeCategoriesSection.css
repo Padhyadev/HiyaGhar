@@ -298,32 +298,47 @@
   }
 }
 
-/* Mobile: ~1.35 cards so the next one peeks in; swipe + dots, no arrows */
+/* Mobile: 2 cards per view with smooth auto-scroll + swipe dots */
 @media (max-width: 767px) {
   .hiyaghar-homecat-section {
-    --homecat-gap: 14px;
+    --homecat-gap: 12px;
+  }
+
+  .hiyaghar-homecat-track {
+    padding: 8px 4px 20px;
+    gap: var(--homecat-gap);
   }
 
   .hiyaghar-homecat-card {
-    flex-basis: 72%;
-    border-radius: 16px;
+    flex: 0 0 calc((100% - var(--homecat-gap)) / 2);
+    min-width: 0;
+    border-radius: 14px;
   }
 
   .hiyaghar-homecat-name-section {
-    padding: 12px 14px;
-    min-height: 48px;
+    padding: 10px 8px;
+    min-height: 42px;
   }
 
   .hiyaghar-homecat-name {
-    font-size: 16px;
+    font-size: 14px;
+    line-height: 1.25;
   }
 
   .hiyaghar-homecat-action-section {
-    padding: 12px 14px 16px;
+    padding: 10px 6px 12px;
   }
 
   .hiyaghar-homecat-btn {
-    font-size: 14px;
+    font-size: 12px;
+    gap: 4px;
+    white-space: nowrap;
+  }
+
+  .hiyaghar-homecat-btn-arrow {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
   }
 
   .hiyaghar-homecat-arrow {
@@ -334,6 +349,30 @@
   .hiyaghar-homecat-card:hover,
   .hiyaghar-homecat-card:focus-within {
     transform: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .hiyaghar-homecat-section {
+    --homecat-gap: 8px;
+  }
+
+  .hiyaghar-homecat-name-section {
+    padding: 8px 6px;
+    min-height: 38px;
+  }
+
+  .hiyaghar-homecat-name {
+    font-size: 13px;
+  }
+
+  .hiyaghar-homecat-action-section {
+    padding: 8px 4px 10px;
+  }
+
+  .hiyaghar-homecat-btn {
+    font-size: 11px;
+    gap: 3px;
   }
 }
 

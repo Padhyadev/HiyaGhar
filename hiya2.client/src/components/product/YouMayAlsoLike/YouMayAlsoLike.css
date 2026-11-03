@@ -1,0 +1,119 @@
+/* Product page "You May Also Like" row. All classes are scoped with hiyaghar-ymal-. */
+
+.hiyaghar-ymal-section {
+  --ymal-gap: 20px;
+  margin-top: clamp(32px, 5vw, 56px);
+}
+
+.hiyaghar-ymal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.hiyaghar-ymal-title {
+  margin: 0;
+  font-size: clamp(22px, 2.6vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-ymal-arrows {
+  display: flex;
+  gap: 10px;
+}
+
+.hiyaghar-ymal-arrow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(17, 34, 58, 0.12);
+  background-color: #ffffff;
+  color: var(--hiya-navy, #11223A);
+  box-shadow: 0 4px 12px rgba(17, 34, 58, 0.08);
+  cursor: pointer;
+  transition: background-color 300ms ease, color 300ms ease, opacity 300ms ease;
+}
+
+.hiyaghar-ymal-arrow:hover:not(:disabled) {
+  background-color: var(--hiya-navy, #11223A);
+  color: #ffffff;
+}
+
+.hiyaghar-ymal-arrow:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+.hiyaghar-ymal-arrow:focus-visible {
+  outline: 3px solid #2F6B4F;
+  outline-offset: 3px;
+}
+
+/* Native horizontal scroll with snap: swipe works on touch screens */
+.hiyaghar-ymal-track {
+  list-style: none;
+  margin: 0;
+  padding: 6px 2px 16px;
+  display: flex;
+  gap: var(--ymal-gap);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.hiyaghar-ymal-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* 4 cards visible on desktop */
+.hiyaghar-ymal-item {
+  flex: 0 0 calc((100% - 3 * var(--ymal-gap)) / 4);
+  min-width: 0;
+  scroll-snap-align: start;
+  display: flex;
+}
+
+.hiyaghar-ymal-item > * {
+  width: 100%;
+}
+
+@media (max-width: 1199px) {
+  .hiyaghar-ymal-item {
+    flex-basis: calc((100% - 2 * var(--ymal-gap)) / 3);
+  }
+}
+
+/* Phones: 2 cards, same as the product listings */
+@media (max-width: 768px) {
+  .hiyaghar-ymal-section {
+    --ymal-gap: 10px;
+  }
+
+  .hiyaghar-ymal-item {
+    flex-basis: calc((100% - var(--ymal-gap)) / 2);
+  }
+
+  .hiyaghar-ymal-arrows {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hiyaghar-ymal-track {
+    scroll-behavior: auto;
+  }
+
+  .hiyaghar-ymal-arrow {
+    transition: none;
+  }
+}
