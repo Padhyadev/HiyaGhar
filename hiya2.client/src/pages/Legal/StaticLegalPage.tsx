@@ -55,7 +55,6 @@ export const StaticLegalPage: React.FC<StaticLegalPageProps> = ({
               <ScrollReveal variant="fade-up">
                 
 
-                <span className="hiyaghar-legal-hero-eyebrow">POLICIES & LEGAL TRANSPARENCY</span>
                 <h1 className="hiyaghar-legal-hero-title">{title}</h1>
                 <p className="hiyaghar-legal-hero-subtitle">
                   We value your trust. Learn about how we handle orders, privacy protection, and transparent customer care at HIYAGHAR.

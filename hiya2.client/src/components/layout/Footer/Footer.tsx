@@ -72,7 +72,6 @@ export const Footer: React.FC = () => {
       links: [
         { label: 'Privacy Policy', type: 'route', href: '/privacy-policy' },
         { label: 'Terms & Conditions', type: 'route', href: '/terms-conditions' },
-        { label: 'Return & Refund Policy', type: 'route', href: '/refund-policy' },
       ],
     },
   ];
