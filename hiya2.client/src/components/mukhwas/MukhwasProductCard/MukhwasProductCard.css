@@ -254,26 +254,18 @@
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--hiya-navy);
-  margin: 0 0 var(--space-3) 0;
+  margin: 0 0 var(--space-4) 0;
   line-height: 1.3;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.hiyaghar-mukhwas-card-desc {
-  font-size: 14px;
-  color: var(--color-text-secondary);
-  line-height: 1.4;
-  margin-bottom: var(--space-6);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: 34px;
+  min-height: 40px;
+}
+
+.hiyaghar-mukhwas-card-desc {
+  display: none !important;
 }
 
 /* Weight Selector */

@@ -14,7 +14,7 @@
 
 .hg-founder-strip-grid {
   display: grid;
-  grid-template-columns: 420px 1fr;
+  grid-template-columns: 1fr 420px;
   align-items: center;
   gap: clamp(40px, 6vw, 76px);
 }
@@ -67,6 +67,10 @@
     grid-template-columns: 1fr;
     gap: 40px;
     text-align: center;
+  }
+
+  .hg-founder-strip-photo-col {
+    order: -1;
   }
 
   .hg-founder-strip-quote-box {

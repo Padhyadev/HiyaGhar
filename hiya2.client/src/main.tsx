@@ -13,6 +13,14 @@ startVersionWatch();
 // Bring prices saved in the cart up to today's catalog prices (see CartService.refreshPrices).
 void CartService.refreshPrices(true);
 
+// Older admin screens kept a copy of product details (ingredients, FAQs...) in the browser, which
+// then hid later admin changes. Product details now come only from the server; remove that copy.
+try {
+  localStorage.removeItem('hiyaghar_product_custom_meta');
+} catch {
+  /* storage blocked */
+}
+
 // This site does not use a service worker. A service worker left in a browser by an earlier
 // version of the site answers normal reloads with its saved copy of the OLD site (only a hard
 // refresh bypasses it), so remove any registration and its saved files.

@@ -148,7 +148,7 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
   const handleAddToCartCard = (product: TeaMasalaProduct, weight: string, _qty: number = 1, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
-      name: `${product.name} (${weight})`,
+      name: product.name,
       image: product.image,
       price: typeof price === 'number' ? price : product.price,
       originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
@@ -156,13 +156,13 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
       quantity: 1,
     });
 
-    showToast(`Added ${product.name} (${weight}) to your cart!`);
+    showToast(`Added ${product.name} to your cart!`);
   };
 
   const handleBuyNowCard = (product: TeaMasalaProduct, weight: string, price?: number, originalPrice?: number) => {
     CartService.buyNow({
       productId: product.id,
-      name: `${product.name} (${weight})`,
+      name: product.name,
       image: product.image,
       price: typeof price === 'number' ? price : product.price,
       originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
@@ -180,7 +180,7 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
           <MukhwasHero
             onNavigateHome={onNavigateHome}
             title="Tea Masala"
-            bgImage="/image/Banner_image/Tea-Masala3.webp"
+            bgImage="/image/Banner_image/Tea-Masala3.webp?v=2"
           />
 
           <MukhwasFilterSort

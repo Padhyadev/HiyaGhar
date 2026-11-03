@@ -272,9 +272,6 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
           </a>
         </h3>
 
-        {/* Short Description */}
-        <p className="hiyaghar-mukhwas-card-desc">{product.shortDescription}</p>
-
         {/* Price & Discount Bar */}
         <div className="hiyaghar-mukhwas-card-price-row">
           <div className="hiyaghar-price-group">

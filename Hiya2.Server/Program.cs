@@ -699,6 +699,27 @@ app.Use(async (context, next) =>
     await next();
 });
 
+// After any saved admin change to products/stock/categories/attributes (or a placed order, which
+// changes stock), drop the server's cached product list and rendered pages so the next visitor
+// gets today's prices, images and stock (Services/CatalogCache.cs).
+app.Use(async (context, next) =>
+{
+    await next();
+    if (Hiya2.Server.Services.CatalogCache.IsCatalogWrite(context))
+    {
+        try
+        {
+            await Hiya2.Server.Services.CatalogCache.InvalidateAsync(
+                context.RequestServices.GetRequiredService<Microsoft.AspNetCore.OutputCaching.IOutputCacheStore>());
+        }
+        catch (Exception ex)
+        {
+            context.RequestServices.GetRequiredService<ILogger<Program>>()
+                .LogWarning(ex, "Catalog cache invalidation failed; it will expire on its own.");
+        }
+    }
+});
+
 app.UseOutputCache();
 
 app.UseAuthentication();

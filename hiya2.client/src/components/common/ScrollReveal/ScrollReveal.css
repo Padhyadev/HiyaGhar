@@ -9,29 +9,42 @@
 
 /* Directional variants */
 .reveal-fade-up {
-  transform: translateY(48px);
+  transform: translateY(36px);
 }
 
 .reveal-fade-down {
-  transform: translateY(-48px);
+  transform: translateY(-36px);
 }
 
 .reveal-fade-left {
-  transform: translateX(-50px);
+  transform: translateX(-36px);
 }
 
 .reveal-fade-right {
-  transform: translateX(50px);
+  transform: translateX(36px);
 }
 
 .reveal-scale-up {
-  transform: scale(0.92) translateY(24px);
+  transform: scale(0.95) translateY(18px);
 }
 
 /* Revealed state triggered when element enters viewport */
 .reveal-element.is-revealed {
   opacity: 1;
   transform: translate(0, 0) scale(1);
+}
+
+/* Mobile: subtle offset for seamless scrolling */
+@media (max-width: 768px) {
+  .reveal-fade-left {
+    transform: translateX(-18px);
+  }
+  .reveal-fade-right {
+    transform: translateX(18px);
+  }
+  .reveal-fade-up {
+    transform: translateY(18px);
+  }
 }
 
 /* Reduced Motion Preferences */

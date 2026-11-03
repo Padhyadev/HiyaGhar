@@ -6,7 +6,6 @@ import { showConfirm, showToast } from '../../utils/alertService';
 import {
   parseProductFullDescription,
   buildFullDescriptionWithMeta,
-  saveStoredProductMeta,
   type ProductCustomMeta,
   type ProductFaq,
 } from '../../utils/productMetaStore';
@@ -767,11 +766,6 @@ export const ProductManagementPage: React.FC = () => {
       });
 
       if (res.ok) {
-        const savedData = await res.json().catch(() => null);
-        const savedId = savedData?.id || editingItem?.id;
-        if (savedId) {
-          saveStoredProductMeta(savedId, customMeta);
-        }
         showToastMsg(editingItem ? `Product ${formData.productName} updated successfully.` : `Product ${formData.productName} created successfully.`);
         await loadProducts();
         setViewMode('list');

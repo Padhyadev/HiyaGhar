@@ -794,7 +794,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           onNavigateHome={onNavigateHome}
           breadcrumbCurrent="Checkout"
           title="Checkout"
-          bgImage="/image/Banner_image/Checkout.webp"
+          bgImage="/image/Banner_image/Checkout.webp?v=2"
           textShade="dark"
         />
 

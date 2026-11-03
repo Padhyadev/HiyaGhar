@@ -55,7 +55,7 @@ export const CombosPage: React.FC<CombosPageProps> = ({ onNavigateHome, onNaviga
           onNavigateHome={onNavigateHome}
           breadcrumbCurrent="Combo Packs"
           title="Combo Packs"
-          bgImage="/image/Banner_image/Combos_Banner.webp"
+          bgImage="/image/Banner_image/Combos_Banner.webp?v=2"
           textShade="dark"
         />
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { ScrollReveal } from '../../common/ScrollReveal/ScrollReveal';
-import { navigateTo } from '../../../utils/navigation';
 import './FeaturedStorySection.css';
 
 const featuredStory = {
@@ -8,8 +7,6 @@ const featuredStory = {
   title: 'Some goodness has a story.',
   description:
     'From familiar flavours and traditional ingredients to the care behind every creation, Hiya brings a little piece of heritage into everyday life.',
-  ctaLabel: 'Discover Our Story',
-  ctaHref: '/our-story',
   signature: 'A little tradition. A lot of goodness.',
   image: '/image/jamunbottole_clean.webp',
   imageAlt: 'Hiya authentic traditional preparation and natural ingredients',
@@ -27,7 +24,7 @@ export const FeaturedStorySection: React.FC = () => {
       <div className="hiyaghar-story-inner-container">
         <div className="hiyaghar-story-layout-grid">
           {/* Story Image Column with Overlapping Floating Fruits */}
-          <ScrollReveal variant="scale-up" delay={100} className="hiyaghar-story-image-col">
+          <ScrollReveal variant="fade-left" delay={100} className="hiyaghar-story-image-col">
             <div className="hiyaghar-story-image-card-wrapper">
               {/* Floating Fruit Elements overlapping card edges & product image */}
               <div className="hiyaghar-story-floating-fruits" aria-hidden="true">
@@ -78,7 +75,7 @@ export const FeaturedStorySection: React.FC = () => {
           </ScrollReveal>
 
           {/* Story Content Column */}
-          <ScrollReveal variant="fade-up" delay={250} className="hiyaghar-story-content-col">
+          <ScrollReveal variant="fade-right" delay={200} className="hiyaghar-story-content-col">
             <div className="hiyaghar-story-eyebrow-wrapper">
               <span className="hiyaghar-story-eyebrow">{featuredStory.eyebrow}</span>
             </div>
@@ -86,23 +83,6 @@ export const FeaturedStorySection: React.FC = () => {
             <h2 className="hiyaghar-story-title">{featuredStory.title}</h2>
 
             <p className="hiyaghar-story-description">{featuredStory.description}</p>
-
-            <div className="hiyaghar-story-action">
-              <a
-                href={featuredStory.ctaHref}
-                className="hiyaghar-story-cta-link"
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigateTo('/our-story');
-                }}
-              >
-                <span>{featuredStory.ctaLabel}</span>
-                <svg className="hiyaghar-story-arrow" width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="1" y1="7" x2="15" y2="7" />
-                  <polyline points="10 2 15 7 10 12" />
-                </svg>
-              </a>
-            </div>
 
             {/* Emotional Signature Closing */}
             <div className="hiyaghar-story-signature-box">

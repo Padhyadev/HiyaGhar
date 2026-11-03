@@ -1,6 +1,6 @@
 import { CustomerAuthService } from './customerAuthService';
 import { ProductService, type Product, type ProductVariant } from './productService';
-import { formatVariantLabel } from '../utils/productFormat';
+import { formatVariantLabel, getVariantImages } from '../utils/productFormat';
 
 // Bridges the client's guest cart (keyed by productId + a display "weight"
 // label) to the server-persisted cart (keyed by numeric productId + variantId).
@@ -16,7 +16,7 @@ interface ResolvedLine {
 const variantResolutionCache = new Map<string, ResolvedLine>();
 
 // The variant whose name matches a cart line's weight label, or undefined.
-function findVariantByLabel(variants: ProductVariant[], weight: string): ProductVariant | undefined {
+export function findVariantByLabel(variants: ProductVariant[], weight: string): ProductVariant | undefined {
   const cleanWeight = (weight || '').toLowerCase().replace(/[\s\-\>:]+/g, '');
   return (
     variants.find((v) => v.variantName === weight) ||
@@ -157,14 +157,15 @@ export class CartApiService {
     return resolveLine(productId, weight);
   }
 
-  // Today's price of each cart line, keyed `${productId}::${weight}`, read fresh from the catalog
-  // (not ProductService's in-memory list) so a price changed in admin shows without a reload.
-  // Priced the same way the server prices an order (CartRepository.ResolveUnitPrice). Lines that
-  // can't be matched to a variant by name, or whose product can't be loaded, are left out.
+  // Today's price, name and photo of each cart line, keyed `${productId}::${weight}`, read fresh
+  // from the catalog (not ProductService's in-memory list) so a price or photo changed in admin
+  // shows without a reload. Priced the same way the server prices an order
+  // (CartRepository.ResolveUnitPrice). Lines that can't be matched to a variant by name, or whose
+  // product can't be loaded, are left out.
   public static async fetchCurrentPrices(
     items: Array<{ productId: string; weight: string }>
-  ): Promise<Map<string, { price: number; originalPrice?: number }>> {
-    const prices = new Map<string, { price: number; originalPrice?: number }>();
+  ): Promise<Map<string, { price: number; originalPrice?: number; name?: string; image?: string }>> {
+    const prices = new Map<string, { price: number; originalPrice?: number; name?: string; image?: string }>();
     const productIds = [...new Set(items.map((i) => Number(i.productId)).filter((id) => id > 0))];
 
     const products = await Promise.all(
@@ -184,11 +185,23 @@ export class CartApiService {
       const variants = product.variants || [];
       if (variants.length > 0) {
         const variant = findVariantByLabel(variants, item.weight);
-        if (variant) prices.set(`${item.productId}::${item.weight}`, { price: variant.price, originalPrice: variant.originalPrice ?? undefined });
+        if (variant) {
+          prices.set(`${item.productId}::${item.weight}`, {
+            price: variant.price,
+            originalPrice: variant.originalPrice ?? undefined,
+            name: product.productName,
+            image: getVariantImages(product, variant)[0],
+          });
+        }
       } else {
         const price = product.discountPrice ?? product.basePrice;
         if (typeof price === 'number') {
-          prices.set(`${item.productId}::${item.weight}`, { price, originalPrice: product.discountPrice != null ? product.basePrice : undefined });
+          prices.set(`${item.productId}::${item.weight}`, {
+            price,
+            originalPrice: product.discountPrice != null ? product.basePrice : undefined,
+            name: product.productName,
+            image: getVariantImages(product)[0],
+          });
         }
       }
     }

@@ -17,6 +17,25 @@ import { showNoImageOnError, NO_IMAGE, productPath } from '../../../utils/produc
 import { LOGO_URL } from '../../../utils/brand';
 import { REWARD_COINS_ENABLED } from '../../../utils/features';
 
+
+function getSideCartCategory(item: { name: string; weight?: string; category?: string }): string {
+  let cat = item.category?.trim();
+  if (!cat || cat.toLowerCase() === 'all') {
+    const n = (item.name || '').toLowerCase();
+    if (n.includes('soap')) cat = 'Handmade Soap';
+    else if (n.includes('tea') || n.includes('masala') || n.includes('chai')) cat = 'Tea Masala';
+    else if (n.includes('oil')) cat = 'Hair Oil';
+    else if (n.includes('hamper') || n.includes('gift')) cat = 'Gift Hamper';
+    else if (n.includes('combo')) cat = 'Curated Combo';
+    else cat = 'Mukhwas';
+  }
+  const w = item.weight?.trim();
+  if (w && !/^(no[ -]?variant|default|standard|none|n\/a)$/i.test(w)) {
+    return `${cat} • ${w}`;
+  }
+  return cat;
+}
+
 export const Header: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState<boolean>(CartService.isCartOpen());
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -1099,7 +1118,7 @@ export const Header: React.FC = () => {
                     CartService.closeCart();
                   }}
                 >
-                  View All →
+                  View Cart →
                 </button>
                 <button
                   type="button"
@@ -1127,7 +1146,7 @@ export const Header: React.FC = () => {
                     </div>
                     <div className="hiyaghar-side-cart-item-info">
                       <span className="hiyaghar-side-cart-item-cat">
-                        {item.weight ? `Mukhwas • ${item.weight}` : 'Authentic Delicacy'}
+                        {getSideCartCategory(item)}
                       </span>
                       <span className="hiyaghar-side-cart-item-name">{item.name}</span>
                     </div>
@@ -1236,7 +1255,7 @@ export const Header: React.FC = () => {
                       CartService.closeCart();
                     }}
                   >
-                    View Full Cart Page (View All) →
+                    View Full Basket →
                   </button>
                 </div>
               </>

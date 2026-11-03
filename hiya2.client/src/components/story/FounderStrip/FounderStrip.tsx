@@ -10,18 +10,7 @@ export const FounderStrip: React.FC = () => {
     <section className="hg-founder-strip" aria-label="Meet the Founder" data-scroll-anchor="founder">
       <div className="hg-founder-strip-container">
         <div className="hg-founder-strip-grid">
-          {/* Left Column: Arch-shaped portrait */}
-          <ScrollReveal variant="fade-right" className="hg-founder-strip-photo-col">
-            <ArchImage
-              alt="Priti Shah, founder of HIYA Ghar"
-              width={380}
-              height={480}
-              loading="lazy"
-              badgeText="Handmade in Ahmedabad"
-            />
-          </ScrollReveal>
-
-          {/* Right Column: Copy, quote & button */}
+          {/* Left Column: Copy, quote & button */}
           <ScrollReveal variant="fade-left" className="hg-founder-strip-content-col">
             <span className="hg-section-label">MEET THE FOUNDER</span>
             <h2 className="hg-section-heading">From our kitchen to your family table</h2>
@@ -48,6 +37,17 @@ export const FounderStrip: React.FC = () => {
                 </svg>
               </Link>
             </div>
+          </ScrollReveal>
+
+          {/* Right Column: Arch-shaped portrait */}
+          <ScrollReveal variant="fade-right" className="hg-founder-strip-photo-col">
+            <ArchImage
+              alt="Priti Shah, founder of HIYA Ghar"
+              width={380}
+              height={480}
+              loading="lazy"
+              badgeText="Handmade in Ahmedabad"
+            />
           </ScrollReveal>
         </div>
       </div>

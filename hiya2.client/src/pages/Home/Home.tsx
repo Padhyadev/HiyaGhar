@@ -2,6 +2,7 @@ import React from 'react';
 import { Header } from '../../components/layout/Header/Header';
 import { Hero } from '../../components/home/Hero/Hero';
 import { BestSellersSection } from '../../components/home/BestSellersSection/BestSellersSection';
+import { HomeCategoriesSection } from '../../components/home/HomeCategoriesSection/HomeCategoriesSection';
 import { CombosSection } from '../../components/home/CombosSection/CombosSection';
 import { WhyHiyaSection } from '../../components/home/WhyHiyaSection/WhyHiyaSection';
 import { FeaturedStorySection } from '../../components/home/FeaturedStorySection/FeaturedStorySection';
@@ -19,7 +20,7 @@ export const Home: React.FC = () => {
       <main id="main-content" tabIndex={-1} className="hiyaghar-home-main">
         <Hero />
         {/* 1. Category Section (EXPLORE CATEGORIES / Squeeze in Some Goodness) */}
-        <BestSellersSection componentKey="Category" />
+        <HomeCategoriesSection />
 
         {/* 2. Bestsellers Product Section (BESTSELLERS / Our Most Popular Products) */}
         <BestSellersSection componentKey="Bestsellers" />

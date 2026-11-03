@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { reviewsData as fallbackReviewsData, type Review } from './reviewsData';
 import { ReviewCard } from './ReviewCard';
 import { ScrollReveal } from '../../common/ScrollReveal/ScrollReveal';
-import { navigateTo } from '../../../utils/navigation';
 import './ReviewsSection.css';
 
 export const ReviewsSection: React.FC = () => {
@@ -16,6 +15,14 @@ export const ReviewsSection: React.FC = () => {
 
   const touchStartXRef = useRef<number | null>(null);
   const touchEndXRef = useRef<number | null>(null);
+  // Set when "previous" is pressed on the first review: the track first jumps (invisibly) to the
+  // identical copy one set further on, then slides one step back from there.
+  const pendingPrevRef = useRef<boolean>(false);
+  const [isPageVisible, setIsPageVisible] = useState<boolean>(() =>
+    typeof document === 'undefined' ? true : document.visibilityState === 'visible'
+  );
+  const prefersReducedMotion =
+    typeof window !== 'undefined' && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 
   useEffect(() => {
     const fetchLiveReviews = async () => {
@@ -68,40 +75,74 @@ export const ReviewsSection: React.FC = () => {
   }, []);
 
   const prevSlide = useCallback(() => {
+    if (currentIndex <= 0) {
+      // Going back from the first review: one smooth step, not a rewind across every card.
+      pendingPrevRef.current = true;
+      setIsTransitioning(false);
+      setCurrentIndex(totalReviews);
+      return;
+    }
     setIsTransitioning(true);
-    setCurrentIndex((prev) => (prev <= 0 ? totalReviews - 1 : prev - 1));
-  }, [totalReviews]);
+    setCurrentIndex((prev) => prev - 1);
+  }, [currentIndex, totalReviews]);
 
-  // Seamless reset when transition ends past original array length
-  const handleTransitionEnd = () => {
+  // Seamless reset when the track's own slide ends past the original array length. Cards inside
+  // have their own (shorter) transitions whose end events bubble up here; those are ignored, or
+  // the reset would happen mid-slide and show as a jump.
+  const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget || e.propertyName !== 'transform') return;
     if (currentIndex >= totalReviews) {
       setIsTransitioning(false);
       setCurrentIndex(currentIndex % totalReviews);
     }
   };
 
-  // Re-enable smooth transitions after invisible reset
+  // Re-enable smooth transitions after invisible reset (then take the pending "previous" step)
   useEffect(() => {
     if (!isTransitioning) {
-      const timer = requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
+      let inner = 0;
+      const outer = requestAnimationFrame(() => {
+        inner = requestAnimationFrame(() => {
           setIsTransitioning(true);
+          if (pendingPrevRef.current) {
+            pendingPrevRef.current = false;
+            setCurrentIndex((prev) => prev - 1);
+          }
         });
       });
-      return () => cancelAnimationFrame(timer);
+      return () => {
+        cancelAnimationFrame(outer);
+        cancelAnimationFrame(inner);
+      };
     }
   }, [isTransitioning]);
 
-  // Always Autoplay effect (4.5 seconds per review) - Paused only on direct mouse hover
+  // Background tabs don't finish slides, so autoplay there would run past the end of the track.
   useEffect(() => {
-    if (isHovered) return;
+    const onVisibility = () => setIsPageVisible(document.visibilityState === 'visible');
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => document.removeEventListener('visibilitychange', onVisibility);
+  }, []);
+
+  // Safety net: if a slide end was ever missed, snap back to the matching review without a jump.
+  useEffect(() => {
+    if (totalReviews > 0 && currentIndex > totalReviews) {
+      setIsTransitioning(false);
+      setCurrentIndex(currentIndex % totalReviews);
+    }
+  }, [currentIndex, totalReviews]);
+
+  // Autoplay (4.5 seconds per review): paused on hover/focus, in a hidden tab, and for visitors
+  // who asked for reduced motion.
+  useEffect(() => {
+    if (isHovered || !isPageVisible || prefersReducedMotion) return;
 
     const timer = setInterval(() => {
       nextSlide();
     }, 4500);
 
     return () => clearInterval(timer);
-  }, [isHovered, nextSlide]);
+  }, [isHovered, isPageVisible, prefersReducedMotion, nextSlide]);
 
   // Keyboard navigation
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -295,35 +336,7 @@ export const ReviewsSection: React.FC = () => {
         </ScrollReveal>
 
         {/* Section Primary Action */}
-        <ScrollReveal variant="fade-up" delay={250}>
-          <div className="hiyaghar-reviews-action">
-            <a
-              href="/mukhwas"
-              className="hiyaghar-reviews-explore-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                navigateTo('/mukhwas');
-              }}
-            >
-              <span>Explore Hiya</span>
-              <svg
-                className="hiyaghar-reviews-arrow-icon"
-                width="18"
-                height="14"
-                viewBox="0 0 18 14"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <line x1="1" y1="7" x2="15" y2="7" />
-                <polyline points="10 2 15 7 10 12" />
-              </svg>
-            </a>
-          </div>
-        </ScrollReveal>
+
       </div>
     </section>
   );

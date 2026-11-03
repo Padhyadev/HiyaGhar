@@ -66,7 +66,7 @@ interface ProductCarouselProps {
   componentKey?: 'Category' | 'Bestsellers' | string;
 }
 
-function getCategoryRouteSlug(categoryName: string): string {
+export function getCategoryRouteSlug(categoryName: string): string {
   const catLower = categoryName.toLowerCase().trim();
   if (catLower.includes('mukhwas')) return 'mukhwas';
   if (catLower.includes('tea') || catLower.includes('masala')) return 'tea-masala';

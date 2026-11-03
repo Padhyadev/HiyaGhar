@@ -92,12 +92,8 @@ export class ProductService {
   public static async getProductById(id: number): Promise<Product | null> {
     if (!id || isNaN(id) || id <= 0) return null;
 
-    // Check cached in-memory list first
-    if (this.cachedProducts.length > 0) {
-      const found = this.cachedProducts.find((p) => p.id === id);
-      if (found) return found;
-    }
-
+    // Always ask the server first so an admin change shows; the in-memory list is only the
+    // fallback when the request fails.
     try {
       const response = await fetch(`/api/product/${id}`);
       if (response.ok) {

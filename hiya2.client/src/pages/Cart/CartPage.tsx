@@ -19,6 +19,38 @@ interface CartPageProps {
   onNavigateCheckout: () => void;
 }
 
+function getCategoryLabel(item: { name: string; category?: string; weight?: string }): string {
+  if (item.category && item.category.trim() && item.category.toLowerCase() !== "all") {
+    return item.category;
+  }
+  const n = (item.name || "").toLowerCase();
+  if (n.includes("soap")) return "Handmade Soap";
+  if (n.includes("tea") || n.includes("masala") || n.includes("chai")) return "Tea Masala";
+  if (n.includes("oil")) return "Herbal Hair Care";
+  if (n.includes("hamper") || n.includes("gifting") || n.includes("box")) return "Gift Hamper";
+  if (n.includes("combo") || n.includes("pack of")) return "Curated Combo";
+  return "Gourmet Mukhwas";
+}
+
+function cleanDisplayName(name: string, weight?: string): string {
+  if (!name) return "";
+  let clean = name.replace(/\s*\(\s*(undefined|null)?\s*\)$/i, "").trim();
+  if (weight && weight.trim()) {
+    const escaped = weight.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    clean = clean.replace(new RegExp('\\s*\\(' + escaped + '\\)$', 'i'), '').trim();
+  }
+  return clean;
+}
+
+function formatPackSize(weight?: string): string | null {
+  if (!weight) return null;
+  const w = weight.trim();
+  if (!w || /^(no[ -]?variant|default|standard|none|n\/a)$/i.test(w)) {
+    return null;
+  }
+  return w;
+}
+
 export const CartPage: React.FC<CartPageProps> = ({
   onNavigateHome = () => navigateTo('/'),
   onNavigateToDetail,
@@ -109,18 +141,23 @@ export const CartPage: React.FC<CartPageProps> = ({
         />
 
         <div className="hiyaghar-container">
-          {/* Page Heading */}
-          <div className="hiyaghar-cart-header-section">
-            <h2 className="hiyaghar-cart-title">Your Shopping Cart</h2>
-            {cartItems.length > 0 && (() => {
-              const totalCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
-              return (
-                <span className="hiyaghar-cart-item-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
-                  <AnimatedNumber value={totalCount} /> {totalCount === 1 ? 'item' : 'items'}
-                </span>
-              );
-            })()}
-          </div>
+          {/* Page Heading (Shown when cart has items) */}
+          {cartItems.length > 0 && (
+            <div className="hiyaghar-cart-header-section">
+              <div className="hiyaghar-cart-header-left">
+                <h2 className="hiyaghar-cart-title">Your Handcrafted Basket</h2>
+                <p className="hiyaghar-cart-subtitle">Handcrafted with heart, packed fresh for your doorstep.</p>
+              </div>
+              {(() => {
+                const totalCount = cartItems.reduce((acc, i) => acc + i.quantity, 0);
+                return (
+                  <span className="hiyaghar-cart-item-badge" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                    <AnimatedNumber value={totalCount} /> {totalCount === 1 ? 'item' : 'items'}
+                  </span>
+                );
+              })()}
+            </div>
+          )}
 
           {cartItems.length === 0 ? (
             /* 11. EMPTY CART STATE */
@@ -192,7 +229,7 @@ export const CartPage: React.FC<CartPageProps> = ({
                     <div key={item.id} className="hiyaghar-cart-item-card">
                       <div
                         className="hiyaghar-cart-item-img-wrapper"
-                        onClick={() => onNavigateToDetail(item.productId, item.name)}
+                        onClick={() => onNavigateToDetail(item.productId, cleanDisplayName(item.name, item.weight))}
                         role="button"
                         tabIndex={0}
                       >
@@ -200,14 +237,16 @@ export const CartPage: React.FC<CartPageProps> = ({
                       </div>
 
                       <div className="hiyaghar-cart-item-details">
-                        <span className="hiyaghar-cart-item-cat">Gourmet Mukhwas</span>
+                        <span className="hiyaghar-cart-item-cat">{getCategoryLabel(item)}</span>
                         <h3
                           className="hiyaghar-cart-item-name"
-                          onClick={() => onNavigateToDetail(item.productId, item.name)}
+                          onClick={() => onNavigateToDetail(item.productId, cleanDisplayName(item.name, item.weight))}
                         >
-                          {item.name}
+                          {cleanDisplayName(item.name, item.weight)}
                         </h3>
-                        <span className="hiyaghar-cart-item-weight">Pack Size: {item.weight}</span>
+                        {formatPackSize(item.weight) && (
+                          <span className="hiyaghar-cart-item-weight">Pack Size: {formatPackSize(item.weight)}</span>
+                        )}
                         <span className="hiyaghar-cart-item-price-row">
                           <span className="hiyaghar-cart-item-unit-price">₹{item.price}</span>
                           {item.originalPrice && item.originalPrice > item.price && (

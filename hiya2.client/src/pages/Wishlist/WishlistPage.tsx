@@ -10,7 +10,8 @@ import { MukhwasHero } from '../../components/mukhwas/MukhwasHero/MukhwasHero';
 import { MukhwasProductCard } from '../../components/mukhwas/MukhwasProductCard/MukhwasProductCard';
 import { showToast } from '../../utils/alertService';
 import { navigateTo } from '../../utils/navigation';
-import { formatVariantLabel, NO_IMAGE } from '../../utils/productFormat';
+import { findVariantByLabel } from '../../services/cartApiService';
+import { formatVariantLabel, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import './WishlistPage.css';
 
 interface WishlistPageProps {
@@ -68,6 +69,18 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
             <div className="hiyaghar-wishlist-grid">
               {wishlistItems.map((item, index) => {
                 const liveApiMatch = apiProducts.find((p) => p.id.toString() === item.productId.toString());
+                // Today's price and photo for the saved size; the values stored with the item are
+                // only a fallback (they are from the day it was saved).
+                const liveVariant = liveApiMatch?.variants?.length
+                  ? findVariantByLabel(liveApiMatch.variants, item.weight || '')
+                  : undefined;
+                const livePrice = liveVariant?.price ?? (liveApiMatch && !liveApiMatch.variants?.length
+                  ? liveApiMatch.discountPrice ?? liveApiMatch.basePrice
+                  : undefined);
+                const liveOriginalPrice = liveVariant
+                  ? liveVariant.originalPrice ?? undefined
+                  : (liveApiMatch && !liveApiMatch.variants?.length && liveApiMatch.discountPrice != null ? liveApiMatch.basePrice : undefined);
+                const liveImage = liveApiMatch ? getVariantImages(liveApiMatch, liveVariant)[0] : undefined;
 
                 const weightOpts = liveApiMatch?.variants
                   ? liveApiMatch.variants.map((v) => formatVariantLabel(v.variantName))
@@ -80,13 +93,15 @@ export const WishlistPage: React.FC<WishlistPageProps> = ({
                   categoryLabel: liveApiMatch?.category?.categoryName || 'Speciality Product',
                   shortDescription: liveApiMatch?.shortDescription || '',
                   longDescription: liveApiMatch?.fullDescription || '',
-                  price: item.price,
-                  originalPrice: item.originalPrice || liveApiMatch?.discountPrice || item.price,
+                  price: livePrice ?? item.price,
+                  originalPrice: livePrice != null
+                    ? Math.max(liveOriginalPrice || 0, livePrice)
+                    : item.originalPrice || liveApiMatch?.discountPrice || item.price,
                   discountPercentage: 0,
                   weightOptions: weightOpts.length > 0 ? weightOpts : [item.weight || '100g'],
                   variants: liveApiMatch?.variants || [],
                   selectedWeight: item.weight || undefined,
-                  image: item.image || liveApiMatch?.mainImagePath || NO_IMAGE,
+                  image: liveImage || item.image || NO_IMAGE,
                   rating: liveApiMatch?.rating || 4.9,
                   reviewsCount: liveApiMatch?.reviewCount || 50,
                   isBestSeller: liveApiMatch?.isFeatured || false,

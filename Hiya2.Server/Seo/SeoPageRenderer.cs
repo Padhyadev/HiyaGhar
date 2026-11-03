@@ -14,8 +14,8 @@ namespace Hiya2.Server.Seo
     /// Status: 200 for routes in seo/routes.json and for active products at their canonical
     /// /product/{slug} path, 301 from /product/{id} (and other non-canonical product paths) to it,
     /// 404 otherwise (the React app still renders its 404 view). Uses the same repositories/queries
-    /// as the public API. Rendered pages are cached per path for 5 minutes (there is no
-    /// product-change hook to evict on).
+    /// as the public API. Rendered pages are cached per path for 5 minutes, and dropped straight
+    /// away after any catalog change (the key includes Services/CatalogCache.Version).
     /// </summary>
     public class SeoPageRenderer
     {
@@ -40,7 +40,7 @@ namespace Hiya2.Server.Seo
         {
             var snapshot = _store.Get();
             // Case-sensitive key: "/product/Foo" (301) and "/product/foo" (200) must not share an entry.
-            var key = $"seo-page:{snapshot.Version}:{path}";
+            var key = $"seo-page:{snapshot.Version}:{Hiya2.Server.Services.CatalogCache.Version}:{path}";
             if (_cache.TryGetValue(key, out SeoRenderResult? cached) && cached != null) return cached;
 
             var result = await BuildResultAsync(path, snapshot);
@@ -54,7 +54,7 @@ namespace Hiya2.Server.Seo
         /// </summary>
         public async Task<Dictionary<int, string>> GetProductPathsAsync()
         {
-            return (await _cache.GetOrCreateAsync("seo-product-paths", async entry =>
+            return (await _cache.GetOrCreateAsync($"seo-product-paths:{Hiya2.Server.Services.CatalogCache.Version}", async entry =>
             {
                 entry.AbsoluteExpirationRelativeToNow = CacheDuration;
                 var products = await _db.Products.AsNoTracking()

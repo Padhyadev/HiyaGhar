@@ -156,20 +156,20 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
   const handleAddToCartCard = (product: HairOilProduct, weight: string, _qty: number = 1, price?: number, originalPrice?: number) => {
     CartService.addItem({
       productId: product.id,
-      name: `${product.name} (${weight})`,
+      name: product.name,
       image: product.image,
       price: typeof price === 'number' ? price : product.price,
       originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
       weight: weight,
       quantity: 1,
     });
-    showToast(`Added ${product.name} (${weight}) to your cart!`);
+    showToast(`Added ${product.name} to your cart!`);
   };
 
   const handleBuyNowCard = (product: HairOilProduct, weight: string, price?: number, originalPrice?: number) => {
     CartService.buyNow({
       productId: product.id,
-      name: `${product.name} (${weight})`,
+      name: product.name,
       image: product.image,
       price: typeof price === 'number' ? price : product.price,
       originalPrice: typeof originalPrice === 'number' ? originalPrice : product.originalPrice,
@@ -187,7 +187,7 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
           <MukhwasHero
             onNavigateHome={onNavigateHome}
             title="Hair Oil"
-            bgImage="/image/Banner_image/Hair_Oil.webp"
+            bgImage="/image/Banner_image/Hair_Oil.webp?v=2"
             bgPosition="right 60%"
           />
 

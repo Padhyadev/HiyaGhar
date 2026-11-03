@@ -10,7 +10,7 @@ export const HeroSection: React.FC = () => {
         {/* Full-width hero background banner on both desktop & mobile */}
         <div className="hg-hero-bg-container">
           <img
-            src="/image/Banner_image/our_story.png"
+            src="/image/Banner_image/our_story.png?v=2"
             alt="HIYAGHAR handcrafted heritage kitchen and artisanal wellness story banner"
             className="hg-hero-bg-img"
             loading="eager"

@@ -35,31 +35,6 @@ export interface ProductCustomMeta {
   }>;
 }
 
-const STORAGE_KEY = 'hiyaghar_product_custom_meta';
-
-export const getStoredProductMeta = (productId: string | number): ProductCustomMeta | null => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return null;
-    const map = JSON.parse(raw);
-    return map[productId.toString()] || null;
-  } catch (e) {
-    console.warn('Failed to load product meta from storage:', e);
-    return null;
-  }
-};
-
-export const saveStoredProductMeta = (productId: string | number, meta: ProductCustomMeta): void => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    const map = raw ? JSON.parse(raw) : {};
-    map[productId.toString()] = meta;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
-  } catch (e) {
-    console.warn('Failed to save product meta to storage:', e);
-  }
-};
-
 /**
  * Parses embedded JSON block or standard text from fullDescription.
  * Format inside fullDescription can be standard text, or can embed:
@@ -101,15 +76,11 @@ export const parseProductFullDescription = (
     }
   }
 
-  // Also check local storage overrides
-  const localMeta = productId ? getStoredProductMeta(productId) : null;
+  // What the admin saved (embedded above) is the only source, so a change made in admin always shows.
+  void productId;
   const mergedMeta: ProductCustomMeta = {
     ...(embeddedMeta || {}),
-    ...(localMeta || {}),
-    nutritionalInfo: {
-      ...(embeddedMeta?.nutritionalInfo || {}),
-      ...(localMeta?.nutritionalInfo || {}),
-    },
+    nutritionalInfo: { ...(embeddedMeta?.nutritionalInfo || {}) },
   };
 
   const cleanList = (list?: string[]) =>

@@ -12,6 +12,12 @@ export interface CartItem {
   originalPrice?: number;
   weight: string;
   quantity: number;
+  category?: string;
+}
+
+function cleanCartName(name?: string): string {
+  if (!name) return '';
+  return name.replace(/\s*\(\s*(undefined|null)?\s*\)$/i, '').trim();
 }
 
 const STORAGE_KEY = 'hiya_shopping_cart';
@@ -26,7 +32,9 @@ export class CartService {
   public static getItems(): CartItem[] {
     try {
       const data = localStorage.getItem(STORAGE_KEY);
-      return data ? JSON.parse(data) : [];
+      if (!data) return [];
+      const items: CartItem[] = JSON.parse(data);
+      return items.map((i) => ({ ...i, name: cleanCartName(i.name) }));
     } catch {
       return [];
     }
@@ -42,6 +50,7 @@ export class CartService {
   }
 
   public static addItem(item: Omit<CartItem, 'id'>): string {
+    item.name = cleanCartName(item.name);
     const items = this.getItems();
     const itemId = `${item.productId}-${item.weight}`;
     const existingIndex = items.findIndex((i) => i.id === itemId);
@@ -130,11 +139,17 @@ export class CartService {
     if (lines.length === 0) return false;
     const prices = await CartApiService.fetchCurrentPrices(lines);
 
+    // Price, name and photo all come from today's catalog (a photo replaced in admin too).
     const reprice = (item: CartItem): boolean => {
       const current = prices.get(`${item.productId}::${item.weight}`);
-      if (!current || (current.price === item.price && current.originalPrice === item.originalPrice)) return false;
+      if (!current) return false;
+      const image = current.image || item.image;
+      const name = current.name || item.name;
+      if (current.price === item.price && current.originalPrice === item.originalPrice && image === item.image && name === item.name) return false;
       item.price = current.price;
       item.originalPrice = current.originalPrice;
+      item.image = image;
+      item.name = name;
       return true;
     };
 
@@ -160,6 +175,7 @@ export class CartService {
   // sessionStorage, never in the cart, so leaving checkout without paying
   // leaves the cart exactly as it was.
   public static buyNow(item: Omit<CartItem, 'id'>): void {
+    item.name = cleanCartName(item.name);
     try {
       sessionStorage.setItem(BUY_NOW_STORAGE_KEY, JSON.stringify({ ...item, id: `${item.productId}-${item.weight}` }));
     } catch (e) {
@@ -176,7 +192,9 @@ export class CartService {
   private static getBuyNowItem(): CartItem | null {
     try {
       const data = sessionStorage.getItem(BUY_NOW_STORAGE_KEY);
-      return data ? JSON.parse(data) : null;
+      if (!data) return null;
+      const item: CartItem = JSON.parse(data);
+      return { ...item, name: cleanCartName(item.name) };
     } catch {
       return null;
     }
