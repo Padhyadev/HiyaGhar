@@ -82,6 +82,7 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
   const isHoveredRef = useRef<boolean>(false);
   const [activeCategoryId, setActiveCategoryId] = useState<string | null>(null);
   const [categoriesList, setCategoriesList] = useState<CarouselItem[]>([]);
+  const [activePageIndex, setActivePageIndex] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(() => {
     if (typeof window === 'undefined') return false;
     return window.innerWidth <= 768;
@@ -186,13 +187,10 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
   const set3 = categoriesList.map((item, idx) => ({ ...item, uniqueKey: `set3-${item.id}-${idx}`, _clone: true }));
   const infiniteCategoriesData = [...set1, ...set2, ...set3];
 
-  const itemsToRender = isMobile
-    ? categoriesList.map((item, idx) => ({ ...item, uniqueKey: `mobile-${item.id}-${idx}`, _clone: false }))
-    : infiniteCategoriesData;
+  const itemsToRender = infiniteCategoriesData;
 
-  // Initialize track scroll to middle set (Set 2) and attach seamless bidirectional infinite boundary listener (Desktop only)
+  // Initialize track scroll to middle set (Set 2) and attach seamless bidirectional infinite boundary listener
   useEffect(() => {
-    if (isMobile) return;
     const track = trackRef.current;
     if (!track || infiniteCategoriesData.length === 0) return;
 
@@ -224,6 +222,19 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
         track.scrollLeft = currentScroll - setWidth;
         track.style.scrollBehavior = 'smooth';
       }
+
+      const cardItem = track.querySelector<HTMLElement>('.hiyaghar-carousel-item');
+      if (cardItem && categoriesList.length > 0) {
+        const gap = isMobile ? (window.innerWidth <= 420 ? 8 : 10) : 20;
+        const cardStep = cardItem.offsetWidth + gap;
+        const relativeScroll = (track.scrollLeft - setWidth) % setWidth;
+        const normalized = relativeScroll < 0 ? relativeScroll + setWidth : relativeScroll;
+        const rawIndex = Math.round(normalized / cardStep);
+        const activeIdx = (rawIndex % categoriesList.length + categoriesList.length) % categoriesList.length;
+        const itemsPerPage = isMobile ? 2 : 4;
+        const page = Math.floor(activeIdx / itemsPerPage);
+        setActivePageIndex(page);
+      }
     };
 
     track.addEventListener('scroll', handleScroll, { passive: true });
@@ -231,11 +242,10 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
       clearTimeout(timer);
       track.removeEventListener('scroll', handleScroll);
     };
-  }, [isMobile, categoriesList]);
+  }, [categoriesList, isMobile]);
 
-  // Gentle Continuous Autoplay Timer (Every 3.2 seconds smoothly) - Disabled on mobile view
+  // Gentle Continuous Autoplay Timer (Every 3.6 seconds smoothly)
   useEffect(() => {
-    if (isMobile) return;
     const interval = setInterval(() => {
       if (isHoveredRef.current || !trackRef.current || categoriesList.length === 0) return;
 
@@ -249,20 +259,40 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
       }
 
       const cardItem = track.querySelector<HTMLElement>('.hiyaghar-carousel-item');
-      const step = cardItem ? cardItem.offsetWidth + 20 : 320;
+      const gap = isMobile ? (window.innerWidth <= 420 ? 8 : 10) : 20;
+      const itemsToAdvance = isMobile ? 2 : 1;
+      const step = cardItem ? (cardItem.offsetWidth + gap) * itemsToAdvance : 320;
 
       track.scrollBy({ left: step, behavior: 'smooth' });
-    }, 3200);
+    }, 3600);
 
     return () => clearInterval(interval);
-  }, [isMobile, categoriesList]);
+  }, [categoriesList, isMobile]);
+
+  const itemsPerPage = isMobile ? 2 : 4;
+  const totalPages = Math.max(1, Math.ceil(categoriesList.length / itemsPerPage));
+
+  const goToPage = (pageIdx: number) => {
+    if (!trackRef.current) return;
+    const track = trackRef.current;
+    const setWidth = track.scrollWidth / 3;
+    const cardItem = track.querySelector<HTMLElement>('.hiyaghar-carousel-item');
+    if (!cardItem) return;
+    const gap = isMobile ? (window.innerWidth <= 420 ? 8 : 10) : 20;
+    const cardStep = cardItem.offsetWidth + gap;
+    const targetScroll = setWidth + (pageIdx * itemsPerPage * cardStep);
+    track.scrollTo({ left: targetScroll, behavior: 'smooth' });
+    setActivePageIndex(pageIdx);
+  };
 
   const scroll = (direction: 'left' | 'right') => {
     if (trackRef.current) {
       const track = trackRef.current;
       const setWidth = track.scrollWidth / 3;
       const cardItem = track.querySelector<HTMLElement>('.hiyaghar-carousel-item');
-      const step = cardItem ? cardItem.offsetWidth + 20 : 320;
+      const gap = isMobile ? (window.innerWidth <= 420 ? 8 : 10) : 20;
+      const itemsToAdvance = isMobile ? 2 : 1;
+      const step = cardItem ? (cardItem.offsetWidth + gap) * itemsToAdvance : 320;
 
       if (direction === 'left') {
         if (track.scrollLeft <= 25 || setWidth <= 0) {
@@ -297,17 +327,21 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
 
   return (
     <div
-      className={`hiyaghar-carousel-wrapper ${isMobile ? 'is-mobile-view' : ''}`}
+      className="hiyaghar-carousel-wrapper"
       onMouseEnter={() => { isHoveredRef.current = true; }}
       onMouseLeave={() => { isHoveredRef.current = false; setActiveCategoryId(null); }}
       onPointerEnter={() => { isHoveredRef.current = true; }}
       onPointerLeave={() => { isHoveredRef.current = false; setActiveCategoryId(null); }}
+      onTouchStart={() => { isHoveredRef.current = true; }}
+      onTouchEnd={() => {
+        setTimeout(() => { isHoveredRef.current = false; }, 2500);
+      }}
     >
       <div
-        className={`hiyaghar-carousel-track ${isMobile ? 'is-mobile-grid' : ''}`}
+        className="hiyaghar-carousel-track"
         ref={trackRef}
-        tabIndex={isMobile ? -1 : 0}
-        onKeyDown={isMobile ? undefined : handleKeyDown}
+        tabIndex={0}
+        onKeyDown={handleKeyDown}
         role="region"
         aria-label="Product Showcase Carousel"
       >
@@ -316,7 +350,6 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
             key={category.uniqueKey}
             className="hiyaghar-carousel-item"
             aria-hidden={category._clone ? 'true' : undefined}
-            inert={category._clone ? true : undefined}
           >
             {category.card ? (
               <MukhwasProductCard
@@ -333,8 +366,8 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
             ) : (
               <CategoryCard
                 category={category}
-                isActive={!category._clone && activeCategoryId === category.id}
-                onActivate={() => !category._clone && setActiveCategoryId(category.id)}
+                isActive={activeCategoryId === category.id}
+                onActivate={() => setActiveCategoryId(category.id)}
                 onDeactivate={() => setActiveCategoryId(null)}
               />
             )}
@@ -342,34 +375,46 @@ export const ProductCarousel: React.FC<ProductCarouselProps> = ({ componentKey =
         ))}
       </div>
 
-      {!isMobile && (
-        <>
-          <button
-            type="button"
-            className="hiyaghar-carousel-btn prev"
-            onClick={() => scroll('left')}
-            aria-label="Previous cards"
-            title="Previous"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12" />
-              <polyline points="12 19 5 12 12 5" />
-            </svg>
-          </button>
+      <button
+        type="button"
+        className="hiyaghar-carousel-btn prev"
+        onClick={() => scroll('left')}
+        aria-label="Previous cards"
+        title="Previous"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="19" y1="12" x2="5" y2="12" />
+          <polyline points="12 19 5 12 12 5" />
+        </svg>
+      </button>
 
-          <button
-            type="button"
-            className="hiyaghar-carousel-btn next"
-            onClick={() => scroll('right')}
-            aria-label="Next cards"
-            title="Next"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <line x1="5" y1="12" x2="19" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </button>
-        </>
+      <button
+        type="button"
+        className="hiyaghar-carousel-btn next"
+        onClick={() => scroll('right')}
+        aria-label="Next cards"
+        title="Next"
+      >
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <line x1="5" y1="12" x2="19" y2="12" />
+          <polyline points="12 5 19 12 12 19" />
+        </svg>
+      </button>
+
+      {totalPages > 1 && (
+        <div className="hiyaghar-carousel-indicators" role="tablist" aria-label="Slides">
+          {Array.from({ length: totalPages }).map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              className={`hiyaghar-carousel-indicator-dot ${idx === activePageIndex ? 'is-active' : ''}`}
+              onClick={() => goToPage(idx)}
+              aria-label={`Go to slide page ${idx + 1}`}
+              role="tab"
+              aria-selected={idx === activePageIndex}
+            />
+          ))}
+        </div>
       )}
     </div>
   );

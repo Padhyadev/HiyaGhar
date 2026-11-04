@@ -179,8 +179,8 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
             onNavigateHome={onNavigateHome}
             breadcrumbCurrent="Handmade Soap"
             title="Handmade Soap"
-            bgImage="/image/Banner_image/Soap.webp?v=2"
-            textShade="light"
+            bgImage="/image/Banner_image/Soap.webp?v=3"
+            textShade="dark"
           />
 
           <MukhwasFilterSort

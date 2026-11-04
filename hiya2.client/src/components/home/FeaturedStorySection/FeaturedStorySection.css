@@ -421,6 +421,39 @@
     border-radius: 24px;
   }
 
+  /* Fruits: the desktop positions reach ~60px past the card, but there is only 20px of side
+     padding on phones, so the screen edge cut them off. Keep them within ~12px of the card,
+     a bit smaller, two per side (mango moves right so it doesn't sit on the badge). */
+  .hiyaghar-story-floating-fruits {
+    inset: 0;
+  }
+
+  .hiyaghar-story-left-1-wrap {
+    top: -14px;
+    left: -12px;
+    width: 58px;
+  }
+
+  .hiyaghar-story-left-2-wrap {
+    top: 44%;
+    left: -14px;
+    width: 62px;
+  }
+
+  .hiyaghar-story-left-3-wrap {
+    top: auto;
+    bottom: -14px;
+    left: auto;
+    right: -12px;
+    width: 60px;
+  }
+
+  .hiyaghar-story-top-right-wrap {
+    top: -12px;
+    right: -12px;
+    width: 52px;
+  }
+
   .hiyaghar-story-img {
     max-height: 280px;
     width: 90%;

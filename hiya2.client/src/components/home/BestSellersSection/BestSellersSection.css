@@ -607,6 +607,33 @@
   left: 4px;
 }
 
+/* Carousel Indicators (Dots) */
+.hiyaghar-carousel-indicators {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 4px 0;
+}
+
+.hiyaghar-carousel-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background-color: #D1D5DB;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.hiyaghar-carousel-indicator-dot.is-active {
+  width: 22px;
+  background-color: #CB992C;
+  border-radius: 4px;
+}
+
 /* Responsive Breakpoints */
 
 /* Desktop (>= 1200px): 4 cards visible */
@@ -654,29 +681,39 @@
   }
 }
 
-/* Mobile (< 768px): Show All Products in a 2-Column Grid (No Autoplay) */
+/* Mobile (< 768px): Exactly 2 cards per view with arrows and indicators */
 @media (max-width: 767px) {
   .hiyaghar-carousel-wrapper {
-    padding: 0 10px;
+    position: relative;
+    padding: 0 8px;
   }
 
   .hiyaghar-carousel-track,
   .hiyaghar-carousel-track.is-mobile-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 12px 10px;
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding: 8px 0 24px 0;
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 10px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 0 14px 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .hiyaghar-carousel-track::-webkit-scrollbar,
+  .hiyaghar-carousel-track.is-mobile-grid::-webkit-scrollbar {
+    display: none;
   }
 
   .hiyaghar-carousel-item,
   .hiyaghar-carousel-track.is-mobile-grid .hiyaghar-carousel-item {
-    flex: none;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
-    scroll-snap-align: none;
+    flex: 0 0 calc((100% - 10px) / 2);
+    width: calc((100% - 10px) / 2);
+    min-width: calc((100% - 10px) / 2);
+    max-width: calc((100% - 10px) / 2);
+    scroll-snap-align: start;
     display: flex;
   }
 
@@ -763,7 +800,31 @@
   }
 
   .hiyaghar-carousel-btn {
-    display: none;
+    display: flex;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.95);
+    color: #1F384C;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.16);
+    top: 38%;
+    z-index: 12;
+    cursor: pointer;
+    touch-action: manipulation;
+  }
+
+  .hiyaghar-carousel-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .hiyaghar-carousel-btn.prev {
+    left: 2px;
+  }
+
+  .hiyaghar-carousel-btn.next {
+    right: 2px;
   }
 }
 
@@ -774,16 +835,34 @@
 
   .hiyaghar-carousel-track,
   .hiyaghar-carousel-track.is-mobile-grid {
-    gap: 10px 8px;
-    padding: 6px 0 20px 0;
+    gap: 8px;
+    padding: 6px 0 12px 0;
   }
 
   .hiyaghar-carousel-item,
   .hiyaghar-carousel-track.is-mobile-grid .hiyaghar-carousel-item {
-    flex: none;
-    width: 100%;
-    min-width: 0;
-    max-width: 100%;
+    flex: 0 0 calc((100% - 8px) / 2);
+    width: calc((100% - 8px) / 2);
+    min-width: calc((100% - 8px) / 2);
+    max-width: calc((100% - 8px) / 2);
+  }
+
+  .hiyaghar-carousel-btn {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hiyaghar-carousel-btn svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .hiyaghar-carousel-btn.prev {
+    left: 0px;
+  }
+
+  .hiyaghar-carousel-btn.next {
+    right: 0px;
   }
 
   .hiyaghar-category-card {
