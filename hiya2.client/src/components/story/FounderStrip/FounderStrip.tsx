@@ -13,7 +13,7 @@ export const FounderStrip: React.FC = () => {
           {/* Left Column: Copy, quote & button */}
           <ScrollReveal variant="fade-left" className="hg-founder-strip-content-col">
             <span className="hg-section-label">MEET THE FOUNDER</span>
-            <h2 className="hg-section-heading">From our kitchen to your family table</h2>
+            <h2 className="hg-section-heading">Made in our ghar, with love</h2>
 
             <p className="hg-founder-strip-body">
               Hi, I&apos;m Priti Shah. Two years ago, I started HIYA Ghar in my kitchen in Ahmedabad to celebrate traditional flavours, family memories, and the joy of that little handful of mukhwas after every meal. Every jar is still made in small batches, by hand, the way we make it for our own family.

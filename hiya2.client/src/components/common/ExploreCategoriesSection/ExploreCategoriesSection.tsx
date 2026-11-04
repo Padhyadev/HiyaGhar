@@ -50,20 +50,20 @@ export const ExploreCategoriesSection: React.FC = () => {
           {categories.map((cat, idx) => {
             const nameLower = cat.categoryName.toLowerCase();
             let slug = '';
-            let bgImage = '/image/categories/cat_mukhwas.webp';
+            let bgImage = '/image/categories/mukhwash.webp';
 
             if (nameLower.includes('mukhwas') || nameLower.includes('mukhwash')) {
               slug = 'mukhwas';
-              bgImage = '/image/categories/cat_mukhwas.webp';
+              bgImage = '/image/categories/mukhwash.webp';
             } else if (nameLower.includes('tea')) {
               slug = 'tea-masala';
-              bgImage = '/image/categories/cat_tea_masala.webp';
+              bgImage = '/image/categories/Tea-masala.webp';
             } else if (nameLower.includes('soap')) {
               slug = 'handmade-soap';
-              bgImage = '/image/categories/cat_handmade_soap.webp';
+              bgImage = '/image/categories/Soap.webp';
             } else if (nameLower.includes('hair')) {
               slug = 'hair-oil';
-              bgImage = '/image/categories/cat_hair_oil.webp';
+              bgImage = '/image/categories/Hair_Oil.webp';
             }
             
             return (

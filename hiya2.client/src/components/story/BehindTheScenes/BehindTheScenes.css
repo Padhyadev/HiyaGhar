@@ -1,0 +1,99 @@
+/* Our Story: behind-the-scenes photo grid (cream background) */
+
+.hg-bts-section {
+  padding: clamp(56px, 8vw, 88px) 0;
+  background-color: var(--cream, #FBF6EC);
+}
+
+.hg-bts-header {
+  text-align: center;
+  margin-bottom: clamp(32px, 5vw, 48px);
+}
+
+.hg-bts-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+/* Fewer photos: keep them a sensible size, centred */
+.hg-bts-grid.is-count-1 { grid-template-columns: minmax(0, 320px); justify-content: center; }
+.hg-bts-grid.is-count-2 { grid-template-columns: repeat(2, minmax(0, 320px)); justify-content: center; }
+.hg-bts-grid.is-count-3 { grid-template-columns: repeat(3, 1fr); }
+
+.hg-bts-figure {
+  margin: 0;
+}
+
+.hg-bts-media {
+  aspect-ratio: 4 / 5; /* reserves the space before the photo loads: no layout shift */
+  border-radius: 18px;
+  overflow: hidden;
+  background-color: #F1E6CF;
+}
+
+.hg-bts-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.hg-bts-item:hover .hg-bts-img {
+  transform: scale(1.05);
+}
+
+.hg-bts-caption {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 14px;
+  font-family: 'Poppins', 'DM Sans', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--navy, #14233C);
+}
+
+.hg-bts-step {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #8C5F05;
+}
+
+@media (max-width: 1024px) {
+  .hg-bts-grid,
+  .hg-bts-grid.is-count-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .hg-bts-grid {
+    gap: 14px;
+  }
+
+  .hg-bts-grid.is-count-1,
+  .hg-bts-grid.is-count-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .hg-bts-caption {
+    font-size: 0.9rem;
+    margin-top: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hg-bts-img {
+    transition: none;
+  }
+
+  .hg-bts-item:hover .hg-bts-img {
+    transform: none;
+  }
+}

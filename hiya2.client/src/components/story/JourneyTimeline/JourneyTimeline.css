@@ -1,0 +1,134 @@
+/* Our Story: journey timeline (cream background, numbered steps joined by a gold line) */
+
+.hg-journey-section {
+  padding: clamp(56px, 8vw, 88px) 0;
+  background-color: var(--cream, #FBF6EC);
+}
+
+.hg-journey-header {
+  text-align: center;
+  margin-bottom: clamp(36px, 5vw, 56px);
+}
+
+.hg-journey-list {
+  --hg-journey-dot: 56px;
+
+  position: relative;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 28px;
+}
+
+/* Gold line from the first circle's centre to the last one's */
+.hg-journey-list::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--hg-journey-dot) / 2);
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(201, 152, 46, 0.35), var(--gold, #C9982E), rgba(201, 152, 46, 0.35));
+}
+
+.hg-journey-step-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hg-journey-number {
+  position: relative;
+  z-index: 1;
+  width: var(--hg-journey-dot);
+  height: var(--hg-journey-dot);
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  border: 2px solid var(--gold, #C9982E);
+  box-shadow: 0 0 0 6px var(--cream, #FBF6EC); /* gap between the line and the circle */
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--purple, #5E2A84);
+  margin-bottom: 20px;
+}
+
+.hg-journey-title {
+  font-family: 'Poppins', 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--navy, #14233C);
+  margin: 0 0 8px;
+}
+
+.hg-journey-text {
+  font-family: 'Poppins', 'DM Sans', sans-serif;
+  font-size: 0.93rem;
+  line-height: 1.65;
+  color: #334155;
+  margin: 0;
+  max-width: 240px;
+}
+
+/* Tablet: two rows of two, no connecting line */
+@media (max-width: 900px) {
+  .hg-journey-list {
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 40px;
+  }
+
+  .hg-journey-list::before {
+    display: none;
+  }
+}
+
+/* Phones: vertical timeline, line down the left */
+@media (max-width: 600px) {
+  .hg-journey-list {
+    --hg-journey-dot: 48px;
+
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+    max-width: 440px;
+    margin: 0 auto;
+  }
+
+  .hg-journey-list::before {
+    display: block;
+    top: calc(var(--hg-journey-dot) / 2);
+    bottom: calc(var(--hg-journey-dot) / 2);
+    left: calc(var(--hg-journey-dot) / 2 - 1px);
+    right: auto;
+    width: 2px;
+    height: auto;
+    background: linear-gradient(180deg, rgba(201, 152, 46, 0.35), var(--gold, #C9982E), rgba(201, 152, 46, 0.35));
+  }
+
+  .hg-journey-step-inner {
+    flex-direction: row;
+    align-items: flex-start;
+    text-align: left;
+    gap: 18px;
+  }
+
+  .hg-journey-number {
+    font-size: 1.15rem;
+    margin-bottom: 0;
+  }
+
+  .hg-journey-body {
+    padding-top: 10px;
+  }
+
+  .hg-journey-text {
+    max-width: none;
+  }
+}

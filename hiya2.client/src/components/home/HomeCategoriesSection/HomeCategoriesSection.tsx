@@ -15,11 +15,17 @@ interface HomeCategory {
 
 const FALLBACK_IMAGE = '/image/jamunbottole_clean.webp';
 
+interface HomeCategoriesSectionProps {
+  /** Only the cards (no pill, heading or subtitle, transparent background), for use inside
+   *  another section, e.g. the Our Story closing call-to-action. */
+  embedded?: boolean;
+}
+
 /**
  * Home "Explore Categories" section. Same data as before: the categories picked in admin
  * (Home Page Component "Category", refId = comma-separated category ids), or all categories.
  */
-export const HomeCategoriesSection: React.FC = () => {
+export const HomeCategoriesSection: React.FC<HomeCategoriesSectionProps> = ({ embedded = false }) => {
   const [badgeText, setBadgeText] = useState('EXPLORE CATEGORIES');
   const [headingText, setHeadingText] = useState('Squeeze in Some Goodness');
   const [categories, setCategories] = useState<HomeCategory[]>([]);
@@ -208,15 +214,21 @@ export const HomeCategoriesSection: React.FC = () => {
     : categories.map((cat, idx) => ({ cat, idx, copy: 1 }));
 
   return (
-    <section className="hiyaghar-homecat-section" aria-labelledby="hiyaghar-homecat-title">
+    <section
+      className={`hiyaghar-homecat-section${embedded ? ' is-embedded' : ''}`}
+      aria-labelledby={embedded ? undefined : 'hiyaghar-homecat-title'}
+      aria-label={embedded ? 'Shop by category' : undefined}
+    >
       <div className="hiyaghar-container">
-        <ScrollReveal variant="fade-up">
-          <header className="hiyaghar-homecat-header">
-            <span className="hiyaghar-homecat-pill">{badgeText}</span>
-            <h2 id="hiyaghar-homecat-title" className="hiyaghar-homecat-title">{headingText}</h2>
-            <p className="hiyaghar-homecat-subtitle">Handcrafted with love, straight from our ghar to yours</p>
-          </header>
-        </ScrollReveal>
+        {!embedded && (
+          <ScrollReveal variant="fade-up">
+            <header className="hiyaghar-homecat-header">
+              <span className="hiyaghar-homecat-pill">{badgeText}</span>
+              <h2 id="hiyaghar-homecat-title" className="hiyaghar-homecat-title">{headingText}</h2>
+              <p className="hiyaghar-homecat-subtitle">Handcrafted with love, straight from our ghar to yours</p>
+            </header>
+          </ScrollReveal>
+        )}
 
         {categories.length > 0 && (
           <ScrollReveal variant="fade-up" delay={120}>

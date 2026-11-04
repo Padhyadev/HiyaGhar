@@ -1,6 +1,6 @@
 .hg-how-section {
-  padding: clamp(56px, 8vw, 84px) 0 clamp(72px, 10vw, 104px) 0;
-  background-color: var(--cream, #FBF6EC);
+  padding: clamp(56px, 8vw, 88px) 0;
+  background-color: #FFFFFF;
 }
 
 .hg-how-header {
@@ -17,15 +17,16 @@
   margin: 0;
 }
 
-/* 3 cards in a row on desktop, one column on mobile */
+/* 4 cards in a row on desktop, 2 on tablet, 1 on phones */
 .hg-how-cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 28px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
 }
 
 .hg-how-card {
-  background-color: #FFFFFF;
+  /* Soft gold tint so the cards stand out on the white section */
+  background-color: #FCF8EF;
   border: 1px solid rgba(201, 152, 46, 0.28);
   border-radius: 18px;
   padding: 36px 26px;
@@ -78,11 +79,37 @@
   margin: 0;
 }
 
-@media (max-width: 900px) {
+.hg-how-icon-wrap svg {
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .hg-how-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
   .hg-how-cards-grid {
     grid-template-columns: 1fr;
-    gap: 20px;
-    max-width: 480px;
+    max-width: 440px;
     margin: 0 auto;
+  }
+
+  .hg-how-card {
+    padding: 28px 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hg-how-card,
+  .hg-how-icon-wrap {
+    transition: none;
+  }
+
+  .hg-how-card:hover,
+  .hg-how-card:hover .hg-how-icon-wrap {
+    transform: none;
   }
 }

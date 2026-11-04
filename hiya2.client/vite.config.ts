@@ -42,7 +42,15 @@ export default defineConfig({
     plugins: [plugin()],
     define: {
         // Default og:image falls back to the logo until public/image/og-default.webp is added (see src/seo/routeSeo.ts).
-        __OG_DEFAULT_IMAGE_EXISTS__: JSON.stringify(fs.existsSync(fileURLToPath(new URL('./public/image/og-default.webp', import.meta.url))))
+        __OG_DEFAULT_IMAGE_EXISTS__: JSON.stringify(fs.existsSync(fileURLToPath(new URL('./public/image/og-default.webp', import.meta.url)))),
+        // Our Story "Behind the scenes" photos that exist in public/image/story (bts-1..4.webp). The
+        // section shows only these, and stays hidden until at least one is added (see BehindTheScenes.tsx).
+        __STORY_BTS_IMAGES__: JSON.stringify(
+            [1, 2, 3, 4].filter((n) => fs.existsSync(fileURLToPath(new URL(`./public/image/story/bts-${n}.webp`, import.meta.url))))
+        ),
+        // Our Story "From our ghar to yours" arch photo: public/image/story/our-kitchen.webp once it
+        // is added, until then an existing kitchen photo (see StorySection.tsx).
+        __STORY_KITCHEN_IMAGE_EXISTS__: JSON.stringify(fs.existsSync(fileURLToPath(new URL('./public/image/story/our-kitchen.webp', import.meta.url))))
     },
     resolve: {
         alias: {

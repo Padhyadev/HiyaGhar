@@ -33,7 +33,8 @@
   justify-content: center;
   gap: 10px;
   background-color: var(--gold, #C9982E);
-  color: #FFFFFF;
+  /* Navy on gold is ~6:1 (white on this gold was only ~2.6:1, below WCAG AA) */
+  color: var(--navy, #14233C);
   font-family: 'Poppins', sans-serif;
   font-size: 0.98rem;
   font-weight: 600;
@@ -43,12 +44,25 @@
   border: none;
   cursor: pointer;
   box-shadow: 0 8px 20px rgba(201, 152, 46, 0.28);
-  transition: all 0.28s ease;
+  transition: background-color 0.28s ease, transform 0.28s ease, box-shadow 0.28s ease;
   text-decoration: none;
 }
 
 .hg-btn-gold:hover {
-  background-color: #b08222;
+  background-color: #D9AE4E; /* lighter on hover keeps navy text readable (~7:1) */
   transform: translateY(-2px);
   box-shadow: 0 12px 24px rgba(201, 152, 46, 0.38);
+}
+
+.hg-btn-gold:focus-visible {
+  outline: 3px solid var(--navy, #14233C);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hg-btn-gold,
+  .hg-btn-gold:hover {
+    transition: none;
+    transform: none;
+  }
 }

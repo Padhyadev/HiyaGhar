@@ -5,7 +5,7 @@
 .hg-hero-section {
   width: 100%;
   margin-top: -88px;
-  margin-bottom: clamp(32px, 5vw, 48px);
+  margin-bottom: 0;
   padding: 0;
   position: relative;
   z-index: 1;
@@ -14,7 +14,7 @@
 .hg-hero-banner-card {
   position: relative;
   width: 100%;
-  min-height: 430px;
+  min-height: 520px;
   padding-top: 88px;
   border-radius: 0 0 32px 32px;
   overflow: hidden;
@@ -46,11 +46,11 @@
 .hg-hero-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(18, 36, 61, 0.58) 0%,
-    rgba(18, 36, 61, 0.72) 100%
-  );
+  /* Darkest in the middle where the text sits, lighter at the top so the sketch and
+     products still show; text on it stays well above 4.5:1. */
+  background:
+    radial-gradient(ellipse 60% 70% at 50% 58%, rgba(14, 27, 47, 0.82) 0%, rgba(14, 27, 47, 0.6) 55%, rgba(14, 27, 47, 0) 100%),
+    linear-gradient(180deg, rgba(14, 27, 47, 0.3) 0%, rgba(14, 27, 47, 0.55) 55%, rgba(14, 27, 47, 0.8) 100%);
   z-index: 1;
 }
 
@@ -119,11 +119,35 @@
   text-align: center;
 }
 
+/* ─── Small label above the heading ("OUR STORY") ───────────────────────────── */
+.hg-hero-label {
+  display: inline-block;
+  font-family: 'Poppins', 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: #F3D58A; /* light gold, readable on the dark overlay */
+  margin-bottom: 12px;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.35);
+}
+
+/* Second sentence of the H1 on its own, slightly smaller line */
+.hg-hero-title-sub {
+  display: block;
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  margin-top: 6px;
+  font-size: 0.62em;
+  font-weight: 500;
+  letter-spacing: 0;
+  opacity: 0.95;
+}
+
 /* ─── Hero Heading ─────────────────────────────────────────────────────────── */
 .hg-hero-title {
-  font-family: 'DM Sans', sans-serif;
-  font-size: clamp(32px, 4.5vw, 48px);
-  font-weight: 700;
+  font-family: 'Fraunces', Georgia, 'Times New Roman', serif;
+  font-size: clamp(32px, 4.5vw, 52px);
+  font-weight: 600;
   color: #ffffff;
   margin: 0 0 14px 0;
   line-height: 1.18;
@@ -156,7 +180,7 @@
   }
 
   .hg-hero-banner-card {
-    min-height: 290px;
+    min-height: 360px;
     padding-top: 74px;
     border-radius: 0 0 24px 24px;
   }
@@ -177,3 +201,10 @@
   }
 }
 
+/* Phones: full-width button */
+@media (max-width: 480px) {
+  .hg-hero-btn-wrap .hg-btn-gold {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

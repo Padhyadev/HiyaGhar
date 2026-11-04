@@ -11,7 +11,7 @@ export const HeroSection: React.FC = () => {
         <div className="hg-hero-bg-container">
           <img
             src="/image/Banner_image/our_story.png?v=2"
-            alt="HIYAGHAR handcrafted heritage kitchen and artisanal wellness story banner"
+            alt="HIYA mukhwas bottles and handmade soaps with traditional brass bowls, in front of a sketch of a family home"
             className="hg-hero-bg-img"
             loading="eager"
             fetchPriority="high"
@@ -27,12 +27,15 @@ export const HeroSection: React.FC = () => {
             <ScrollReveal variant="fade-up">
               
 
+              <span className="hg-hero-label">OUR STORY</span>
+
               <h1 className="hg-hero-title">
-                Every Goodness Has A Heartfelt Story
+                Every goodness has a heartfelt story.
+                <span className="hg-hero-title-sub">Ours began in a home kitchen in Ahmedabad.</span>
               </h1>
 
               <p className="hg-hero-subline">
-                HIYA Ghar is a small, family-run brand making mukhwas and everyday wellness products by hand, in small batches, from recipes we grew up with in Ahmedabad.
+                HIYA Ghar is a small, family-run brand making mukhwas and everyday wellness products by hand, in small batches, from recipes we grew up with.
               </p>
 
               <div className="hg-hero-btn-wrap">

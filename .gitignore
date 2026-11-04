@@ -32,3 +32,6 @@ publish_backend/
 _backup_phase3/
 _backup_phase4/
 _backup_phase5/
+
+*.bak
+.tools/

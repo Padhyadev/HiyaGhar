@@ -4,17 +4,17 @@ import './HowWeMakeSection.css';
 
 export const HowWeMakeSection: React.FC = () => {
   return (
-    <section className="hg-how-section" aria-label="How We Make It">
+    <section className="hg-how-section" aria-labelledby="hg-how-heading">
       <div className="hg-story-container">
         <ScrollReveal variant="fade-up" className="hg-how-header">
           <span className="hg-section-label">THE HIYA WAY</span>
-          <h2 className="hg-section-heading">Still made the ghar way</h2>
+          <h2 id="hg-how-heading" className="hg-section-heading">Still made the ghar way</h2>
           <p className="hg-how-intro">
             Every jar is made the way we make it for our own family.
           </p>
         </ScrollReveal>
 
-        {/* 3 cards in a row on desktop, one column on mobile */}
+        {/* 4 cards in a row on desktop, 2 on tablet, 1 on phones */}
         <div className="hg-how-cards-grid">
           {/* Card 1: Family recipes */}
           <ScrollReveal variant="fade-up" delay={50} className="hg-how-card">
@@ -65,8 +65,8 @@ export const HowWeMakeSection: React.FC = () => {
             </p>
           </ScrollReveal>
 
-          {/* Card 4: Honest ingredients (Kept as commented-out block per specification)
-          <div className="hg-how-card">
+          {/* Card 4: Honest ingredients */}
+          <ScrollReveal variant="fade-up" delay={350} className="hg-how-card">
             <div className="hg-how-icon-wrap" aria-hidden="true">
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--gold, #C9982E)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
@@ -77,8 +77,7 @@ export const HowWeMakeSection: React.FC = () => {
             <p className="hg-how-card-text">
               Simple ingredients you can recognise, chosen the way we would for our own home.
             </p>
-          </div>
-          */}
+          </ScrollReveal>
         </div>
       </div>
     </section>

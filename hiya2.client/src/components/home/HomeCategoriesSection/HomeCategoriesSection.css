@@ -17,6 +17,13 @@
   box-sizing: border-box;
 }
 
+/* Embedded inside another section (cards only): no own background or outer spacing */
+.hiyaghar-homecat-section.is-embedded {
+  background-color: transparent;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
 /* Header */
 .hiyaghar-homecat-header {
   display: flex;

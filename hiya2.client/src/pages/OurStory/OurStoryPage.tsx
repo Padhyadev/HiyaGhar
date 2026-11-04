@@ -5,7 +5,10 @@ import { Footer } from '../../components/layout/Footer/Footer';
 import { HeroSection } from '../../components/story/HeroSection/HeroSection';
 import { FounderSection } from '../../components/story/FounderSection/FounderSection';
 import { StorySection } from '../../components/story/StorySection/StorySection';
+import { JourneyTimeline } from '../../components/story/JourneyTimeline/JourneyTimeline';
 import { HowWeMakeSection } from '../../components/story/HowWeMakeSection/HowWeMakeSection';
+import { BehindTheScenes } from '../../components/story/BehindTheScenes/BehindTheScenes';
+import { ClosingCtaSection } from '../../components/story/ClosingCtaSection/ClosingCtaSection';
 import '../../components/story/storyShared.css';
 import './OurStoryPage.css';
 
@@ -14,49 +17,17 @@ interface OurStoryPageProps {
 }
 
 export const OurStoryPage: React.FC<OurStoryPageProps> = () => {
-  const pageTitle = 'Our Story: Meet Founder Priti Shah | HIYA Ghar';
-  const metaDescription =
-    'HIYA Ghar began two years ago in a home kitchen in Ahmedabad. Meet founder Priti Shah and discover our handmade, small-batch mukhwas made from family recipes.';
-
-  const aboutSchema = {
-    '@context': 'https://schema.org',
-    '@type': 'AboutPage',
-    name: pageTitle,
-    description: metaDescription,
-    mainEntity: {
-      '@type': 'Person',
-      name: 'Priti Shah',
-      jobTitle: 'Founder',
-      worksFor: {
-        '@type': 'Organization',
-        name: 'HIYAGHAR',
-        url: 'https://hiyaghar.com',
-      },
-      image: 'https://hiyaghar.com/image/founder-priti-shah.webp',
-    },
-  };
+  // Title, description, canonical and OG tags come from seo/routes.json (App <SEO>), and the
+  // AboutPage + founder JSON-LD from the server (Seo/SeoPageRenderer.cs). Only the share image
+  // is specific to this page: the founder's photo instead of the default.
+  const shareImage = 'https://hiyaghar.com/image/founder-priti-shah.webp';
 
   return (
     <div className="hg-story-wrapper">
       <Helmet>
-        <title>{pageTitle}</title>
-        <meta name="description" content={metaDescription} />
-        <link rel="canonical" href="https://hiyaghar.com/our-story" />
-        <meta property="og:title" content={pageTitle} />
-        <meta property="og:description" content={metaDescription} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hiyaghar.com/our-story" />
-        <meta property="og:image" content="https://hiyaghar.com/image/founder-priti-shah.webp" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={pageTitle} />
-        <meta name="twitter:description" content={metaDescription} />
-        <meta name="twitter:image" content="https://hiyaghar.com/image/founder-priti-shah.webp" />
+        <meta property="og:image" content={shareImage} />
+        <meta name="twitter:image" content={shareImage} />
       </Helmet>
-
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
-      />
 
       <Header />
 
@@ -64,39 +35,23 @@ export const OurStoryPage: React.FC<OurStoryPageProps> = () => {
         {/* SECTION 1: HERO */}
         <HeroSection />
 
-        {/* REASSURANCE RIBBON (Trust signals) */}
-        <div className="hg-trust-ribbon" aria-label="Brand Guarantees">
-          <div className="hg-trust-ribbon-inner">
-            <div className="hg-trust-item">
-              <span className="hg-trust-val">100% Pure</span>
-              <span className="hg-trust-desc">Natural & Chemical-Free</span>
-            </div>
-            <div className="hg-trust-sep" aria-hidden="true" />
-            <div className="hg-trust-item">
-              <span className="hg-trust-val">Small Batches</span>
-              <span className="hg-trust-desc">Slow Roasted by Hand</span>
-            </div>
-            <div className="hg-trust-sep" aria-hidden="true" />
-            <div className="hg-trust-item">
-              <span className="hg-trust-val">Ahmedabad Kitchen</span>
-              <span className="hg-trust-desc">Family Heritage Recipes</span>
-            </div>
-            <div className="hg-trust-sep" aria-hidden="true" />
-            <div className="hg-trust-item">
-              <span className="hg-trust-val">FSSAI Certified</span>
-              <span className="hg-trust-desc">Guaranteed Food Safety</span>
-            </div>
-          </div>
-        </div>
-
         {/* SECTION 2: MEET THE FOUNDER */}
         <FounderSection />
 
         {/* SECTION 3: OUR STORY (FROM OUR GHAR TO YOURS) */}
         <StorySection />
 
-        {/* SECTION 4: HOW WE MAKE IT (THE HIYA WAY) */}
+        {/* SECTION 4: OUR JOURNEY (TIMELINE) */}
+        <JourneyTimeline />
+
+        {/* SECTION 5: HOW WE MAKE IT (THE HIYA WAY) */}
         <HowWeMakeSection />
+
+        {/* SECTION 6: BEHIND THE SCENES (shown once kitchen photos are added) */}
+        <BehindTheScenes />
+
+        {/* SECTION 7: CLOSING CTA (WELCOME TO OUR GHAR) */}
+        <ClosingCtaSection />
       </main>
 
       <Footer />

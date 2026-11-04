@@ -1,0 +1,202 @@
+/* Our Story, closing call-to-action: the page's one dark section (navy #14233C, gold #C9982E).
+   Text pairs: white on navy ~15:1, light gold #F3D58A on navy ~11:1, navy on gold ~6:1. */
+
+.hg-closing-cta-section {
+  position: relative;
+  padding: clamp(60px, 8vw, 96px) 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201, 152, 46, 0.16) 0%, rgba(201, 152, 46, 0) 70%),
+    var(--navy, #14233C);
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.hg-closing-cta-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hg-closing-cta-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 22px;
+  margin-bottom: 24px;
+  background-color: var(--cream, #FBF6EC);
+  border-radius: 9999px;
+  box-shadow: 0 0 0 6px rgba(201, 152, 46, 0.18);
+}
+
+.hg-closing-cta-logo {
+  display: block;
+  width: auto;
+  height: 40px;
+}
+
+.hg-closing-cta-section .hg-section-heading {
+  color: #FFFFFF;
+}
+
+.hg-closing-cta-text {
+  font-family: 'Poppins', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.86);
+  margin: 0 0 32px;
+  max-width: 520px;
+}
+
+/* ─── Category cards (shared HomeCategoriesSection, embedded) ─────────────────
+   Lighter look on this page only: no solid navy bar, just a gold "Explore →" link; the whole
+   card stays one link and the image still zooms on hover. The Home page is not affected. */
+.hg-closing-cta-categories {
+  margin: 0 0 32px;
+  text-align: initial;
+}
+
+.hg-closing-cta-categories .hiyaghar-homecat-card {
+  border-color: transparent;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.hg-closing-cta-categories .hiyaghar-homecat-action-section,
+.hg-closing-cta-categories .hiyaghar-homecat-card:hover .hiyaghar-homecat-action-section,
+.hg-closing-cta-categories .hiyaghar-homecat-card:focus-within .hiyaghar-homecat-action-section {
+  background-color: transparent;
+  padding-top: 4px;
+  padding-bottom: 18px;
+}
+
+.hg-closing-cta-categories .hiyaghar-homecat-btn {
+  color: #8C5F05; /* dark gold, ~5:1 on the cream card */
+  font-size: 14px;
+}
+
+.hg-closing-cta-categories .hiyaghar-homecat-card:hover .hiyaghar-homecat-btn,
+.hg-closing-cta-categories .hiyaghar-homecat-card:focus-within .hiyaghar-homecat-btn {
+  color: var(--navy, #14233C);
+}
+
+/* The divider above the link is not needed without the bar */
+.hg-closing-cta-categories .hiyaghar-homecat-name-section + .hiyaghar-homecat-divider {
+  display: none;
+}
+
+.hg-closing-cta-categories .hiyaghar-homecat-link:focus-visible {
+  outline-color: #F3D58A;
+}
+
+/* Dots and arrows readable on navy */
+.hg-closing-cta-categories .hiyaghar-homecat-dot {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.hg-closing-cta-categories .hiyaghar-homecat-dot.is-active {
+  background-color: var(--gold, #C9982E);
+}
+
+.hg-closing-cta-categories .hiyaghar-homecat-arrow:focus-visible,
+.hg-closing-cta-categories .hiyaghar-homecat-dot:focus-visible {
+  outline-color: #F3D58A;
+}
+
+/* ─── Buttons ──────────────────────────────────────────────────────────────── */
+.hg-closing-cta-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+
+.hg-closing-cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 13px 28px;
+  border-radius: 9999px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.98rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background-color 0.28s ease, color 0.28s ease, border-color 0.28s ease, transform 0.28s ease, box-shadow 0.28s ease;
+}
+
+/* Primary: gold with navy text */
+.hg-closing-cta-btn.is-primary {
+  background-color: var(--gold, #C9982E);
+  color: var(--navy, #14233C);
+  border: 2px solid var(--gold, #C9982E);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+.hg-closing-cta-btn.is-primary:hover {
+  background-color: #D9AE4E;
+  border-color: #D9AE4E;
+  transform: translateY(-2px);
+}
+
+/* Secondary: gold outline, light text */
+.hg-closing-cta-btn.is-outline {
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 2px solid rgba(201, 152, 46, 0.8);
+}
+
+.hg-closing-cta-btn.is-outline:hover {
+  background-color: rgba(201, 152, 46, 0.14);
+  border-color: var(--gold, #C9982E);
+  color: #F3D58A;
+  transform: translateY(-2px);
+}
+
+.hg-closing-cta-btn:focus-visible {
+  outline: 3px solid #F3D58A;
+  outline-offset: 3px;
+}
+
+.hg-closing-cta-footnote {
+  font-family: 'Lora', Georgia, serif;
+  font-style: italic;
+  font-size: 1rem;
+  color: #F3D58A;
+  margin: 28px 0 0;
+}
+
+.hg-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Phones: full-width stacked buttons */
+@media (max-width: 480px) {
+  .hg-closing-cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hg-closing-cta-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hg-closing-cta-btn {
+    transition: none;
+  }
+
+  .hg-closing-cta-btn:hover {
+    transform: none;
+  }
+}
