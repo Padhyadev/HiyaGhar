@@ -1,5 +1,5 @@
 {
-  "testedAt": "2026-11-02T09:49:55.858Z",
+  "testedAt": "2026-11-05T05:00:35.034Z",
   "target": "https://localhost:59978",
   "summary": {
     "totalPagesTested": 23,
@@ -16,7 +16,7 @@
       "page": "Home",
       "path": "/",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 49,
+      "count": 58,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -25,34 +25,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Tea Masala",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Handmade Soap",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Hair Oil",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 27,
+          "height": 27
         }
       ]
     },
@@ -60,7 +60,7 @@
       "page": "Mukhwas Category",
       "path": "/mukhwas",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 50,
+      "count": 45,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -69,34 +69,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Choco Masti",
+          "width": 72,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Jamnagari Zaika",
+          "width": 94,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -104,7 +104,7 @@
       "page": "Tea Masala Category",
       "path": "/tea-masala",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 10,
+      "count": 5,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -113,34 +113,28 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Tea Masala",
+          "width": 63,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -148,7 +142,7 @@
       "page": "Handmade Soap Category",
       "path": "/handmade-soap",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 12,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -157,34 +151,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Glow Craft Detan Soap",
+          "width": 131,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Neem Aloe Fresh",
+          "width": 97,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         }
       ]
     },
@@ -192,7 +186,7 @@
       "page": "Hair Oil Category",
       "path": "/hair-oil",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 10,
+      "count": 5,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -201,34 +195,28 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Keshvedaam Herbal Hair Oi",
+          "width": 141,
+          "height": 31
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -236,7 +224,7 @@
       "page": "Combo Packs",
       "path": "/combos",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 16,
+      "count": 11,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -245,34 +233,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Glow Craft Detan Soap 3-P",
+          "width": 131,
+          "height": 31
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -280,7 +268,7 @@
       "page": "Gift Hampers",
       "path": "/gift-hampers",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 26,
+      "count": 25,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -289,34 +277,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": "a",
+          "text": "Wedding",
+          "width": 86,
+          "height": 25
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Birthday",
+          "width": 66,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Housewarming",
+          "width": 114,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Festival",
+          "width": 59,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Corporate",
+          "width": 79,
+          "height": 20
         }
       ]
     },
@@ -324,7 +312,7 @@
       "page": "Product Detail 1 (Drakshawati Mukhwas)",
       "path": "/product/drakshawati-mukhwas",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -333,34 +321,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -368,7 +338,7 @@
       "page": "Product Detail 2 (Tea Masala)",
       "path": "/product/tea-masala",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 15,
+      "count": 24,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -377,34 +347,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Tea Masala",
+          "width": 185,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill.is-selected",
+          "text": "50 g",
+          "width": 64,
+          "height": 37
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill",
+          "text": "100 g",
+          "width": 68,
+          "height": 35
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill",
+          "text": "200 g",
+          "width": 71,
+          "height": 35
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-fbt-item-checkbox",
+          "text": "Tea Masala",
+          "width": 18,
+          "height": 18
         }
       ]
     },
@@ -412,7 +382,7 @@
       "page": "Product Detail 3 (Glow Craft Detan Soap)",
       "path": "/product/glow-craft-detan-soap",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 9,
+      "count": 11,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -421,34 +391,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Handmade Soap",
+          "width": 219,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Neem Aloe Fresh",
+          "width": 97,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -456,7 +426,7 @@
       "page": "Shopping Cart",
       "path": "/cart",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -465,34 +435,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -500,7 +452,7 @@
       "page": "Checkout (Step 1-3)",
       "path": "/checkout",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -509,34 +461,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -544,7 +478,7 @@
       "page": "Wishlist",
       "path": "/wishlist",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -553,34 +487,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -640,7 +556,7 @@
       "page": "Our Story",
       "path": "/our-story",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 8,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -649,40 +565,98 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Tea Masala",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Handmade Soap",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Hair Oil",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 132,
+          "height": 17
         }
       ]
     },
     {
       "page": "Contact Us",
       "path": "/contact-us",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 3,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "FAQ",
+      "path": "/faq",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 4,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-faq-search-input",
+          "text": "Search frequently asked q",
+          "width": 220,
+          "height": 20
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
       "viewport": "Mobile Small (360x740 Android)",
       "count": 8,
       "examples": [
@@ -693,40 +667,84 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "hiyaghar@gmail.com",
+          "width": 142,
+          "height": 20
         }
       ]
     },
     {
-      "page": "FAQ",
-      "path": "/faq",
+      "page": "Terms & Conditions",
+      "path": "/terms-conditions",
+      "viewport": "Mobile Small (360x740 Android)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Refund Policy",
+      "path": "/refund-policy",
       "viewport": "Mobile Small (360x740 Android)",
       "count": 9,
       "examples": [
@@ -737,166 +755,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Privacy Policy",
-      "path": "/privacy-policy",
-      "viewport": "Mobile Small (360x740 Android)",
-      "count": 13,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Terms & Conditions",
-      "path": "/terms-conditions",
-      "viewport": "Mobile Small (360x740 Android)",
-      "count": 12,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Refund Policy",
-      "path": "/refund-policy",
-      "viewport": "Mobile Small (360x740 Android)",
-      "count": 14,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "hiyaghar@gmail.com",
+          "width": 142,
+          "height": 20
         }
       ]
     },
@@ -904,7 +790,7 @@
       "page": "Shipping Policy",
       "path": "/shipping-policy",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 12,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -913,34 +799,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         }
       ]
     },
@@ -948,7 +834,7 @@
       "page": "404 Error Page",
       "path": "/this-page-does-not-exist-404-test",
       "viewport": "Mobile Small (360x740 Android)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -957,34 +843,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -992,7 +860,7 @@
       "page": "Home",
       "path": "/",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 49,
+      "count": 58,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1001,34 +869,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Tea Masala",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Handmade Soap",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Hair Oil",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 27,
+          "height": 27
         }
       ]
     },
@@ -1036,7 +904,7 @@
       "page": "Mukhwas Category",
       "path": "/mukhwas",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 50,
+      "count": 45,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1045,34 +913,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Choco Masti",
+          "width": 84,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Jamnagari Zaika",
+          "width": 109,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -1080,7 +948,7 @@
       "page": "Tea Masala Category",
       "path": "/tea-masala",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 10,
+      "count": 5,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1089,34 +957,28 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Tea Masala",
+          "width": 74,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -1124,7 +986,7 @@
       "page": "Handmade Soap Category",
       "path": "/handmade-soap",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 12,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1133,34 +995,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Glow Craft Detan Soap",
+          "width": 152,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Neem Aloe Fresh",
+          "width": 113,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         }
       ]
     },
@@ -1168,7 +1030,7 @@
       "page": "Hair Oil Category",
       "path": "/hair-oil",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 10,
+      "count": 5,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1177,34 +1039,28 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".product-card-title-link",
+          "text": "Keshvedaam Herbal Hair Oi",
+          "width": 134,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -1212,7 +1068,7 @@
       "page": "Combo Packs",
       "path": "/combos",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 16,
+      "count": 11,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1221,34 +1077,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".product-card-title-link",
+          "text": "Glow Craft Detan Soap 3-P",
+          "width": 152,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -1256,7 +1112,7 @@
       "page": "Gift Hampers",
       "path": "/gift-hampers",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 26,
+      "count": 25,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1265,34 +1121,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": "a",
+          "text": "Wedding",
+          "width": 86,
+          "height": 25
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Birthday",
+          "width": 66,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Housewarming",
+          "width": 114,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Festival",
+          "width": 59,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Corporate",
+          "width": 79,
+          "height": 20
         }
       ]
     },
@@ -1300,7 +1156,7 @@
       "page": "Product Detail 1 (Drakshawati Mukhwas)",
       "path": "/product/drakshawati-mukhwas",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1309,34 +1165,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -1344,7 +1182,7 @@
       "page": "Product Detail 2 (Tea Masala)",
       "path": "/product/tea-masala",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 15,
+      "count": 24,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1353,34 +1191,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Tea Masala",
+          "width": 185,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill.is-selected",
+          "text": "50 g",
+          "width": 64,
+          "height": 37
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill",
+          "text": "100 g",
+          "width": 68,
+          "height": 35
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill",
+          "text": "200 g",
+          "width": 71,
+          "height": 35
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-fbt-item-checkbox",
+          "text": "Tea Masala",
+          "width": 18,
+          "height": 18
         }
       ]
     },
@@ -1388,7 +1226,7 @@
       "page": "Product Detail 3 (Glow Craft Detan Soap)",
       "path": "/product/glow-craft-detan-soap",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 9,
+      "count": 11,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1397,34 +1235,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Handmade Soap",
+          "width": 219,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Neem Aloe Fresh",
+          "width": 113,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -1432,7 +1270,7 @@
       "page": "Shopping Cart",
       "path": "/cart",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1441,34 +1279,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -1476,7 +1296,7 @@
       "page": "Checkout (Step 1-3)",
       "path": "/checkout",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1485,34 +1305,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -1520,7 +1322,7 @@
       "page": "Wishlist",
       "path": "/wishlist",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1529,34 +1331,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -1616,7 +1400,7 @@
       "page": "Our Story",
       "path": "/our-story",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 8,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1625,34 +1409,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Tea Masala",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Handmade Soap",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Hair Oil",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 132,
+          "height": 17
         }
       ]
     },
@@ -1660,7 +1444,7 @@
       "page": "Contact Us",
       "path": "/contact-us",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1669,40 +1453,142 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
     {
       "page": "FAQ",
       "path": "/faq",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 4,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-faq-search-input",
+          "text": "Search frequently asked q",
+          "width": 250,
+          "height": 20
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
+        },
+        {
+          "selector": "a",
+          "text": "Account Profile",
+          "width": 110,
+          "height": 22
+        }
+      ]
+    },
+    {
+      "page": "Terms & Conditions",
+      "path": "/terms-conditions",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Refund Policy",
+      "path": "/refund-policy",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
       "count": 9,
       "examples": [
@@ -1713,216 +1599,40 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Privacy Policy",
-      "path": "/privacy-policy",
-      "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 15,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Terms & Conditions",
-      "path": "/terms-conditions",
-      "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 12,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Refund Policy",
-      "path": "/refund-policy",
-      "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 14,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "hiyaghar@gmail.com",
+          "width": 142,
+          "height": 20
         }
       ]
     },
     {
       "page": "Shipping Policy",
       "path": "/shipping-policy",
-      "viewport": "Mobile Standard (390x844 iPhone 14)",
-      "count": 13,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "404 Error Page",
-      "path": "/this-page-does-not-exist-404-test",
       "viewport": "Mobile Standard (390x844 iPhone 14)",
       "count": 8,
       "examples": [
@@ -1933,34 +1643,60 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "My Account → Orders",
+          "width": 158,
+          "height": 22
+        }
+      ]
+    },
+    {
+      "page": "404 Error Page",
+      "path": "/this-page-does-not-exist-404-test",
+      "viewport": "Mobile Standard (390x844 iPhone 14)",
+      "count": 3,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -1968,7 +1704,7 @@
       "page": "Home",
       "path": "/",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 67,
+      "count": 58,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -1977,34 +1713,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Tea Masala",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Handmade Soap",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Hair Oil",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 27,
+          "height": 27
         }
       ]
     },
@@ -2012,7 +1748,7 @@
       "page": "Mukhwas Category",
       "path": "/mukhwas",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 50,
+      "count": 45,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2021,34 +1757,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Choco Masti",
+          "width": 84,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Jamnagari Zaika",
+          "width": 109,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -2056,7 +1792,7 @@
       "page": "Tea Masala Category",
       "path": "/tea-masala",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 10,
+      "count": 5,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2065,34 +1801,28 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Tea Masala",
+          "width": 74,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -2100,7 +1830,7 @@
       "page": "Handmade Soap Category",
       "path": "/handmade-soap",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 12,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2109,34 +1839,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Glow Craft Detan Soap",
+          "width": 152,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Neem Aloe Fresh",
+          "width": 113,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         }
       ]
     },
@@ -2144,7 +1874,7 @@
       "page": "Hair Oil Category",
       "path": "/hair-oil",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 10,
+      "count": 5,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2153,34 +1883,28 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".product-card-title-link",
+          "text": "Keshvedaam Herbal Hair Oi",
+          "width": 164,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -2188,7 +1912,7 @@
       "page": "Combo Packs",
       "path": "/combos",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 16,
+      "count": 11,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2197,34 +1921,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
+        },
+        {
+          "selector": ".product-card-title-link",
+          "text": "Glow Craft Detan Soap 3-P",
+          "width": 152,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -2232,7 +1956,7 @@
       "page": "Gift Hampers",
       "path": "/gift-hampers",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 26,
+      "count": 25,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2241,34 +1965,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": "a",
+          "text": "Wedding",
+          "width": 86,
+          "height": 25
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Birthday",
+          "width": 66,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Housewarming",
+          "width": 114,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Festival",
+          "width": 59,
+          "height": 20
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "Corporate",
+          "width": 79,
+          "height": 20
         }
       ]
     },
@@ -2276,7 +2000,7 @@
       "page": "Product Detail 1 (Drakshawati Mukhwas)",
       "path": "/product/drakshawati-mukhwas",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2285,34 +2009,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -2320,7 +2026,7 @@
       "page": "Product Detail 2 (Tea Masala)",
       "path": "/product/tea-masala",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 15,
+      "count": 24,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2329,34 +2035,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Tea Masala",
+          "width": 185,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill.is-selected",
+          "text": "50 g",
+          "width": 64,
+          "height": 37
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill",
+          "text": "100 g",
+          "width": 68,
+          "height": 35
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-attr-pill",
+          "text": "200 g",
+          "width": 71,
+          "height": 35
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-fbt-item-checkbox",
+          "text": "Tea Masala",
+          "width": 18,
+          "height": 18
         }
       ]
     },
@@ -2364,7 +2070,7 @@
       "page": "Product Detail 3 (Glow Craft Detan Soap)",
       "path": "/product/glow-craft-detan-soap",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 9,
+      "count": 11,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2373,34 +2079,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
+          "selector": ".hiyaghar-detail-back-button",
+          "text": "Back to Handmade Soap",
+          "width": 219,
           "height": 36
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".product-card-title-link",
+          "text": "Neem Aloe Fresh",
+          "width": 113,
+          "height": 18
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-card-wishlist-btn",
+          "text": "Add to wishlist",
+          "width": 28,
+          "height": 28
         }
       ]
     },
@@ -2408,7 +2114,7 @@
       "page": "Shopping Cart",
       "path": "/cart",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2417,34 +2123,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -2452,7 +2140,7 @@
       "page": "Checkout (Step 1-3)",
       "path": "/checkout",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2461,34 +2149,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -2496,7 +2166,7 @@
       "page": "Wishlist",
       "path": "/wishlist",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2505,34 +2175,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
@@ -2592,7 +2244,7 @@
       "page": "Our Story",
       "path": "/our-story",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 8,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2601,34 +2253,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Tea Masala",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Handmade Soap",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-homecat-dot",
+          "text": "Go to Hair Oil",
+          "width": 8,
+          "height": 8
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 132,
+          "height": 17
         }
       ]
     },
@@ -2636,7 +2288,7 @@
       "page": "Contact Us",
       "path": "/contact-us",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2645,40 +2297,142 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
         }
       ]
     },
     {
       "page": "FAQ",
       "path": "/faq",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 4,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-faq-search-input",
+          "text": "Search frequently asked q",
+          "width": 274,
+          "height": 20
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 91,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Privacy Policy",
+      "path": "/privacy-policy",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 10,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
+        },
+        {
+          "selector": "a",
+          "text": "Account Profile",
+          "width": 110,
+          "height": 22
+        }
+      ]
+    },
+    {
+      "page": "Terms & Conditions",
+      "path": "/terms-conditions",
+      "viewport": "Mobile Large (414x896 iPhone XR)",
+      "count": 7,
+      "examples": [
+        {
+          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
+          "text": "Pause",
+          "width": 1,
+          "height": 1
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
+        },
+        {
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
+        }
+      ]
+    },
+    {
+      "page": "Refund Policy",
+      "path": "/refund-policy",
       "viewport": "Mobile Large (414x896 iPhone XR)",
       "count": 9,
       "examples": [
@@ -2689,166 +2443,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Privacy Policy",
-      "path": "/privacy-policy",
-      "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 15,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Terms & Conditions",
-      "path": "/terms-conditions",
-      "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 12,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
-        }
-      ]
-    },
-    {
-      "page": "Refund Policy",
-      "path": "/refund-policy",
-      "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 14,
-      "examples": [
-        {
-          "selector": ".sr-only.hiyaghar-ticker-pause-btn",
-          "text": "Pause",
-          "width": 1,
-          "height": 1
-        },
-        {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
-        },
-        {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": "a",
+          "text": "hiyaghar@gmail.com",
+          "width": 142,
+          "height": 20
         }
       ]
     },
@@ -2856,7 +2478,7 @@
       "page": "Shipping Policy",
       "path": "/shipping-policy",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 12,
+      "count": 7,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2865,34 +2487,34 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Privacy Policy",
+          "width": 126,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Terms & Conditions",
+          "width": 165,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn",
+          "text": "Refund & Cancellation",
+          "width": 183,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-legal-tab-btn.active",
+          "text": "Shipping Policy",
+          "width": 138,
+          "height": 38
         },
         {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 116,
+          "height": 16
         }
       ]
     },
@@ -2900,7 +2522,7 @@
       "page": "404 Error Page",
       "path": "/this-page-does-not-exist-404-test",
       "viewport": "Mobile Large (414x896 iPhone XR)",
-      "count": 8,
+      "count": 3,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2909,34 +2531,16 @@
           "height": 1
         },
         {
-          "selector": ".hiyaghar-mobile-hamburger-btn",
-          "text": "Open menu",
-          "width": 36,
-          "height": 36
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "hiyaghar@gmail.com",
+          "width": 118,
+          "height": 16
         },
         {
-          "selector": ".hiyaghar-search-icon-btn",
-          "text": "Search Products",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-account-icon-btn",
-          "text": "Account Menu",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-wishlist-icon-btn",
-          "text": "Wishlist with 0 items",
-          "width": 34,
-          "height": 34
-        },
-        {
-          "selector": ".hiyaghar-cart-cyan-pill",
-          "text": "Cart with 0 items",
-          "width": 34,
-          "height": 34
+          "selector": ".hiyaghar-footer-contact-link",
+          "text": "+91 9274443617",
+          "width": 88,
+          "height": 16
         }
       ]
     },
@@ -2944,7 +2548,7 @@
       "page": "Home",
       "path": "/",
       "viewport": "Tablet Portrait (768x1024 iPad)",
-      "count": 68,
+      "count": 62,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -2977,10 +2581,10 @@
           "height": 38
         },
         {
-          "selector": "a",
-          "text": "Mukhwas",
-          "width": 59,
-          "height": 17
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         }
       ]
     },
@@ -3208,7 +2812,7 @@
       "page": "Gift Hampers",
       "path": "/gift-hampers",
       "viewport": "Tablet Portrait (768x1024 iPad)",
-      "count": 25,
+      "count": 29,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -3296,7 +2900,7 @@
       "page": "Product Detail 2 (Tea Masala)",
       "path": "/product/tea-masala",
       "viewport": "Tablet Portrait (768x1024 iPad)",
-      "count": 14,
+      "count": 30,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -3340,7 +2944,7 @@
       "page": "Product Detail 3 (Glow Craft Detan Soap)",
       "path": "/product/glow-craft-detan-soap",
       "viewport": "Tablet Portrait (768x1024 iPad)",
-      "count": 8,
+      "count": 18,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -3568,7 +3172,7 @@
       "page": "Our Story",
       "path": "/our-story",
       "viewport": "Tablet Portrait (768x1024 iPad)",
-      "count": 7,
+      "count": 11,
       "examples": [
         {
           "selector": ".sr-only.hiyaghar-ticker-pause-btn",
@@ -3601,10 +3205,10 @@
           "height": 38
         },
         {
-          "selector": ".hiyaghar-footer-contact-link",
-          "text": "hiyaghar@gmail.com",
-          "width": 132,
-          "height": 17
+          "selector": ".hiyaghar-homecat-dot.is-active",
+          "text": "Go to Mukhwas",
+          "width": 24,
+          "height": 8
         }
       ]
     },
@@ -3935,6 +3539,20 @@
     {
       "page": "Contact Us",
       "viewport": "Mobile Large (414x896 iPhone XR)",
+      "errors": [
+        "requestStorageAccess: Permission denied."
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "viewport": "Tablet Portrait (768x1024 iPad)",
+      "errors": [
+        "requestStorageAccess: Permission denied."
+      ]
+    },
+    {
+      "page": "Contact Us",
+      "viewport": "Tablet Landscape (1024x768 iPad)",
       "errors": [
         "requestStorageAccess: Permission denied."
       ]
