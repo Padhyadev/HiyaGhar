@@ -9,13 +9,13 @@ Create implementation-ready, token-driven UI guidance for Noka that is optimized
 - Audience: online shoppers and consumers
 - Product surface: e-commerce storefront
 
-## Style Foundations
-- Visual style: minimal, utility-first, accessibility-prioritized
-- Main font style: `font.family.primary=Mier-A-Book`, `font.family.stack=Mier-A-Book, Helvetica, Arial, sans-serif`, `font.size.base=20px`, `font.weight.base=400`, `font.lineHeight.base=29.524px`
-- Typography scale: `font.size.xs=0px`, `font.size.sm=14px`, `font.size.md=16px`, `font.size.lg=18px`, `font.size.xl=20px`, `font.size.2xl=22px`, `font.size.3xl=24px`, `font.size.4xl=26px`
-- Color palette: `color.text.primary=#2a2a2a`, `color.border.default=#ffffff`, `color.surface.base=#000000`, `color.surface.raised=#37a6ca`
-- Spacing scale: `space.1=2px`, `space.2=3px`, `space.3=4px`, `space.4=5px`, `space.5=7px`, `space.6=8px`, `space.7=10px`, `space.8=11px`
-- Radius/shadow/motion tokens: `radius.xs=2px`, `radius.sm=3px`, `radius.md=4px`, `radius.lg=12px`, `radius.xl=20px`, `radius.2xl=23px`, `radius.step7=25px`, `radius.step8=26px` | `motion.duration.instant=100ms`, `motion.duration.fast=200ms`, `motion.duration.normal=300ms`, `motion.duration.slow=400ms`, `motion.duration.slower=500ms`
+    ## Style Foundations
+    - Visual style: minimal, utility-first, accessibility-prioritized
+    - Main font style: `font.family.primary=Mier-A-Book`, `font.family.stack=Mier-A-Book, Helvetica, Arial, sans-serif`, `font.size.base=20px`, `font.weight.base=400`, `font.lineHeight.base=29.524px`
+    - Typography scale: `font.size.xs=0px`, `font.size.sm=14px`, `font.size.md=16px`, `font.size.lg=18px`, `font.size.xl=20px`, `font.size.2xl=22px`, `font.size.3xl=24px`, `font.size.4xl=26px`
+    - Color palette: `color.text.primary=#2a2a2a`, `color.border.default=#ffffff`, `color.surface.base=#000000`, `color.surface.raised=#37a6ca`
+    - Spacing scale: `space.1=2px`, `space.2=3px`, `space.3=4px`, `space.4=5px`, `space.5=7px`, `space.6=8px`, `space.7=10px`, `space.8=11px`
+    - Radius/shadow/motion tokens: `radius.xs=2px`, `radius.sm=3px`, `radius.md=4px`, `radius.lg=12px`, `radius.xl=20px`, `radius.2xl=23px`, `radius.step7=25px`, `radius.step8=26px` | `motion.duration.instant=100ms`, `motion.duration.fast=200ms`, `motion.duration.normal=300ms`, `motion.duration.slow=400ms`, `motion.duration.slower=500ms`
 
 ## Accessibility
 - Target: WCAG 2.2 AA
