@@ -18,6 +18,8 @@ namespace Hiya2.Server.Services
         {
             "/api/product", "/api/stock", "/api/category", "/api/attribute",
             "/api/gifthamper", "/api/order", "/api/payment",
+            // Cart changes reserve/release stock, which changes the "X left" shown on product cards.
+            "/api/cart", "/api/stockreservation",
         };
 
         public static bool IsCatalogWrite(HttpContext context)

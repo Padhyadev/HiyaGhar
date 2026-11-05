@@ -22,6 +22,7 @@ import { loadRazorpayScript } from '../../utils/razorpayLoader';
 import { navigateTo } from '../../utils/navigation';
 import { trackBeginCheckout } from '../../utils/analytics';
 import './CheckoutPage.css';
+import { formatVariantLabel } from '../../utils/productFormat';
 
 const EMPTY_NEW_ADDRESS_FORM = {
   fullName: '',
@@ -1392,7 +1393,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                             <img src={item.image} alt={item.name} className="hiyaghar-review-item-img" />
                             <div className="hiyaghar-review-item-info">
                               <span className="hiyaghar-review-item-name">{item.name}</span>
-                              <span className="hiyaghar-review-item-meta" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>Size: {item.weight} • Qty: <AnimatedNumber value={item.quantity} /></span>
+                              <span className="hiyaghar-review-item-meta" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>{formatVariantLabel(item.weight) && <>Size: {formatVariantLabel(item.weight)} • </>}Qty: <AnimatedNumber value={item.quantity} /></span>
                             </div>
                             <span className="hiyaghar-review-item-price" style={{ display: 'inline-flex', alignItems: 'center' }}>₹<AnimatedNumber value={item.price * item.quantity} /></span>
                           </div>
@@ -1437,7 +1438,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       <img src={item.image} alt={item.name} />
                       <div className="info">
                         <span className="name">{item.name}</span>
-                        <span className="meta" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>{item.weight} × <AnimatedNumber value={item.quantity} /></span>
+                        <span className="meta" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>{formatVariantLabel(item.weight) ? `${formatVariantLabel(item.weight)} ×` : 'Qty:'} <AnimatedNumber value={item.quantity} /></span>
                       </div>
                       <span className="price" style={{ display: 'inline-flex', alignItems: 'center' }}>₹<AnimatedNumber value={item.price * item.quantity} /></span>
                     </div>

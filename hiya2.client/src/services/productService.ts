@@ -95,7 +95,8 @@ export class ProductService {
     // Always ask the server first so an admin change shows; the in-memory list is only the
     // fallback when the request fails.
     try {
-      const response = await fetch(`/api/product/${id}`);
+      // no-store: never reuse a browser-cached copy, so stock/price are always current.
+      const response = await fetch(`/api/product/${id}`, { cache: 'no-store' });
       if (response.ok) {
         return await response.json();
       }
@@ -120,7 +121,10 @@ export class ProductService {
       .sort((a, b) => a.id - b.id)
       .find((p) => toProductSlug(p.productName) === cleanSlug || p.productName.toLowerCase() === cleanSlug);
 
-    return match || null;
+    if (!match) return null;
+    // The list above may be a few minutes old (server output cache); the detail page shows
+    // stock, so load this one product fresh by id - fall back to the list copy if that fails.
+    return (await this.getProductById(match.id)) || match;
   }
 
   /**

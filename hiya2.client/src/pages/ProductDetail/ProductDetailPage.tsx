@@ -13,7 +13,7 @@ import { ProductReviews } from '../../components/ProductReviews/ProductReviews';
 import { YouMayAlsoLike } from '../../components/product/YouMayAlsoLike/YouMayAlsoLike';
 import { navigateTo } from '../../utils/navigation';
 import { cameDirectlyFrom } from '../../utils/scrollMemory';
-import { formatVariantLabel, getVariantImages, NO_IMAGE, productPath } from '../../utils/productFormat';
+import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE, productPath } from '../../utils/productFormat';
 import { parseProductFullDescription, type ComboItem } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
@@ -511,10 +511,17 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     ? (matchedVariant ? { price: matchedVariant.price, originalPrice: matchedVariant.originalPrice || matchedVariant.price } : null)
     : getVariantPrice(selectedWeight);
   const isCombinationAvailable = currentPrices !== null;
-  const totalStockUnits = matchedVariant
-    ? (typeof matchedVariant.sellableStock === 'number'
-        ? matchedVariant.sellableStock
-        : (typeof matchedVariant.stockQuantity === 'number' ? matchedVariant.stockQuantity : 99))
+  // The variant whose stock applies: the exact match for structured products; for flat ones the
+  // variant picked by weight, or - for a "No Variant" product (soaps, hair oil, combos), whose
+  // single variant has no label to pick - its default variant.
+  const stockVariant = matchedVariant
+    || (hasStructuredAttributes
+      ? undefined
+      : activeVariant || (rawWeightOptions.length === 0 ? getDefaultVariant(product?.variants) : undefined));
+  const totalStockUnits = stockVariant
+    ? (typeof stockVariant.sellableStock === 'number'
+        ? stockVariant.sellableStock
+        : (typeof stockVariant.stockQuantity === 'number' ? stockVariant.stockQuantity : 99))
     : (product?.variants?.length ? 0 : 99);
   
   const cartItemId = `${product?.id}-${selectedWeight}`;
@@ -835,7 +842,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         >
                           {item.name}
                         </a>
-                        {item.variant && <span style={{ color: '#64748b' }}> ({item.variant})</span>}
+                        {formatVariantLabel(item.variant) && (
+                          <span style={{ color: '#64748b' }}> ({formatVariantLabel(item.variant)})</span>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -875,19 +884,25 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       This combination isn't available.
                     </div>
                   )}
-                  {isCombinationAvailable && isOutOfStock && (
+                </div>
+              )}
+
+              {/* Stock status - shown for every product, including ones without sizes (soaps, hair oil, combos) */}
+              {isCombinationAvailable && (
+                <div className="hiyaghar-detail-stock-status">
+                  {isOutOfStock && (
                     <div className="hiyaghar-stock-status-box is-out-of-stock">
                       <span className="stock-dot"></span>
                       <span>Currently Out of Stock</span>
                     </div>
                   )}
-                  {isCombinationAvailable && isAllInCart && (
+                  {isAllInCart && (
                     <div className="hiyaghar-stock-status-box is-out-of-stock">
                       <span className="stock-dot"></span>
                       <span>All available stock ({totalStockUnits}) is in your Cart</span>
                     </div>
                   )}
-                  {isCombinationAvailable && !isOutOfStock && !isAllInCart && availableStockUnits > 0 && availableStockUnits <= 10 && (
+                  {!isOutOfStock && !isAllInCart && availableStockUnits > 0 && availableStockUnits < 10 && (
                     <div className="hiyaghar-stock-status-box is-low-stock">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="12" cy="12" r="10" />
@@ -895,15 +910,16 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                         <line x1="12" y1="16" x2="12.01" y2="16" />
                       </svg>
                       <span>
-                        {Math.max(0, availableStockUnits - quantity) > 0 ? (
-                          <>Hurry! Only <strong>{Math.max(0, availableStockUnits - quantity)}</strong> left in stock!</>
+                        {/* Counts down as the shopper raises the quantity: 9 left at qty 1, 8 at qty 2, ... */}
+                        {quantity < availableStockUnits ? (
+                          <>Hurry! Only <strong>{availableStockUnits - (quantity - 1)}</strong> left in stock!</>
                         ) : (
-                          <>Maximum available stock (<strong>{availableStockUnits}</strong>) selected!</>
+                          <>You've selected all <strong>{availableStockUnits}</strong> left in stock!</>
                         )}
                       </span>
                     </div>
                   )}
-                  {isCombinationAvailable && !isOutOfStock && !isAllInCart && availableStockUnits > 10 && (
+                  {!isOutOfStock && !isAllInCart && availableStockUnits >= 10 && (
                     <div className="hiyaghar-stock-status-box is-in-stock">
                       <span className="stock-dot in-stock"></span>
                       <span>In Stock</span>
@@ -1099,7 +1115,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                             <span className="hiyaghar-fbt-item-name" title={crossItem.name}>
                               {crossItem.name}
                             </span>
-                            <span className="hiyaghar-fbt-item-sub">{crossItem.weight}</span>
+                            <span className="hiyaghar-fbt-item-sub">{formatVariantLabel(crossItem.weight)}</span>
                             <div className="hiyaghar-fbt-item-price-wrap">
                               <span className="hiyaghar-fbt-item-price">₹{crossItem.price}</span>
                               {crossItem.originalPrice > crossItem.price && (

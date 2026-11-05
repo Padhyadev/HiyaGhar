@@ -8,6 +8,7 @@ import type { CustomerProfile } from '../../services/customerAuthService';
 import { showToast } from '../../utils/alertService';
 import { trackPurchase } from '../../utils/analytics';
 import './OrderConfirmationPage.css';
+import { formatVariantLabel } from '../../utils/productFormat';
 
 interface OrderConfirmationPageProps {
   orderId?: string;
@@ -209,7 +210,7 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
                     <img src={item.image} alt={item.name} className="hiyaghar-conf-item-img" />
                     <div className="hiyaghar-conf-item-info">
                       <span className="name">{item.name}</span>
-                      <span className="meta">Pack Size: {item.weight} • Qty: {item.quantity} (₹{item.price} each)</span>
+                      <span className="meta">{formatVariantLabel(item.weight) && <>Pack Size: {formatVariantLabel(item.weight)} • </>}Qty: {item.quantity} (₹{item.price} each)</span>
                     </div>
                     <span className="price">₹{item.price * item.quantity}</span>
                   </div>

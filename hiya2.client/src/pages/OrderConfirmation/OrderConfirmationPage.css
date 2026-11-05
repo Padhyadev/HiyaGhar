@@ -412,12 +412,68 @@
   flex-wrap: wrap;
 }
 
+/* Own button styles: .hiyaghar-btn-primary/secondary are otherwise only defined in other
+   pages' CSS (cart, admin), which isn't loaded when the shopper arrives here via Buy Now. */
+.hiyaghar-conf-actions .hiyaghar-btn-primary,
+.hiyaghar-conf-actions .hiyaghar-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hiyaghar-conf-actions .hiyaghar-btn-primary {
+  background: var(--hiya-navy, #11223A);
+  color: #ffffff;
+  border: none;
+}
+
+.hiyaghar-conf-actions .hiyaghar-btn-primary:hover {
+  background: #1C355E;
+  transform: translateY(-1px);
+}
+
+.hiyaghar-conf-actions .hiyaghar-btn-secondary {
+  background: #FDFBF7;
+  color: var(--hiya-navy, #11223A);
+  border: 1px solid var(--hiya-gold, #CB992C);
+}
+
+.hiyaghar-conf-actions .hiyaghar-btn-secondary:hover {
+  background: rgba(203, 153, 44, 0.1);
+}
+
 .hiyaghar-conf-actions .track-btn {
   background: linear-gradient(135deg, #11223A 0%, #1A345B 100%);
+  color: #ffffff;
   border: 1.5px solid var(--hiya-gold, #CB992C);
   padding: 16px 36px;
   border-radius: 14px;
   font-size: 16px;
+}
+
+.hiyaghar-conf-actions .track-btn:hover {
+  background: linear-gradient(135deg, #1A345B 0%, #22436F 100%);
+  box-shadow: 0 6px 16px rgba(17, 34, 58, 0.25);
+}
+
+@media (max-width: 480px) {
+  .hiyaghar-conf-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .hiyaghar-conf-actions .hiyaghar-btn-primary,
+  .hiyaghar-conf-actions .hiyaghar-btn-secondary {
+    width: 100%;
+  }
 }
 
 .hiyaghar-no-order-card {

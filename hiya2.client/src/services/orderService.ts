@@ -2,6 +2,7 @@ import type { CartItem } from '../cart';
 import { CustomerAuthService } from './customerAuthService';
 import { ProductService } from './productService';
 import { LovService } from './lovService';
+import { formatVariantLabel } from '../utils/productFormat';
 
 export interface ShippingAddress {
   fullName: string;
@@ -391,7 +392,7 @@ export class OrderService {
       <tr>
         <td style="padding: 10px 12px; border-bottom: 1px solid #eee; text-align: left;">
           <strong style="color: #11223A; font-size: 14px;">${item.name}</strong><br/>
-          <span style="font-size:12px; color:#666;">Pack Size: ${item.weight || 'Standard'}</span>
+          ${formatVariantLabel(item.weight) ? `<span style="font-size:12px; color:#666;">Pack Size: ${formatVariantLabel(item.weight)}</span>` : ''}
         </td>
         <td style="padding: 10px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px;">${item.quantity}</td>
         <td style="padding: 10px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 14px;">₹${item.price.toFixed(2)}</td>

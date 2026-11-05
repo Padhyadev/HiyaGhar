@@ -19,7 +19,7 @@ import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { allowOnlyDigits, sanitizeDigits } from '../../utils/validationUtils';
 import { showToast } from '../../utils/alertService';
 import './ProfilePage.css';
-import { showNoImageOnError, NO_IMAGE } from '../../utils/productFormat';
+import { showNoImageOnError, NO_IMAGE, formatVariantLabel } from '../../utils/productFormat';
 
 interface ProfilePageProps {
   initialTab?: 'profile' | 'orders' | 'addresses' | 'password' | 'rewards';
@@ -1032,7 +1032,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                                   </div>
                                   <div className="item-card-details">
                                     <h4 className="item-title">{currentItem.name}</h4>
-                                    <p className="item-info"><strong>Variant :</strong> {currentItem.weight || 'Standard'}</p>
+                                    {formatVariantLabel(currentItem.weight) && (
+                                      <p className="item-info"><strong>Variant :</strong> {formatVariantLabel(currentItem.weight)}</p>
+                                    )}
                                     <p className="item-info"><strong>Quantity :</strong> {currentItem.quantity}</p>
                                     <p className="item-info"><strong>Unit Price :</strong> ₹{currentItem.price}</p>
                                     <p className="item-info"><strong>Amount :</strong> ₹{currentItem.price * currentItem.quantity}</p>
