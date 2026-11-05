@@ -105,18 +105,36 @@ async function postDelta(productIdRaw: string | number, weight: string, quantity
   }
 }
 
+// Cart changes are sent one at a time, in click order. Sent in parallel (fast +/- taps), the
+// server read the same old quantity for several requests and some changes were lost, leaving the
+// cart quantity out of step with the stock it holds for the cart.
+let syncQueue: Promise<void> = Promise.resolve();
+function enqueueDelta(productIdRaw: string | number, weight: string, quantityDelta: number): void {
+  syncQueue = syncQueue.then(() => postDelta(productIdRaw, weight, quantityDelta)).catch(() => undefined);
+}
+
 export class CartApiService {
   // Fire-and-forget sync calls, mirroring CartService's synchronous mutations.
   public static syncAdd(productId: string | number, weight: string, quantity: number): void {
-    void postDelta(productId, weight, quantity);
+    enqueueDelta(productId, weight, quantity);
   }
 
   public static syncQuantityChange(productId: string | number, weight: string, delta: number): void {
-    void postDelta(productId, weight, delta);
+    enqueueDelta(productId, weight, delta);
   }
 
   public static syncRemove(productId: string | number, weight: string, quantity: number): void {
-    void postDelta(productId, weight, -quantity);
+    enqueueDelta(productId, weight, -quantity);
+  }
+
+  /**
+   * How much of a cart quantity still has to come off a product's shown stock. For a signed-in
+   * (or guest-session) shopper the server already holds their cart's units, and the stock the API
+   * sends ("sellableStock") excludes them - subtracting the cart again counted it twice. Only a
+   * cart that isn't synced to the server (no session) still needs subtracting.
+   */
+  public static cartQtyNotHeldByServer(quantity: number): number {
+    return CustomerAuthService.hasSession() ? 0 : quantity;
   }
 
   // Push every item currently in the guest (localStorage) cart onto the

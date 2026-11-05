@@ -33,6 +33,9 @@ namespace Hiya2.Server.Services
                     if (released > 0)
                     {
                         _logger.LogInformation("ReservationExpiryService released {Count} expired stock reservation(s).", released);
+                        // Released units are buyable again: drop the cached product list so cards show them now.
+                        var cacheStore = scope.ServiceProvider.GetRequiredService<Microsoft.AspNetCore.OutputCaching.IOutputCacheStore>();
+                        await CatalogCache.InvalidateAsync(cacheStore);
                     }
                 }
                 catch (Exception ex)

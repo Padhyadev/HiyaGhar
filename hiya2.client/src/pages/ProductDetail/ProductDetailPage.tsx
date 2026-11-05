@@ -5,6 +5,7 @@ import { fallbackTeaMasalaProductsData } from '../TeaMasala/TeaMasalaPage';
 import { fallbackHandmadeSoapProducts } from '../HandmadeSoap/HandmadeSoapPage';
 import { fallbackHairOilProductsData } from '../HairOil/HairOilPage';
 import { CartService, triggerFlyingProductAnimation } from '../../cart';
+import { CartApiService } from '../../services/cartApiService';
 import { WishlistService } from '../../services/wishlistService';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
@@ -525,8 +526,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     : (product?.variants?.length ? 0 : 99);
   
   const cartItemId = `${product?.id}-${selectedWeight}`;
-  const existingInCart = cartItems.find((i) => i.id === cartItemId)?.quantity || 0;
-  const availableStockUnits = Math.max(0, totalStockUnits - existingInCart);
+  // A product with a single variant (soaps, hair oil, combos) can sit in the cart under
+  // different labels ("No Variant", "", ...), so count every line of it; otherwise match the
+  // selected variant's line.
+  const isSingleVariant = (product?.variants?.length || 0) <= 1;
+  const existingInCart = isSingleVariant
+    ? cartItems.filter((i) => i.productId === product?.id).reduce((sum, i) => sum + i.quantity, 0)
+    : (cartItems.find((i) => i.id === cartItemId)?.quantity || 0);
+  const availableStockUnits = Math.max(0, totalStockUnits - CartApiService.cartQtyNotHeldByServer(existingInCart));
   const isOutOfStock = totalStockUnits <= 0;
   const isAllInCart = !isOutOfStock && availableStockUnits <= 0;
   const currentPrice = currentPrices?.price ?? 0;

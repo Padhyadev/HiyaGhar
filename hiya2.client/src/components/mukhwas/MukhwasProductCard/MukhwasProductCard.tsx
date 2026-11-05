@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import type { MukhwasProduct } from '../../../types/mukhwas';
 import { CartService, triggerFlyingProductAnimation } from '../../../cart';
 import { WishlistService } from '../../../services/wishlistService';
+import { CartApiService } from '../../../services/cartApiService';
 import { AnimatedNumber } from '../../common/AnimatedNumber';
 import { formatVariantLabel, toProductSlug } from '../../../utils/productFormat';
 import { showToast } from '../../../utils/alertService';
@@ -56,7 +57,7 @@ export const MukhwasProductCard: React.FC<MukhwasProductCardProps> = ({
 
     return {
       total,
-      available: Math.max(0, total - inCart)
+      available: Math.max(0, total - CartApiService.cartQtyNotHeldByServer(inCart))
     };
   };
 
