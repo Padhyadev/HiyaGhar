@@ -306,10 +306,16 @@
 }
 
 @media (max-width: 480px) {
-  /* Just enough room below the copyright for the back-to-top and WhatsApp buttons
-     (126px stack, see FloatingWidgets.css) so they don't cover its text */
+  /* The back-to-top and WhatsApp buttons (126px stack, 66px from the right edge, see
+     FloatingWidgets.css) sit beside the copyright instead of below it: the copyright wraps
+     into a narrow centered column that clears them, so only the address above needs room. */
   .hiyaghar-footer-section {
-    padding-bottom: 124px;
+    padding-bottom: 72px;
+  }
+
+  .hiyaghar-footer-copyright {
+    max-width: 180px;
+    text-align: center;
   }
 
   .hiyaghar-footer-nav-grid {
