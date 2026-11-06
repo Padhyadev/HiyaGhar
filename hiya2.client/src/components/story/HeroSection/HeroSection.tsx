@@ -10,7 +10,7 @@ export const HeroSection: React.FC = () => {
         {/* Full-width hero background banner on both desktop & mobile */}
         <div className="hg-hero-bg-container">
           <img
-            src="/image/Banner_image/our_story.png?v=2"
+            src="/image/Banner_image/our_story.webp?v=3"
             alt="HIYA mukhwas bottles and handmade soaps with traditional brass bowls, in front of a sketch of a family home"
             className="hg-hero-bg-img"
             loading="eager"

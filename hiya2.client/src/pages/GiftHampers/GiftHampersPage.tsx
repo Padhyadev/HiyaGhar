@@ -207,7 +207,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({
           onNavigateHome={onNavigateHome}
           title={currentOccasion?.name.trim() || 'Gift Hampers'}
           breadcrumbCurrent={currentOccasion?.name.trim() || 'Gift Hampers'}
-          bgImage="/image/Banner_image/Gift_Hampers.png?v=2"
+          bgImage="/image/Banner_image/Gift_Hampers.webp?v=3"
           textShade="dark"
         />
 
