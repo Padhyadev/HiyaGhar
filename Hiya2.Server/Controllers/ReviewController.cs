@@ -60,7 +60,7 @@ namespace Hiya2.Server.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetHomepageReviews()
         {
-            var reviews = await _repository.GetFeaturedReviewsAsync(12);
+            var reviews = await _repository.GetFeaturedReviewsAsync(10);
             var (averageRating, totalReviews) = await _repository.GetOverallStatsAsync();
 
             return Ok(new

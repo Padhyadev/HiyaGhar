@@ -60,10 +60,19 @@ namespace Hiya2.Server.Repositories.Review
                 .ToListAsync();
         }
 
+        // Homepage: 4-5 star reviews only, ONE (latest) review per customer, newest first.
         public async Task<List<Models.Review>> GetFeaturedReviewsAsync(int limit = 10)
         {
+            var eligible = _context.Reviews
+                .Where(r => !r.IsDeleted && r.IsActive && r.Rating >= 4
+                            && r.Customer != null && r.Customer.IsActive && !r.Customer.IsDeleted);
+
+            var latestIdPerCustomer = eligible
+                .GroupBy(r => r.CustomerId)
+                .Select(g => g.Max(r => r.Id));
+
             return await _context.Reviews
-                .Where(r => !r.IsDeleted && r.IsActive && r.Rating >= 4)
+                .Where(r => latestIdPerCustomer.Contains(r.Id))
                 .Include(r => r.Customer)
                 .Include(r => r.Product)
                 .OrderByDescending(r => r.CreatedDate)
