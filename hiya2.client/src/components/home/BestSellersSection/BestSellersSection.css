@@ -179,6 +179,7 @@
   margin: 0 0 4px 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -411,6 +412,7 @@
   line-height: 1.4;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -607,17 +609,33 @@
   left: 4px;
 }
 
+/* Invisible 40px tap area so the smaller mobile arrows (28-32px) stay easy to hit */
+.hiyaghar-carousel-btn::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: max(100%, 40px);
+  height: max(100%, 40px);
+  border-radius: 50%;
+}
+
 /* Carousel Indicators (Dots) */
 .hiyaghar-carousel-indicators {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 14px;
-  padding: 4px 0;
+  /* 16px gap = 24px centre-to-centre, so each dot's tap area meets WCAG 2.2 target size (24px) */
+  gap: 16px;
+  /* 12px vertical padding keeps the dots' 32px tap area inside the carousel container (overflow: hidden);
+     dots stay in the same place (6 + 12 = previous 14 + 4) */
+  margin-top: 6px;
+  padding: 12px 0;
 }
 
 .hiyaghar-carousel-indicator-dot {
+  position: relative;
   width: 8px;
   height: 8px;
   border-radius: 4px;
@@ -626,6 +644,17 @@
   padding: 0;
   cursor: pointer;
   transition: all 0.25s ease;
+}
+
+/* Invisible tap area: reaches halfway into the gap on each side, so neighbouring dots never overlap */
+.hiyaghar-carousel-indicator-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 16px);
+  height: 32px;
 }
 
 .hiyaghar-carousel-indicator-dot.is-active {
@@ -761,6 +790,7 @@
   .hiyaghar-category-card-desc {
     font-size: 11px;
     -webkit-line-clamp: 1;
+    line-clamp: 1;
     margin: 2px 0 4px 0;
   }
 

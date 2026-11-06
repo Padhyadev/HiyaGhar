@@ -248,10 +248,13 @@
   transition: background-color var(--homecat-ease), color var(--homecat-ease), box-shadow var(--homecat-ease), opacity var(--homecat-ease);
 }
 
-.hiyaghar-homecat-arrow:hover:not(:disabled) {
-  background-color: var(--homecat-navy);
-  color: #ffffff;
-  box-shadow: 0 6px 16px rgba(17, 34, 58, 0.18);
+/* Mouse devices only: on touch screens :hover "sticks" after a tap and the arrow would stay navy */
+@media (hover: hover) {
+  .hiyaghar-homecat-arrow:hover:not(:disabled) {
+    background-color: var(--homecat-navy);
+    color: #ffffff;
+    box-shadow: 0 6px 16px rgba(17, 34, 58, 0.18);
+  }
 }
 
 .hiyaghar-homecat-arrow:disabled {
@@ -269,10 +272,12 @@
 .hiyaghar-homecat-dots {
   display: flex;
   align-items: center;
-  gap: 8px;
+  /* 16px gap = 24px centre-to-centre, so each dot's tap area meets WCAG 2.2 target size (24px) */
+  gap: 16px;
 }
 
 .hiyaghar-homecat-dot {
+  position: relative;
   width: 8px;
   height: 8px;
   padding: 0;
@@ -281,6 +286,17 @@
   background-color: rgba(17, 34, 58, 0.2);
   cursor: pointer;
   transition: width var(--homecat-ease), background-color var(--homecat-ease);
+}
+
+/* Invisible tap area: reaches halfway into the gap on each side, so neighbouring dots never overlap */
+.hiyaghar-homecat-dot::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 16px);
+  height: 32px;
 }
 
 .hiyaghar-homecat-dot.is-active {
@@ -348,8 +364,16 @@
     flex-shrink: 0;
   }
 
+  /* Arrows stay visible on mobile (beside the dots, not over the cards) so visitors can see there are
+     more categories; slightly smaller than desktop so the row fits small phones */
   .hiyaghar-homecat-arrow {
-    display: none;
+    width: 40px;
+    height: 40px;
+  }
+
+  .hiyaghar-homecat-arrow svg {
+    width: 18px;
+    height: 18px;
   }
 
   /* No hover on touch screens: keep cards still */
