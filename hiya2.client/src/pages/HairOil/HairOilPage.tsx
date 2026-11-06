@@ -187,8 +187,8 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
           <MukhwasHero
             onNavigateHome={onNavigateHome}
             title="Hair Oil"
-            bgImage="/image/Banner_image/Hair_Oil.webp?v=2"
-            bgPosition="right 60%"
+            bgImage="/image/Banner_image/Herbal Hair Oil.webp?v=1"
+            bgPosition="right 15%"
           />
 
           <MukhwasFilterSort
