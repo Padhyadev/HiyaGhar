@@ -8,7 +8,7 @@
    5. Images      : delete soft-deleted image rows + images of deleted products/variants
    6. Stock       : delete ALL stock history, ReservedStock = 0,
                     insert one "StockIn" row per variant dated TODAY (qty = current AvailableStock)
-   7. Users       : delete ALL admin users, create single admin  (Email: admin@hiyaghar.com / Password: admin)
+   7. Users       : delete ALL admin users, create single admin  (Email: admin@gmail.com / Password: admin)
    8. Reviews     : create 3 reviewer customers (CustomerId 1,2,3) + static reviews,
                     recalculate Product.Rating / ReviewCount
    Identity counters are reset so new data starts from 1.
@@ -91,11 +91,11 @@ DBCC CHECKIDENT ('UserRole', RESEED, 0) WITH NO_INFOMSGS;
 -- Plain "admin" is accepted by PasswordHasherService (legacy fallback) and is
 -- automatically re-hashed on the first successful login.
 INSERT INTO [User] (FirstName, LastName, Email, MobileNo, PasswordHash, Username, IsActive, IsDeleted, CreatedDate)
-VALUES ('Admin', 'HiyaGhar', 'admin@hiyaghar.com', '9510212154', 'admin', 'admin', 1, 0, GETDATE());
+VALUES ('Admin', 'HiyaGhar', 'admin@gmail.com', '9510212154', 'admin', 'admin', 1, 0, GETDATE());
 
 INSERT INTO UserRole (UserId, RoleId, AssignedDate)
 SELECT u.UserId, r.RoleId, GETDATE() FROM [User] u CROSS JOIN Role r
-WHERE u.Email = 'admin@hiyaghar.com' AND r.RoleCode = 'SUPER_ADMIN';
+WHERE u.Email = 'admin@gmail.com' AND r.RoleCode = 'SUPER_ADMIN';
 
 /* ---------- 1/2b. Reset identity counters ---------- */
 DBCC CHECKIDENT ('[Order]', RESEED, 0)          WITH NO_INFOMSGS;

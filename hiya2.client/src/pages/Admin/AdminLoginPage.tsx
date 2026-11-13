@@ -139,7 +139,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
               type="email"
               name="admin_user_email"
               autoComplete="email"
-              placeholder="e.g. admin@hiyaghar.com"
+              placeholder="e.g. admin@gmail.com"
               value={email}
               className={formErrors.email ? 'input-error' : ''}
               onChange={(e) => {

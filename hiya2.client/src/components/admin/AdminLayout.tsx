@@ -484,7 +484,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                 </div>
                 <div style={{ gridColumn: 'span 2' }}>
                   <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, display: 'block' }}>Email Address</span>
-                  <span style={{ fontSize: '0.9rem', color: '#10243E', fontWeight: 700, wordBreak: 'break-all' }}>{user?.email || 'admin@hiyaghar.com'}</span>
+                  <span style={{ fontSize: '0.9rem', color: '#10243E', fontWeight: 700, wordBreak: 'break-all' }}>{user?.email || 'admin@gmail.com'}</span>
                 </div>
                 <div>
                   <span style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, display: 'block' }}>Phone Number</span>
