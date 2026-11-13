@@ -23,6 +23,10 @@ import { navigateTo } from '../../utils/navigation';
 import { trackBeginCheckout } from '../../utils/analytics';
 import './CheckoutPage.css';
 import { formatVariantLabel } from '../../utils/productFormat';
+import { GiftOptionsPanel } from '../../components/gifting/GiftOptionsPanel';
+import { useGiftDraft, validateGiftDraft, prepareGiftPayload } from '../../components/gifting/giftCheckout';
+import { GiftDraftStore } from '../../components/gifting/giftDraft';
+import { GiftService, PERSONALISATION_CHARGE_PER_BOX, type GiftOrderPayload, type GiftQuote } from '../../services/giftService';
 
 const EMPTY_NEW_ADDRESS_FORM = {
   fullName: '',
@@ -47,6 +51,13 @@ const resolveBuyNowItem = async (items: CartItem[]): Promise<BuyNowItem | undefi
   if (!CartService.isBuyNowCheckout() || items.length === 0) return undefined;
   const line = await CartApiService.resolveBuyNowItem(items[0].productId, items[0].weight);
   return line ? { ...line, quantity: items[0].quantity } : undefined;
+};
+
+// Gift builder "Gift only these items": the server orders just these lines and keeps the cart.
+// Undefined for every other checkout.
+const giftOnlyLines = () => {
+  const lines = CartService.getGiftOnlyLines();
+  return lines.length > 0 ? lines : undefined;
 };
 
 interface CheckoutPageProps {
@@ -140,6 +151,13 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const [coinToRupeeRate, setCoinToRupeeRate] = useState<number>(1);
   const [maxCoinUsagePercent, setMaxCoinUsagePercent] = useState<number>(10);
   const [useRewardCoins, setUseRewardCoins] = useState<boolean>(false);
+
+  // "Convert your order into a gift?" - choice kept in the gift draft (also filled by the gift
+  // builder). The box and the ₹100-per-box charge come from the server; it prices them again
+  // when the order is placed.
+  const giftDraft = useGiftDraft();
+  const [giftQuote, setGiftQuote] = useState<GiftQuote | null>(null);
+  const [giftQuoteLoading, setGiftQuoteLoading] = useState<boolean>(false);
 
   // Helper to sync selected saved address into addressForm
   const selectSavedAddress = (addr: UserAddress) => {
@@ -288,6 +306,24 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
     });
     return () => { cancelled = true; };
   }, [subtotal, guestReady]);
+
+  // Gift box for what is being checked out. Asked once the customer has a session (signed in or
+  // guest); again on the review step and whenever the items change.
+  const giftWanted = giftDraft.option !== 'none';
+  useEffect(() => {
+    if (!giftWanted || !CustomerAuthService.hasSession()) return;
+    let cancelled = false;
+    setGiftQuoteLoading(true);
+    resolveBuyNowItem(cartItems)
+      .then((buyNowItem) => GiftService.quoteCheckout(buyNowItem, giftOnlyLines()))
+      .then((quote) => {
+        if (!cancelled) setGiftQuote(quote);
+      })
+      .finally(() => {
+        if (!cancelled) setGiftQuoteLoading(false);
+      });
+    return () => { cancelled = true; };
+  }, [currentStep, giftWanted, cartItems, guestReady]);
 
   const handleGuestContinue = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -559,9 +595,9 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   };
 
   // Online Razorpay Payment handler
-  const handleOnlineRazorpayPayment = async (numericAddressId: number, customer: any, buyNowItem: BuyNowItem | undefined) => {
+  const handleOnlineRazorpayPayment = async (numericAddressId: number, customer: any, buyNowItem: BuyNowItem | undefined, gift: GiftOrderPayload | null) => {
     try {
-      // 1. Create Razorpay order on backend
+      // 1. Create Razorpay order on backend (the amount includes any gift packing charge)
       const res = await fetch('/api/payment/create-order', {
         method: 'POST',
         headers: CustomerAuthService.getAuthHeaders(),
@@ -570,6 +606,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
           deliveryType: selectedDelivery?.id || 'standard',
           buyNowItem,
+          buyNowItems: giftOnlyLines(),
+          gift,
         }),
       });
 
@@ -616,6 +654,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
                 deliveryType: selectedDelivery?.id || 'standard',
                 buyNowItem,
+                buyNowItems: giftOnlyLines(),
+                gift,
               }),
             });
 
@@ -643,10 +683,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                 shippingFee: serverShippingFee,
                 tax,
                 total: serverTotal,
+                giftCharge: verifyData.giftCharge ?? 0,
+                giftLabel: gift && gift.type !== 'None' ? `${gift.type} Gifting` : undefined,
+                giftHasInsert: !!gift && gift.type === 'Personalised' && (!!gift.photoToken || !!gift.messageJson),
                 orderNumber: verifyData.orderNumber,
               });
 
               CartService.finishCheckout();
+              GiftDraftStore.clear();
               showToast('Payment successful! Your order has been placed.', 'success');
               onNavigateConfirmation(verifyData.orderNumber);
             } else {
@@ -680,7 +724,7 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   };
 
   // Cash on Delivery handler
-  const handleCodPayment = async (numericAddressId: number, buyNowItem: BuyNowItem | undefined) => {
+  const handleCodPayment = async (numericAddressId: number, buyNowItem: BuyNowItem | undefined, gift: GiftOrderPayload | null) => {
     try {
       const res = await fetch('/api/order/checkout', {
         method: 'POST',
@@ -690,6 +734,8 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
           useRewardCoins: useRewardCoins ? maxRedeemableCoins : 0,
           deliveryType: selectedDelivery?.id || 'standard',
           buyNowItem,
+          buyNowItems: giftOnlyLines(),
+          gift,
         }),
       });
       const data = await res.json();
@@ -722,10 +768,14 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
         shippingFee: serverShippingFee,
         tax,
         total: serverTotal,
+        giftCharge: data.giftCharge ?? 0,
+        giftLabel: gift && gift.type !== 'None' ? `${gift.type} Gifting` : undefined,
+        giftHasInsert: !!gift && gift.type === 'Personalised' && (!!gift.photoToken || !!gift.messageJson),
         orderNumber: data.orderNumber,
       });
 
       CartService.finishCheckout();
+      GiftDraftStore.clear();
       showToast('Order placed successfully!', 'success');
       onNavigateConfirmation(data.orderNumber);
     } catch (err: any) {
@@ -759,6 +809,18 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       return;
     }
 
+    // Gift checks before anything is charged.
+    const giftProblem = validateGiftDraft(giftDraft);
+    if (giftProblem) {
+      setSubmitError(giftProblem);
+      document.getElementById('gift-option-heading')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    if (giftWanted && giftQuote && !giftQuote.isSuccess) {
+      setSubmitError(giftQuote.message || 'We could not choose a gift box for these products.');
+      return;
+    }
+
     setIsSubmitting(true);
     setSubmitError(null);
 
@@ -769,11 +831,27 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
       setSubmitError('Could not load this item. Please refresh the page and try again.');
       return;
     }
+    // Same for a gift of only the builder's items: never order the whole cart instead.
+    if (CartService.isGiftOnlyCheckout() && !giftOnlyLines()) {
+      setIsSubmitting(false);
+      setSubmitError('Your gift items could not be loaded. Please go back to Gift Hampers and try again.');
+      return;
+    }
+
+    // Uploads the personalised photo (if any) and builds the gift data the server prices.
+    let gift: GiftOrderPayload | null = null;
+    try {
+      gift = await prepareGiftPayload();
+    } catch (err) {
+      setIsSubmitting(false);
+      setSubmitError((err as Error).message);
+      return;
+    }
 
     if (selectedPaymentMethod === 'razorpay') {
-      await handleOnlineRazorpayPayment(numericAddressId, customer, buyNowItem);
+      await handleOnlineRazorpayPayment(numericAddressId, customer, buyNowItem, gift);
     } else {
-      await handleCodPayment(numericAddressId, buyNowItem);
+      await handleCodPayment(numericAddressId, buyNowItem, gift);
     }
   };
 
@@ -784,7 +862,10 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
   const shippingFee = selectedDelivery ? selectedDelivery.price : 0;
   const taxableSubtotal = Math.max(0, subtotal - discountAmount - coinDiscount);
   const taxAmount = Math.round(taxableSubtotal * (gstPercent / 100));
-  const finalTotal = Math.max(0, subtotal - discountAmount - coinDiscount + shippingFee);
+  // ₹100 per gift box for Personalised gifting (box count from the server); 0 otherwise.
+  const giftBoxCount = giftQuote?.isSuccess ? giftQuote.boxCount : 0;
+  const giftCharge = giftDraft.option === 'personalised' && giftBoxCount > 0 ? PERSONALISATION_CHARGE_PER_BOX * giftBoxCount : 0;
+  const finalTotal = Math.max(0, subtotal - discountAmount - coinDiscount + shippingFee) + giftCharge;
 
   return (
     <div className="hiyaghar-checkout-page-layout">
@@ -818,6 +899,18 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
               <li className="current">Checkout</li>
             </ol>
           </nav>
+
+          {CartService.isGiftOnlyCheckout() && (
+            <div role="status" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', margin: '0 0 16px', padding: '10px 14px', borderRadius: '10px', background: '#FFF9E6', border: '1px dashed #D19A27', color: '#855F0F', fontSize: '14px' }}>
+              <span style={{ flex: '1 1 220px' }}>
+                <i className="fa-solid fa-gift" aria-hidden="true" style={{ marginRight: '8px' }}></i>
+                <strong>Gift order:</strong> only the {cartItems.reduce((n, i) => n + i.quantity, 0)} items you picked. Your cart is not included and stays as it is.
+              </span>
+              <a href="/gift-hampers" onClick={(e) => { e.preventDefault(); navigateTo('/gift-hampers'); }} style={{ color: '#11223A', fontWeight: 700, marginLeft: 'auto' }}>
+                Edit gift
+              </a>
+            </div>
+          )}
 
           {/* 12. STEP PROGRESS INDICATOR */}
           <div className="hiyaghar-checkout-stepper">
@@ -1382,6 +1475,23 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       </p>
                     </div>
 
+                    {/* Convert to gift (optional) - "No" keeps the normal checkout unchanged */}
+                    <div className="hiyaghar-review-block">
+                      <div className="hiyaghar-review-block-header">
+                        <h3 id="gift-option-heading">
+                          <i className="fa-solid fa-gift" aria-hidden="true" style={{ color: 'var(--hiya-gold-text, #855F0F)', marginRight: '8px' }}></i>
+                          Would you like to convert your order into a gift?
+                        </h3>
+                      </div>
+                      <GiftOptionsPanel
+                        allowNone
+                        showRecipient
+                        quote={giftQuote}
+                        quoteLoading={giftQuoteLoading}
+                        headingId="gift-option-heading"
+                      />
+                    </div>
+
                     {/* Order Items */}
                     <div className="hiyaghar-review-block">
                       <div className="hiyaghar-review-block-header">
@@ -1502,6 +1612,19 @@ export const CheckoutPage: React.FC<CheckoutPageProps> = ({
                       {shippingFee === 0 ? 'FREE' : <span style={{ display: 'inline-flex', alignItems: 'center' }}>₹<AnimatedNumber value={shippingFee} /></span>}
                     </span>
                   </div>
+                  {giftDraft.option !== 'none' && (
+                    <div className="hiyaghar-summary-row">
+                      <span>
+                        {giftDraft.option === 'personalised' ? 'Personalised Gifting' : 'Normal Gifting'}
+                        {giftQuote?.isSuccess && (
+                          <small style={{ display: 'block', fontSize: '12px', color: 'var(--color-text-secondary, #475467)' }}>{giftQuote.boxSummary}</small>
+                        )}
+                      </span>
+                      <span className="highlight">
+                        {giftCharge === 0 ? 'FREE' : <span style={{ display: 'inline-flex', alignItems: 'center' }}>₹<AnimatedNumber value={giftCharge} /></span>}
+                      </span>
+                    </div>
+                  )}
                   {enableGstDisplay && (
                     <div className="hiyaghar-summary-row subtle">
                       <span>{gstLabel}</span>

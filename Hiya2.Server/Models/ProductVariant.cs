@@ -30,6 +30,10 @@ namespace Hiya2.Server.Models
 
         public bool IsDefault { get; set; } = false;
 
+        // Gift box space one piece of this variant takes (e.g. small bottle or soap = 1, big bottle = 2).
+        // Used to choose the gift box size automatically; see GiftBox.Capacity.
+        public int GiftUnits { get; set; } = 1;
+
         public bool IsActive { get; set; } = true;
 
         public bool IsDeleted { get; set; } = false;

@@ -1,0 +1,465 @@
+/* ==========================================================================
+   Gifting: options, personalised photo + message editor, live A4 preview.
+   Fonts are the same files embedded in the printed PDF (served at /gift-fonts/).
+   ========================================================================== */
+
+@font-face { font-family: 'Gift Poppins'; src: url('/gift-fonts/Poppins-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Poppins'; src: url('/gift-fonts/Poppins-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Poppins'; src: url('/gift-fonts/Poppins-400-italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Poppins'; src: url('/gift-fonts/Poppins-700-italic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Arimo'; src: url('/gift-fonts/Arimo-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Arimo'; src: url('/gift-fonts/Arimo-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Arimo'; src: url('/gift-fonts/Arimo-400-italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Arimo'; src: url('/gift-fonts/Arimo-700-italic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Gelasio'; src: url('/gift-fonts/Gelasio-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Gelasio'; src: url('/gift-fonts/Gelasio-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Gelasio'; src: url('/gift-fonts/Gelasio-400-italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Gelasio'; src: url('/gift-fonts/Gelasio-700-italic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Tinos'; src: url('/gift-fonts/Tinos-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Tinos'; src: url('/gift-fonts/Tinos-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Tinos'; src: url('/gift-fonts/Tinos-400-italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Tinos'; src: url('/gift-fonts/Tinos-700-italic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Playfair Display'; src: url('/gift-fonts/PlayfairDisplay-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Playfair Display'; src: url('/gift-fonts/PlayfairDisplay-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Playfair Display'; src: url('/gift-fonts/PlayfairDisplay-400-italic.ttf') format('truetype'); font-weight: 400; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Playfair Display'; src: url('/gift-fonts/PlayfairDisplay-700-italic.ttf') format('truetype'); font-weight: 700; font-style: italic; font-display: swap; }
+@font-face { font-family: 'Gift Dancing Script'; src: url('/gift-fonts/DancingScript-400.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Gift Dancing Script'; src: url('/gift-fonts/DancingScript-700.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+
+.gift-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  font-family: var(--font-family-primary);
+  color: var(--color-text-body);
+}
+
+/* ---------- option cards ---------- */
+.gift-option-list { display: grid; gap: 10px; }
+
+.gift-option-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: 1.5px solid var(--color-border-default);
+  border-radius: 12px;
+  background: var(--color-surface-card);
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+.gift-option-card:hover { border-color: var(--hiya-gold-light); }
+.gift-option-card.is-selected {
+  border-color: var(--color-brand-accent);
+  background: var(--color-surface-soft);
+  box-shadow: 0 0 0 3px rgba(203, 153, 44, 0.15);
+}
+.gift-option-card input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.gift-option-card:has(input:focus-visible) { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+.gift-option-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-surface-beige);
+  color: var(--hiya-gold-text);
+  font-size: 17px;
+}
+.gift-option-card.is-selected .gift-option-icon { background: var(--color-brand-primary); color: var(--hiya-gold-light); }
+.gift-option-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
+.gift-option-text strong { color: var(--color-text-primary); font-size: 15px; }
+.gift-option-text span { font-size: 13px; color: var(--color-text-secondary); }
+.gift-option-price {
+  flex-shrink: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--hiya-gold-text);
+  text-align: right;
+  max-width: 45%;
+}
+
+.gift-box-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #FFF9E6;
+  border: 1px dashed #D19A27;
+  color: var(--hiya-gold-text);
+  font-size: 14px;
+}
+.gift-box-info strong { color: var(--color-text-primary); }
+.gift-box-info small { color: var(--color-text-secondary); }
+
+/* ---------- recipient ---------- */
+.gift-recipient { border: 0; padding: 0; margin: 0; display: grid; gap: 10px; }
+.gift-recipient legend { font-weight: 700; color: var(--color-text-primary); margin-bottom: 8px; font-size: 15px; }
+.gift-recipient-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.gift-recipient-fields label { display: grid; gap: 6px; font-size: 13px; font-weight: 600; color: var(--color-text-primary); }
+.gift-recipient-fields input {
+  padding: 10px 12px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 400;
+}
+.gift-recipient-fields input:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }
+.gift-recipient-note { grid-column: 1 / -1; margin: 0; font-size: 12.5px; color: var(--color-text-secondary); }
+
+/* ---------- segmented buttons ---------- */
+.gift-segmented { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.gift-segmented button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 999px;
+  background: var(--color-surface-card);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.gift-segmented button.is-active { background: var(--color-brand-primary); border-color: var(--color-brand-primary); color: #fff; }
+.gift-segmented button:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+/* ---------- personalise layout ---------- */
+.gift-personalise {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+.gift-personalise-inputs { display: grid; gap: 12px; min-width: 0; }
+.gift-personalise-preview { position: sticky; top: 90px; display: grid; gap: 10px; min-width: 0; }
+.gift-subheading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 0;
+  font-size: 15px;
+  color: var(--color-text-primary);
+}
+.gift-subheading small { font-weight: 400; color: var(--color-text-secondary); }
+.gift-preview-note { margin: 0; font-size: 12px; color: var(--color-text-secondary); }
+.gift-field-error { margin: 4px 0 0; color: #B42318; font-size: 13px; }
+
+/* ---------- photo ---------- */
+.gift-photo-drop {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 22px 16px;
+  border: 2px dashed var(--hiya-gold-light);
+  border-radius: 12px;
+  background: var(--color-surface-soft);
+  color: var(--color-text-primary);
+  font: inherit;
+  cursor: pointer;
+  text-align: center;
+}
+.gift-photo-drop i { font-size: 26px; color: var(--hiya-gold-text); }
+.gift-photo-drop span { font-size: 12.5px; color: var(--color-text-secondary); }
+.gift-photo-drop:hover, .gift-photo-drop:focus-visible { border-color: var(--color-brand-accent); outline: none; }
+
+.gift-photo-current { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.gift-photo-current img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  background: #f4f1e6;
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+}
+.gift-photo-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+.gift-link-btn {
+  background: none;
+  border: 0;
+  padding: 4px 0;
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+.gift-link-btn:hover { color: var(--hiya-gold-text); }
+.gift-link-btn.is-danger { color: #B42318; }
+.gift-link-btn:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+.gift-cropper { border: 1px solid var(--color-border-default); border-radius: 12px; overflow: hidden; background: var(--color-surface-card); }
+.gift-cropper-stage { position: relative; height: 320px; background: #1b1b1b; }
+.gift-cropper-controls { display: grid; gap: 10px; padding: 12px; }
+.gift-zoom { display: flex; align-items: center; gap: 10px; color: var(--color-text-secondary); }
+.gift-zoom input { flex: 1; accent-color: var(--color-brand-accent); }
+.gift-cropper-hint { margin: 0; font-size: 12px; color: var(--color-text-secondary); }
+.gift-cropper-buttons { display: flex; justify-content: flex-end; gap: 8px; }
+
+.gift-btn-primary, .gift-btn-secondary {
+  padding: 9px 18px;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+}
+.gift-btn-primary { background: var(--color-brand-primary); color: #fff; border: 1px solid var(--color-brand-primary); }
+.gift-btn-primary:hover:not(:disabled) { background: #1c3457; }
+.gift-btn-secondary { background: var(--color-surface-card); color: var(--color-text-primary); border: 1px solid var(--color-border-default); }
+.gift-btn-primary:disabled, .gift-btn-secondary:disabled { opacity: 0.6; cursor: not-allowed; }
+.gift-btn-primary:focus-visible, .gift-btn-secondary:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+/* ---------- message editor ---------- */
+.gift-editor { display: grid; gap: 0; border: 1px solid var(--color-border-default); border-radius: 12px; background: var(--color-surface-card); }
+.gift-editor:focus-within { border-color: var(--color-border-focus); box-shadow: 0 0 0 3px rgba(203, 153, 44, 0.15); }
+
+.gift-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+  border-bottom: 1px solid var(--color-border-default);
+  background: var(--color-surface-soft);
+  border-radius: 12px 12px 0 0;
+}
+.gift-toolbar.is-compact {
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  background: var(--color-surface-card);
+  box-shadow: 0 8px 24px rgba(17, 34, 58, 0.18);
+  max-width: min(92vw, 560px);
+}
+.gift-toolbar-field select,
+.gift-toolbar-custom-size input,
+.gift-hex-input {
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 6px;
+  background: #fff;
+  font: inherit;
+  font-size: 13px;
+  color: var(--color-text-primary);
+}
+.gift-toolbar-field select { max-width: 150px; }
+.gift-toolbar-custom-size { display: inline-flex; gap: 4px; }
+.gift-toolbar-custom-size input { width: 58px; }
+.gift-hex-input { width: 78px; font-family: monospace; text-transform: uppercase; }
+.gift-toolbar-divider { width: 1px; height: 22px; background: var(--color-border-default); }
+.gift-toolbar-group, .gift-toolbar-colors { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+
+.gift-tool-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.gift-tool-btn:hover:not(:disabled) { background: var(--color-surface-beige); }
+.gift-tool-btn.is-active { background: var(--color-brand-primary); color: #fff; }
+.gift-tool-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.gift-tool-btn:focus-visible,
+.gift-toolbar select:focus-visible,
+.gift-toolbar input:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 1px; }
+
+.gift-color-swatch {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px var(--color-border-default);
+  cursor: pointer;
+  padding: 0;
+}
+.gift-color-swatch.is-active { box-shadow: 0 0 0 2px var(--color-brand-primary); }
+.gift-color-swatch:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+.gift-color-picker { position: relative; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; box-shadow: 0 0 0 1px var(--color-border-default); background: conic-gradient(red, yellow, lime, aqua, blue, magenta, red); cursor: pointer; }
+.gift-color-picker input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.gift-color-picker:focus-within { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+.gift-editor-surface { padding: 14px 16px; min-height: 140px; max-height: 360px; overflow-y: auto; }
+/* Defaults for text without its own formatting - must match DEFAULT_* in giftFonts.ts and the PDF. */
+.gift-editor-content {
+  outline: none;
+  min-height: 110px;
+  font-family: 'Gift Poppins', sans-serif;
+  font-size: 24px;
+  color: #11223A;
+  line-height: normal;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.gift-editor-content p { margin: 0; text-align: center; }
+.gift-editor-content [data-gift-font='poppins'] { font-family: 'Gift Poppins', sans-serif; }
+.gift-editor-content [data-gift-font='arial'] { font-family: 'Gift Arimo', Arial, sans-serif; }
+.gift-editor-content [data-gift-font='georgia'] { font-family: 'Gift Gelasio', Georgia, serif; }
+.gift-editor-content [data-gift-font='times'] { font-family: 'Gift Tinos', 'Times New Roman', serif; }
+.gift-editor-content [data-gift-font='playfair'] { font-family: 'Gift Playfair Display', serif; }
+.gift-editor-content [data-gift-font='dancing'] { font-family: 'Gift Dancing Script', cursive; }
+.gift-editor-content p.is-editor-empty:first-child::before { content: attr(data-placeholder); color: #98A2B3; pointer-events: none; float: left; height: 0; }
+.gift-editor-content:empty::before,
+.gift-editor-content > p:only-child:has(> br.ProseMirror-trailingBreak:only-child)::before {
+  content: 'Type your message, e.g. Happy Birthday Dhaval!';
+  color: #98A2B3;
+  font-size: 18px;
+  pointer-events: none;
+}
+
+.gift-editor-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--color-border-default);
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}
+.gift-editor-count.is-over { color: #B42318; font-weight: 700; }
+.gift-editor > .gift-field-error { padding: 0 12px 10px; }
+.gift-bubble-menu { z-index: 50; }
+
+/* ---------- A4 preview ---------- */
+.gift-a4-frame {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 6px;
+  box-shadow: 0 10px 30px rgba(17, 34, 58, 0.15), 0 0 0 1px rgba(17, 34, 58, 0.06);
+  background: #fff;
+}
+.gift-a4-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  background: #fff;
+  transform-origin: top left;
+}
+.gift-a4-content { display: flex; flex-direction: column; }
+.gift-a4-photo-box { display: flex; align-items: center; justify-content: center; width: 100%; flex-shrink: 0; }
+.gift-a4-photo-box img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+.gift-a4-center { flex: 1; display: flex; align-items: center; }
+.gift-a4-message-box { display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+.gift-a4-message-inner { flex-shrink: 0; }
+.gift-a4-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: #98A2B3;
+  font-family: var(--font-family-primary);
+  font-size: 40px;
+  text-align: center;
+  padding: 0 60px;
+}
+.gift-a4-empty i { font-size: 120px; }
+
+/* ---------- responsive ---------- */
+@media (max-width: 991px) {
+  .gift-personalise { grid-template-columns: 1fr; }
+  .gift-personalise-preview { position: static; max-width: 420px; width: 100%; margin: 0 auto; }
+}
+@media (max-width: 600px) {
+  .gift-option-card { flex-wrap: wrap; padding: 12px; }
+  .gift-option-price { max-width: none; width: 100%; text-align: left; padding-left: 54px; }
+  .gift-recipient-fields { grid-template-columns: 1fr; }
+  .gift-cropper-stage { height: 260px; }
+  .gift-toolbar-field select { max-width: 130px; }
+  .gift-hex-input { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .gift-option-card { transition: none; }
+}
+
+/* ---------- admin order detail ---------- */
+.admin-gift-panel {
+  margin: 16px 0;
+  padding: 16px 18px;
+  border: 1px solid #E9D3A0;
+  border-radius: 12px;
+  background: #FFFCF2;
+}
+.admin-gift-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.admin-gift-header h4 { margin: 0; display: flex; gap: 8px; align-items: center; color: var(--color-text-primary); }
+.admin-gift-pill { padding: 4px 12px; border-radius: 999px; background: #E8F5E9; color: #1B5E20; font-weight: 700; font-size: 13px; }
+.admin-gift-pill.is-personalised { background: #FDF0D5; color: var(--hiya-gold-text); }
+.admin-gift-grid { display: grid; grid-template-columns: minmax(0, 1fr) 220px; gap: 20px; align-items: start; }
+.admin-gift-facts p { margin: 4px 0; font-size: 14px; }
+.admin-gift-message {
+  margin: 6px 0 10px;
+  padding: 10px;
+  border: 1px dashed var(--color-border-default);
+  border-radius: 8px;
+  background: #fff;
+  max-height: 220px;
+  overflow: auto;
+}
+.admin-gift-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; align-items: center; }
+.admin-gift-actions .gift-btn-primary, .admin-gift-actions .gift-btn-secondary { display: inline-flex; gap: 6px; align-items: center; }
+.admin-gift-preview { display: grid; gap: 6px; }
+@media (max-width: 767px) {
+  .admin-gift-grid { grid-template-columns: 1fr; }
+  .admin-gift-preview { max-width: 240px; }
+}
+
+/* ---------- "email me a copy" option ---------- */
+.gift-email-copy {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin: 6px 0 0;
+  padding: 12px;
+  border: 1px solid var(--color-border-default);
+  border-radius: 10px;
+  background: var(--color-surface-soft);
+}
+.gift-email-copy i { margin-top: 3px; color: var(--hiya-gold-text); }
+.gift-email-copy span { display: flex; flex-direction: column; gap: 2px; }
+.gift-email-copy strong { font-size: 14px; color: var(--color-text-primary); }
+.gift-email-copy small { font-size: 12.5px; color: var(--color-text-secondary); }
+.gift-email-copy:has(input:focus-visible) { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }
+
+/* ---------- customer "download gift insert" button ---------- */
+.gift-insert-download {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--color-brand-accent);
+  background: #FFF9E6;
+  color: var(--color-brand-primary);
+  font: inherit;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.gift-insert-download:hover:not(:disabled) { background: #FDF0D5; }
+.gift-insert-download:disabled { opacity: 0.6; cursor: wait; }
+.gift-insert-download:focus-visible { outline: 2px solid var(--color-border-focus); outline-offset: 2px; }

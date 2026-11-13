@@ -72,20 +72,4 @@ public class MerchantFeedTests
         Assert.Equal(new[] { "13-321", "13-320" }, items.Select(i => i.Element(G + "id")!.Value));   // default variant first
         Assert.Equal("https://hiyaghar.com/uploads/product/common.png", items[1].Element(G + "image_link")!.Value);
     }
-
-    [Theory]
-    [InlineData("Wedding", "Wedding Gift Hampers | HIYAGHAR")]
-    [InlineData("Corporate Gifts", "Corporate Gifts | HIYAGHAR")]
-    [InlineData(" Diwali Hamper ", "Diwali Hamper | HIYAGHAR")]
-    public void Occasion_title(string name, string expected) =>
-        Assert.Equal(expected, SeoMarkup.OccasionTitle(name, "HIYAGHAR"));
-
-    [Fact]
-    public void Occasion_description_and_path()
-    {
-        Assert.StartsWith("Shop HIYAGHAR Wedding gift hampers", SeoMarkup.OccasionDescription("Wedding", "  "));
-        Assert.Equal("Gifts for the couple", SeoMarkup.OccasionDescription("Wedding", "Gifts for <b>the</b> couple"));
-        Assert.True(SeoMarkup.OccasionDescription("W", string.Join(' ', Enumerable.Repeat("word", 60))).Length <= 160);
-        Assert.Equal("/gift-hampers/wedding", SeoMarkup.OccasionPath(" Wedding "));
-    }
 }

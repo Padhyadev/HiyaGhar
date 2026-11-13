@@ -18,6 +18,10 @@ namespace Hiya2.Server.Controllers
         public string DeliveryType { get; set; } = "standard";
         /// <summary>Set for "Buy Now": order only this cart line and keep the rest of the cart.</summary>
         public BuyNowItem? BuyNowItem { get; set; }
+        /// <summary>Several items ordered without the cart (gift builder, "Gift only these items"); the cart is kept.</summary>
+        public List<BuyNowItem>? BuyNowItems { get; set; }
+        /// <summary>Gift packing choice; null or Type "None" for a normal order.</summary>
+        public Hiya2.Server.Services.Gifting.GiftRequest? Gift { get; set; }
     }
 
     public class CancelOrderRequestDto
@@ -87,7 +91,22 @@ namespace Hiya2.Server.Controllers
             coinsUsed = o.CoinsUsed,
             coinDiscountAmount = o.CoinDiscountAmount,
             deliveryFee = o.DeliveryFee,
+            giftCharge = o.GiftCharge,
             totalAmount = o.TotalAmount,
+            // Gift summary only; the photo, message and print file are fetched by staff from /api/gift/admin.
+            gift = o.Gift == null ? null : new
+            {
+                giftType = o.Gift.GiftType,
+                boxCount = o.Gift.BoxCount,
+                boxSummary = o.Gift.BoxSummary,
+                chargePerBox = o.Gift.ChargePerBox,
+                totalCharge = o.Gift.TotalCharge,
+                isForSelf = o.Gift.IsForSelf,
+                recipientName = o.Gift.RecipientName,
+                recipientPhone = o.Gift.RecipientPhone,
+                hasPhoto = o.Gift.PhotoPath != null,
+                hasMessage = o.Gift.MessageJson != null,
+            },
             orderStatus = o.OrderStatus.ToString(),
             orderStatusDisplay = statusLabels.TryGetValue(o.OrderStatus.ToString(), out var label) ? label : o.OrderStatus.ToString(),
             paymentStatus = o.PaymentStatus.ToString(),
@@ -132,7 +151,7 @@ namespace Hiya2.Server.Controllers
                 return BadRequest(new { isSuccess = false, message = "Please select a delivery address." });
             }
 
-            var result = await _orderService.CreateOrderFromCartAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, deliveryType: dto.DeliveryType, buyNowItem: dto.BuyNowItem);
+            var result = await _orderService.CreateOrderFromCartAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, deliveryType: dto.DeliveryType, buyNowItem: dto.BuyNowItem, gift: dto.Gift, buyNowItems: dto.BuyNowItems);
 
             if (!result.IsSuccess)
             {
@@ -149,6 +168,7 @@ namespace Hiya2.Server.Controllers
                 discountAmount = result.DiscountAmount,
                 coinDiscountAmount = result.CoinDiscountAmount,
                 deliveryFee = result.DeliveryFee,
+                giftCharge = result.GiftCharge,
                 totalAmount = result.TotalAmount
             });
         }

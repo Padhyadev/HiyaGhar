@@ -23,11 +23,15 @@ namespace Hiya2.Server.Services
         public int UseRewardCoins { get; set; } = 0;
         public string DeliveryType { get; set; } = "standard";
         public BuyNowItem? BuyNowItem { get; set; }
+        /// <summary>Several items ordered without the cart (gift builder, "Gift only these items").</summary>
+        public List<BuyNowItem>? BuyNowItems { get; set; }
+        /// <summary>Same gift choice sent to create-order; the server prices it again.</summary>
+        public Hiya2.Server.Services.Gifting.GiftRequest? Gift { get; set; }
     }
 
     public interface IPaymentService
     {
-        Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard", BuyNowItem? buyNowItem = null);
+        Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard", BuyNowItem? buyNowItem = null, Hiya2.Server.Services.Gifting.GiftRequest? gift = null, List<BuyNowItem>? buyNowItems = null);
         bool VerifyRazorpaySignature(string razorpayOrderId, string razorpayPaymentId, string razorpaySignature);
         Task<OrderResult> ProcessSuccessfulOnlineOrderAsync(long customerId, RazorpayVerifyRequest request);
     }

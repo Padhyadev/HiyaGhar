@@ -56,7 +56,6 @@ const CustomerManagementPage = lazy(() => import('./pages/Admin/CustomerManageme
 const AttributeManagementPage = lazy(() => import('./pages/Admin/AttributeManagementPage').then(m => ({ default: m.AttributeManagementPage })));
 const AdminDashboardPage = lazy(() => import('./pages/Admin/AdminDashboardPage').then(m => ({ default: m.AdminDashboardPage })));
 const HomePageComponentManagementPage = lazy(() => import('./pages/Admin/HomePageComponentManagementPage').then(m => ({ default: m.HomePageComponentManagementPage })));
-const GiftHamperManagementPage = lazy(() => import('./pages/Admin/GiftHamperManagementPage').then(m => ({ default: m.GiftHamperManagementPage })));
 const ReviewManagementPage = lazy(() => import('./pages/Admin/ReviewManagementPage').then(m => ({ default: m.ReviewManagementPage })));
 const ContactQueryManagementPage = lazy(() => import('./pages/Admin/ContactQueryManagementPage').then(m => ({ default: m.ContactQueryManagementPage })));
 const FaqManagementPage = lazy(() => import('./pages/Admin/FaqManagementPage').then(m => ({ default: m.FaqManagementPage })));
@@ -423,22 +422,6 @@ function App() {
             }
           >
             <HomePageComponentManagementPage />
-          </PermissionGuard>
-        );
-      } else if (route.includes('gift-hamper')) {
-        adminChild = (
-          <PermissionGuard
-            menuKey="GIFTHAMPER"
-            action="canView"
-            fallback={
-              <AccessDeniedPage
-                moduleName="Gift Hampers"
-                onNavigateDashboard={() => navigateTo('/admin/dashboard')}
-                onNavigateHome={handleNavigateHome}
-              />
-            }
-          >
-            <GiftHamperManagementPage />
           </PermissionGuard>
         );
       } else if (route.includes('stock')) {

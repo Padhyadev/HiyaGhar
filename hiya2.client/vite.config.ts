@@ -89,6 +89,12 @@ export default defineConfig({
                 changeOrigin: true,
                 secure: false
             },
+            // Gift message fonts (served by the server from Assets/GiftFonts, also used in the PDF)
+            '^/gift-fonts': {
+                target,
+                changeOrigin: true,
+                secure: false
+            },
             '^/weatherforecast': {
                 target,
                 changeOrigin: true,

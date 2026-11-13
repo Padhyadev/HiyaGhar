@@ -11,7 +11,6 @@ using Hiya2.Server.Repositories.Product;
 using Hiya2.Server.Repositories.HomePageComponent;
 using Hiya2.Server.Repositories.Cart;
 using Hiya2.Server.Repositories.Wishlist;
-using Hiya2.Server.Repositories.GiftHamper;
 using Hiya2.Server.Repositories.Review;
 using Hiya2.Server.Repositories.Stock;
 using Hiya2.Server.Services;
@@ -128,7 +127,14 @@ builder.Services.AddScoped<IWishlistRepository, WishlistRepository>();
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 builder.Services.AddScoped<IStockService, StockService>();
 builder.Services.AddHostedService<Hiya2.Server.Services.ReservationExpiryService>();
-builder.Services.AddScoped<IGiftHamperRepository, GiftHamperRepository>();
+
+// Gifting: box choice, private photo/insert storage, A4 insert PDF (QuestPDF Community licence:
+// free for businesses under USD 1M annual revenue).
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+QuestPDF.Settings.UseSystemFonts = false;
+QuestPDF.Settings.ThrowOnMissingTextGlyphs = false;
+builder.Services.AddSingleton<Hiya2.Server.Services.Gifting.GiftStorage>();
+builder.Services.AddScoped<Hiya2.Server.Services.Gifting.IGiftService, Hiya2.Server.Services.Gifting.GiftService>();
 
 // Server-side SEO: per-route head tags, JSON-LD and <noscript> content injected into index.html
 builder.Services.AddMemoryCache();
@@ -614,14 +620,11 @@ app.Use(async (context, next) =>
             : trimmed != path ? trimmed
             : null;
 
-        // Old occasion filter links (/gift-hampers?category=wedding) → /gift-hampers/wedding.
-        var category = request.Query["category"].ToString().Trim().ToLowerInvariant();
-        if ((target ?? trimmed).Equals("/gift-hampers", StringComparison.OrdinalIgnoreCase)
-            && category.Length > 0 && category != "all" && category.All(ch => char.IsLetterOrDigit(ch) || ch == '-'))
+        // The old gift hamper occasion pages (/gift-hampers/{slug}) were replaced by the
+        // single gift builder at /gift-hampers.
+        if (target == null && trimmed.StartsWith("/gift-hampers/", StringComparison.OrdinalIgnoreCase))
         {
-            context.Response.StatusCode = StatusCodes.Status301MovedPermanently;
-            context.Response.Headers.Location = Hiya2.Server.Seo.SeoMarkup.OccasionPath(category);
-            return;
+            target = "/gift-hampers";
         }
 
         if (target != null)
@@ -670,6 +673,18 @@ app.UseStaticFiles(new StaticFileOptions
         }
     }
 });
+
+// Fonts for the personalised gift message editor - the same files are embedded in the A4 insert PDF.
+var giftFontsPath = Path.Combine(app.Environment.ContentRootPath, "Assets", "GiftFonts");
+if (Directory.Exists(giftFontsPath))
+{
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new Microsoft.Extensions.FileProviders.PhysicalFileProvider(giftFontsPath),
+        RequestPath = "/gift-fonts",
+        OnPrepareResponse = ctx => ctx.Context.Response.Headers.Append("Cache-Control", "public,max-age=604800"),
+    });
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

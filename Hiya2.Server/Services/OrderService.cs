@@ -3,6 +3,7 @@ using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Repositories.Cart;
 using Hiya2.Server.Repositories.Stock;
+using Hiya2.Server.Services.Gifting;
 
 namespace Hiya2.Server.Services
 {
@@ -14,6 +15,7 @@ namespace Hiya2.Server.Services
         private readonly IRewardService _rewardService;
         private readonly IEmailService _emailService;
         private readonly IStockService _stockService;
+        private readonly IGiftService _giftService;
 
         // Which statuses an order may move to from a given status. Mirrors the
         // reference project's status machine, simplified to skip the separate
@@ -29,7 +31,7 @@ namespace Hiya2.Server.Services
             [OrderStatus.Delivered] = new[] { OrderStatus.Returned },
         };
 
-        public OrderService(DataContext context, ICartRepository cartRepository, ICouponService couponService, IRewardService rewardService, IEmailService emailService, IStockService stockService)
+        public OrderService(DataContext context, ICartRepository cartRepository, ICouponService couponService, IRewardService rewardService, IEmailService emailService, IStockService stockService, IGiftService giftService)
         {
             _context = context;
             _cartRepository = cartRepository;
@@ -37,6 +39,26 @@ namespace Hiya2.Server.Services
             _rewardService = rewardService;
             _emailService = emailService;
             _stockService = stockService;
+            _giftService = giftService;
+        }
+
+        // Gift packing block appended to the order emails' product list. Values are fixed
+        // labels and numbers only - the customer's message is never put into an email.
+        private static string BuildGiftRowHtml(PreparedGift? gift)
+        {
+            if (gift == null || !gift.IsGift) return "";
+            var type = gift.IsPersonalised ? "Personalised Gifting" : "Normal Gifting";
+            var charge = gift.TotalCharge > 0 ? $" • ₹{gift.TotalCharge:N2}" : " • No extra charge";
+            var insert = gift.IsPersonalised
+                ? (gift.Photo.HasValue || gift.Message != null ? "<div style='font-size: 13px; color: #64748b; margin-top: 4px;'>Includes a printed A4 photo &amp; message insert</div>" : "")
+                : "";
+            return $@"
+        <div style='background-color: #FFF9E6; border: 1px solid #E9D3A0; border-radius: 8px; padding: 14px 20px; margin-bottom: 16px;'>
+          <div style='font-size: 11px; font-weight: 700; color: #855F0F; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px;'>GIFT PACKING</div>
+          <div style='font-size: 15px; font-weight: 700; color: #0f172a;'>{type}{charge}</div>
+          <div style='font-size: 13px; color: #64748b; margin-top: 4px;'>{System.Net.WebUtility.HtmlEncode(gift.Plan.Summary)}</div>
+          {insert}
+        </div>";
         }
 
         private static string BuildProductRowsHtml(IEnumerable<OrderItem> items)
@@ -132,10 +154,118 @@ namespace Hiya2.Server.Services
             return standardPrice;
         }
 
+        public const int MaxDirectItems = 50;
+
+        /// <summary>
+        /// Items ordered directly, without the cart: one Buy Now item, or several (a gift built in
+        /// the gift builder with "Gift only these items"). Null for a normal whole-cart checkout.
+        /// Same product + option sent twice is merged into one line.
+        /// </summary>
+        public static List<BuyNowItem>? DirectItems(BuyNowItem? buyNowItem, List<BuyNowItem>? buyNowItems)
+        {
+            if (buyNowItems != null && buyNowItems.Count > 0)
+            {
+                return buyNowItems
+                    .GroupBy(i => new { i.ProductId, i.VariantId, i.PackingType })
+                    .Select(g => new BuyNowItem { ProductId = g.Key.ProductId, VariantId = g.Key.VariantId, PackingType = g.Key.PackingType, Quantity = g.Sum(i => i.Quantity) })
+                    .ToList();
+            }
+            return buyNowItem != null ? new List<BuyNowItem> { buyNowItem } : null;
+        }
+
+        public async Task<CheckoutLinesResult> LoadCheckoutLinesAsync(long customerId, BuyNowItem? buyNowItem, List<BuyNowItem>? buyNowItems = null)
+        {
+            List<CartLine> cartLines;
+            var direct = DirectItems(buyNowItem, buyNowItems);
+            if (direct != null)
+            {
+                if (direct.Count > MaxDirectItems)
+                {
+                    return new CheckoutLinesResult { Error = $"Please order at most {MaxDirectItems} different products at once." };
+                }
+
+                cartLines = new List<CartLine>();
+                foreach (var item in direct)
+                {
+                    // Also checks stock, so the customer isn't charged for something that can't be sold.
+                    var buyNowLine = await _cartRepository.BuildBuyNowLineAsync(customerId, item);
+                    if (buyNowLine.Line == null)
+                    {
+                        return new CheckoutLinesResult { Error = buyNowLine.Message ?? "This product is no longer available." };
+                    }
+                    cartLines.Add(buyNowLine.Line);
+                }
+            }
+            else
+            {
+                cartLines = await _cartRepository.GetCartAsync(customerId);
+            }
+
+            return cartLines.Count == 0
+                ? new CheckoutLinesResult { Error = "Your cart is empty." }
+                : new CheckoutLinesResult { Lines = cartLines };
+        }
+
+        public async Task<OrderPricing> PriceOrderAsync(long customerId, List<CartLine> lines, string? couponCode, int useRewardCoins, string deliveryType, GiftRequest? gift)
+        {
+            // Reward coins paused (see RewardFeature): never spend coins on an order.
+            if (!RewardFeature.Enabled) useRewardCoins = 0;
+
+            var subtotal = lines.Sum(l => l.LineTotal);
+
+            // Offers apply automatically; a code (if sent) is used only when it saves more.
+            var couponResult = await _couponService.ResolveDiscountAsync(couponCode, customerId, subtotal);
+            if (!couponResult.IsValid)
+            {
+                return new OrderPricing { IsSuccess = false, Message = couponResult.Message };
+            }
+            var discountAmount = couponResult.DiscountAmount;
+
+            // Free-shipping threshold is judged on the price after coupon discount
+            // (e.g. ₹500 cart − ₹50 coupon = ₹450 → not free).
+            var deliveryFee = await CalculateDeliveryFeeAsync(subtotal - discountAmount, deliveryType);
+            var amountAfterDiscount = subtotal - discountAmount + deliveryFee;
+
+            decimal coinDiscount = 0;
+            if (useRewardCoins > 0)
+            {
+                var coinResult = await _rewardService.ValidateCoinUsageAsync(customerId, useRewardCoins, amountAfterDiscount);
+                if (!coinResult.IsValid)
+                {
+                    return new OrderPricing { IsSuccess = false, Message = coinResult.Message };
+                }
+                coinDiscount = coinResult.CoinDiscountAmount;
+            }
+
+            // Gift packing: box chosen on the server, ₹100 per box for Personalised gifting.
+            // Offers, free shipping and coins never apply to this charge.
+            var giftResult = await _giftService.PrepareAsync(customerId, gift, lines);
+            if (!giftResult.IsSuccess)
+            {
+                return new OrderPricing { IsSuccess = false, Message = giftResult.Message };
+            }
+
+            var totalAmount = Math.Max(0, amountAfterDiscount - coinDiscount) + giftResult.Gift.TotalCharge;
+
+            return new OrderPricing
+            {
+                IsSuccess = true,
+                Subtotal = subtotal,
+                DiscountAmount = discountAmount,
+                AppliedCoupon = couponResult.Coupon,
+                DeliveryFee = deliveryFee,
+                CoinsUsed = useRewardCoins > 0 ? useRewardCoins : 0,
+                CoinDiscountAmount = coinDiscount,
+                GiftCharge = giftResult.Gift.TotalCharge,
+                TotalAmount = totalAmount,
+                Gift = giftResult.Gift,
+            };
+        }
+
         public async Task<OrderResult> CreateOrderFromCartAsync(
-            long customerId, 
-            long customerAddressId, 
-            string? couponCode, 
+            long customerId,
+            long customerAddressId,
+            string? couponCode,
             int useRewardCoins,
             string paymentMode = "COD",
             OrderPaymentStatus paymentStatus = OrderPaymentStatus.Pending,
@@ -143,29 +273,19 @@ namespace Hiya2.Server.Services
             string? razorpayPaymentId = null,
             string? razorpaySignature = null,
             string deliveryType = "standard",
-            BuyNowItem? buyNowItem = null)
+            BuyNowItem? buyNowItem = null,
+            GiftRequest? gift = null,
+            long? expectedTotalPaise = null,
+            List<BuyNowItem>? buyNowItems = null)
         {
-            // Reward coins paused (see RewardFeature): never spend coins on an order.
-            if (!RewardFeature.Enabled) useRewardCoins = 0;
-
-            List<CartLine> cartLines;
-            if (buyNowItem != null)
+            // Direct orders (Buy Now, or a gift of only the builder's items) never touch the cart.
+            var isDirectOrder = DirectItems(buyNowItem, buyNowItems) != null;
+            var linesResult = await LoadCheckoutLinesAsync(customerId, buyNowItem, buyNowItems);
+            if (linesResult.Error != null)
             {
-                var buyNowLine = await _cartRepository.BuildBuyNowLineAsync(customerId, buyNowItem);
-                if (buyNowLine.Line == null)
-                {
-                    return new OrderResult { IsSuccess = false, Message = buyNowLine.Message ?? "This product is no longer available." };
-                }
-                cartLines = new List<CartLine> { buyNowLine.Line };
+                return new OrderResult { IsSuccess = false, Message = linesResult.Error };
             }
-            else
-            {
-                cartLines = await _cartRepository.GetCartAsync(customerId);
-            }
-            if (cartLines.Count == 0)
-            {
-                return new OrderResult { IsSuccess = false, Message = "Your cart is empty." };
-            }
+            var cartLines = linesResult.Lines;
 
             var address = await _context.CustomerAddresses.FirstOrDefaultAsync(a =>
                 a.Id == customerAddressId && a.CustomerId == customerId && !a.IsDeleted);
@@ -181,38 +301,35 @@ namespace Hiya2.Server.Services
                 return new OrderResult { IsSuccess = false, Message = "Sorry, we currently deliver only around Ghatlodiya, Ahmedabad (about 5 km). Please choose an address in our delivery area." };
             }
 
-            var subtotal = cartLines.Sum(l => l.LineTotal);
-
-            // Offers apply automatically; a code (if sent) is used only when it saves more.
-            var couponResult = await _couponService.ResolveDiscountAsync(couponCode, customerId, subtotal);
-            if (!couponResult.IsValid)
+            var pricing = await PriceOrderAsync(customerId, cartLines, couponCode, useRewardCoins, deliveryType, gift);
+            if (!pricing.IsSuccess)
             {
-                return new OrderResult { IsSuccess = false, Message = couponResult.Message };
+                return new OrderResult { IsSuccess = false, Message = pricing.Message ?? "Could not price this order." };
             }
-            decimal discountAmount = couponResult.DiscountAmount;
-            Coupon? appliedCoupon = couponResult.Coupon;
 
-            // Free-shipping threshold is judged on the price after coupon discount
-            // (e.g. ₹500 cart − ₹50 coupon = ₹450 → not free).
-            var deliveryFee = await CalculateDeliveryFeeAsync(subtotal - discountAmount, deliveryType);
-            var amountAfterDiscount = subtotal - discountAmount + deliveryFee;
-
-            decimal coinDiscount = 0;
-            if (useRewardCoins > 0)
+            // Online payments: the amount Razorpay actually charged must equal the order total.
+            if (expectedTotalPaise.HasValue)
             {
-                var coinResult = await _rewardService.ValidateCoinUsageAsync(customerId, useRewardCoins, amountAfterDiscount);
-                if (!coinResult.IsValid)
+                var totalPaise = (long)Math.Round(pricing.TotalAmount * 100m, MidpointRounding.AwayFromZero);
+                if (totalPaise != expectedTotalPaise.Value)
                 {
-                    return new OrderResult { IsSuccess = false, Message = coinResult.Message };
+                    return new OrderResult
+                    {
+                        IsSuccess = false,
+                        Message = $"The amount paid (₹{expectedTotalPaise.Value / 100m:N2}) does not match your order total (₹{pricing.TotalAmount:N2}). " +
+                                  $"Your order was not placed. Please contact support with payment ID {razorpayPaymentId} for a refund."
+                    };
                 }
-                coinDiscount = coinResult.CoinDiscountAmount;
             }
 
-            var totalAmount = amountAfterDiscount - coinDiscount;
-            if (totalAmount < 0)
-            {
-                totalAmount = 0;
-            }
+            var subtotal = pricing.Subtotal;
+            var discountAmount = pricing.DiscountAmount;
+            var appliedCoupon = pricing.AppliedCoupon;
+            var deliveryFee = pricing.DeliveryFee;
+            var coinDiscount = pricing.CoinDiscountAmount;
+            var totalAmount = pricing.TotalAmount;
+            var preparedGift = pricing.Gift;
+            useRewardCoins = pricing.CoinsUsed;
 
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
@@ -228,6 +345,7 @@ namespace Hiya2.Server.Services
                     CoinsUsed = useRewardCoins > 0 ? useRewardCoins : 0,
                     CoinDiscountAmount = coinDiscount,
                     DeliveryFee = deliveryFee,
+                    GiftCharge = preparedGift.TotalCharge,
                     TotalAmount = totalAmount,
                     OrderStatus = OrderStatus.Placed,
                     PaymentStatus = paymentStatus,
@@ -278,7 +396,7 @@ namespace Hiya2.Server.Services
                         continue;
                     }
 
-                    var conversion = buyNowItem != null
+                    var conversion = isDirectOrder
                         ? await _stockService.SellDirectAsync(
                             customerId, line.Product.Id, line.Variant.Id, order.Id, line.Item.Quantity, customerId)
                         : await _stockService.ConvertToSoldAsync(
@@ -318,6 +436,8 @@ namespace Hiya2.Server.Services
                     ChangedBy = customerId
                 });
 
+                await _giftService.AttachToOrderAsync(order, preparedGift);
+
                 await _context.SaveChangesAsync();
 
                 if (order.CoinsUsed > 0)
@@ -326,14 +446,31 @@ namespace Hiya2.Server.Services
                 }
 
                 // A Buy Now order never touched the cart, so the cart is kept as it is.
-                if (buyNowItem == null)
+                if (!isDirectOrder)
                 {
                     await _cartRepository.ClearCartAsync(customerId);
                 }
 
                 await transaction.CommitAsync();
 
-                await SendOrderPlacedEmailAsync(order);
+                string? insertPdfPath = null;
+                if (preparedGift.IsGift)
+                {
+                    _giftService.CleanUpAfterOrder(customerId, preparedGift);
+                    // The A4 insert is made now so it is ready for packing (and attached to the order
+                    // emails); if this fails, the downloads build it on demand, so the order itself is
+                    // never affected.
+                    try
+                    {
+                        insertPdfPath = await _giftService.EnsureInsertPdfAsync(order.Id);
+                    }
+                    catch (Exception pdfEx)
+                    {
+                        Console.WriteLine($"[GIFT PDF ERROR] Order {order.OrderNumber}: {pdfEx}");
+                    }
+                }
+
+                await SendOrderPlacedEmailAsync(order, preparedGift, insertPdfPath);
 
                 return new OrderResult
                 {
@@ -345,6 +482,7 @@ namespace Hiya2.Server.Services
                     DiscountAmount = order.DiscountAmount,
                     CoinDiscountAmount = order.CoinDiscountAmount,
                     DeliveryFee = order.DeliveryFee,
+                    GiftCharge = order.GiftCharge,
                     TotalAmount = order.TotalAmount
                 };
             }
@@ -355,8 +493,20 @@ namespace Hiya2.Server.Services
             }
         }
 
-        private async Task SendOrderPlacedEmailAsync(Order order)
+        private async Task SendOrderPlacedEmailAsync(Order order, PreparedGift? gift = null, string? insertPdfPath = null)
         {
+            var giftRow = BuildGiftRowHtml(gift);
+            // The printable A4 gift insert (Personalised gifts with a photo or message) is attached to
+            // both the customer's and the admin's order email.
+            var insertAttachment = insertPdfPath != null
+                ? new[] { new EmailAttachment($"{order.OrderNumber}-gift-insert-A4.pdf", insertPdfPath, "application/pdf") }
+                : null;
+            var customerAttachment = insertAttachment;
+            // Totals row for the gift packing charge, so the email's rows add up to the total.
+            var giftChargeRow = order.GiftCharge > 0
+                ? "<tr><td style=\"padding: 5px 18px 10px 18px; font-size: 13.5px; color: #64748b;\">Personalised Gifting:</td>"
+                  + $"<td style=\"padding: 5px 18px 10px 18px; text-align: right; font-size: 13.5px; color: #0f172a; font-weight: 600;\">₹{order.GiftCharge:N2}</td></tr>"
+                : "";
             try
             {
                 var customer = await _context.Customers.FirstOrDefaultAsync(c => c.CustomerId == order.CustomerId);
@@ -370,15 +520,16 @@ namespace Hiya2.Server.Services
                     {
                         ["customerName"] = $"{customer.FirstName} {customer.LastName}".Trim(),
                         ["orderNumber"] = order.OrderNumber,
-                        ["productRows"] = BuildProductRowsHtml(order.Items),
+                        ["productRows"] = BuildProductRowsHtml(order.Items) + giftRow,
                         ["subtotal"] = order.Subtotal.ToString("N2"),
                         ["discountAmount"] = order.DiscountAmount.ToString("N2"),
                         ["coinDiscountAmount"] = order.CoinDiscountAmount.ToString("N2"),
                         ["deliveryFee"] = order.DeliveryFee.ToString("N2"),
+                        ["giftChargeRow"] = giftChargeRow,
                         ["totalAmount"] = order.TotalAmount.ToString("N2")
                     };
 
-                    var result = await _emailService.SendEmailAsync(customer.Email, $"Order Confirmed - {order.OrderNumber}", "order_placed", templateData);
+                    var result = await _emailService.SendEmailAsync(customer.Email, $"Order Confirmed - {order.OrderNumber}", "order_placed", templateData, customerAttachment);
                     Console.WriteLine($"[EMAIL Customer Order Placed Result]: Success={result.IsSuccess}, Message={result.Message}");
                 }
             }
@@ -387,10 +538,10 @@ namespace Hiya2.Server.Services
                 Console.WriteLine($"[EMAIL ERROR SendOrderPlacedEmailAsync]: {ex}");
             }
 
-            await SendAdminOrderPlacedEmailAsync(order);
+            await SendAdminOrderPlacedEmailAsync(order, giftRow, insertAttachment);
         }
 
-        private async Task SendAdminOrderPlacedEmailAsync(Order order)
+        private async Task SendAdminOrderPlacedEmailAsync(Order order, string giftRow = "", IEnumerable<EmailAttachment>? attachments = null)
         {
             try
             {
@@ -410,11 +561,11 @@ namespace Hiya2.Server.Services
                     ["customerEmail"] = customer?.Email ?? "-",
                     ["customerMobile"] = customer?.MobileNo ?? "-",
                     ["orderDate"] = order.OrderDate.ToString("dd MMM yyyy, hh:mm tt"),
-                    ["productRows"] = BuildProductRowsHtml(order.Items),
+                    ["productRows"] = BuildProductRowsHtml(order.Items) + giftRow,
                     ["totalAmount"] = order.TotalAmount.ToString("N2")
                 };
 
-                var result = await _emailService.SendEmailAsync(adminRecipients, $"New Order - {order.OrderNumber}", "admin_order_placed", templateData);
+                var result = await _emailService.SendEmailAsync(adminRecipients, $"New Order - {order.OrderNumber}", "admin_order_placed", templateData, attachments);
                 Console.WriteLine($"[EMAIL Admin Order Placed Result]: Success={result.IsSuccess}, Message={result.Message}");
             }
             catch (Exception ex)
@@ -487,6 +638,7 @@ namespace Hiya2.Server.Services
             return await _context.Orders
                 .Where(o => o.CustomerId == customerId && !o.IsDeleted)
                 .Include(o => o.Items)
+                .Include(o => o.Gift)
                 .OrderByDescending(o => o.OrderDate)
                 .ToListAsync();
         }
@@ -498,7 +650,7 @@ namespace Hiya2.Server.Services
             {
                 query = query.Where(o => o.CustomerId == customerId.Value);
             }
-            return await query.Include(o => o.Items).FirstOrDefaultAsync();
+            return await query.Include(o => o.Items).Include(o => o.Gift).FirstOrDefaultAsync();
         }
 
         public async Task<OrderResult> CancelOrderAsync(long orderId, long customerId, string reason)
@@ -525,6 +677,7 @@ namespace Hiya2.Server.Services
             return await _context.Orders
                 .Where(o => !o.IsDeleted)
                 .Include(o => o.Items)
+                .Include(o => o.Gift)
                 .OrderByDescending(o => o.OrderDate)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)

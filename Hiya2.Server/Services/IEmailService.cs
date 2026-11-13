@@ -1,5 +1,8 @@
 namespace Hiya2.Server.Services
 {
+    /// <summary>A file to attach to an email (read from disk when the email is sent).</summary>
+    public record EmailAttachment(string FileName, string FilePath, string ContentType);
+
     public interface IEmailService
     {
         /// <summary>
@@ -13,7 +16,8 @@ namespace Hiya2.Server.Services
             string toEmail,
             string subject,
             string templateFile,
-            Dictionary<string, string> templateData);
+            Dictionary<string, string> templateData,
+            IEnumerable<EmailAttachment>? attachments = null);
 
         /// <summary>
         /// Comma-separated admin recipient list: the account email that sends

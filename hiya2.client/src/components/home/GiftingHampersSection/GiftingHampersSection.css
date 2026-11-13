@@ -372,3 +372,28 @@
     transform: none !important;
   }
 }
+
+/* Gift builder teaser: three icon cards instead of the old five occasion photos. */
+.hiyaghar-gifting-cards-grid.is-three {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.hiyaghar-gifting-image-wrapper.is-icon {
+  height: 170px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hiyaghar-gifting-icon {
+  position: relative;
+  font-size: 56px;
+}
+@media (max-width: 1023px) and (min-width: 768px) {
+  .hiyaghar-gifting-cards-grid.is-three { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .hiyaghar-gifting-image-wrapper.is-icon { height: 150px; }
+}
+@media (max-width: 767px) {
+  .hiyaghar-gifting-cards-grid.is-three { grid-template-columns: 1fr; }
+  .hiyaghar-gifting-image-wrapper.is-icon { height: 130px; }
+}

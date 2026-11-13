@@ -14,6 +14,10 @@ namespace Hiya2.Server.Controllers
         public string DeliveryType { get; set; } = "standard";
         /// <summary>Set for "Buy Now": charge for only this cart line.</summary>
         public BuyNowItem? BuyNowItem { get; set; }
+        /// <summary>Several items ordered without the cart (gift builder, "Gift only these items").</summary>
+        public List<BuyNowItem>? BuyNowItems { get; set; }
+        /// <summary>Gift packing choice; null or Type "None" for a normal order.</summary>
+        public Hiya2.Server.Services.Gifting.GiftRequest? Gift { get; set; }
     }
 
     [ApiController]
@@ -45,7 +49,7 @@ namespace Hiya2.Server.Controllers
                 return BadRequest(new { isSuccess = false, message = "Please select a delivery address." });
             }
 
-            var result = await _paymentService.CreateRazorpayOrderAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, dto.DeliveryType, dto.BuyNowItem);
+            var result = await _paymentService.CreateRazorpayOrderAsync(customerId, dto.CustomerAddressId, dto.CouponCode, dto.UseRewardCoins, dto.DeliveryType, dto.BuyNowItem, dto.Gift, dto.BuyNowItems);
             if (!result.IsSuccess)
             {
                 return BadRequest(new { isSuccess = false, message = result.Message });
@@ -92,6 +96,7 @@ namespace Hiya2.Server.Controllers
                 discountAmount = result.DiscountAmount,
                 coinDiscountAmount = result.CoinDiscountAmount,
                 deliveryFee = result.DeliveryFee,
+                giftCharge = result.GiftCharge,
                 totalAmount = result.TotalAmount
             });
         }

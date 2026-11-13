@@ -47,6 +47,12 @@ export interface Order {
   discount: number;
   couponCode?: string;
   shippingFee: number;
+  /** Personalised gift packing charge (₹100 per box); 0 or undefined otherwise. */
+  giftCharge?: number;
+  /** "Normal Gifting" / "Personalised Gifting" when the order is a gift. */
+  giftLabel?: string;
+  /** Personalised gift with a photo or message: an A4 insert PDF can be downloaded. */
+  giftHasInsert?: boolean;
   tax: number;
   total: number;
   status: 'Confirmed' | 'Packed' | 'Shipped' | 'Out for Delivery' | 'Delivered' | 'Cancelled' | 'Returned' | 'Refunded';
@@ -200,6 +206,9 @@ async function mapApiOrderToLocal(api: any, labels: Record<string, string>): Pro
     discount: (api.discountAmount || 0) + (api.coinDiscountAmount || 0),
     couponCode: api.couponCode || undefined,
     shippingFee: api.deliveryFee || 0,
+    giftCharge: api.giftCharge || 0,
+    giftLabel: api.gift ? `${api.gift.giftType} Gifting` : undefined,
+    giftHasInsert: !!api.gift && api.gift.giftType === 'Personalised' && (!!api.gift.hasPhoto || !!api.gift.hasMessage),
     tax: Math.round(Math.max(0, api.subtotal - (api.discountAmount || 0)) * 0.05),
     total: api.totalAmount,
     status,
@@ -300,6 +309,9 @@ export class OrderService {
     discount: number;
     couponCode?: string;
     shippingFee: number;
+    giftCharge?: number;
+    giftLabel?: string;
+    giftHasInsert?: boolean;
     tax: number;
     total: number;
     orderNumber?: string;
@@ -369,6 +381,9 @@ export class OrderService {
       discount: orderPayload.discount,
       couponCode: orderPayload.couponCode,
       shippingFee: orderPayload.shippingFee,
+      giftCharge: orderPayload.giftCharge,
+      giftLabel: orderPayload.giftLabel,
+      giftHasInsert: orderPayload.giftHasInsert,
       tax: orderPayload.tax,
       total: orderPayload.total,
       status: 'Packed',
@@ -458,6 +473,7 @@ export class OrderService {
             <span>Shipping Fee:</span>
             <span>${order.shippingFee === 0 ? 'FREE' : `₹${order.shippingFee}`}</span>
           </div>
+          ${order.giftLabel ? `<div style="display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid #eee;"><span>${order.giftLabel}:</span><span>${order.giftCharge ? `₹${order.giftCharge}` : 'FREE'}</span></div>` : ''}
           <div style="display: flex; justify-content: space-between; padding: 10px 0; font-size: 16px; font-weight: bold; color: #11223A; border-top: 2px solid #CB992C;">
             <span>Grand Total:</span>
             <span>₹${order.total}</span>
@@ -648,11 +664,12 @@ export class OrderService {
       const subtotal = order.subtotal || 0;
       const discount = order.discount || 0;
       const shipping = order.shippingFee || 0;
-      const total = order.total || subtotal - discount + shipping;
+      const giftCharge = order.giftCharge || 0;
+      const total = order.total || subtotal - discount + shipping + giftCharge;
 
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(226, 232, 240);
-      doc.roundedRect(125, totalsY - 2, 71, (discount > 0 ? 32 : 26), 1.5, 1.5, 'FD');
+      doc.roundedRect(125, totalsY - 2, 71, (discount > 0 ? 32 : 26) + (order.giftLabel ? 5.5 : 0), 1.5, 1.5, 'FD');
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
@@ -679,6 +696,16 @@ export class OrderService {
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(51, 65, 85);
       doc.text(shipping === 0 ? 'FREE' : `Rs. ${shipping.toFixed(2)}`, 192, totalsY + 3, { align: 'right' });
+
+      if (order.giftLabel) {
+        totalsY += 5.5;
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(100, 116, 139);
+        doc.text(`${order.giftLabel}:`, 129, totalsY + 3);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(51, 65, 85);
+        doc.text(giftCharge === 0 ? 'FREE' : `Rs. ${giftCharge.toFixed(2)}`, 192, totalsY + 3, { align: 'right' });
+      }
 
       totalsY += 4.5;
       doc.setDrawColor(203, 153, 44);

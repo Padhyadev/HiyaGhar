@@ -35,3 +35,6 @@ _backup_phase5/
 
 *.bak
 .tools/
+
+# Private gift photos and A4 inserts (created at runtime)
+App_Data/

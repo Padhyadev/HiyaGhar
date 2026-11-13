@@ -1,5 +1,4 @@
 using HIyaghar.Infra;
-using Hiya2.Server.Repositories.GiftHamper;
 using Hiya2.Server.Repositories.Product;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -23,15 +22,13 @@ namespace Hiya2.Server.Seo
 
         private readonly SeoContentStore _store;
         private readonly IProductRepository _products;
-        private readonly IGiftHamperRepository _hampers;
         private readonly DataContext _db;
         private readonly IMemoryCache _cache;
 
-        public SeoPageRenderer(SeoContentStore store, IProductRepository products, IGiftHamperRepository hampers, DataContext db, IMemoryCache cache)
+        public SeoPageRenderer(SeoContentStore store, IProductRepository products, DataContext db, IMemoryCache cache)
         {
             _store = store;
             _products = products;
-            _hampers = hampers;
             _db = db;
             _cache = cache;
         }
@@ -88,20 +85,6 @@ namespace Hiya2.Server.Seo
                 var product = await _products.GetByIdAsync(found.Id);
                 if (product == null) return NotFoundResult(path, s, baseNodes);
                 page = BuildProductPage(product, found.Path, c, s.DefaultImage, baseNodes);
-            }
-            else if (path.StartsWith(SeoMarkup.OccasionPathPrefix, StringComparison.OrdinalIgnoreCase))
-            {
-                var slug = path[SeoMarkup.OccasionPathPrefix.Length..];
-                var occasion = (await _hampers.GetAllOccasionsAsync(true))
-                    .FirstOrDefault(o => !string.IsNullOrWhiteSpace(o.Slug) && string.Equals(o.Slug.Trim(), slug, StringComparison.OrdinalIgnoreCase));
-                if (occasion == null) return NotFoundResult(path, s, baseNodes);
-
-                var canonical = SeoMarkup.OccasionPath(occasion.Slug);
-                if (!string.Equals(path, canonical, StringComparison.Ordinal))
-                {
-                    return new SeoRenderResult(StatusCodes.Status301MovedPermanently, null, canonical);
-                }
-                page = await BuildOccasionPageAsync(occasion, canonical, c, s.DefaultImage, baseNodes);
             }
             else
             {
@@ -168,10 +151,6 @@ namespace Hiya2.Server.Seo
             {
                 var paths = await GetProductPathsAsync();
                 string PathOf(Models.Product p) => paths.TryGetValue(p.Id, out var path) ? path : "/product/" + p.Id;
-                var occasions = route.Collection == "giftHampers" ? await _hampers.GetAllOccasionsAsync(true) : new List<Models.GiftHamperOccasion>();
-                var occasionLinks = occasions.Where(o => !string.IsNullOrWhiteSpace(o.Slug))
-                    .Select(o => (o.Name.Trim(), SeoMarkup.OccasionPath(o.Slug))).ToList();
-                if (occasionLinks.Count > 0) body += SeoMarkup.LinkList(occasionLinks);
 
                 // Combos live in the "Combos" category, whose id is only known once the admin created it.
                 var categoryId = route.CategoryId ?? (route.Collection == "combos"
@@ -180,16 +159,13 @@ namespace Hiya2.Server.Seo
                         .Select(cat => (int?)cat.Id).FirstOrDefaultAsync()
                     : null);
 
-                var items = route.Collection != "giftHampers"
-                    ? (categoryId.HasValue ? await _products.GetAllAsync(categoryId.Value) : Enumerable.Empty<Models.Product>())
-                        .Where(p => p.IsActive && !p.IsDeleted)
-                        .Select(p => (p.ProductName, PathOf(p))).ToList()
-                    : occasions
-                        .SelectMany(o => o.Products.Where(op => op.Product != null).OrderBy(op => op.DisplayOrder))
-                        .Select(op => op.Product!)
-                        .Where(p => p.IsActive && !p.IsDeleted)
-                        .GroupBy(p => p.Id).Select(g => g.First())
-                        .Select(p => (p.ProductName, PathOf(p))).ToList();
+                // The gift builder (/gift-hampers) offers every product except combo packs.
+                var source = route.Collection == "giftHampers"
+                    ? (await _products.GetAllAsync()).Where(p => p.Category?.CategoryName != Services.ComboPricing.CategoryName)
+                    : categoryId.HasValue ? await _products.GetAllAsync(categoryId.Value) : Enumerable.Empty<Models.Product>();
+                var items = source
+                    .Where(p => p.IsActive && !p.IsDeleted)
+                    .Select(p => (p.ProductName, PathOf(p))).ToList();
 
                 // Same wording as the page's result count ("Showing 7 Mukhwas products", "Showing 8 products").
                 var label = route.CategoryId.HasValue && route.Breadcrumb != null ? route.Breadcrumb + " " : "";
@@ -244,44 +220,6 @@ namespace Hiya2.Server.Seo
 
             if (pageNode != null) page.JsonLd.Add(pageNode);
             page.BodyHtml = SeoMarkup.Prerender(body);
-        }
-
-        /// <summary>One gift hamper occasion (/gift-hampers/{slug}): its products, breadcrumbs, CollectionPage.</summary>
-        private async Task<SeoPage> BuildOccasionPageAsync(Models.GiftHamperOccasion o, string path, SeoConfig c, string defaultImage, List<object> baseNodes)
-        {
-            var paths = await GetProductPathsAsync();
-            var items = o.Products
-                .Where(op => op.Product != null && op.Product.IsActive && !op.Product.IsDeleted)
-                .OrderBy(op => op.DisplayOrder)
-                .Select(op => op.Product!)
-                .GroupBy(p => p.Id).Select(g => g.First())
-                .Select(p => (p.ProductName, paths.TryGetValue(p.Id, out var pp) ? pp : "/product/" + p.Id))
-                .ToList();
-
-            var hub = c.Routes.FirstOrDefault(r => r.Collection == "giftHampers");
-            var page = new SeoPage
-            {
-                Title = SeoMarkup.OccasionTitle(o.Name, c.SiteName),
-                Description = SeoMarkup.OccasionDescription(o.Name, o.Description),
-                Path = path,
-                Image = string.IsNullOrWhiteSpace(o.BannerImagePath) ? defaultImage : o.BannerImagePath!,
-                JsonLd = new List<object>(baseNodes),
-            };
-
-            var pageNode = SeoMarkup.WebPageNode(c, "CollectionPage", page);
-            pageNode["mainEntity"] = SeoMarkup.ItemList(c, items);
-            page.JsonLd.Add(pageNode);
-            var crumbs = new List<(string, string)> { ("Home", "/") };
-            if (hub?.Path != null) crumbs.Add((hub.Breadcrumb ?? hub.H1 ?? hub.Title, hub.Path));
-            crumbs.Add((o.Name.Trim(), path));
-            page.JsonLd.Add(SeoMarkup.Breadcrumbs(c, crumbs));
-
-            var body = SeoMarkup.Heading(o.Name.Trim(), page.Description)
-                + "<p>" + SeoMarkup.E($"Showing {items.Count} product{(items.Count == 1 ? "" : "s")}") + "</p>"
-                + SeoMarkup.LinkList(items);
-            if (hub?.Path != null) body += SeoMarkup.LinkList(new[] { ("All " + (hub.LinkText ?? hub.Title), hub.Path) });
-            page.BodyHtml = SeoMarkup.Prerender(body);
-            return page;
         }
 
         private static SeoPage BuildProductPage(Models.Product p, string path, SeoConfig c, string defaultImage, List<object> baseNodes)

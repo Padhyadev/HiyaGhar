@@ -277,34 +277,6 @@ namespace Hiya2.Server.Seo
         public static string CleanText(string? text) =>
             Whitespace.Replace(HtmlTag.Replace(HiyaMetaBlock.Replace(text ?? string.Empty, " "), " "), " ").Trim();
 
-        // ---------- gift hamper occasions ----------
-
-        public const string OccasionPathPrefix = "/gift-hampers/";
-
-        public static string OccasionPath(string slug) => OccasionPathPrefix + slug.Trim().ToLowerInvariant();
-
-        /// <summary>"Wedding" → "Wedding Gift Hampers | HIYAGHAR"; names that already say gift/hamper are kept as-is.</summary>
-        public static string OccasionTitle(string name, string siteName)
-        {
-            var n = name.Trim();
-            var hasGiftWord = n.Contains("gift", StringComparison.OrdinalIgnoreCase) || n.Contains("hamper", StringComparison.OrdinalIgnoreCase);
-            return (hasGiftWord ? n : n + " Gift Hampers") + " | " + siteName;
-        }
-
-        /// <summary>The admin description (plain text, max 160 chars at a word boundary), else a standard sentence.</summary>
-        public static string OccasionDescription(string name, string? description)
-        {
-            var text = CleanText(description);
-            if (text.Length == 0)
-            {
-                return $"Shop HIYAGHAR {name.Trim()} gift hampers: curated handcrafted mukhwas, tea masala, soaps and wellness gifts. See prices and order online across India.";
-            }
-            if (text.Length <= 160) return text;
-            var cut = text[..159];
-            var space = cut.LastIndexOf(' ');
-            return cut[..(space > 120 ? space : 159)] + "…";
-        }
-
         private static readonly Regex HiyaMetaJson =new(@"<!--HIYA_META:\s*([\s\S]*?)\s*-->", RegexOptions.Compiled);
 
         /// <summary>

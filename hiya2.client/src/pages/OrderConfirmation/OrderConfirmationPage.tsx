@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { GiftInsertDownloadButton } from '../../components/gifting/GiftInsertDownloadButton';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { OrderService } from '../../services/orderService';
@@ -250,6 +251,19 @@ export const OrderConfirmationPage: React.FC<OrderConfirmationPageProps> = ({
                     )}
                   </span>
                 </div>
+
+                {order.giftLabel && (
+                  <div className="bill-row">
+                    <span className="bill-label">{order.giftLabel}:</span>
+                    <span className="bill-value">{order.giftCharge ? `₹${order.giftCharge}` : 'FREE'}</span>
+                  </div>
+                )}
+
+                {order.giftHasInsert && (order.orderNumber || order.id) && (
+                  <div className="bill-row" style={{ justifyContent: 'flex-start', margin: '6px 0' }}>
+                    <GiftInsertDownloadButton orderNumber={order.orderNumber || order.id} />
+                  </div>
+                )}
 
                 {order.tax > 0 && (
                   <div className="bill-row">

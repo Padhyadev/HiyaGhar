@@ -39,6 +39,7 @@ export interface ProductVariantItem {
   originalPrice: number;  // Price (MRP)
   price: number;          // SellPrice
   isDefault: boolean;
+  giftUnits?: number;      // gift box space one piece takes (Store Settings → Gift Boxes); default 1
   images?: ProductImageItem[]; // this variant's own gallery (empty = website falls back to the product's older shared photos)
 }
 
@@ -313,6 +314,7 @@ export const ProductManagementPage: React.FC = () => {
           originalPrice: v.originalPrice ?? item.basePrice ?? 0,
           price: v.price ?? item.discountPrice ?? item.basePrice ?? 0,
           isDefault: v.isDefault,
+          giftUnits: v.giftUnits ?? 1,
           // Photos are managed per variant only. A variant with none of its own starts with
           // the product's older photos (if any, see carriedOverImages), so saving moves them into it.
           images: Array.isArray(v.images) && v.images.length > 0
@@ -1203,6 +1205,23 @@ export const ProductManagementPage: React.FC = () => {
                             )}
                           </div>
                         </div>
+                        <div>
+                          <label
+                            style={{ display: 'block', fontSize: '0.8rem', fontWeight: 700, color: '#334155', marginBottom: '6px' }}
+                            title="Gift box space one piece takes (small bottle or soap = 1, big bottle = 2). Box sizes: Store Settings → Gift Boxes."
+                          >
+                            Gift Box Units
+                          </label>
+                          <input
+                            type="number"
+                            min={1}
+                            max={100}
+                            step={1}
+                            value={singleVar.giftUnits ?? 1}
+                            onChange={(e) => handleUpdateVariantField(0, 'giftUnits', Math.min(100, Math.max(1, Math.trunc(Number(e.target.value)) || 1)))}
+                            style={{ width: '100%', padding: '8px 12px', borderRadius: '8px', border: '1px solid #cbd5e1', height: '38px', boxSizing: 'border-box' }}
+                          />
+                        </div>
                       </div>
                     );
                   })()}
@@ -1219,6 +1238,12 @@ export const ProductManagementPage: React.FC = () => {
                         <th style={{ width: '14%' }}>SellPrice (₹)</th>
                         <th style={{ width: '15%' }}>Discount Savings</th>
                         <th
+                          style={{ textAlign: 'center', width: '8%', padding: '14px 6px', fontSize: '0.8rem' }}
+                          title="Gift box space one piece takes (small bottle or soap = 1, big bottle = 2). Box sizes: Store Settings → Gift Boxes."
+                        >
+                          Gift Units
+                        </th>
+                        <th
                           style={{ textAlign: 'center', width: '7%', padding: '14px 6px', fontSize: '0.8rem' }}
                           title="The primary variant is shown on product listing cards (its photo and price) and is pre-selected on the product page."
                         >
@@ -1230,7 +1255,7 @@ export const ProductManagementPage: React.FC = () => {
                     <tbody>
                       {formData.variants.length === 0 ? (
                         <tr>
-                          <td colSpan={7} style={{ textAlign: 'center', color: '#94a3b8', padding: '20px' }}>
+                          <td colSpan={8} style={{ textAlign: 'center', color: '#94a3b8', padding: '20px' }}>
                             No variants added yet. Click <strong>+ Add Variant Row</strong> to add options.
                           </td>
                         </tr>
@@ -1406,6 +1431,20 @@ export const ProductManagementPage: React.FC = () => {
                                 <div style={{ fontSize: '0.8rem', fontWeight: 700, color: '#2d6a4f', padding: '6px', background: '#f0fdf4', borderRadius: '6px', border: '1px solid #bbf7d0', textAlign: 'center' }}>
                                   ₹{rowSavings} ({rowPct}%)
                                 </div>
+                              </td>
+
+                              {/* Gift box units (automatic gift box choice) */}
+                              <td>
+                                <input
+                                  type="number"
+                                  min={1}
+                                  max={100}
+                                  step={1}
+                                  value={variant.giftUnits ?? 1}
+                                  aria-label="Gift box units"
+                                  onChange={(e) => handleUpdateVariantField(index, 'giftUnits', Math.min(100, Math.max(1, Math.trunc(Number(e.target.value)) || 1)))}
+                                  style={{ width: '100%', padding: '6px 8px', borderRadius: '6px', border: '1px solid #cbd5e1', textAlign: 'center' }}
+                                />
                               </td>
 
                               {/* Primary (default) variant radio - this variant is shown on listing cards */}

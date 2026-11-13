@@ -36,8 +36,8 @@ namespace HIyaghar.Infra
         public DbSet<OrderRewardSlab> OrderRewardSlabs { get; set; }
         public DbSet<RewardTransaction> RewardTransactions { get; set; }
         public DbSet<WishlistCustomer> WishlistCustomers { get; set; }
-        public DbSet<GiftHamperOccasion> GiftHamperOccasions { get; set; }
-        public DbSet<GiftHamperOccasionProduct> GiftHamperOccasionProducts { get; set; }
+        public DbSet<GiftBox> GiftBoxes { get; set; }
+        public DbSet<OrderGift> OrderGifts { get; set; }
         public DbSet<PasswordResetOtp> PasswordResetOtps { get; set; }
         public DbSet<LovMaster> LovMasters { get; set; }
         public DbSet<LovCategory> LovCategories { get; set; }
@@ -74,13 +74,24 @@ namespace HIyaghar.Infra
                 .HasIndex(w => new { w.CustomerId, w.ProductId, w.VariantId, w.PackingType })
                 .IsUnique();
 
-            modelBuilder.Entity<GiftHamperOccasion>()
-                .HasIndex(o => o.Slug)
+            // One gift record per gifted order.
+            modelBuilder.Entity<OrderGift>()
+                .HasOne(g => g.Order)
+                .WithOne(o => o.Gift)
+                .HasForeignKey<OrderGift>(g => g.OrderId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<OrderGift>()
+                .HasIndex(g => g.OrderId)
                 .IsUnique();
 
-            modelBuilder.Entity<GiftHamperOccasionProduct>()
-                .HasIndex(p => new { p.OccasionId, p.ProductId })
-                .IsUnique();
+            // Starting box sizes - placeholders until the real boxes are confirmed; admin edits
+            // them in Store Settings. Units: small mukhwas bottle / soap = 1, big bottle = 2.
+            var giftBoxSeedDate = new DateTime(2026, 11, 13);
+            modelBuilder.Entity<GiftBox>().HasData(
+                new GiftBox { Id = 1, Name = "Small Box", Capacity = 2, DisplayOrder = 1, IsActive = true, CreatedDate = giftBoxSeedDate },
+                new GiftBox { Id = 2, Name = "Medium Box", Capacity = 4, DisplayOrder = 2, IsActive = true, CreatedDate = giftBoxSeedDate },
+                new GiftBox { Id = 3, Name = "Large Box", Capacity = 6, DisplayOrder = 3, IsActive = true, CreatedDate = giftBoxSeedDate });
 
             modelBuilder.Entity<Coupon>()
                 .HasIndex(c => c.Code)

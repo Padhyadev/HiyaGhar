@@ -20,11 +20,23 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.13" />
+    <PackageReference Include="QuestPDF" Version="2026.9.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Watch Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <!-- Gift insert fonts: served at /gift-fonts and embedded in the A4 insert PDF. -->
+  <ItemGroup>
+    <None Include="Assets\GiftFonts\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <!-- Private gift photos / inserts are created at runtime; never publish local test files. -->
+  <ItemGroup>
+    <Content Remove="App_Data\**" />
+    <None Remove="App_Data\**" />
   </ItemGroup>
 
   <!-- Auto-build React client during dotnet publish -->

@@ -11,14 +11,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.8.0",
     "@fontsource/dm-sans": "^5.3.0",
     "@fortawesome/fontawesome-free": "^7.3.1",
+    "@tiptap/core": "^3.33.1",
+    "@tiptap/extension-text-style": "^3.33.1",
+    "@tiptap/pm": "^3.33.1",
+    "@tiptap/react": "^3.33.1",
+    "@tiptap/starter-kit": "^3.33.1",
     "framer-motion": "^13.1.0",
     "gsap": "^3.15.0",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-easy-crop": "^6.2.5",
     "react-helmet-async": "^3.0.0"
   },
   "devDependencies": {

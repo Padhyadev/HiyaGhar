@@ -25,6 +25,8 @@ namespace Hiya2.Server.Controllers
         public decimal OriginalPrice { get; set; }
         public decimal Price { get; set; }
         public bool IsDefault { get; set; }
+        // Gift box space one piece takes (1-100). null = leave unchanged (new variants get 1).
+        public int? GiftUnits { get; set; }
         // null = leave this variant's images untouched; empty list = remove them all.
         public List<IncomingImageDto>? Images { get; set; }
     }
@@ -222,6 +224,7 @@ namespace Hiya2.Server.Controllers
                 reservedStock = v.ReservedStock,
                 sellableStock = v.AvailableStock - v.ReservedStock,
                 isDefault = v.IsDefault,
+                giftUnits = v.GiftUnits,
                 primaryImage = images.FirstOrDefault()?.ImagePath,
                 images = images.Select(i => new
                 {
@@ -537,6 +540,7 @@ namespace Hiya2.Server.Controllers
                     match.Price = price;
                     match.OriginalPrice = originalPrice;
                     match.IsDefault = v.IsDefault;
+                    if (v.GiftUnits.HasValue) match.GiftUnits = Math.Clamp(v.GiftUnits.Value, 1, 100);
                     match.IsActive = true;
                     match.LastModifiedDate = now;
                     if (v.Images != null) imageUpdates.Add((match, v.Images));
@@ -551,6 +555,7 @@ namespace Hiya2.Server.Controllers
                     Price = price,
                     OriginalPrice = originalPrice,
                     IsDefault = v.IsDefault,
+                    GiftUnits = Math.Clamp(v.GiftUnits ?? 1, 1, 100),
                     IsActive = true,
                     IsDeleted = false,
                     CreatedDate = now

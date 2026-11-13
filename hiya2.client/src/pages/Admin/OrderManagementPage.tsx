@@ -4,6 +4,7 @@ import { AdminAuthService } from '../../services/adminAuthService';
 import { usePermission } from '../../context/PermissionContext';
 import { LovService } from '../../services/lovService';
 import { showToast } from '../../utils/alertService';
+import { AdminOrderGiftPanel } from '../../components/gifting/AdminOrderGiftPanel';
 import './OrderManagementPage.css';
 
 interface AdminOrderItem {
@@ -27,7 +28,9 @@ interface AdminOrder {
   coinsUsed: number;
   coinDiscountAmount: number;
   deliveryFee: number;
+  giftCharge?: number;
   totalAmount: number;
+  gift?: { giftType: string; boxCount: number; boxSummary: string; totalCharge: number } | null;
   orderStatus: string;
   orderStatusDisplay: string;
   paymentStatus: string;
@@ -423,11 +426,12 @@ export const OrderManagementPage: React.FC = () => {
       const subtotal = selectedOrder.subtotal || 0;
       const discount = (selectedOrder.discountAmount || 0) + (selectedOrder.coinDiscountAmount || 0);
       const shipping = selectedOrder.deliveryFee || 0;
-      const total = selectedOrder.totalAmount || subtotal - discount + shipping;
+      const giftCharge = selectedOrder.giftCharge || 0;
+      const total = selectedOrder.totalAmount || subtotal - discount + shipping + giftCharge;
 
       doc.setFillColor(248, 250, 252);
       doc.setDrawColor(226, 232, 240);
-      doc.roundedRect(125, totalsY - 2, 71, (discount > 0 ? 32 : 26), 1.5, 1.5, 'FD');
+      doc.roundedRect(125, totalsY - 2, 71, (discount > 0 ? 32 : 26) + (giftCharge > 0 ? 5.5 : 0), 1.5, 1.5, 'FD');
 
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8);
@@ -454,6 +458,16 @@ export const OrderManagementPage: React.FC = () => {
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(51, 65, 85);
       doc.text(shipping === 0 ? 'FREE' : `Rs. ${shipping.toFixed(2)}`, 192, totalsY + 3, { align: 'right' });
+
+      if (giftCharge > 0) {
+        totalsY += 5.5;
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(100, 116, 139);
+        doc.text('Personalised Gifting:', 129, totalsY + 3);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(51, 65, 85);
+        doc.text(`Rs. ${giftCharge.toFixed(2)}`, 192, totalsY + 3, { align: 'right' });
+      }
 
       totalsY += 4.5;
       doc.setDrawColor(203, 153, 44);
@@ -617,6 +631,12 @@ export const OrderManagementPage: React.FC = () => {
               <td style="color: #64748b;">Delivery Charges:</td>
               <td style="text-align: right; font-weight: 600;">₹${selectedOrder.deliveryFee.toFixed(2)}</td>
             </tr>
+            ${(selectedOrder.giftCharge || 0) > 0 ? `
+              <tr>
+                <td style="color: #64748b;">Personalised Gifting:</td>
+                <td style="text-align: right; font-weight: 600;">₹${(selectedOrder.giftCharge || 0).toFixed(2)}</td>
+              </tr>
+            ` : ''}
             <tr class="total-row">
               <td>Grand Total:</td>
               <td style="text-align: right;">₹${selectedOrder.totalAmount.toFixed(2)}</td>
@@ -682,7 +702,23 @@ export const OrderManagementPage: React.FC = () => {
   };
 
   const columns: ColumnDef<AdminOrder>[] = [
-    { key: 'orderNumber', label: 'Order Number' },
+    {
+      key: 'orderNumber',
+      label: 'Order Number',
+      render: (o) => (
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+          {o.orderNumber}
+          {o.gift && (
+            <i
+              className="fa-solid fa-gift"
+              style={{ color: o.gift.giftType === 'Personalised' ? '#B8862B' : '#2d6a4f' }}
+              title={`${o.gift.giftType} gifting • ${o.gift.boxSummary}`}
+              aria-label={`${o.gift.giftType} gift order`}
+            />
+          )}
+        </span>
+      ),
+    },
     {
       key: 'recipientName',
       label: 'Recipient',
@@ -880,6 +916,11 @@ export const OrderManagementPage: React.FC = () => {
                 <p>Coins Redeemed: {selectedOrder.coinsUsed} (-₹{selectedOrder.coinDiscountAmount.toFixed(2)})</p>
               )}
               <p>Delivery: ₹{selectedOrder.deliveryFee.toFixed(2)}</p>
+              {selectedOrder.gift && (
+                <p>
+                  {selectedOrder.gift.giftType} Gifting: {(selectedOrder.giftCharge || 0) > 0 ? `₹${(selectedOrder.giftCharge || 0).toFixed(2)}` : 'Free'}
+                </p>
+              )}
               <p style={{ fontWeight: 700, fontSize: '1.05rem', marginTop: '6px' }}>
                 Total: ₹{selectedOrder.totalAmount.toFixed(2)}
               </p>
@@ -916,6 +957,8 @@ export const OrderManagementPage: React.FC = () => {
               )}
             </div>
           </div>
+
+          {selectedOrder.gift && <AdminOrderGiftPanel orderId={selectedOrder.id} />}
 
           <div className="hiyaghar-order-items-table">
             <h4>Ordered Items ({selectedOrder.items?.length || 0})</h4>

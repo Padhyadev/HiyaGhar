@@ -52,6 +52,9 @@ namespace Hiya2.Server.Models
 
         public decimal DeliveryFee { get; set; } = 0;
 
+        // Personalised gift packing charge (₹100 per gift box); 0 for normal orders and Normal gifting.
+        public decimal GiftCharge { get; set; } = 0;
+
         public decimal TotalAmount { get; set; }
 
         public OrderStatus OrderStatus { get; set; } = OrderStatus.Placed;
@@ -111,5 +114,8 @@ namespace Hiya2.Server.Models
         public DateTime? LastModifiedDate { get; set; }
 
         public virtual ICollection<OrderItem> Items { get; set; } = new List<OrderItem>();
+
+        [System.Text.Json.Serialization.JsonIgnore]
+        public virtual OrderGift? Gift { get; set; }
     }
 }

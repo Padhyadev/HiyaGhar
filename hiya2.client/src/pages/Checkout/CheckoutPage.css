@@ -927,3 +927,63 @@
   color: #475569;
   margin: 0 0 16px;
 }
+
+/* Order summary rows - copied from CartPage.css so checkout is styled even when the cart page was
+   never opened (Buy Now, gift builder). Keep in step with CartPage.css. */
+.hiyaghar-summary-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  margin: 0 0 20px 0;
+  border-bottom: 1px solid #F0EAE1;
+  padding-bottom: 14px;
+}
+
+.hiyaghar-summary-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hiyaghar-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: #554D40;
+}
+
+.hiyaghar-summary-row .val {
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-summary-row.discount .val {
+  color: #27AE60;
+}
+
+.hiyaghar-summary-row .val.highlight {
+  color: #27AE60;
+}
+
+.hiyaghar-summary-row.subtle {
+  font-size: 12px;
+  color: #8C8272;
+}
+
+.hiyaghar-summary-divider {
+  height: 1px;
+  background-color: #E8E2C9;
+  margin: 8px 0;
+}
+
+.hiyaghar-summary-row.total {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+}
+
+.hiyaghar-summary-row.total .val {
+  font-size: 22px;
+  color: var(--hiya-navy, #11223A);
+}

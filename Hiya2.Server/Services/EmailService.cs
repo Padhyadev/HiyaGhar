@@ -33,7 +33,8 @@ namespace Hiya2.Server.Services
             string toEmail,
             string subject,
             string templateFile,
-            Dictionary<string, string> templateData)
+            Dictionary<string, string> templateData,
+            IEnumerable<EmailAttachment>? attachments = null)
         {
             if (string.IsNullOrWhiteSpace(toEmail))
             {
@@ -104,6 +105,17 @@ namespace Hiya2.Server.Services
                 else
                 {
                     mailMessage.Body = body;
+                }
+
+                // Attachments (e.g. the gift insert PDF); a missing file is skipped, never fatal.
+                foreach (var file in attachments ?? Enumerable.Empty<EmailAttachment>())
+                {
+                    if (!File.Exists(file.FilePath))
+                    {
+                        Console.WriteLine($"[EMAIL NOTICE] Attachment not found, skipped: {file.FileName}");
+                        continue;
+                    }
+                    mailMessage.Attachments.Add(new Attachment(file.FilePath, file.ContentType) { Name = file.FileName });
                 }
 
                 using var smtpClient = new SmtpClient(host, port)

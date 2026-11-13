@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { GiftInsertDownloadButton } from '../../components/gifting/GiftInsertDownloadButton';
 import { Header } from '../../components/layout/Header/Header';
 import { Footer } from '../../components/layout/Footer/Footer';
 import { CustomerAuthService } from '../../services/customerAuthService';
@@ -1057,6 +1058,17 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                                 <span>Delivery Fee</span>
                                 <span className="val">{selectedOrder.shippingFee === 0 ? 'FREE' : `₹${selectedOrder.shippingFee}`}</span>
                               </div>
+                              {selectedOrder.giftLabel && (
+                                <div className="totals-row">
+                                  <span>{selectedOrder.giftLabel}</span>
+                                  <span className="val">{selectedOrder.giftCharge ? `₹${selectedOrder.giftCharge}` : 'FREE'}</span>
+                                </div>
+                              )}
+                              {selectedOrder.giftHasInsert && (selectedOrder.orderNumber || selectedOrder.id) && (
+                                <div className="totals-row" style={{ justifyContent: 'flex-start', margin: '6px 0' }}>
+                                  <GiftInsertDownloadButton orderNumber={selectedOrder.orderNumber || selectedOrder.id} />
+                                </div>
+                              )}
                               <div className="totals-divider" />
                               <div className="totals-row total">
                                 <span>Total</span>

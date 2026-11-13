@@ -4,6 +4,7 @@ using System.Text.Json;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Repositories.Cart;
+using Hiya2.Server.Services.Gifting;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hiya2.Server.Services
@@ -12,25 +13,16 @@ namespace Hiya2.Server.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IOrderService _orderService;
-        private readonly ICartRepository _cartRepository;
-        private readonly ICouponService _couponService;
-        private readonly IRewardService _rewardService;
         private readonly DataContext _context;
         private readonly HttpClient _httpClient;
 
         public PaymentService(
             IConfiguration configuration,
             IOrderService orderService,
-            ICartRepository cartRepository,
-            ICouponService couponService,
-            IRewardService rewardService,
             DataContext context)
         {
             _configuration = configuration;
             _orderService = orderService;
-            _cartRepository = cartRepository;
-            _couponService = couponService;
-            _rewardService = rewardService;
             _context = context;
             _httpClient = new HttpClient();
         }
@@ -42,29 +34,12 @@ namespace Hiya2.Server.Services
             return (keyId, keySecret);
         }
 
-        public async Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard", BuyNowItem? buyNowItem = null)
+        public async Task<RazorpayOrderResult> CreateRazorpayOrderAsync(long customerId, long customerAddressId, string? couponCode, int useRewardCoins, string deliveryType = "standard", BuyNowItem? buyNowItem = null, GiftRequest? gift = null, List<BuyNowItem>? buyNowItems = null)
         {
-            // Reward coins paused (see RewardFeature): charge the full amount, no coins used.
-            if (!RewardFeature.Enabled) useRewardCoins = 0;
-
-            List<CartLine> cartLines;
-            if (buyNowItem != null)
+            var linesResult = await _orderService.LoadCheckoutLinesAsync(customerId, buyNowItem, buyNowItems);
+            if (linesResult.Error != null)
             {
-                // Also checks stock, so the customer isn't charged for something that can't be sold.
-                var buyNowLine = await _cartRepository.BuildBuyNowLineAsync(customerId, buyNowItem);
-                if (buyNowLine.Line == null)
-                {
-                    return new RazorpayOrderResult { IsSuccess = false, Message = buyNowLine.Message ?? "This product is no longer available." };
-                }
-                cartLines = new List<CartLine> { buyNowLine.Line };
-            }
-            else
-            {
-                cartLines = await _cartRepository.GetCartAsync(customerId);
-            }
-            if (cartLines.Count == 0)
-            {
-                return new RazorpayOrderResult { IsSuccess = false, Message = "Your cart is empty." };
+                return new RazorpayOrderResult { IsSuccess = false, Message = linesResult.Error };
             }
 
             var address = await _context.CustomerAddresses.FirstOrDefaultAsync(a =>
@@ -74,45 +49,15 @@ namespace Hiya2.Server.Services
                 return new RazorpayOrderResult { IsSuccess = false, Message = "Selected delivery address was not found." };
             }
 
-            var subtotal = cartLines.Sum(l => l.LineTotal);
-
-            // Same discount rule as OrderService.CreateOrderFromCartAsync, so the amount charged
-            // matches the order total.
-            var couponResult = await _couponService.ResolveDiscountAsync(couponCode, customerId, subtotal);
-            if (!couponResult.IsValid)
+            // Same pricing as OrderService.CreateOrderFromCartAsync (one shared method), so the
+            // amount charged matches the order total - including any gift packing charge.
+            var pricing = await _orderService.PriceOrderAsync(customerId, linesResult.Lines, couponCode, useRewardCoins, deliveryType, gift);
+            if (!pricing.IsSuccess)
             {
-                return new RazorpayOrderResult { IsSuccess = false, Message = couponResult.Message };
-            }
-            decimal discountAmount = couponResult.DiscountAmount;
-
-            var shippingSetting = await _context.ShippingSettings.FirstOrDefaultAsync(s => s.IsActive);
-            var freeShippingThreshold = shippingSetting?.FreeShippingThreshold ?? 500m;
-            var standardShippingFee = shippingSetting?.StandardShippingPrice ?? 49m;
-            var expressShippingFee = shippingSetting?.ExpressShippingPrice ?? 99m;
-            var enableFreeShipping = shippingSetting?.EnableFreeShipping ?? true;
-            var isExpress = string.Equals(deliveryType, "express", StringComparison.OrdinalIgnoreCase);
-            // Express delivery is never free. Free-shipping threshold is judged on
-            // the price after coupon discount - must match OrderService.
-            decimal deliveryFee;
-            if (isExpress)
-                deliveryFee = expressShippingFee;
-            else
-                deliveryFee = ((subtotal - discountAmount) >= freeShippingThreshold && enableFreeShipping) ? 0m : standardShippingFee;
-            var amountAfterDiscount = subtotal - discountAmount + deliveryFee;
-
-            decimal coinDiscount = 0;
-            if (useRewardCoins > 0)
-            {
-                var coinResult = await _rewardService.ValidateCoinUsageAsync(customerId, useRewardCoins, amountAfterDiscount);
-                if (coinResult.IsValid)
-                {
-                    coinDiscount = coinResult.CoinDiscountAmount;
-                }
+                return new RazorpayOrderResult { IsSuccess = false, Message = pricing.Message ?? "Could not price this order." };
             }
 
-            var totalAmount = amountAfterDiscount - coinDiscount;
-            if (totalAmount < 0) totalAmount = 0;
-
+            var totalAmount = pricing.TotalAmount;
             var amountInPaise = (long)Math.Round(totalAmount * 100m, MidpointRounding.AwayFromZero);
             if (amountInPaise <= 0)
             {
@@ -132,12 +77,11 @@ namespace Hiya2.Server.Services
                     payment_capture = 1
                 };
 
-                var authHeader = Convert.ToBase64String(Encoding.UTF8.GetBytes($"{keyId}:{keySecret}"));
                 var requestMessage = new HttpRequestMessage(HttpMethod.Post, "https://api.razorpay.com/v1/orders")
                 {
                     Content = new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json")
                 };
-                requestMessage.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authHeader);
+                requestMessage.Headers.Authorization = BasicAuth(keyId, keySecret);
 
                 var response = await _httpClient.SendAsync(requestMessage);
                 var responseContent = await response.Content.ReadAsStringAsync();
@@ -207,6 +151,34 @@ namespace Hiya2.Server.Services
                 };
             }
 
+            // One Razorpay payment = one order. A repeated verify (double click, retry) returns the
+            // order already placed for it instead of creating another one.
+            var existing = await _context.Orders.FirstOrDefaultAsync(o => o.RazorpayOrderId == request.RazorpayOrderId && !o.IsDeleted);
+            if (existing != null)
+            {
+                if (existing.CustomerId != customerId)
+                {
+                    return new OrderResult { IsSuccess = false, Message = "This payment has already been used for another order." };
+                }
+                return new OrderResult
+                {
+                    IsSuccess = true,
+                    Message = "Order already placed for this payment.",
+                    OrderId = existing.Id,
+                    OrderNumber = existing.OrderNumber,
+                    Subtotal = existing.Subtotal,
+                    DiscountAmount = existing.DiscountAmount,
+                    CoinDiscountAmount = existing.CoinDiscountAmount,
+                    DeliveryFee = existing.DeliveryFee,
+                    GiftCharge = existing.GiftCharge,
+                    TotalAmount = existing.TotalAmount
+                };
+            }
+
+            // The order total must equal what Razorpay actually charged, so a changed cart or
+            // gift option between payment and verify can't produce a mismatched order.
+            var paidPaise = await GetRazorpayOrderAmountPaiseAsync(request.RazorpayOrderId);
+
             // Create order with ONLINE mode and Paid status
             return await _orderService.CreateOrderFromCartAsync(
                 customerId,
@@ -219,8 +191,39 @@ namespace Hiya2.Server.Services
                 razorpayPaymentId: request.RazorpayPaymentId,
                 razorpaySignature: request.RazorpaySignature,
                 deliveryType: request.DeliveryType,
-                buyNowItem: request.BuyNowItem
+                buyNowItem: request.BuyNowItem,
+                gift: request.Gift,
+                expectedTotalPaise: paidPaise,
+                buyNowItems: request.BuyNowItems
             );
         }
+
+        // Amount (in paise) of the Razorpay order; null if Razorpay can't be reached, in which
+        // case the order is still placed (the signature already proves the payment is genuine).
+        private async Task<long?> GetRazorpayOrderAmountPaiseAsync(string razorpayOrderId)
+        {
+            try
+            {
+                var (keyId, keySecret) = GetRazorpayCredentials();
+                var request = new HttpRequestMessage(HttpMethod.Get, $"https://api.razorpay.com/v1/orders/{Uri.EscapeDataString(razorpayOrderId)}");
+                request.Headers.Authorization = BasicAuth(keyId, keySecret);
+                using var response = await _httpClient.SendAsync(request);
+                if (!response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine($"[PAYMENT] Could not read Razorpay order {razorpayOrderId}: HTTP {(int)response.StatusCode}");
+                    return null;
+                }
+                using var doc = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+                return doc.RootElement.TryGetProperty("amount", out var amount) && amount.TryGetInt64(out var paise) ? paise : null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[PAYMENT] Could not read Razorpay order {razorpayOrderId}: {ex.Message}");
+                return null;
+            }
+        }
+
+        private static System.Net.Http.Headers.AuthenticationHeaderValue BasicAuth(string keyId, string keySecret) =>
+            new("Basic", Convert.ToBase64String(Encoding.UTF8.GetBytes($"{keyId}:{keySecret}")));
     }
 }

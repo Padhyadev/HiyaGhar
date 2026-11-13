@@ -22,6 +22,17 @@ function cleanCartName(name?: string): string {
 
 const STORAGE_KEY = 'hiya_shopping_cart';
 const BUY_NOW_STORAGE_KEY = 'hiya_buy_now_item';
+// Gift builder → "Gift only these items": several items ordered without the cart.
+const GIFT_ONLY_STORAGE_KEY = 'hiya_gift_only_checkout';
+const GIFT_BUILDER_SELECTION_KEY = 'hiya_gift_builder_selection';
+
+/** A line of a gift-only checkout, as the server orders it. */
+export interface DirectOrderLine {
+  productId: number;
+  variantId: number | null;
+  packingType: string | null;
+  quantity: number;
+}
 
 export class CartService {
   private static listeners: Array<() => void> = [];
@@ -135,7 +146,8 @@ export class CartService {
     this.lastPriceRefresh = Date.now();
 
     const buyNow = this.getBuyNowItem();
-    const lines = [...this.getItems(), ...(buyNow ? [buyNow] : [])];
+    const giftOnly = this.readGiftOnly();
+    const lines = [...this.getItems(), ...(buyNow ? [buyNow] : []), ...(giftOnly?.items ?? [])];
     if (lines.length === 0) return false;
     const prices = await CartApiService.fetchCurrentPrices(lines);
 
@@ -168,7 +180,17 @@ export class CartService {
         // ignore
       }
     }
-    return cartChanged || buyNowChanged;
+    let giftOnlyChanged = false;
+    const latestGiftOnly = this.readGiftOnly();
+    if (latestGiftOnly && latestGiftOnly.items.map(reprice).some(Boolean)) {
+      giftOnlyChanged = true;
+      try {
+        sessionStorage.setItem(GIFT_ONLY_STORAGE_KEY, JSON.stringify(latestGiftOnly));
+      } catch {
+        // ignore
+      }
+    }
+    return cartChanged || buyNowChanged || giftOnlyChanged;
   }
 
   // "Buy Now" goes straight to checkout with just that product. It is kept in
@@ -200,15 +222,58 @@ export class CartService {
     }
   }
 
-  // Items the current checkout is for: just the Buy Now product, or the whole cart.
+  // Gift builder "Gift only these items": goes to checkout with just those items. They are kept in
+  // sessionStorage, never in the cart, so the customer's cart is not touched.
+  public static startGiftOnlyCheckout(items: Omit<CartItem, 'id'>[], lines: DirectOrderLine[]): void {
+    try {
+      sessionStorage.setItem(GIFT_ONLY_STORAGE_KEY, JSON.stringify({
+        items: items.map((i) => ({ ...i, name: cleanCartName(i.name), id: `${i.productId}-${i.weight}` })),
+        lines,
+      }));
+    } catch (e) {
+      console.error('Failed to save gift items', e);
+      return;
+    }
+    navigateTo('/checkout?giftOnly=1');
+  }
+
+  public static isGiftOnlyCheckout(): boolean {
+    return new URLSearchParams(window.location.search).has('giftOnly');
+  }
+
+  private static readGiftOnly(): { items: CartItem[]; lines: DirectOrderLine[] } | null {
+    try {
+      const data = sessionStorage.getItem(GIFT_ONLY_STORAGE_KEY);
+      return data ? JSON.parse(data) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  /** The lines the server orders for a gift-only checkout (empty when not in that mode). */
+  public static getGiftOnlyLines(): DirectOrderLine[] {
+    return this.isGiftOnlyCheckout() ? this.readGiftOnly()?.lines ?? [] : [];
+  }
+
+  // Items the current checkout is for: the gift-only items, the Buy Now product, or the whole cart.
   public static getCheckoutItems(): CartItem[] {
+    if (this.isGiftOnlyCheckout()) return this.readGiftOnly()?.items ?? [];
     if (!this.isBuyNowCheckout()) return this.getItems();
     const item = this.getBuyNowItem();
     return item ? [item] : [];
   }
 
-  // After an order is placed: a Buy Now order leaves the cart alone.
+  // After an order is placed: Buy Now and gift-only orders leave the cart alone.
   public static finishCheckout(): void {
+    if (this.isGiftOnlyCheckout()) {
+      try {
+        sessionStorage.removeItem(GIFT_ONLY_STORAGE_KEY);
+        sessionStorage.removeItem(GIFT_BUILDER_SELECTION_KEY);
+      } catch {
+        // ignore
+      }
+      return;
+    }
     if (this.isBuyNowCheckout()) {
       try {
         sessionStorage.removeItem(BUY_NOW_STORAGE_KEY);

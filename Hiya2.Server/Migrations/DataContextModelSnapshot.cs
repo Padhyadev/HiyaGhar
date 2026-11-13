@@ -590,7 +590,7 @@ namespace Hiya2.Server.Migrations
                     b.ToTable("Faq");
                 });
 
-            modelBuilder.Entity("Hiya2.Server.Models.GiftHamperOccasion", b =>
+            modelBuilder.Entity("Hiya2.Server.Models.GiftBox", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -598,17 +598,11 @@ namespace Hiya2.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("BannerImagePath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("CreatedBy")
+                    b.Property<int>("Capacity")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DisplayOrder")
                         .HasColumnType("int");
@@ -618,66 +612,50 @@ namespace Hiya2.Server.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
-
-                    b.Property<int?>("LastModifiedBy")
-                        .HasColumnType("int");
 
                     b.Property<DateTime?>("LastModifiedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Slug")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Slug")
-                        .IsUnique();
+                    b.ToTable("GiftBox");
 
-                    b.ToTable("GiftHamperOccasion");
-                });
-
-            modelBuilder.Entity("Hiya2.Server.Models.GiftHamperOccasionProduct", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CreatedBy")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DisplayOrder")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("OccasionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("OccasionId", "ProductId")
-                        .IsUnique();
-
-                    b.ToTable("GiftHamperOccasionProduct");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Capacity = 2,
+                            CreatedDate = new DateTime(2026, 11, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 1,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Small Box"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Capacity = 4,
+                            CreatedDate = new DateTime(2026, 11, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 2,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Medium Box"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Capacity = 6,
+                            CreatedDate = new DateTime(2026, 11, 13, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            DisplayOrder = 3,
+                            IsActive = true,
+                            IsDeleted = false,
+                            Name = "Large Box"
+                        });
                 });
 
             modelBuilder.Entity("Hiya2.Server.Models.HomePageComponent", b =>
@@ -1023,6 +1001,9 @@ namespace Hiya2.Server.Migrations
                     b.Property<decimal>("DiscountAmount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<decimal>("GiftCharge")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1097,6 +1078,80 @@ namespace Hiya2.Server.Migrations
                         .IsUnique();
 
                     b.ToTable("Order");
+                });
+
+            modelBuilder.Entity("Hiya2.Server.Models.OrderGift", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("BoxCount")
+                        .HasColumnType("int");
+
+                    b.Property<string>("BoxSummary")
+                        .IsRequired()
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("BoxesJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ChargePerBox")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("GiftType")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("InsertPdfPath")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<bool>("IsForSelf")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MessageJson")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MessageText")
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("PhotoOriginalPath")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("PhotoPath")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("RecipientName")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("RecipientPhone")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal>("TotalCharge")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("OrderGift");
                 });
 
             modelBuilder.Entity("Hiya2.Server.Models.OrderItem", b =>
@@ -1414,6 +1469,9 @@ namespace Hiya2.Server.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("GiftUnits")
+                        .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
@@ -2050,25 +2108,6 @@ namespace Hiya2.Server.Migrations
                     b.Navigation("Coupon");
                 });
 
-            modelBuilder.Entity("Hiya2.Server.Models.GiftHamperOccasionProduct", b =>
-                {
-                    b.HasOne("Hiya2.Server.Models.GiftHamperOccasion", "Occasion")
-                        .WithMany("Products")
-                        .HasForeignKey("OccasionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Hiya2.Server.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Occasion");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Hiya2.Server.Models.HomePageComponentItem", b =>
                 {
                     b.HasOne("Hiya2.Server.Models.HomePageComponent", "Component")
@@ -2078,6 +2117,17 @@ namespace Hiya2.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Component");
+                });
+
+            modelBuilder.Entity("Hiya2.Server.Models.OrderGift", b =>
+                {
+                    b.HasOne("Hiya2.Server.Models.Order", "Order")
+                        .WithOne("Gift")
+                        .HasForeignKey("Hiya2.Server.Models.OrderGift", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Hiya2.Server.Models.OrderItem", b =>
@@ -2264,11 +2314,6 @@ namespace Hiya2.Server.Migrations
                     b.Navigation("AttributeValues");
                 });
 
-            modelBuilder.Entity("Hiya2.Server.Models.GiftHamperOccasion", b =>
-                {
-                    b.Navigation("Products");
-                });
-
             modelBuilder.Entity("Hiya2.Server.Models.HomePageComponent", b =>
                 {
                     b.Navigation("Items");
@@ -2281,6 +2326,8 @@ namespace Hiya2.Server.Migrations
 
             modelBuilder.Entity("Hiya2.Server.Models.Order", b =>
                 {
+                    b.Navigation("Gift");
+
                     b.Navigation("Items");
                 });
 

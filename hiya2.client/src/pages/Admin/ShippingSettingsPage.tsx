@@ -3,6 +3,7 @@ import { ShippingService, DELIVERY_AREA_MESSAGE, type ShippingSettings } from '.
 import { AnnouncementService, type AnnouncementItem } from '../../services/announcementService';
 import { AdminAuthService } from '../../services/adminAuthService';
 import { showToast } from '../../utils/alertService';
+import { AdminGiftBoxSettings } from '../../components/gifting/AdminGiftBoxSettings';
 import './OrderManagementPage.css';
 import './StoreSettings.css';
 
@@ -748,6 +749,9 @@ export const ShippingSettingsPage: React.FC = () => {
               </label>
             </div>
           </div>
+
+          {/* GIFT BOXES (automatic gift box selection) */}
+          <AdminGiftBoxSettings canEdit />
 
         </div>
       </div>
