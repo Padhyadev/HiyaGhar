@@ -7,6 +7,7 @@ import { fallbackHairOilProductsData } from '../HairOil/HairOilPage';
 import { CartService, triggerFlyingProductAnimation } from '../../cart';
 import { CartApiService } from '../../services/cartApiService';
 import { WishlistService } from '../../services/wishlistService';
+import { ShippingService, type ShippingSettings } from '../../services/shippingService';
 import { AnimatedNumber } from '../../components/common/AnimatedNumber';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { AttributeOrderService, type AttributeOrder } from '../../services/attributeOrderService';
@@ -94,6 +95,14 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const [galleryImages, setGalleryImages] = useState<string[]>([]);
   const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'description' | 'ingredients' | 'nutrition' | 'reviews'>('description');
+  const [storeSettings, setStoreSettings] = useState<ShippingSettings>(() => ShippingService.getSettings());
+
+  useEffect(() => {
+    ShippingService.loadSettingsFromApi().then(setStoreSettings);
+    const handleStorage = () => setStoreSettings(ShippingService.getSettings());
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
 
   // Frequently Bought Together (FBT) cross-sell state
   const [fbtCrossSells, setFbtCrossSells] = useState<any[]>([]);
@@ -322,6 +331,27 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // whenever isLoadingProduct/!product is true, so these derived values are simply
   // unused (but still safely computed, since hooks must run unconditionally) then.
   const product = productData;
+
+  const showDescTab = storeSettings.enableProductDescriptionTab ?? true;
+  const showIngredientsTab = (storeSettings.enableProductIngredientsTab ?? true) && Boolean((product?.ingredients?.length ?? 0) > 0 || (product?.benefits?.length ?? 0) > 0);
+  const showNutritionTab = (storeSettings.enableProductNutritionTab ?? true) && Boolean(product?.nutritionalInfo);
+  const showReviewsTab = storeSettings.enableProductReviewsTab ?? true;
+  const hasAnyVisibleTab = showDescTab || showIngredientsTab || showNutritionTab || showReviewsTab;
+
+  useEffect(() => {
+    const isCurrentTabVisible =
+      (activeTab === 'description' && showDescTab) ||
+      (activeTab === 'ingredients' && showIngredientsTab) ||
+      (activeTab === 'nutrition' && showNutritionTab) ||
+      (activeTab === 'reviews' && showReviewsTab);
+
+    if (!isCurrentTabVisible && hasAnyVisibleTab) {
+      if (showDescTab) setActiveTab('description');
+      else if (showIngredientsTab) setActiveTab('ingredients');
+      else if (showNutritionTab) setActiveTab('nutrition');
+      else if (showReviewsTab) setActiveTab('reviews');
+    }
+  }, [activeTab, showDescTab, showIngredientsTab, showNutritionTab, showReviewsTab, hasAnyVisibleTab]);
 
   // Attribute groups: use the real, structured per-variant attributes when the API provided
   // them; otherwise fall back to treating the whole weightOptions list as one "Weight" group
@@ -1173,110 +1203,118 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           )}
 
           {/* Description & Details Tabs Section */}
-          <div className="hiyaghar-detail-tabs-container">
-            <div className="hiyaghar-detail-tabs-header">
-              <button
-                type="button"
-                className={`hiyaghar-tab-btn ${activeTab === 'description' ? 'is-active' : ''}`}
-                onClick={() => setActiveTab('description')}
-              >
-                Product Description
-              </button>
-              {(product.ingredients?.length > 0 || product.benefits?.length > 0) && (
-                <button
-                  type="button"
-                  className={`hiyaghar-tab-btn ${activeTab === 'ingredients' ? 'is-active' : ''}`}
-                  onClick={() => setActiveTab('ingredients')}
-                >
-                  Ingredients & Benefits
-                </button>
-              )}
-              {product.nutritionalInfo && (
-                <button
-                  type="button"
-                  className={`hiyaghar-tab-btn ${activeTab === 'nutrition' ? 'is-active' : ''}`}
-                  onClick={() => setActiveTab('nutrition')}
-                >
-                  Nutritional Facts
-                </button>
-              )}
-              <button
-                type="button"
-                className={`hiyaghar-tab-btn ${activeTab === 'reviews' ? 'is-active' : ''}`}
-                onClick={() => setActiveTab('reviews')}
-              >
-                Reviews
-              </button>
-            </div>
-
-            <div className="hiyaghar-detail-tab-content">
-              {/* Text panels stay in the DOM so crawlers read every tab; inactive ones are `hidden`. */}
-              <div hidden={activeTab !== 'description'}>
-                <p className="hiyaghar-tab-paragraph">
-                  {product.longDescription || product.shortDescription}
-                </p>
-                {product.howToUse && (
-                  <>
-                    <h4 className="pane-subheading">How to Use:</h4>
-                    <p className="hiyaghar-tab-paragraph" style={{ whiteSpace: 'pre-line' }}>{product.howToUse}</p>
-                  </>
+          {hasAnyVisibleTab && (
+            <div className="hiyaghar-detail-tabs-container">
+              <div className="hiyaghar-detail-tabs-header">
+                {showDescTab && (
+                  <button
+                    type="button"
+                    className={`hiyaghar-tab-btn ${activeTab === 'description' ? 'is-active' : ''}`}
+                    onClick={() => setActiveTab('description')}
+                  >
+                    Product Description
+                  </button>
                 )}
-                {product.shelfLife && (
-                  <p className="hiyaghar-tab-paragraph"><strong>Shelf Life:</strong> {product.shelfLife}</p>
+                {showIngredientsTab && (
+                  <button
+                    type="button"
+                    className={`hiyaghar-tab-btn ${activeTab === 'ingredients' ? 'is-active' : ''}`}
+                    onClick={() => setActiveTab('ingredients')}
+                  >
+                    Ingredients & Benefits
+                  </button>
+                )}
+                {showNutritionTab && (
+                  <button
+                    type="button"
+                    className={`hiyaghar-tab-btn ${activeTab === 'nutrition' ? 'is-active' : ''}`}
+                    onClick={() => setActiveTab('nutrition')}
+                  >
+                    Nutritional Facts
+                  </button>
+                )}
+                {showReviewsTab && (
+                  <button
+                    type="button"
+                    className={`hiyaghar-tab-btn ${activeTab === 'reviews' ? 'is-active' : ''}`}
+                    onClick={() => setActiveTab('reviews')}
+                  >
+                    Reviews
+                  </button>
                 )}
               </div>
 
-              {(product.ingredients?.length > 0 || product.benefits?.length > 0) && (
-                <div hidden={activeTab !== 'ingredients'}>
-                  {product.ingredients?.length > 0 && (
-                    <>
-                      <h4 className="pane-subheading">Key Ingredients:</h4>
-                      <div className="ingredients-pills-list" style={{ marginBottom: '24px' }}>
-                        {product.ingredients.map((ing: string, i: number) => (
-                          <span key={i} className="ing-pill">{ing}</span>
+              <div className="hiyaghar-detail-tab-content">
+                {/* Text panels stay in the DOM so crawlers read every tab; inactive ones are `hidden`. */}
+                {showDescTab && (
+                  <div hidden={activeTab !== 'description'}>
+                    <p className="hiyaghar-tab-paragraph">
+                      {product.longDescription || product.shortDescription}
+                    </p>
+                    {product.howToUse && (
+                      <>
+                        <h4 className="pane-subheading">How to Use:</h4>
+                        <p className="hiyaghar-tab-paragraph" style={{ whiteSpace: 'pre-line' }}>{product.howToUse}</p>
+                      </>
+                    )}
+                    {product.shelfLife && (
+                      <p className="hiyaghar-tab-paragraph"><strong>Shelf Life:</strong> {product.shelfLife}</p>
+                    )}
+                  </div>
+                )}
+
+                {showIngredientsTab && (
+                  <div hidden={activeTab !== 'ingredients'}>
+                    {product.ingredients?.length > 0 && (
+                      <>
+                        <h4 className="pane-subheading">Key Ingredients:</h4>
+                        <div className="ingredients-pills-list" style={{ marginBottom: '24px' }}>
+                          {product.ingredients.map((ing: string, i: number) => (
+                            <span key={i} className="ing-pill">{ing}</span>
+                          ))}
+                        </div>
+                      </>
+                    )}
+
+                    {product.benefits && product.benefits.length > 0 && (
+                      <>
+                        <h4 className="pane-subheading">Health & Wellness Benefits:</h4>
+                        <ul className="benefits-checklist">
+                          {product.benefits?.map((b: string, i: number) => (
+                            <li key={i}>
+                              <span className="check-icon">✓</span> {b}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+                  </div>
+                )}
+
+                {showNutritionTab && (
+                  <div hidden={activeTab !== 'nutrition'}>
+                    <h4 className="pane-subheading">
+                      Nutritional Values (per {selectedAttrs.Weight || product.servingSize || '100g'} serving):
+                    </h4>
+                    <table className="hiyaghar-nutrition-table">
+                      <tbody>
+                        {Object.entries(product.nutritionalInfo).map(([nutrientName, nutrientValue]) => (
+                          <tr key={nutrientName}>
+                            <td><strong>{nutrientName}</strong></td>
+                            <td>{String(nutrientValue ?? '')}</td>
+                          </tr>
                         ))}
-                      </div>
-                    </>
-                  )}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
 
-                  {product.benefits && product.benefits.length > 0 && (
-                    <>
-                      <h4 className="pane-subheading">Health & Wellness Benefits:</h4>
-                      <ul className="benefits-checklist">
-                        {product.benefits?.map((b: string, i: number) => (
-                          <li key={i}>
-                            <span className="check-icon">✓</span> {b}
-                          </li>
-                        ))}
-                      </ul>
-                    </>
-                  )}
-                </div>
-              )}
-
-              {product.nutritionalInfo && (
-                <div hidden={activeTab !== 'nutrition'}>
-                  <h4 className="pane-subheading">
-                    Nutritional Values (per {selectedAttrs.Weight || product.servingSize || '100g'} serving):
-                  </h4>
-                  <table className="hiyaghar-nutrition-table">
-                    <tbody>
-                      {Object.entries(product.nutritionalInfo).map(([nutrientName, nutrientValue]) => (
-                        <tr key={nutrientName}>
-                          <td><strong>{nutrientName}</strong></td>
-                          <td>{String(nutrientValue ?? '')}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
-
-              {activeTab === 'reviews' && (
-                <ProductReviews productId={product.id} />
-              )}
+                {showReviewsTab && activeTab === 'reviews' && (
+                  <ProductReviews productId={product.id} />
+                )}
+              </div>
             </div>
-          </div>
+          )}
 
           {/* Product FAQs (admin: Products > How to Use, Shelf Life & FAQs). Answers are always in
               the DOM (<details>), so crawlers read them; the server adds FAQPage JSON-LD. */}

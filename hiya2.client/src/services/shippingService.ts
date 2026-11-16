@@ -17,6 +17,11 @@ export interface ShippingSettings {
   contactEmail: string;
   contactPhone: string;
   contactAddress: string;
+  // Product Page Tabs Visibility (Global Store-wide)
+  enableProductDescriptionTab: boolean;
+  enableProductIngredientsTab: boolean;
+  enableProductNutritionTab: boolean;
+  enableProductReviewsTab: boolean;
 }
 
 const STORAGE_KEY = 'hiyaghar_shipping_settings';
@@ -44,6 +49,10 @@ export const DEFAULT_SHIPPING_SETTINGS: ShippingSettings = {
   contactEmail: 'support@hiyaghar.com',
   contactPhone: '+91 92744 43617',
   contactAddress: '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India',
+  enableProductDescriptionTab: true,
+  enableProductIngredientsTab: true,
+  enableProductNutritionTab: true,
+  enableProductReviewsTab: true,
 };
 
 export const SHIPPING_CONFIG = {
@@ -162,6 +171,10 @@ export class ShippingService {
           contactEmail: data.settings.contactEmail ?? DEFAULT_SHIPPING_SETTINGS.contactEmail,
           contactPhone: data.settings.contactPhone ?? DEFAULT_SHIPPING_SETTINGS.contactPhone,
           contactAddress: data.settings.contactAddress ?? DEFAULT_SHIPPING_SETTINGS.contactAddress,
+          enableProductDescriptionTab: data.settings.enableProductDescriptionTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductDescriptionTab,
+          enableProductIngredientsTab: data.settings.enableProductIngredientsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductIngredientsTab,
+          enableProductNutritionTab: data.settings.enableProductNutritionTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductNutritionTab,
+          enableProductReviewsTab: data.settings.enableProductReviewsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductReviewsTab,
         };
         // Sync DB value to localStorage so offline reads are up to date
         ShippingService.saveSettings(apiSettings);
@@ -202,6 +215,10 @@ export class ShippingService {
           contactEmail: settings.contactEmail,
           contactPhone: settings.contactPhone,
           contactAddress: settings.contactAddress,
+          enableProductDescriptionTab: settings.enableProductDescriptionTab,
+          enableProductIngredientsTab: settings.enableProductIngredientsTab,
+          enableProductNutritionTab: settings.enableProductNutritionTab,
+          enableProductReviewsTab: settings.enableProductReviewsTab,
         }),
       });
       const data = await res.json().catch(() => ({}));

@@ -26,6 +26,11 @@ namespace Hiya2.Server.Controllers
         public string? ContactEmail { get; set; }
         public string? ContactPhone { get; set; }
         public string? ContactAddress { get; set; }
+        // Global Product Detail Tabs Visibility
+        public bool EnableProductDescriptionTab { get; set; } = true;
+        public bool EnableProductIngredientsTab { get; set; } = true;
+        public bool EnableProductNutritionTab { get; set; } = true;
+        public bool EnableProductReviewsTab { get; set; } = true;
     }
 
     [ApiController]
@@ -83,7 +88,11 @@ namespace Hiya2.Server.Controllers
                     enableFssaiDisplay = s.EnableFssaiDisplay,
                     contactEmail = s.ContactEmail,
                     contactPhone = s.ContactPhone,
-                    contactAddress = s.ContactAddress
+                    contactAddress = s.ContactAddress,
+                    enableProductDescriptionTab = s.EnableProductDescriptionTab,
+                    enableProductIngredientsTab = s.EnableProductIngredientsTab,
+                    enableProductNutritionTab = s.EnableProductNutritionTab,
+                    enableProductReviewsTab = s.EnableProductReviewsTab
                 }
             });
         }
@@ -114,6 +123,10 @@ namespace Hiya2.Server.Controllers
             setting.ContactEmail = dto.ContactEmail ?? "support@hiyaghar.com";
             setting.ContactPhone = dto.ContactPhone ?? "+91 92744 43617";
             setting.ContactAddress = dto.ContactAddress ?? "303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India";
+            setting.EnableProductDescriptionTab = dto.EnableProductDescriptionTab;
+            setting.EnableProductIngredientsTab = dto.EnableProductIngredientsTab;
+            setting.EnableProductNutritionTab = dto.EnableProductNutritionTab;
+            setting.EnableProductReviewsTab = dto.EnableProductReviewsTab;
             setting.LastModifiedBy = GetCurrentUserId();
             setting.LastModifiedDate = DateTime.Now;
 

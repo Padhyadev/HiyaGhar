@@ -58,6 +58,12 @@ namespace Hiya2.Server.Models
         [MaxLength(200)]
         public string ContactAddress { get; set; } = "303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India";
 
+        // Global Product Detail Tabs Visibility (Store-wide)
+        public bool EnableProductDescriptionTab { get; set; } = true;
+        public bool EnableProductIngredientsTab { get; set; } = true;
+        public bool EnableProductNutritionTab { get; set; } = true;
+        public bool EnableProductReviewsTab { get; set; } = true;
+
         public bool IsActive { get; set; } = true;
         public long? LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }

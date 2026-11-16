@@ -267,6 +267,18 @@ using (var scope = app.Services.CreateScope())
 
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'ContactAddress')
                     EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactAddress] NVARCHAR(200) NOT NULL DEFAULT N''303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India''');
+
+                IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'EnableProductDescriptionTab')
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableProductDescriptionTab] BIT NOT NULL DEFAULT 1');
+
+                IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'EnableProductIngredientsTab')
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableProductIngredientsTab] BIT NOT NULL DEFAULT 1');
+
+                IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'EnableProductNutritionTab')
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableProductNutritionTab] BIT NOT NULL DEFAULT 1');
+
+                IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'EnableProductReviewsTab')
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableProductReviewsTab] BIT NOT NULL DEFAULT 1');
             END
 
             IF OBJECT_ID('dbo.[Coupon]', 'U') IS NOT NULL

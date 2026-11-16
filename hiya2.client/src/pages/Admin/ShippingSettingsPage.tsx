@@ -13,7 +13,7 @@ export const ShippingSettingsPage: React.FC = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // Individual Section Edit States
-  const [editingSection, setEditingSection] = useState<'none' | 'deliveryCharges' | 'deliveryTimeline' | 'gst' | 'zones' | 'storeInfo'>('none');
+  const [editingSection, setEditingSection] = useState<'none' | 'deliveryCharges' | 'deliveryTimeline' | 'gst' | 'zones' | 'storeInfo' | 'productTabs'>('none');
 
   // Announcements State
   const [announcements, setAnnouncements] = useState<AnnouncementItem[]>([]);
@@ -747,6 +747,241 @@ export const ShippingSettingsPage: React.FC = () => {
                 />
                 <span>Display FSSAI License Badge in Footer</span>
               </label>
+            </div>
+          </div>
+
+          {/* SECTION 7: GLOBAL PRODUCT DETAIL TABS DISPLAY */}
+          <div className={`hiyaghar-setting-card ${editingSection === 'productTabs' ? 'is-active-edit' : ''}`}>
+            <div className="hiyaghar-setting-card-header">
+              <div>
+                <h3 className="hiyaghar-setting-card-title">
+                  <i className="fa-solid fa-layer-group"></i>
+                  7. Product Detail Tabs Visibility (Global for All Products)
+                </h3>
+                <p style={{ margin: '4px 0 0 28px', fontSize: '0.82rem', color: '#64748b' }}>
+                  Enable or disable product page information tabs across all products. Hiding a tab removes it from customer view store-wide.
+                </p>
+              </div>
+              <div>
+                {editingSection !== 'productTabs' ? (
+                  <button
+                    type="button"
+                    className="hiyaghar-section-btn-edit"
+                    onClick={() => setEditingSection('productTabs')}
+                  >
+                    <i className="fa-solid fa-pen-to-square"></i>
+                    Edit Tab Visibility
+                  </button>
+                ) : (
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      type="button"
+                      className="hiyaghar-section-btn-cancel"
+                      onClick={handleCancelSection}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="hiyaghar-section-btn-save"
+                      onClick={() => handleSaveSection('Product Tab Visibility')}
+                    >
+                      <i className="fa-solid fa-floppy-disk"></i>
+                      Save
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', marginTop: '16px' }}>
+              {/* Tab 1: Product Description */}
+              <div style={{
+                background: form.enableProductDescriptionTab ? '#f8fafc' : '#f1f5f9',
+                border: form.enableProductDescriptionTab ? '1px solid #cbd5e1' : '1px dashed #cbd5e1',
+                borderRadius: '10px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                opacity: form.enableProductDescriptionTab ? 1 : 0.7,
+                transition: 'all 0.2s ease'
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <span style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      background: form.enableProductDescriptionTab ? '#e0f2fe' : '#e2e8f0',
+                      color: form.enableProductDescriptionTab ? '#0284c7' : '#94a3b8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '14px'
+                    }}>
+                      <i className="fa-solid fa-align-left"></i>
+                    </span>
+                    <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>1. Product Description</strong>
+                  </div>
+                  <p style={{ margin: '0 0 12px', fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>
+                    Shows the full product description, how-to-use guide, and shelf life details.
+                  </p>
+                </div>
+                <label className={`hiyaghar-toggle-label ${editingSection !== 'productTabs' ? 'is-disabled' : ''}`} style={{ marginTop: 'auto' }}>
+                  <input
+                    type="checkbox"
+                    disabled={editingSection !== 'productTabs'}
+                    checked={form.enableProductDescriptionTab ?? true}
+                    onChange={(e) => handleChange('enableProductDescriptionTab', e.target.checked)}
+                    className="hiyaghar-toggle-checkbox"
+                  />
+                  <span style={{ fontWeight: 600, color: form.enableProductDescriptionTab ? '#0f766e' : '#64748b' }}>
+                    {form.enableProductDescriptionTab ? 'Visible to Customers' : 'Hidden from Customers'}
+                  </span>
+                </label>
+              </div>
+
+              {/* Tab 2: Ingredients & Health Benefits */}
+              <div style={{
+                background: form.enableProductIngredientsTab ? '#f8fafc' : '#f1f5f9',
+                border: form.enableProductIngredientsTab ? '1px solid #cbd5e1' : '1px dashed #cbd5e1',
+                borderRadius: '10px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                opacity: form.enableProductIngredientsTab ? 1 : 0.7,
+                transition: 'all 0.2s ease'
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <span style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      background: form.enableProductIngredientsTab ? '#dcfce7' : '#e2e8f0',
+                      color: form.enableProductIngredientsTab ? '#16a34a' : '#94a3b8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '14px'
+                    }}>
+                      <i className="fa-solid fa-leaf"></i>
+                    </span>
+                    <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>2. Ingredients & Benefits</strong>
+                  </div>
+                  <p style={{ margin: '0 0 12px', fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>
+                    Shows key natural ingredient badges and health & wellness benefit checklist items.
+                  </p>
+                </div>
+                <label className={`hiyaghar-toggle-label ${editingSection !== 'productTabs' ? 'is-disabled' : ''}`} style={{ marginTop: 'auto' }}>
+                  <input
+                    type="checkbox"
+                    disabled={editingSection !== 'productTabs'}
+                    checked={form.enableProductIngredientsTab ?? true}
+                    onChange={(e) => handleChange('enableProductIngredientsTab', e.target.checked)}
+                    className="hiyaghar-toggle-checkbox"
+                  />
+                  <span style={{ fontWeight: 600, color: form.enableProductIngredientsTab ? '#0f766e' : '#64748b' }}>
+                    {form.enableProductIngredientsTab ? 'Visible to Customers' : 'Hidden from Customers'}
+                  </span>
+                </label>
+              </div>
+
+              {/* Tab 3: Nutritional Facts */}
+              <div style={{
+                background: form.enableProductNutritionTab ? '#f8fafc' : '#f1f5f9',
+                border: form.enableProductNutritionTab ? '1px solid #cbd5e1' : '1px dashed #cbd5e1',
+                borderRadius: '10px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                opacity: form.enableProductNutritionTab ? 1 : 0.7,
+                transition: 'all 0.2s ease'
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <span style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      background: form.enableProductNutritionTab ? '#ffedd5' : '#e2e8f0',
+                      color: form.enableProductNutritionTab ? '#ea580c' : '#94a3b8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '14px'
+                    }}>
+                      <i className="fa-solid fa-apple-whole"></i>
+                    </span>
+                    <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>3. Nutritional Facts</strong>
+                  </div>
+                  <p style={{ margin: '0 0 12px', fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>
+                    Shows nutritional values per serving size table (Energy, Carbs, Protein, Fat, Fiber).
+                  </p>
+                </div>
+                <label className={`hiyaghar-toggle-label ${editingSection !== 'productTabs' ? 'is-disabled' : ''}`} style={{ marginTop: 'auto' }}>
+                  <input
+                    type="checkbox"
+                    disabled={editingSection !== 'productTabs'}
+                    checked={form.enableProductNutritionTab ?? true}
+                    onChange={(e) => handleChange('enableProductNutritionTab', e.target.checked)}
+                    className="hiyaghar-toggle-checkbox"
+                  />
+                  <span style={{ fontWeight: 600, color: form.enableProductNutritionTab ? '#0f766e' : '#64748b' }}>
+                    {form.enableProductNutritionTab ? 'Visible to Customers' : 'Hidden from Customers'}
+                  </span>
+                </label>
+              </div>
+
+              {/* Tab 4: Customer Reviews */}
+              <div style={{
+                background: form.enableProductReviewsTab ? '#f8fafc' : '#f1f5f9',
+                border: form.enableProductReviewsTab ? '1px solid #cbd5e1' : '1px dashed #cbd5e1',
+                borderRadius: '10px',
+                padding: '16px',
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'space-between',
+                opacity: form.enableProductReviewsTab ? 1 : 0.7,
+                transition: 'all 0.2s ease'
+              }}>
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <span style={{
+                      width: '32px',
+                      height: '32px',
+                      borderRadius: '8px',
+                      background: form.enableProductReviewsTab ? '#fef3c7' : '#e2e8f0',
+                      color: form.enableProductReviewsTab ? '#d97706' : '#94a3b8',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '14px'
+                    }}>
+                      <i className="fa-solid fa-star"></i>
+                    </span>
+                    <strong style={{ fontSize: '0.95rem', color: '#0f172a' }}>4. Customer Reviews</strong>
+                  </div>
+                  <p style={{ margin: '0 0 12px', fontSize: '0.8rem', color: '#64748b', lineHeight: 1.4 }}>
+                    Shows real customer feedback, average star rating, and the submit review form.
+                  </p>
+                </div>
+                <label className={`hiyaghar-toggle-label ${editingSection !== 'productTabs' ? 'is-disabled' : ''}`} style={{ marginTop: 'auto' }}>
+                  <input
+                    type="checkbox"
+                    disabled={editingSection !== 'productTabs'}
+                    checked={form.enableProductReviewsTab ?? true}
+                    onChange={(e) => handleChange('enableProductReviewsTab', e.target.checked)}
+                    className="hiyaghar-toggle-checkbox"
+                  />
+                  <span style={{ fontWeight: 600, color: form.enableProductReviewsTab ? '#0f766e' : '#64748b' }}>
+                    {form.enableProductReviewsTab ? 'Visible to Customers' : 'Hidden from Customers'}
+                  </span>
+                </label>
+              </div>
             </div>
           </div>
 
