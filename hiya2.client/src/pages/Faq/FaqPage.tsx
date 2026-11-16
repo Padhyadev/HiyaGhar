@@ -17,72 +17,72 @@ const FAQ_DATA: FaqItem[] = [
   {
     id: 'gen-1',
     category: 'general',
-    question: 'What is HIYAGHAR all about?',
+    question: 'What is HIYAGHAR?',
     answer:
-      'HIYAGHAR is a premium Indian heritage & wellness lifestyle brand founded with the philosophy "From Our Ghar, With Heart." We craft 100% natural, artisanal mukhwas, traditional tea masalas, cold-processed herbal soaps, Ayurvedic hair oils, and curated festive hampers in small batches using time-tested recipes.',
+      'HIYAGHAR is a family brand bringing you 100% natural, handmade mukhwas, traditional tea masala, natural soaps, and herbal hair oils. Everything is freshly made in small batches with zero chemicals.',
   },
   {
     id: 'gen-2',
     category: 'general',
     question: 'Are HIYAGHAR products 100% natural and preservative-free?',
     answer:
-      'Yes, absolutely. All our mukhwas and spice blends contain zero artificial colors, synthetic flavors, or chemical preservatives. Our skincare and hair wellness range is crafted using pure botanical extracts, cold-pressed oils, and natural herbs.',
+      'Yes, 100%! We do not use any artificial food colors, synthetic flavors, or chemical preservatives. All our mukhwas, spices, and soaps are made using pure natural ingredients.',
   },
   {
     id: 'prod-1',
     category: 'products',
     question: 'How should I store HIYAGHAR Mukhwas and Tea Masala?',
     answer:
-      'Store your mukhwas and tea masala in a cool, dry place away from direct sunlight. Always keep the container tightly sealed to preserve the rich aroma, crunch, and authentic essential oils.',
+      'Keep the jar in a cool, dry place away from direct sunlight. Always close the lid tightly after use to keep the mukhwas crunchy and the aroma fresh.',
   },
   {
     id: 'prod-2',
     category: 'products',
-    question: 'What is the shelf life of your digestive mukhwas and soaps?',
+    question: 'What is the shelf life of your mukhwas, soaps, and hair oils?',
     answer:
-      'Our artisanal mukhwas typically have a shelf life of 6 to 9 months from the date of manufacture. Our cold-processed soaps and herbal hair oils have a shelf life of 12 to 24 months.',
+      'Our mukhwas stays fresh and crunchy for 6 to 9 months from the date of packing. Our handmade soaps and herbal hair oils stay good for 1 to 2 years.',
   },
   {
     id: 'prod-3',
     category: 'products',
     question: 'Are your handmade soaps suitable for sensitive skin?',
     answer:
-      'Yes! Our soaps are made through traditional cold-process saponification without SLS, parabens, or harsh sulfates. They retain natural glycerin that deeply moisturizes even sensitive skin types.',
+      'Yes! Our soaps are made with natural oils and herbs without any harsh chemicals, SLS, or parabens. They are gentle and deeply moisturize even sensitive skin.',
   },
   {
     id: 'ord-1',
     category: 'orders',
-    question: 'How long will it take to receive my order?',
+    question: 'Where do you deliver, and how long does it take?',
     answer:
-      'Orders placed before 1:00 PM are dispatched on the same business day (or within 24 hours). We currently deliver only to selected pin codes around Ghatlodiya, Ahmedabad, and delivery usually takes 3–5 business days. You can check your pin code at checkout.',
+      'We currently deliver across Ahmedabad (around Ghatlodiya). Orders placed before 1:00 PM are prepared and dispatched the same day. Delivery usually takes 3 to 5 business days.',
   },
   {
     id: 'ord-2',
     category: 'orders',
     question: 'How can I check my order status?',
     answer:
-      'You can see your order status anytime in My Account → Orders. We will keep you updated when your order is out for delivery.',
+      "You will receive an email confirmation as soon as your order is placed. You can also view your live order status anytime by logging in and going to 'My Account → Orders'.",
   },
   {
     id: 'ord-3',
     category: 'orders',
     question: 'What payment methods do you accept?',
     answer:
-      'We accept all major UPI apps (Google Pay, PhonePe, Paytm), Credit & Debit Cards, Net Banking, and Cash on Delivery (COD) across eligible pin codes.',
+      'We accept UPI (Google Pay, PhonePe, Paytm), all Debit and Credit Cards, Net Banking, and Cash on Delivery (COD) across eligible pin codes.',
   },
   {
     id: 'gift-1',
     category: 'gifting',
-    question: 'Can I customize a combo or gift hamper for weddings/festivals?',
+    question: 'Can I customize a combo or gift hamper for weddings or festivals?',
     answer:
-      'Yes! Use our gift builder on the Gift Hampers page to pick products and send them as a gift, choose one of our ready-made combo packs, or contact us directly via WhatsApp / Contact Us page for bulk wedding favors, corporate gifting, and bespoke gift hampers.',
+      'Yes! You can build your own gift box directly on our website, or contact us on WhatsApp for bulk orders for weddings, festivals, and corporate gifting.',
   },
   {
     id: 'gift-2',
     category: 'gifting',
-    question: 'Do you provide personalized gift notes inside the box?',
+    question: 'Can I add a personalized message and photo to the gift box?',
     answer:
-      'Yes! Choose Personalised gifting at checkout or in the gift builder to add your own message and photo. We print them on an A4 insert that goes inside your gift box.',
+      'Yes! While building your gift box, you can type your personal message and upload photos. We print a personalized gift insert letter and place it inside the gift box.',
   },
 ];
 
