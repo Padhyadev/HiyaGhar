@@ -18,16 +18,17 @@ export const PrivacyPolicyPage: React.FC = () => {
           <p>We only collect information necessary to fulfill your orders and deliver exceptional customer service:</p>
           <ul>
             <li><strong>Personal Identifiers:</strong> Your full name, delivery shipping address, billing address, phone/WhatsApp number, and email address.</li>
-            <li><strong>Account Credentials:</strong> If you register an account, we securely store your encrypted password hash, saved delivery addresses, wishlist items, and reward coin balance.</li>
-            <li><strong>Transaction & Order Records:</strong> Details regarding purchased products, total order amounts, coupon codes applied, and shipping tracking numbers.</li>
+            <li><strong>Account Credentials:</strong> If you register an account, we securely store your encrypted password hash, saved delivery addresses, and wishlist items.</li>
+            <li><strong>Transaction & Order Records:</strong> Details regarding purchased products, total order amounts, offers applied, and delivery status.</li>
+            <li><strong>Gift Details:</strong> If you send an order as a gift, the recipient's name and phone number, and for personalised gifts the photo and message you add. These are used only to prepare and print your gift insert, and are stored privately.</li>
             <li><strong>Device & Browsing Insights:</strong> IP address, browser type, device information, and pages visited, gathered solely to optimize site speed and prevent fraudulent attempts.</li>
           </ul>
 
           <h2>2. How We Use Your Information</h2>
           <p>We process your data strictly for legitimate operational purposes:</p>
           <ul>
-            <li>To assemble, pack, and ship your handmade mukhwas, tea masalas, or gifting packages.</li>
-            <li>To send SMS, WhatsApp, and email order confirmation, dispatch alerts, and live courier tracking links.</li>
+            <li>To assemble, pack, and deliver your handmade mukhwas, tea masalas, or gifting packages.</li>
+            <li>To send your order confirmation by email and to contact you by phone or WhatsApp about your delivery.</li>
             <li>To process verified payments through RBI-compliant secure gateways.</li>
             <li>To provide prompt customer support via email or WhatsApp regarding modifications or inquiries.</li>
             <li>To maintain your account discounts and personalized offers (with full opt-out available).</li>
@@ -35,12 +36,12 @@ export const PrivacyPolicyPage: React.FC = () => {
 
           <h2>3. Payment Security & Data Protection</h2>
           <p>
-            We do <strong>NOT</strong> collect, view, or store your credit/debit card numbers, CVVs, UPI PINs, or net banking passwords. All online payments are handled directly by PCI-DSS compliant, RBI-authorized payment processors (such as Razorpay / Cashfree) protected under 256-bit TLS bank-grade encryption.
+            We do <strong>NOT</strong> collect, view, or store your credit/debit card numbers, CVVs, UPI PINs, or net banking passwords. All online payments are handled directly by PCI-DSS compliant, RBI-authorized payment processor Razorpay, protected under 256-bit TLS bank-grade encryption.
           </p>
 
           <h2>4. Cookies & Website Analytics</h2>
           <p>
-            Our website uses essential session cookies to remember your shopping cart items, active login status, and customized combo builder choices. We do not sell, rent, or trade your personal information or browsing data to any third-party advertisers.
+            Our website uses essential browser storage to remember your shopping cart items, wishlist, active login status, and gift choices. We do not sell, rent, or trade your personal information or browsing data to any third-party advertisers.
           </p>
 
           <h2>5. Data Retention & Your Rights</h2>
@@ -94,7 +95,7 @@ export const TermsConditionsPage: React.FC = () => {
 
           <h2>3. Orders, Dispatch & Delivery Acceptance</h2>
           <p>
-            Upon order placement, you will receive an immediate automated invoice acknowledgement. Hiya Ghar reserves the right to decline or cancel orders due to non-serviceable pin codes, fraudulent suspicions, or inventory stock-outs. Customers are responsible for providing complete, accurate shipping addresses and contact phone numbers for seamless doorstep handover.
+            Upon order placement, you will receive an automated order confirmation by email. We currently deliver only to selected pin codes around Ghatlodiya, Ahmedabad; deliverability is checked at checkout. Hiya Ghar reserves the right to decline or cancel orders due to non-serviceable pin codes, fraudulent suspicions, or inventory stock-outs. Customers are responsible for providing complete, accurate shipping addresses and contact phone numbers for seamless doorstep handover.
           </p>
 
           <h2>4. Intellectual Property Rights</h2>
@@ -137,8 +138,8 @@ export const RefundPolicyPage: React.FC = () => {
 
           <h2>1. Order Cancellation Policy</h2>
           <ul>
-            <li><strong>Before Dispatch:</strong> You may request order cancellation anytime before the parcel is picked up by our courier partner by contacting our support team with your Order ID. You will receive a 100% full refund with zero deductions.</li>
-            <li><strong>After Dispatch:</strong> Once an order is handed over to logistics partners and assigned an AWB tracking number, in-transit cancellations cannot be accepted.</li>
+            <li><strong>Before Dispatch:</strong> You may cancel your order anytime before it is shipped, from <a href="/orders">My Account → Orders</a> or by contacting our support team with your Order ID. You will receive a 100% full refund with zero deductions.</li>
+            <li><strong>After Dispatch:</strong> Once an order has been shipped or is out for delivery, it can no longer be cancelled.</li>
           </ul>
 
           <h2>2. Damaged, Defective, or Incorrect Package Replacement</h2>
@@ -148,7 +149,7 @@ export const RefundPolicyPage: React.FC = () => {
           <ul>
             <li>Notify our customer care team within <strong>48 hours</strong> of package delivery.</li>
             <li>Provide clear photos/unboxing video of the parcel and the affected items along with your Order ID.</li>
-            <li>Our team will immediately arrange a <strong>free replacement shipment</strong> with express priority dispatch, or initiate a full refund.</li>
+            <li>Our team will immediately arrange a <strong>free replacement</strong> on priority, or initiate a full refund.</li>
           </ul>
 
           <h2>3. Non-Returnable Items (Food & Personal Hygiene)</h2>
@@ -187,39 +188,41 @@ export const ShippingPolicyPage: React.FC = () => {
       {(storeSettings) => (
         <>
           <p>
-            At <strong>Hiya Ghar</strong>, we treat every order like a fresh gift prepared with care. We partner with India’s top logistics providers including Blue Dart, Delhivery, DTDC, and India Post to deliver safe, tamper-evident packages across the nation.
+            At <strong>Hiya Ghar</strong>, we treat every order like a fresh gift prepared with care, and deliver it safely to your doorstep in tamper-evident packaging.
           </p>
 
-          <h2>1. Shipping Rates & Free Delivery Threshold</h2>
+          <h2>1. Delivery Area</h2>
+          <p>
+            We currently deliver only to selected pin codes around Ghatlodiya, Ahmedabad (about 5 km from our kitchen). Enter your pin code at checkout to confirm that we deliver to your address. We are working to reach more areas soon.
+          </p>
+
+          <h2>2. Delivery Charges & Free Delivery</h2>
           <ul>
-            <li><strong>Free Standard Delivery:</strong> All orders with a final price (after coupon discount) of <strong>₹{storeSettings.freeShippingThreshold || 500}</strong> or above qualify for 100% Free Standard Shipping across India.</li>
-            <li><strong>Standard Shipping Fee:</strong> Flat <strong>₹{storeSettings.standardShippingPrice ?? 40}</strong> on orders below ₹{storeSettings.freeShippingThreshold || 500}.</li>
-            {storeSettings.enableExpressDelivery && (
-              <li><strong>Express Delivery Option:</strong> Flat <strong>₹{storeSettings.expressShippingPrice ?? 99}</strong> for expedited priority air transit where serviceable.</li>
+            {storeSettings.enableFreeShipping && (
+              <li><strong>Free Delivery:</strong> All orders with a final price (after discount) of <strong>₹{storeSettings.freeShippingThreshold || 500}</strong> or above qualify for free delivery.</li>
             )}
+            <li><strong>Delivery Fee:</strong> Flat <strong>₹{storeSettings.standardShippingPrice ?? 49}</strong>{storeSettings.enableFreeShipping ? <> on orders below ₹{storeSettings.freeShippingThreshold || 500}</> : null}.</li>
           </ul>
 
-          <h2>2. Order Processing & Transit Timelines</h2>
+          <h2>3. Order Processing & Delivery Time</h2>
           <ul>
             <li><strong>Handling & Dispatch Time:</strong> Orders placed before 1:00 PM IST are prepared, fresh-sealed, and dispatched on the same business day. Orders placed after 1:00 PM or on Sundays/Public Holidays are dispatched the next business day.</li>
-            <li><strong>Standard Transit Time:</strong> Usually takes <strong>{storeSettings.standardDeliveryDays || '3–5 business days'}</strong> depending on regional pin code connectivity.</li>
-            <li><strong>Express Air Delivery:</strong> Delivered within <strong>{storeSettings.expressDeliveryDays || '1–2 business days'}</strong> across major metro hubs.</li>
-            <li><strong>Ahmedabad Local Deliveries:</strong> Delivered within 24 to 48 hours directly from our local kitchen.</li>
+            <li><strong>Delivery Time:</strong> Usually takes <strong>{storeSettings.standardDeliveryDays || '3–5 business days'}</strong> from the order date.</li>
           </ul>
 
-          <h2>3. Real-Time Tracking & Notifications</h2>
+          <h2>4. Order Status</h2>
           <p>
-            The moment your order is packed and dispatched, you will receive an SMS and Email containing your courier partner name and unique AWB Tracking Number. You can see your order status anytime in <a href="/orders">My Account → Orders</a>.
+            You will receive an email confirming your order as soon as it is placed. You can see your order status, and delivery details once your order is shipped, anytime in <a href="/orders">My Account → Orders</a>.
           </p>
 
-          <h2>4. Tamper-Evident & Weatherproof Packaging</h2>
+          <h2>5. Tamper-Evident & Weatherproof Packaging</h2>
           <p>
-            Our natural food products are packed inside premium, moisture-barrier jars with protective safety shrink-bands and cushioned outer corrugated boxes to maintain authentic flavor, crunch, and complete freshness during all transit conditions.
+            Our natural food products are packed inside premium, moisture-barrier jars with protective safety shrink-bands and cushioned outer corrugated boxes to maintain authentic flavor, crunch, and complete freshness until they reach you.
           </p>
 
-          <h2>5. Non-Delivery & Address Issues</h2>
+          <h2>6. Non-Delivery & Address Issues</h2>
           <p>
-            Couriers will attempt delivery up to 3 times before returning the parcel. Please ensure your contact phone number is reachable to receive courier OTPs and delivery coordination calls.
+            Please provide a complete address and keep your phone number reachable so we can coordinate the delivery with you. If we cannot reach you or deliver to the address given, we will contact you to arrange another delivery.
           </p>
         </>
       )}
@@ -232,38 +235,44 @@ export const ContactUsPage: React.FC = () => (
     title="Contact Us"
     metaDescription="Get in touch with Hiya Ghar for customer support, custom corporate gifting hampers, or wholesale inquiries."
   >
-    <p>
-      We are always delighted to hear from our customers, patrons, and gifting partners.
-    </p>
+    {(storeSettings) => (
+      <>
+        <p>
+          We are always delighted to hear from our customers, patrons, and gifting partners.
+        </p>
 
-    <div className="hiyaghar-trust-badge-card">
-      <h2>Hiya Ghar Customer Support</h2>
-      <p>
-        <strong>Customer Care & WhatsApp:</strong>{' '}
-        <a href="tel:+919274443617" style={{ color: 'inherit', textDecoration: 'underline' }}>
-          +91 92744 43617
-        </a>{' '}
-        (
-        <a
-          href="https://wa.me/919274443617?text=Hello%20HiyaGhar,%20I%20have%20an%20inquiry."
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: '#10b981', fontWeight: 600 }}
-        >
-          Chat on WhatsApp
-        </a>
-        )
-      </p>
-      <p>
-        <strong>Support Email:</strong>{' '}
-        <a href="mailto:support@hiyaghar.com" style={{ color: 'inherit', textDecoration: 'underline' }}>
-          support@hiyaghar.com
-        </a>
-      </p>
-      <p><strong>Operating Hours:</strong> Monday – Saturday (10:00 AM – 7:00 PM IST)</p>
-      <p><strong>Operating Address:</strong> 303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India</p>
-      <p><strong>FSSAI Registration / Lic No:</strong> 10723026001148</p>
-    </div>
+        <div className="hiyaghar-trust-badge-card">
+          <h2>Hiya Ghar Customer Support</h2>
+          <p>
+            <strong>Customer Care & WhatsApp:</strong>{' '}
+            <a href={`tel:${storeSettings.contactPhone || '+91 92744 43617'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>
+              {storeSettings.contactPhone || '+91 92744 43617'}
+            </a>{' '}
+            (
+            <a
+              href={`https://wa.me/${(storeSettings.contactPhone || '919274443617').replace(/[^0-9]/g, '')}?text=Hello%20HiyaGhar,%20I%20have%20an%20inquiry.`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#10b981', fontWeight: 600 }}
+            >
+              Chat on WhatsApp
+            </a>
+            )
+          </p>
+          <p>
+            <strong>Support Email:</strong>{' '}
+            <a href={`mailto:${storeSettings.contactEmail || 'support@hiyaghar.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>
+              {storeSettings.contactEmail || 'support@hiyaghar.com'}
+            </a>
+          </p>
+          <p><strong>Operating Hours:</strong> Monday – Saturday (10:00 AM – 7:00 PM IST)</p>
+          <p><strong>Operating Address:</strong> {storeSettings.contactAddress || '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India'}</p>
+          {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
+            <p><strong>FSSAI Registration / Lic No:</strong> {storeSettings.fssaiLicenseNumber}</p>
+          )}
+        </div>
+      </>
+    )}
   </StaticLegalPage>
 );
 
@@ -272,27 +281,33 @@ export const OurStoryPage: React.FC = () => (
     title="Our Story"
     metaDescription="Discover the heritage, passion, and natural ingredients behind Hiya Ghar handcrafted mukhwas, chai masalas, and wellness products."
   >
-    <p>
-      <strong>Hiya Ghar</strong> was born from a deep love for timeless Indian tradition, authentic culinary heritage, and pure, wholesome ingredients.
-    </p>
+    {(storeSettings) => (
+      <>
+        <p>
+          <strong>Hiya Ghar</strong> was born from a deep love for timeless Indian tradition, authentic culinary heritage, and pure, wholesome ingredients.
+        </p>
 
-    <h2>Our Heritage & Philosophy</h2>
-    <p>
-      In every Indian home, a meal is never truly complete without a comforting post-meal digestive. Our handcrafted mukhwas, aromatic royal chai spices, and artisan personal care products are prepared using time-honored traditional techniques without artificial preservatives or synthetic chemicals.
-    </p>
+        <h2>Our Heritage & Philosophy</h2>
+        <p>
+          In every Indian home, a meal is never truly complete without a comforting post-meal digestive. Our handcrafted mukhwas, aromatic royal chai spices, and artisan personal care products are prepared using time-honored traditional techniques without artificial preservatives or synthetic chemicals.
+        </p>
 
-    <h2>100% Handcrafted & Natural</h2>
-    <p>
-      Every blend is roasted, mixed, and packed in small batches to preserve its natural aromas, essential digestive oils, and maximum freshness. We source only premium-grade whole spices, natural seeds, and real botanical extracts.
-    </p>
+        <h2>100% Handcrafted & Natural</h2>
+        <p>
+          Every blend is roasted, mixed, and packed in small batches to preserve its natural aromas, essential digestive oils, and maximum freshness. We source only premium-grade whole spices, natural seeds, and real botanical extracts.
+        </p>
 
-    <div className="hiyaghar-trust-badge-card">
-      <h2>Certified Purity & Quality</h2>
-      <p><strong>Brand:</strong> Hiya Ghar</p>
-      <p><strong>Origin:</strong> Ahmedabad, Gujarat, India</p>
-      <p><strong>FSSAI Registration / Lic No:</strong> 10723026001148</p>
-      <p><strong>Support Email:</strong> support@hiyaghar.com</p>
-    </div>
+        <div className="hiyaghar-trust-badge-card">
+          <h2>Certified Purity & Quality</h2>
+          <p><strong>Brand:</strong> Hiya Ghar</p>
+          <p><strong>Origin:</strong> Ahmedabad, Gujarat, India</p>
+          {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
+            <p><strong>FSSAI Registration / Lic No:</strong> {storeSettings.fssaiLicenseNumber}</p>
+          )}
+          <p><strong>Support Email:</strong> {storeSettings.contactEmail || 'support@hiyaghar.com'}</p>
+        </div>
+      </>
+    )}
   </StaticLegalPage>
 );
 

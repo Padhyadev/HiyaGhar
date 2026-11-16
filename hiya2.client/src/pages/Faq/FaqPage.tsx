@@ -54,7 +54,7 @@ const FAQ_DATA: FaqItem[] = [
     category: 'orders',
     question: 'How long will it take to receive my order?',
     answer:
-      'Orders placed before 1:00 PM are dispatched on the same business day (or within 24 hours). Standard delivery takes 3–5 business days, and Express Air delivery takes 1–2 business days across India.',
+      'Orders placed before 1:00 PM are dispatched on the same business day (or within 24 hours). We currently deliver only to selected pin codes around Ghatlodiya, Ahmedabad, and delivery usually takes 3–5 business days. You can check your pin code at checkout.',
   },
   {
     id: 'ord-2',
@@ -75,14 +75,14 @@ const FAQ_DATA: FaqItem[] = [
     category: 'gifting',
     question: 'Can I customize a combo or gift hamper for weddings/festivals?',
     answer:
-      'Yes! You can use our interactive "Customize Combo" builder online, or contact us directly via WhatsApp / Contact Us page for bulk wedding favors, corporate gifting, and bespoke luxury gift hampers.',
+      'Yes! Use our gift builder on the Gift Hampers page to pick products and send them as a gift, choose one of our ready-made combo packs, or contact us directly via WhatsApp / Contact Us page for bulk wedding favors, corporate gifting, and bespoke gift hampers.',
   },
   {
     id: 'gift-2',
     category: 'gifting',
     question: 'Do you provide personalized gift notes inside the box?',
     answer:
-      'Yes, you can add a personalized gift message during checkout, and our team will hand-inscribe your thoughtful greeting card inside the premium gift hamper.',
+      'Yes! Choose Personalised gifting at checkout or in the gift builder to add your own message and photo. We print them on an A4 insert that goes inside your gift box.',
   },
 ];
 

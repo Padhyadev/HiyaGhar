@@ -50,7 +50,7 @@ export const MukhwasTrustSection: React.FC<MukhwasTrustSectionProps> = ({ items 
     {
       id: 'delivery',
       title: 'Fast & Secure Delivery',
-      description: 'Express doorstep shipping with 100% freshness guarantee',
+      description: 'Careful doorstep delivery with 100% freshness guarantee',
       icon: (
         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <rect x="1" y="3" width="15" height="13" />

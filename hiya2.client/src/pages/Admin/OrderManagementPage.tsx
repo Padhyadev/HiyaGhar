@@ -4,6 +4,7 @@ import { AdminAuthService } from '../../services/adminAuthService';
 import { usePermission } from '../../context/PermissionContext';
 import { LovService } from '../../services/lovService';
 import { showToast } from '../../utils/alertService';
+import { ShippingService } from '../../services/shippingService';
 import { AdminOrderGiftPanel } from '../../components/gifting/AdminOrderGiftPanel';
 import './OrderManagementPage.css';
 
@@ -102,6 +103,7 @@ export const OrderManagementPage: React.FC = () => {
   const [timeframeFilter, setTimeframeFilter] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
   const [filterPayment, setFilterPayment] = useState<string>('all');
+  const [filterGift, setFilterGift] = useState<string>('all');
   const [isUpdatingStatus, setIsUpdatingStatus] = useState<boolean>(false);
   const [isUpdatingPayment, setIsUpdatingPayment] = useState<boolean>(false);
   const [statusError, setStatusError] = useState<string | null>(null);
@@ -491,11 +493,15 @@ export const OrderManagementPage: React.FC = () => {
       doc.setLineWidth(0.3);
       doc.line(14, footerY - 4, 196, footerY - 4);
 
+      const slipStore = ShippingService.getSettings();
+      const slipEmail = slipStore.contactEmail || 'support@hiyaghar.com';
+      const slipPhone = slipStore.contactPhone || '+91 92744 43617';
+
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(148, 163, 184);
       doc.text(
-        'Thank you for choosing HIYAGHAR! For support, email support@hiyaghar.com or call +91 92744 43617.',
+        `Thank you for choosing HIYAGHAR! For support, email ${slipEmail} or call ${slipPhone}.`,
         105,
         footerY,
         { align: 'center' }
@@ -644,7 +650,7 @@ export const OrderManagementPage: React.FC = () => {
           </table>
 
           <div class="footer">
-            <p>Thank you for choosing <strong>HIYAGHAR</strong>! For support, contact support@hiyaghar.com</p>
+            <p>Thank you for choosing <strong>HIYAGHAR</strong>! For support, contact ${ShippingService.getSettings().contactEmail || 'support@hiyaghar.com'} or call ${ShippingService.getSettings().contactPhone || '+91 92744 43617'}</p>
             <p style="margin-top: 4px;">This is a computer generated invoice and does not require physical signature.</p>
           </div>
         </div>
@@ -787,6 +793,11 @@ export const OrderManagementPage: React.FC = () => {
     // Payment filter
     if (filterPayment !== 'all' && o.paymentStatus !== filterPayment) return false;
 
+    // Gifting filter: non-gift orders, Normal Gifting, Personalised Gifting
+    if (filterGift === 'none' && o.gift) return false;
+    if (filterGift === 'normal' && o.gift?.giftType !== 'Normal') return false;
+    if (filterGift === 'personalised' && o.gift?.giftType !== 'Personalised') return false;
+
     return true;
   });
 
@@ -840,6 +851,22 @@ export const OrderManagementPage: React.FC = () => {
           <option value="Pending">Pending</option>
           <option value="Paid">Paid</option>
           <option value="Refunded">Refunded</option>
+        </select>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+        <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#475569' }}>Gifting:</span>
+        <select
+          value={filterGift}
+          onChange={(e) => setFilterGift(e.target.value)}
+          className="hiyaghar-select-pagesize"
+          style={{ padding: '4px 8px', fontSize: '0.85rem', minWidth: '150px' }}
+          aria-label="Filter by Gifting"
+        >
+          <option value="all">All Orders</option>
+          <option value="none">Non-gift</option>
+          <option value="normal">Normal Gifting</option>
+          <option value="personalised">Personalised Gifting</option>
         </select>
       </div>
     </div>

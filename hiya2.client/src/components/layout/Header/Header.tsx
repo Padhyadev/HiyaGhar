@@ -5,7 +5,7 @@ import type { CartItem } from '../../../cart';
 import { CustomerAuthService } from '../../../services/customerAuthService';
 import type { CustomerProfile } from '../../../services/customerAuthService';
 import { WishlistService } from '../../../services/wishlistService';
-import { ShippingService } from '../../../services/shippingService';
+import { ShippingService, type ShippingSettings } from '../../../services/shippingService';
 import { AnnouncementService } from '../../../services/announcementService';
 import { ProductService, type Product } from '../../../services/productService';
 import { navigateTo } from '../../../utils/navigation';
@@ -219,30 +219,45 @@ export const Header: React.FC = () => {
     }, 250);
   };
 
+  const [shippingSettings, setShippingSettings] = useState<ShippingSettings>(() => ShippingService.getSettings());
+
   const [marqueeItems, setMarqueeItems] = useState<string[]>(() => {
-    const shippingSettings = ShippingService.getSettings();
-    const freeShippingLimit = shippingSettings?.freeShippingThreshold || 500;
+    const fresh = ShippingService.getSettings();
+    const freeShippingLimit = fresh?.freeShippingThreshold || 500;
     return AnnouncementService.getActiveAnnouncementTexts(freeShippingLimit);
   });
 
   const [isTickerPaused, setIsTickerPaused] = useState(false);
 
   useEffect(() => {
-    const updateMarquee = () => {
-      const shippingSettings = ShippingService.getSettings();
-      const freeShippingLimit = shippingSettings?.freeShippingThreshold || 500;
+    const updateSettingsAndMarquee = () => {
+      const fresh = ShippingService.getSettings();
+      setShippingSettings(fresh);
+      const freeShippingLimit = fresh?.freeShippingThreshold || 500;
       setMarqueeItems(AnnouncementService.getActiveAnnouncementTexts(freeShippingLimit));
     };
 
-    window.addEventListener('announcementsUpdated', updateMarquee);
-    window.addEventListener('storage', updateMarquee);
+    window.addEventListener('announcementsUpdated', updateSettingsAndMarquee);
+    window.addEventListener('storage', updateSettingsAndMarquee);
+    // Fetch latest store settings from API on mount
+    ShippingService.loadSettingsFromApi().then((fresh) => {
+      if (fresh) {
+        setShippingSettings(fresh);
+        setMarqueeItems(AnnouncementService.getActiveAnnouncementTexts(fresh.freeShippingThreshold || 500));
+      }
+    });
     // Fetch the admin-saved lines (fires 'announcementsUpdated' when they arrive).
     AnnouncementService.loadFromApi();
     return () => {
-      window.removeEventListener('announcementsUpdated', updateMarquee);
-      window.removeEventListener('storage', updateMarquee);
+      window.removeEventListener('announcementsUpdated', updateSettingsAndMarquee);
+      window.removeEventListener('storage', updateSettingsAndMarquee);
     };
   }, []);
+
+  const freeShippingThreshold = shippingSettings?.freeShippingThreshold || 500;
+  const isFreeShippingEnabled = shippingSettings?.enableFreeShipping !== false;
+  const isFreeShippingUnlocked = isFreeShippingEnabled && cartSubtotal >= freeShippingThreshold;
+  const remainingForFreeShipping = Math.max(0, freeShippingThreshold - cartSubtotal);
 
   const filteredProducts = searchQuery.trim()
     ? allProducts.filter((p) => {
@@ -1194,8 +1209,8 @@ export const Header: React.FC = () => {
               )}
             </div>
 
-            {/* Shipping Progress Bar */}
-            {cartItems.length > 0 && (
+            {/* Shipping Progress Bar (hidden when admin disables free shipping) */}
+            {cartItems.length > 0 && isFreeShippingEnabled && (
               <div className="hiyaghar-side-cart-shipping-bar">
                 <span className="hiyaghar-shipping-icon" style={{ color: 'var(--hiya-gold-text, #855F0F)', display: 'inline-flex', alignItems: 'center' }}>
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
@@ -1206,7 +1221,7 @@ export const Header: React.FC = () => {
                   </svg>
                 </span>
                 <span>
-                  {cartSubtotal >= 500 ? (
+                  {isFreeShippingUnlocked ? (
                     <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', color: '#10b981', fontWeight: 700 }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                         <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
@@ -1215,7 +1230,7 @@ export const Header: React.FC = () => {
                       You unlocked FREE Delivery!
                     </span>
                   ) : (
-                    `Add ₹${500 - cartSubtotal} more to unlock FREE Delivery`
+                    `Add ₹${remainingForFreeShipping} more to unlock FREE Delivery`
                   )}
                 </span>
               </div>

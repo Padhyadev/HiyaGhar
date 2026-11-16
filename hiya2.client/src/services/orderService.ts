@@ -3,6 +3,7 @@ import { CustomerAuthService } from './customerAuthService';
 import { ProductService } from './productService';
 import { LovService } from './lovService';
 import { formatVariantLabel } from '../utils/productFormat';
+import { ShippingService } from './shippingService';
 
 export interface ShippingAddress {
   fullName: string;
@@ -386,10 +387,11 @@ export class OrderService {
       giftHasInsert: orderPayload.giftHasInsert,
       tax: orderPayload.tax,
       total: orderPayload.total,
-      status: 'Packed',
+      // Same values as an order read back from the server (mapApiOrder): just placed, no courier yet.
+      status: 'Confirmed',
       estimatedDeliveryDate: estimatedDeliveryStr,
-      courierName: 'BlueDart Express',
-      trackingId: `BD${Math.floor(100000000 + Math.random() * 900000000)}IN`,
+      courierName: 'Standard Courier',
+      trackingId: orderId,
       timeline,
     };
 
@@ -483,7 +485,7 @@ export class OrderService {
         <div style="clear: both;"></div>
 
         <div style="margin-top: 40px; text-align: center; font-size: 12px; color: var(--hiya-muted, #475467); border-top: 1px solid #eee; padding-top: 15px; line-height: 1.5;">
-          Thank you for choosing HIYAGHAR. For customer care, email support@hiyaghar.com or call +91 92744 43617.<br/>
+          Thank you for choosing HIYAGHAR. For customer care, email ${ShippingService.getSettings().contactEmail || 'support@hiyaghar.com'} or call ${ShippingService.getSettings().contactPhone || '+91 92744 43617'}.<br/>
           This is a computer-generated tax invoice and requires no signature.
         </div>
       </div>
@@ -729,11 +731,15 @@ export class OrderService {
       doc.setLineWidth(0.3);
       doc.line(14, footerY - 4, 196, footerY - 4);
 
+      const invoiceStore = ShippingService.getSettings();
+      const invoiceEmail = invoiceStore.contactEmail || 'support@hiyaghar.com';
+      const invoicePhone = invoiceStore.contactPhone || '+91 92744 43617';
+
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(7);
       doc.setTextColor(148, 163, 184);
       doc.text(
-        'Thank you for shopping with HIYAGHAR! Customer Care: support@hiyaghar.com | +91 92744 43617',
+        `Thank you for shopping with HIYAGHAR! Customer Care: ${invoiceEmail} | ${invoicePhone}`,
         105,
         footerY,
         { align: 'center' }

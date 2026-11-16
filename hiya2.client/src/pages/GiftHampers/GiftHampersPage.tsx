@@ -715,7 +715,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({ onNavigateHome
                   )}
                   <div className="is-total"><dt>Total</dt><dd>{formatRupees(grandTotal)}</dd></div>
                 </dl>
-                <p className="gift-builder-muted small">Standard delivery shown. Express delivery can be chosen at checkout.</p>
+                <p className="gift-builder-muted small">Delivery is to selected pin codes around Ghatlodiya, Ahmedabad; your pin code is checked at checkout.</p>
 
                 <button type="button" className="gift-continue-btn" onClick={primaryAction.onClick} disabled={primaryAction.disabled}>
                   {primaryAction.label} <i className="fa-solid fa-arrow-right" aria-hidden="true" />

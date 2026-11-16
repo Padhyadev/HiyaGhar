@@ -56,6 +56,20 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
   const [isLoadingOrders, setIsLoadingOrders] = useState<boolean>(true);
   const [addresses, setAddresses] = useState<UserAddress[]>(AddressService.getAddresses());
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>(WishlistService.getItems());
+  const [storeSettings, setStoreSettings] = useState(() => ShippingService.getSettings());
+
+  useEffect(() => {
+    ShippingService.loadSettingsFromApi().then((data) => {
+      if (data) setStoreSettings(data);
+    });
+    const handleStorage = () => setStoreSettings(ShippingService.getSettings());
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  const supportEmail = storeSettings.contactEmail?.trim() || 'support@hiyaghar.com';
+  const supportPhone = storeSettings.contactPhone?.trim() || '+91 92744 43617';
+  const supportWhatsapp = supportPhone.replace(/[^0-9]/g, '');
 
   // Rewards Tab State
   const [rewardSettings, setRewardSettings] = useState<RewardSettingsInfo | null>(null);
@@ -1088,16 +1102,16 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
                       </div>
                       <div className="support-actions">
                         <a
-                          href="mailto:support@hiyaghar.com"
+                          href={`mailto:${supportEmail}`}
                           className="hiyaghar-panel-btn secondary"
                           onClick={() => {
-                            navigator.clipboard.writeText('support@hiyaghar.com').catch(() => {});
-                            showToast('support@hiyaghar.com copied to clipboard — reach out anytime!');
+                            navigator.clipboard.writeText(supportEmail).catch(() => {});
+                            showToast(`${supportEmail} copied to clipboard — reach out anytime!`);
                           }}
                         >
                           Contact Support
                         </a>
-                        <a href="https://wa.me/919274443617?text=Hello%20HiyaGhar,%20I%20need%20help%20with%20my%20order." target="_blank" rel="noopener noreferrer" className="hiyaghar-panel-btn primary">
+                        <a href={`https://wa.me/${supportWhatsapp}?text=Hello%20HiyaGhar,%20I%20need%20help%20with%20my%20order.`} target="_blank" rel="noopener noreferrer" className="hiyaghar-panel-btn primary">
                           WhatsApp Support
                         </a>
                       </div>
@@ -1666,16 +1680,16 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               </div>
               <div className="hiyaghar-support-actions">
                 <a
-                  href="mailto:support@hiyaghar.com"
+                  href={`mailto:${supportEmail}`}
                   className="hiyaghar-support-btn secondary"
                   onClick={() => {
-                    navigator.clipboard.writeText('support@hiyaghar.com').catch(() => {});
-                    showToast('support@hiyaghar.com copied to clipboard — reach out anytime!');
+                    navigator.clipboard.writeText(supportEmail).catch(() => {});
+                    showToast(`${supportEmail} copied to clipboard — reach out anytime!`);
                   }}
                 >
                   Contact Support →
                 </a>
-                <a href="https://wa.me/919274443617?text=Hello%20HiyaGhar,%20I%20need%20assistance." target="_blank" rel="noopener noreferrer" className="hiyaghar-support-btn primary">
+                <a href={`https://wa.me/${supportWhatsapp}?text=Hello%20HiyaGhar,%20I%20need%20assistance.`} target="_blank" rel="noopener noreferrer" className="hiyaghar-support-btn primary">
                   Chat with HIYA →
                 </a>
               </div>

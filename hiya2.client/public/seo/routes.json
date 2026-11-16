@@ -52,7 +52,7 @@
     {
       "path": "/tea-masala",
       "title": "Authentic Traditional Tea Masala | HIYAGHAR",
-      "description": "HIYAGHAR Tea Masala is an aromatic, authentic spice blend for making Indian chai at home. Choose your pack size, check the price and order online across India.",
+      "description": "HIYAGHAR Tea Masala is an aromatic, authentic spice blend for making Indian chai at home. Choose your pack size, check the price and order online.",
       "h1": "Tea Masala",
       "linkText": "Traditional Tea Masala",
       "breadcrumb": "Tea Masala",
@@ -167,10 +167,10 @@
     {
       "path": "/shipping-policy",
       "title": "Shipping Policy | HIYAGHAR",
-      "description": "HIYAGHAR shipping policy: free standard delivery in India on orders of ₹500 or more, a flat ₹40 fee below that, ₹99 express where available, and timelines.",
+      "description": "HIYAGHAR shipping policy: where we deliver around Ghatlodiya, Ahmedabad, delivery charges, free delivery on qualifying orders, and delivery timelines.",
       "h1": "Shipping & Delivery Policy",
       "linkText": "Shipping Policy",
-      "intro": "At Hiya Ghar, we treat every order like a fresh gift prepared with care. We partner with India’s top logistics providers including Blue Dart, Delhivery, DTDC, and India Post to deliver safe, tamper-evident packages across the nation.",
+      "intro": "At Hiya Ghar, we treat every order like a fresh gift prepared with care. We currently deliver to selected pin codes around Ghatlodiya, Ahmedabad, in safe, tamper-evident packaging.",
       "sitemap": true
     },
     {
@@ -183,7 +183,7 @@
     {
       "path": "/checkout",
       "title": "Secure Checkout | HIYAGHAR",
-      "description": "Fast and secure checkout with free shipping on qualifying orders across India.",
+      "description": "Fast and secure checkout with free delivery on qualifying orders.",
       "noindex": true
     },
     {
