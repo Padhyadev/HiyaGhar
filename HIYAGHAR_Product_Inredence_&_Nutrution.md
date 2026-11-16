@@ -43,3 +43,10 @@ Namkeen Gotli	Mango kernels (gotli), salt, black salt, turmeric, chili powder an
 Imli Pop	Tamarind pulp, sugar or jaggery, black salt, chili powder, cumin powder and mixed spices.
 Shahi Kharek	Dry dates, ghee, poppy seeds, almonds, cashews, pistachios, dry coconut, cardamom, nutmeg, dry ginger powder and jaggery/sugar.
 Imli Laddu	Tamarind pulp, sugar, jaggery, fennel seeds, coriander seeds, roasted cumin powder, black salt, regular salt, amchur powder, cardamom powder.
+
+
+==========================
+Handmade Soaps Ingredients
+Product Name	Ingredients
+Neem Aloe Fresh	Coconut Oil, Olive Oil, Castor Oil, Aloe Vera Extract, Neem Extract, Glycerin
+Glow Craft Detan Soap	Coconut Oil, Olive Oil, Castor Oil, Glycerin, Shea Butter, Turmeric Extract, Aloe Vera Extract, Licorice Extract
