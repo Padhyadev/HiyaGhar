@@ -59,6 +59,7 @@ const HomePageComponentManagementPage = lazy(() => import('./pages/Admin/HomePag
 const ReviewManagementPage = lazy(() => import('./pages/Admin/ReviewManagementPage').then(m => ({ default: m.ReviewManagementPage })));
 const ContactQueryManagementPage = lazy(() => import('./pages/Admin/ContactQueryManagementPage').then(m => ({ default: m.ContactQueryManagementPage })));
 const FaqManagementPage = lazy(() => import('./pages/Admin/FaqManagementPage').then(m => ({ default: m.FaqManagementPage })));
+const WebsiteAnalyticsPage = lazy(() => import('./pages/Admin/WebsiteAnalyticsPage').then(m => ({ default: m.WebsiteAnalyticsPage })));
 const DeliveryPincodeManagementPage = lazy(() => import('./pages/Admin/DeliveryPincodeManagementPage').then(m => ({ default: m.DeliveryPincodeManagementPage })));
 const StockModulePage = lazy(() => import('./pages/Admin/StockModulePage').then(m => ({ default: m.StockModulePage })));
 const RewardModulePage = lazy(() => import('./pages/Admin/RewardModulePage').then(m => ({ default: m.RewardModulePage })));
@@ -502,6 +503,22 @@ function App() {
             }
           >
             <DeliveryPincodeManagementPage />
+          </PermissionGuard>
+        );
+      } else if (route.includes('website-analytics')) {
+        adminChild = (
+          <PermissionGuard
+            menuKey="WEBSITE_ANALYTICS"
+            action="canView"
+            fallback={
+              <AccessDeniedPage
+                moduleName="Website Analytics"
+                onNavigateDashboard={() => navigateTo('/admin/dashboard')}
+                onNavigateHome={handleNavigateHome}
+              />
+            }
+          >
+            <WebsiteAnalyticsPage />
           </PermissionGuard>
         );
       } else if (route.includes('faq')) {

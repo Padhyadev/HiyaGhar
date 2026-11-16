@@ -38,3 +38,7 @@ _backup_phase5/
 
 # Private gift photos and A4 inserts (created at runtime)
 App_Data/
+
+# Google Analytics service account keys (never commit)
+*-ga-key.json
+*-ga-key.json.json

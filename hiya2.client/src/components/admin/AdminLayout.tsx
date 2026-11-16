@@ -128,6 +128,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     const contentChildren: AdminNavSubItem[] = [
       { key: 'HOMEPAGECOMPONENT', name: 'Homepage Banners', hash: '/admin/homepage-components', icon: 'fa-solid fa-puzzle-piece', displayOrder: 1 },
       { key: 'FAQ', name: 'FAQ Management', hash: '/admin/faqs', icon: 'fa-solid fa-circle-question', displayOrder: 2 },
+      { key: 'WEBSITE_ANALYTICS', name: 'Website Analytics', hash: '/admin/website-analytics', icon: 'fa-solid fa-chart-column', displayOrder: 3 },
     ].filter((c) => canSee(c.key) || canSee(c.key.replace(/_/g, '')));
 
     const systemChildren: AdminNavSubItem[] = [

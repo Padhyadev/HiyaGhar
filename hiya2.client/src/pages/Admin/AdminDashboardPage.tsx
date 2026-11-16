@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { AdminAuthService } from '../../services/adminAuthService';
+import { usePermission } from '../../context/PermissionContext';
+import { WebsiteVisitorsSection } from '../../components/admin/WebsiteVisitorsSection';
 import './AdminDashboardPage.css';
 
 interface AdminDashboardPageProps {
@@ -25,6 +27,9 @@ type TimeFilterType = 'today' | 'week' | 'month' | 'all';
 
 export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNavigate }) => {
   const user = AdminAuthService.getUser();
+  // Website Visitors section: only for admins who may open the Website Analytics page.
+  const { hasPermission } = usePermission();
+  const canViewWebsiteAnalytics = hasPermission('WEBSITE_ANALYTICS', 'canView');
   const [loading, setLoading] = useState<boolean>(true);
   const [timeFilter, setTimeFilter] = useState<TimeFilterType>('week');
 
@@ -568,6 +573,61 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
           )}
         </div>
       </div>
+
+      {/* Website Visitors (Google Analytics) - loads on its own, so a Google error never affects the sales data above */}
+      {canViewWebsiteAnalytics && (
+        <WebsiteVisitorsSection
+          onCardClick={() => onNavigate('/admin/website-analytics')}
+          pagesTop={5}
+          renderPages={({ pages, loading: pagesLoading, error: pagesError }) => (
+            <div className="hiyaghar-dash-card">
+              <div className="hiyaghar-card-header flex-between">
+                <h3><i className="fa-solid fa-file-lines mr-2 text-gold" /> Top 5 Pages</h3>
+                <button className="btn-link-header" onClick={() => onNavigate('/admin/website-analytics')}>
+                  View full report &rarr;
+                </button>
+              </div>
+              {pagesLoading ? (
+                <div className="chart-no-data">
+                  <i className="fa-solid fa-spinner fa-spin text-gold" />
+                  <span>Loading pages...</span>
+                </div>
+              ) : pagesError ? (
+                <div className="chart-no-data">
+                  <i className="fa-solid fa-triangle-exclamation text-amber" />
+                  <span>{pagesError}</span>
+                </div>
+              ) : pages.length === 0 ? (
+                <div className="chart-no-data">
+                  <i className="fa-solid fa-calendar-xmark text-amber" />
+                  <span>No page views found for the selected date range.</span>
+                </div>
+              ) : (
+                <div className="hiyaghar-table-responsive">
+                  <table className="hiyaghar-dash-table">
+                    <thead>
+                      <tr>
+                        <th>Page Path</th>
+                        <th>Views</th>
+                        <th>Active Users</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {pages.map((p) => (
+                        <tr key={p.pagePath}>
+                          <td><strong className="order-number-tag">{p.pagePath}</strong></td>
+                          <td>{p.views.toLocaleString('en-IN')}</td>
+                          <td>{p.activeUsers.toLocaleString('en-IN')}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          )}
+        />
+      )}
 
       {/* Secondary Row: Quick Actions & Alerts */}
       <div className="hiyaghar-dash-two-col">

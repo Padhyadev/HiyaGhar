@@ -146,6 +146,11 @@ builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 
+// Website visitor numbers from the GA4 Data API (admin dashboard + Website Analytics page).
+// Singleton: it keeps one Google client; results are cached in the memory cache above.
+builder.Services.Configure<GoogleAnalyticsSettings>(builder.Configuration.GetSection("GoogleAnalytics"));
+builder.Services.AddSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>();
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
@@ -499,6 +504,26 @@ using (var scope = app.Services.CreateScope())
                 BEGIN
                     INSERT INTO dbo.[RoleMenuPermission] ([RoleId], [MenuId], [CanView], [CanAdd], [CanEdit], [CanDelete], [CanExport], [CreatedDate])
                     VALUES (@SuperAdminRoleIdForPincode, @PincodeMenuId, 1, 0, 1, 0, 1, GETDATE());
+                END
+            END
+
+            -- Website Analytics (Google Analytics visitor report): view-only menu, granted to Super Admin
+            IF OBJECT_ID('dbo.[Menus]', 'U') IS NOT NULL
+            BEGIN
+                IF NOT EXISTS (SELECT 1 FROM dbo.[Menus] WHERE [Controller] = 'WEBSITE_ANALYTICS')
+                BEGIN
+                    INSERT INTO dbo.[Menus] ([ParentId], [Name], [Controller], [Icon], [DisplayOrder], [IsActive], [IsDeleted], [SuperAdmin], [CreatedDate])
+                    VALUES (0, 'Website Analytics', 'WEBSITE_ANALYTICS', 'fa-solid fa-chart-column', 17, 1, 0, 0, GETDATE());
+                END
+
+                DECLARE @AnalyticsMenuId INT = (SELECT TOP 1 [MenuId] FROM dbo.[Menus] WHERE [Controller] = 'WEBSITE_ANALYTICS');
+                DECLARE @SuperAdminRoleIdForAnalytics INT = (SELECT TOP 1 [RoleId] FROM dbo.[Role] WHERE [RoleCode] = 'SUPER_ADMIN' OR [RoleName] = 'Super Admin');
+
+                IF @AnalyticsMenuId IS NOT NULL AND @SuperAdminRoleIdForAnalytics IS NOT NULL
+                    AND NOT EXISTS (SELECT 1 FROM dbo.[RoleMenuPermission] WHERE [RoleId] = @SuperAdminRoleIdForAnalytics AND [MenuId] = @AnalyticsMenuId)
+                BEGIN
+                    INSERT INTO dbo.[RoleMenuPermission] ([RoleId], [MenuId], [CanView], [CanAdd], [CanEdit], [CanDelete], [CanExport], [CreatedDate])
+                    VALUES (@SuperAdminRoleIdForAnalytics, @AnalyticsMenuId, 1, 0, 0, 0, 1, GETDATE());
                 END
             END
         ");
