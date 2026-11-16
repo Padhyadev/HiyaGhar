@@ -332,11 +332,20 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   // unused (but still safely computed, since hooks must run unconditionally) then.
   const product = productData;
 
+  const hasIngredients = Boolean(product?.ingredients && product.ingredients.length > 0);
+  const hasBenefits = Boolean(product?.benefits && product.benefits.length > 0);
+
   const showDescTab = storeSettings.enableProductDescriptionTab ?? true;
-  const showIngredientsTab = (storeSettings.enableProductIngredientsTab ?? true) && Boolean((product?.ingredients?.length ?? 0) > 0 || (product?.benefits?.length ?? 0) > 0);
+  const showIngredientsTab = (storeSettings.enableProductIngredientsTab ?? true) && (hasIngredients || hasBenefits);
   const showNutritionTab = (storeSettings.enableProductNutritionTab ?? true) && Boolean(product?.nutritionalInfo);
   const showReviewsTab = storeSettings.enableProductReviewsTab ?? true;
   const hasAnyVisibleTab = showDescTab || showIngredientsTab || showNutritionTab || showReviewsTab;
+
+  const ingredientsTabLabel = hasIngredients && hasBenefits
+    ? 'Ingredients & Benefits'
+    : hasIngredients
+    ? 'Ingredients'
+    : 'Benefits';
 
   useEffect(() => {
     const isCurrentTabVisible =
@@ -1221,7 +1230,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                     className={`hiyaghar-tab-btn ${activeTab === 'ingredients' ? 'is-active' : ''}`}
                     onClick={() => setActiveTab('ingredients')}
                   >
-                    Ingredients & Benefits
+                    {ingredientsTabLabel}
                   </button>
                 )}
                 {showNutritionTab && (
