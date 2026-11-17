@@ -136,6 +136,7 @@ $criticalFiles = @(
     "Hiya2.Server.dll",
     "web.config",
     "appsettings.json",
+    "appsettings.Production.json",
     "wwwroot\index.html"
 )
 
@@ -149,6 +150,16 @@ foreach ($file in $criticalFiles) {
         $allFound = $false
     }
 }
+
+# The Google Analytics key must never be uploaded with the site (it lives in the server's
+# Secrets folder, outside the website). Stop before zipping if one slipped into the output.
+$leakedKeys = Get-ChildItem -Path $OutputDir -Recurse -File -Include "*-ga-key.json", "*-ga-key.json.json" -ErrorAction SilentlyContinue
+if ($leakedKeys) {
+    $leakedKeys | ForEach-Object { Write-Err "  [KEY FILE IN OUTPUT] $($_.FullName)" }
+    Write-Err "A Google Analytics key file is in the publish output. Remove it and publish again."
+    exit 1
+}
+Write-Host "  [OK] No Google Analytics key file in the output" -ForegroundColor Green
 
 # 6. CREATE DEPLOYMENT ZIP ARCHIVE
 if (-not $SkipZip) {

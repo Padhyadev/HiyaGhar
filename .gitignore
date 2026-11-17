@@ -42,3 +42,4 @@ App_Data/
 # Google Analytics service account keys (never commit)
 *-ga-key.json
 *-ga-key.json.json
+Secrets/

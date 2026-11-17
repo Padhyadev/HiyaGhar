@@ -34,6 +34,16 @@
     <None Include="Assets\GiftFonts\**" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 
+  <!-- Settings: appsettings.Production.json is published (live server runs as Production);
+       appsettings.Development.json is only for this PC and is not published.
+       Google Analytics key files are never part of the build or publish output. -->
+  <ItemGroup>
+    <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
+    <Content Update="appsettings.Production.json" CopyToPublishDirectory="PreserveNewest" />
+    <Content Remove="**\*-ga-key.json" />
+    <None Remove="**\*-ga-key.json" />
+  </ItemGroup>
+
   <!-- Private gift photos / inserts are created at runtime; never publish local test files. -->
   <ItemGroup>
     <Content Remove="App_Data\**" />

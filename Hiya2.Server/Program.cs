@@ -153,6 +153,10 @@ builder.Services.AddSingleton<IGoogleAnalyticsService, GoogleAnalyticsService>()
 
 var app = builder.Build();
 
+// Google Analytics: log once at startup whether the key file can be used (full path checked and the
+// reason if not). Never stops the app; only the Website Visitors section depends on it.
+app.Services.GetRequiredService<IGoogleAnalyticsService>().LogStartupStatus(app.Environment.EnvironmentName);
+
 using (var scope = app.Services.CreateScope())
 {
     try

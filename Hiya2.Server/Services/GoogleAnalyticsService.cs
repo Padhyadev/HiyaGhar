@@ -15,6 +15,7 @@ namespace Hiya2.Server.Services
         // The GA4 property holds more than one website; every query is limited to this web stream.
         public string StreamId { get; set; } = "";
         // Service account JSON key. Must live outside the project folders (never in wwwroot or Git).
+        // Absolute (F:\Secrets\hiyaghar-ga-key.json) or relative to the app folder (..\Secrets\hiyaghar-ga-key.json).
         public string KeyFilePath { get; set; } = "";
     }
 
@@ -74,6 +75,8 @@ namespace Hiya2.Server.Services
         // Today / yesterday: active users per hour (today only up to the current hour).
         Task<AnalyticsResult<List<VisitorHour>>> GetHourlyAsync(VisitorDateRange range);
         Task<AnalyticsResult<List<VisitorPage>>> GetPagesAsync(VisitorDateRange range, int? top);
+        // Startup check: logs whether the key file can be used (full path + reason). Never throws.
+        void LogStartupStatus(string environmentName);
     }
 
     /// <summary>
@@ -93,14 +96,17 @@ namespace Hiya2.Server.Services
         private readonly GoogleAnalyticsSettings _settings;
         private readonly IMemoryCache _cache;
         private readonly ILogger<GoogleAnalyticsService> _logger;
+        // App folder: a relative KeyFilePath is resolved from here (live server: the hiyaghar.com folder).
+        private readonly string _contentRootPath;
         private readonly object _clientLock = new();
         private BetaAnalyticsDataClient? _client;
 
-        public GoogleAnalyticsService(IOptions<GoogleAnalyticsSettings> settings, IMemoryCache cache, ILogger<GoogleAnalyticsService> logger)
+        public GoogleAnalyticsService(IOptions<GoogleAnalyticsSettings> settings, IMemoryCache cache, ILogger<GoogleAnalyticsService> logger, IHostEnvironment environment)
         {
             _settings = settings.Value;
             _cache = cache;
             _logger = logger;
+            _contentRootPath = environment.ContentRootPath;
         }
 
         // GA reports in the property's time zone (India); the store's "today" is IST as well.
@@ -325,23 +331,83 @@ namespace Hiya2.Server.Services
                     return AnalyticsResult<BetaAnalyticsDataClient>.Fail("Website analytics is not configured on the server yet.");
                 }
 
-                if (!File.Exists(_settings.KeyFilePath))
+                var keyPath = KeyFilePathFull;
+
+                // The file is read here (not by the Google library) so the log can say exactly
+                // why it failed. The key's contents are never logged.
+                string keyJson;
+                try
                 {
-                    _logger.LogError("Google Analytics key file not found at '{KeyFilePath}' (GoogleAnalytics:KeyFilePath).", _settings.KeyFilePath);
-                    return AnalyticsResult<BetaAnalyticsDataClient>.Fail("Website analytics is not configured on the server: the Google key file is missing.");
+                    keyJson = File.ReadAllText(keyPath);
+                }
+                catch (Exception ex) when (ex is FileNotFoundException or DirectoryNotFoundException)
+                {
+                    _logger.LogError("Google Analytics key file NOT FOUND. Checked full path: '{KeyFilePath}' (setting GoogleAnalytics:KeyFilePath = '{Configured}', app folder = '{ContentRoot}').",
+                        keyPath, _settings.KeyFilePath, _contentRootPath);
+                    return AnalyticsResult<BetaAnalyticsDataClient>.Fail("Website analytics is not configured on the server: the Google key file was not found.");
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    _logger.LogError("Google Analytics key file ACCESS DENIED. Checked full path: '{KeyFilePath}'. The website's user (IIS application pool) needs read permission on this file and its folder.",
+                        keyPath);
+                    return AnalyticsResult<BetaAnalyticsDataClient>.Fail("Website analytics is not configured on the server: the Google key file cannot be read (access denied).");
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("Google Analytics key file could not be read ({ErrorType}: {ErrorMessage}). Checked full path: '{KeyFilePath}'.",
+                        ex.GetType().Name, ex.Message, keyPath);
+                    return AnalyticsResult<BetaAnalyticsDataClient>.Fail("Website analytics is not configured on the server: the Google key file cannot be read.");
                 }
 
                 try
                 {
-                    var credential = CredentialFactory.FromFile<ServiceAccountCredential>(_settings.KeyFilePath).ToGoogleCredential();
+                    var credential = CredentialFactory.FromJson<ServiceAccountCredential>(keyJson).ToGoogleCredential();
                     _client = new BetaAnalyticsDataClientBuilder { GoogleCredential = credential }.Build();
                     return AnalyticsResult<BetaAnalyticsDataClient>.Ok(_client);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "Google Analytics key file at '{KeyFilePath}' could not be read as a service account key.", _settings.KeyFilePath);
+                    // Only the error type: a JSON parser message can quote part of the file.
+                    _logger.LogError("Google Analytics key file INVALID: it is not a valid service account JSON key ({ErrorType}). Checked full path: '{KeyFilePath}'.",
+                        ex.GetType().Name, keyPath);
                     return AnalyticsResult<BetaAnalyticsDataClient>.Fail("Website analytics is not configured correctly: the Google key file is not a valid service account key.");
                 }
+            }
+        }
+
+        // GoogleAnalytics:KeyFilePath as a full path. Absolute paths (F:\Secrets\...) are used as they
+        // are; relative ones (..\Secrets\...) are resolved from the app folder (ContentRootPath), which
+        // on the live server is the hiyaghar.com folder.
+        private string KeyFilePathFull
+        {
+            get
+            {
+                var configured = _settings.KeyFilePath.Trim();
+                return Path.GetFullPath(Path.IsPathRooted(configured) ? configured : Path.Combine(_contentRootPath, configured));
+            }
+        }
+
+        // Called once at startup: logs whether the key file can be used, so a wrong path or missing
+        // permission shows up in the log straight away. Never throws.
+        public void LogStartupStatus(string environmentName)
+        {
+            try
+            {
+                var client = GetClient(); // logs the exact problem itself when it fails
+                if (client.IsSuccess)
+                {
+                    _logger.LogInformation("Google Analytics ready (environment {Environment}): key file OK at '{KeyFilePath}', property {PropertyId}, stream {StreamId}.",
+                        environmentName, KeyFilePathFull, _settings.PropertyId, _settings.StreamId);
+                }
+                else
+                {
+                    _logger.LogWarning("Google Analytics NOT available (environment {Environment}); the Website Visitors section will show an error. The rest of the admin panel is not affected.",
+                        environmentName);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Google Analytics startup check failed ({ErrorType}).", ex.GetType().Name);
             }
         }
     }
