@@ -16,7 +16,7 @@ import { YouMayAlsoLike } from '../../components/product/YouMayAlsoLike/YouMayAl
 import { navigateTo } from '../../utils/navigation';
 import { cameDirectlyFrom } from '../../utils/scrollMemory';
 import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE, productPath } from '../../utils/productFormat';
-import { parseProductFullDescription, type ComboItem } from '../../utils/productMetaStore';
+import { parseProductFullDescription, NUTRITION_SERVING_SIZE, type ComboItem } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
 import { buildProductSeoDescription, seoConfig } from '../../seo/routeSeo';
@@ -1303,7 +1303,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                 {showNutritionTab && (
                   <div hidden={activeTab !== 'nutrition'}>
                     <h4 className="pane-subheading">
-                      Nutritional Values (per {selectedAttrs.Weight || product.servingSize || '100g'} serving):
+                      Nutritional Values (per {NUTRITION_SERVING_SIZE} serving):
                     </h4>
                     <table className="hiyaghar-nutrition-table">
                       <tbody>

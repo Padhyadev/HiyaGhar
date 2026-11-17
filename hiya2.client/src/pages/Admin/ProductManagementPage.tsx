@@ -6,6 +6,7 @@ import { showConfirm, showToast } from '../../utils/alertService';
 import {
   parseProductFullDescription,
   buildFullDescriptionWithMeta,
+  NUTRITION_SERVING_SIZE,
   type ProductCustomMeta,
   type ProductFaq,
 } from '../../utils/productMetaStore';
@@ -721,7 +722,8 @@ export const ProductManagementPage: React.FC = () => {
     const customMeta: ProductCustomMeta = {
       ingredients: cleanIngredients.length > 0 ? cleanIngredients : undefined,
       benefits: cleanBenefits.length > 0 ? cleanBenefits : undefined,
-      servingSize: formData.servingSize?.trim() || '100g',
+      // Always per 100g; an older product saved with another size is corrected on its next save.
+      servingSize: NUTRITION_SERVING_SIZE,
       nutritionalInfo: Object.keys(nutritionMap).length > 0 ? nutritionMap : undefined,
       crossSellProductIds: formData.crossSellProductIds && formData.crossSellProductIds.length > 0 ? formData.crossSellProductIds : undefined,
       shelfLife: formData.shelfLife.trim() || undefined,
@@ -1672,7 +1674,7 @@ export const ProductManagementPage: React.FC = () => {
                     Nutritional Facts Table
                   </h3>
                   <p style={{ margin: '4px 0 0', fontSize: '0.85rem', color: '#64748b' }}>
-                    Add or customize any nutrient parameter and specify the serving size (e.g. per 50g, 100g, 250g serving).
+                    Add or customize any nutrient parameter. Enter every value per 100g.
                   </p>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -1704,76 +1706,33 @@ export const ProductManagementPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Serving Size / Base Quantity selector directly from configured variant attributes */}
-              {(() => {
-                // Extract unique weight attributes from the Variants Table above
-                const variantWeights: string[] = [];
-                formData.variants.forEach((v) => {
-                  v.attributes?.forEach((a) => {
-                    if (
-                      (a.attributeName.toLowerCase().includes('weight') ||
-                        a.attributeName.toLowerCase().includes('size') ||
-                        a.attributeName.toLowerCase().includes('gram') ||
-                        a.attributeName.toLowerCase().includes('qty')) &&
-                      !variantWeights.includes(a.attributeValue.trim())
-                    ) {
-                      variantWeights.push(a.attributeValue.trim());
-                    }
-                  });
-                });
-
-                const displayWeights = variantWeights.length > 0 ? variantWeights : ['50g', '100g', '150g', '250g', '500g'];
-
-                return (
-                  <div style={{ background: '#f1f5f9', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-                    <label style={{ fontSize: '0.88rem', fontWeight: 700, color: '#1e293b', margin: 0 }}>
-                      <i className="fa-solid fa-scale-balanced" style={{ color: '#2d6a4f', marginRight: '6px' }}></i>
-                      Nutritional Base Serving Size:
-                    </label>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
-                      {displayWeights.map((sz) => {
-                        const isSelected = formData.servingSize.trim().toLowerCase() === sz.trim().toLowerCase();
-                        return (
-                          <button
-                            key={sz}
-                            type="button"
-                            onClick={() => setFormData({ ...formData, servingSize: sz })}
-                            style={{
-                              padding: '6px 14px',
-                              borderRadius: '6px',
-                              fontSize: '0.85rem',
-                              fontWeight: 800,
-                              border: isSelected ? '1.5px solid #2d6a4f' : '1px solid #cbd5e1',
-                              background: isSelected ? '#2d6a4f' : '#ffffff',
-                              color: isSelected ? '#ffffff' : '#334155',
-                              boxShadow: isSelected ? '0 2px 6px rgba(45,106,79,0.2)' : 'none',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '4px',
-                            }}
-                          >
-                            {isSelected && <span>✓</span>}
-                            <span>{sz}</span>
-                          </button>
-                        );
-                      })}
-                      <input
-                        type="text"
-                        placeholder="Custom (e.g. 50g)"
-                        value={formData.servingSize}
-                        onChange={(e) => setFormData({ ...formData, servingSize: e.target.value })}
-                        style={{ width: '130px', padding: '6px 10px', fontSize: '0.85rem', borderRadius: '6px', border: '1px solid #cbd5e1', fontWeight: 700, color: '#2d6a4f' }}
-                      />
-                    </div>
-                    {variantWeights.length > 0 && (
-                      <span style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 600 }}>
-                        (Auto-synced from your Product Attributes above: {variantWeights.join(', ')})
-                      </span>
-                    )}
-                  </div>
-                );
-              })()}
+              {/* Nutrition values are always per 100g (the same for every pack size), so there is no choice here */}
+              <div style={{ background: '#f1f5f9', padding: '12px 16px', borderRadius: '8px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+                <label style={{ fontSize: '0.88rem', fontWeight: 700, color: '#1e293b', margin: 0 }}>
+                  <i className="fa-solid fa-scale-balanced" style={{ color: '#2d6a4f', marginRight: '6px' }}></i>
+                  Nutritional Base Serving Size:
+                </label>
+                <span
+                  style={{
+                    padding: '6px 14px',
+                    borderRadius: '6px',
+                    fontSize: '0.85rem',
+                    fontWeight: 800,
+                    border: '1.5px solid #2d6a4f',
+                    background: '#2d6a4f',
+                    color: '#ffffff',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                >
+                  <span>✓</span>
+                  <span>{NUTRITION_SERVING_SIZE}</span>
+                </span>
+                <span style={{ fontSize: '0.78rem', color: '#166534', fontWeight: 600 }}>
+                  (Always per 100g for every pack size)
+                </span>
+              </div>
 
               {formData.nutritionItems.length === 0 ? (
                 <div style={{ padding: '20px', textAlign: 'center', background: '#f8fafc', borderRadius: '10px', border: '1px dashed #cbd5e1', color: '#64748b', fontSize: '0.88rem' }}>
@@ -1810,7 +1769,7 @@ export const ProductManagementPage: React.FC = () => {
 
                       <div className="hiyaghar-form-group" style={{ margin: 0 }}>
                         <label style={{ fontSize: '0.78rem', marginBottom: '3px', fontWeight: 700, color: '#334155' }}>
-                          Value / Quantity (per {formData.servingSize || '100g'})
+                          Value / Quantity (per {NUTRITION_SERVING_SIZE})
                         </label>
                         <input
                           type="text"

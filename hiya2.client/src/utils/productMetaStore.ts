@@ -1,3 +1,7 @@
+// Nutrition values are always given per 100g, the same for every pack size (admin form and
+// product page). Older products may have another size saved; it is ignored.
+export const NUTRITION_SERVING_SIZE = '100g';
+
 export interface ProductFaq {
   question: string;
   answer: string;

@@ -152,33 +152,35 @@ export class ShippingService {
     void ShippingService.loadAllowedPincodesFromApi();
     try {
       const res = await fetch('/api/shippingsetting');
-      const data = await res.json();
-      if (data?.isSuccess && data.settings) {
-        const apiSettings: ShippingSettings = {
-          freeShippingThreshold: data.settings.freeShippingThreshold ?? DEFAULT_SHIPPING_SETTINGS.freeShippingThreshold,
-          standardShippingPrice: data.settings.standardShippingPrice ?? DEFAULT_SHIPPING_SETTINGS.standardShippingPrice,
-          expressShippingPrice: data.settings.expressShippingPrice ?? DEFAULT_SHIPPING_SETTINGS.expressShippingPrice,
-          enableExpressDelivery: data.settings.enableExpressDelivery ?? DEFAULT_SHIPPING_SETTINGS.enableExpressDelivery,
-          enableFreeShipping: data.settings.enableFreeShipping ?? DEFAULT_SHIPPING_SETTINGS.enableFreeShipping,
-          onlyAhmedabadDelivery: data.settings.onlyAhmedabadDelivery ?? DEFAULT_SHIPPING_SETTINGS.onlyAhmedabadDelivery,
-          standardDeliveryDays: data.settings.standardDeliveryDays ?? DEFAULT_SHIPPING_SETTINGS.standardDeliveryDays,
-          expressDeliveryDays: data.settings.expressDeliveryDays ?? DEFAULT_SHIPPING_SETTINGS.expressDeliveryDays,
-          enableGstDisplay: data.settings.enableGstDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableGstDisplay,
-          gstPercent: data.settings.gstPercent ?? DEFAULT_SHIPPING_SETTINGS.gstPercent,
-          gstLabel: data.settings.gstLabel ?? DEFAULT_SHIPPING_SETTINGS.gstLabel,
-          fssaiLicenseNumber: data.settings.fssaiLicenseNumber ?? DEFAULT_SHIPPING_SETTINGS.fssaiLicenseNumber,
-          enableFssaiDisplay: data.settings.enableFssaiDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableFssaiDisplay,
-          contactEmail: data.settings.contactEmail ?? DEFAULT_SHIPPING_SETTINGS.contactEmail,
-          contactPhone: data.settings.contactPhone ?? DEFAULT_SHIPPING_SETTINGS.contactPhone,
-          contactAddress: data.settings.contactAddress ?? DEFAULT_SHIPPING_SETTINGS.contactAddress,
-          enableProductDescriptionTab: data.settings.enableProductDescriptionTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductDescriptionTab,
-          enableProductIngredientsTab: data.settings.enableProductIngredientsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductIngredientsTab,
-          enableProductNutritionTab: data.settings.enableProductNutritionTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductNutritionTab,
-          enableProductReviewsTab: data.settings.enableProductReviewsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductReviewsTab,
-        };
-        // Sync DB value to localStorage so offline reads are up to date
-        ShippingService.saveSettings(apiSettings);
-        return apiSettings;
+      if (res.ok) {
+        const data = await res.json().catch(() => null);
+        if (data?.isSuccess && data.settings) {
+          const apiSettings: ShippingSettings = {
+            freeShippingThreshold: data.settings.freeShippingThreshold ?? DEFAULT_SHIPPING_SETTINGS.freeShippingThreshold,
+            standardShippingPrice: data.settings.standardShippingPrice ?? DEFAULT_SHIPPING_SETTINGS.standardShippingPrice,
+            expressShippingPrice: data.settings.expressShippingPrice ?? DEFAULT_SHIPPING_SETTINGS.expressShippingPrice,
+            enableExpressDelivery: data.settings.enableExpressDelivery ?? DEFAULT_SHIPPING_SETTINGS.enableExpressDelivery,
+            enableFreeShipping: data.settings.enableFreeShipping ?? DEFAULT_SHIPPING_SETTINGS.enableFreeShipping,
+            onlyAhmedabadDelivery: data.settings.onlyAhmedabadDelivery ?? DEFAULT_SHIPPING_SETTINGS.onlyAhmedabadDelivery,
+            standardDeliveryDays: data.settings.standardDeliveryDays ?? DEFAULT_SHIPPING_SETTINGS.standardDeliveryDays,
+            expressDeliveryDays: data.settings.expressDeliveryDays ?? DEFAULT_SHIPPING_SETTINGS.expressDeliveryDays,
+            enableGstDisplay: data.settings.enableGstDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableGstDisplay,
+            gstPercent: data.settings.gstPercent ?? DEFAULT_SHIPPING_SETTINGS.gstPercent,
+            gstLabel: data.settings.gstLabel ?? DEFAULT_SHIPPING_SETTINGS.gstLabel,
+            fssaiLicenseNumber: data.settings.fssaiLicenseNumber ?? DEFAULT_SHIPPING_SETTINGS.fssaiLicenseNumber,
+            enableFssaiDisplay: data.settings.enableFssaiDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableFssaiDisplay,
+            contactEmail: data.settings.contactEmail ?? DEFAULT_SHIPPING_SETTINGS.contactEmail,
+            contactPhone: data.settings.contactPhone ?? DEFAULT_SHIPPING_SETTINGS.contactPhone,
+            contactAddress: data.settings.contactAddress ?? DEFAULT_SHIPPING_SETTINGS.contactAddress,
+            enableProductDescriptionTab: data.settings.enableProductDescriptionTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductDescriptionTab,
+            enableProductIngredientsTab: data.settings.enableProductIngredientsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductIngredientsTab,
+            enableProductNutritionTab: data.settings.enableProductNutritionTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductNutritionTab,
+            enableProductReviewsTab: data.settings.enableProductReviewsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductReviewsTab,
+          };
+          // Sync DB value to localStorage so offline reads are up to date
+          ShippingService.saveSettings(apiSettings);
+          return apiSettings;
+        }
       }
     } catch {
       // Network error — fall back to localStorage cache
@@ -368,10 +370,12 @@ export class ShippingService {
   public static async loadAllowedPincodesFromApi(): Promise<string[]> {
     try {
       const res = await fetch('/api/deliverypincode/allowed');
-      const data = await res.json();
-      if (data?.isSuccess && Array.isArray(data.pincodes)) {
-        localStorage.setItem(ALLOWED_PINCODES_STORAGE_KEY, JSON.stringify(data.pincodes));
-        return data.pincodes;
+      if (res.ok) {
+        const data = await res.json().catch(() => null);
+        if (data?.isSuccess && Array.isArray(data.pincodes)) {
+          localStorage.setItem(ALLOWED_PINCODES_STORAGE_KEY, JSON.stringify(data.pincodes));
+          return data.pincodes;
+        }
       }
     } catch {
       // Network error — fall back to localStorage cache
