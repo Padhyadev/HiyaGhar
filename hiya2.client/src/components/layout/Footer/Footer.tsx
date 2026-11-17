@@ -154,12 +154,6 @@ export const Footer: React.FC = () => {
           {/* Center Brand Logo & Trust Signals */}
           <ScrollReveal variant="fade-up" delay={100} className="hiyaghar-footer-center-logo">
             <img src={LOGO_URL} alt="HIYAGHAR" width={140} height={42} loading="lazy" decoding="async" className="hiyaghar-footer-logo-img" />
-            {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
-              <div className="hiyaghar-footer-fssai-pill">
-                <span className="hiyaghar-fssai-label">FSSAI Lic. No.</span>
-                <span className="hiyaghar-fssai-val">{storeSettings.fssaiLicenseNumber}</span>
-              </div>
-            )}
             <p className="hiyaghar-footer-contact-brief">
               {[
                 storeSettings.contactEmail && (

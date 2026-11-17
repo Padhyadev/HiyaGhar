@@ -44,8 +44,8 @@ export const DEFAULT_SHIPPING_SETTINGS: ShippingSettings = {
   enableGstDisplay: true,
   gstPercent: 5,
   gstLabel: 'Estimated GST (5% Included)',
-  fssaiLicenseNumber: '10723026001148',
-  enableFssaiDisplay: true,
+  fssaiLicenseNumber: '', // FSSAI is not used on the site (removed 17 Nov 2026)
+  enableFssaiDisplay: false,
   contactEmail: 'hiyaghar@gmail.com',
   contactPhone: '+91 92744 43617',
   contactAddress: '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India',
@@ -73,12 +73,6 @@ export const SHIPPING_CONFIG = {
   },
   get GST_LABEL() {
     return ShippingService.getSettings().gstLabel;
-  },
-  get FSSAI_LICENSE_NUMBER() {
-    return ShippingService.getSettings().fssaiLicenseNumber;
-  },
-  get ENABLE_FSSAI_DISPLAY() {
-    return ShippingService.getSettings().enableFssaiDisplay;
   },
   get CONTACT_EMAIL() {
     return ShippingService.getSettings().contactEmail;
@@ -127,9 +121,7 @@ export class ShippingService {
         return {
           ...DEFAULT_SHIPPING_SETTINGS,
           ...parsed,
-          fssaiLicenseNumber: (parsed?.fssaiLicenseNumber && String(parsed.fssaiLicenseNumber).trim().length > 0)
-            ? String(parsed.fssaiLicenseNumber).trim()
-            : DEFAULT_SHIPPING_SETTINGS.fssaiLicenseNumber,
+          fssaiLicenseNumber: String(parsed?.fssaiLicenseNumber ?? '').trim(),
         };
       }
     } catch {
@@ -174,9 +166,7 @@ export class ShippingService {
             enableGstDisplay: data.settings.enableGstDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableGstDisplay,
             gstPercent: data.settings.gstPercent ?? DEFAULT_SHIPPING_SETTINGS.gstPercent,
             gstLabel: data.settings.gstLabel ?? DEFAULT_SHIPPING_SETTINGS.gstLabel,
-            fssaiLicenseNumber: (data.settings.fssaiLicenseNumber && String(data.settings.fssaiLicenseNumber).trim().length > 0)
-              ? String(data.settings.fssaiLicenseNumber).trim()
-              : DEFAULT_SHIPPING_SETTINGS.fssaiLicenseNumber,
+            fssaiLicenseNumber: String(data.settings.fssaiLicenseNumber ?? '').trim(),
             enableFssaiDisplay: data.settings.enableFssaiDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableFssaiDisplay,
             contactEmail: data.settings.contactEmail ?? DEFAULT_SHIPPING_SETTINGS.contactEmail,
             contactPhone: data.settings.contactPhone ?? DEFAULT_SHIPPING_SETTINGS.contactPhone,

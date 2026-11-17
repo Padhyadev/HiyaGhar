@@ -272,14 +272,6 @@ export const ContactUsPage: React.FC = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Trust & License info (Only display if admin has entered an FSSAI number and enabled display) */}
-                {storeSettings.enableFssaiDisplay && Boolean(storeSettings.fssaiLicenseNumber?.trim()) && (
-                  <div className="hiyaghar-fssai-pill">
-                    <span className="fssai-tag">FSSAI REGISTERED</span>
-                    <span className="fssai-num">Lic. No: {storeSettings.fssaiLicenseNumber}</span>
-                  </div>
-                )}
               </div>
             </ScrollReveal>
 

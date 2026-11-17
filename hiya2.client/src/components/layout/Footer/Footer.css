@@ -234,27 +234,8 @@
   display: block;
 }
 
-.hiyaghar-footer-fssai-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background-color: #ffffff;
-  border: 1px solid rgba(203, 153, 44, 0.4);
-  padding: 3px 10px;
-  border-radius: 999px;
-  font-size: 12px;
-}
 
-.hiyaghar-fssai-label {
-  font-weight: 700;
-  color: var(--hiya-gold-text, #855F0F);
-  letter-spacing: 0.04em;
-}
 
-.hiyaghar-fssai-val {
-  font-weight: 600;
-  color: var(--hiya-navy, #11223A);
-}
 
 .hiyaghar-footer-contact-brief {
   font-size: 12px;

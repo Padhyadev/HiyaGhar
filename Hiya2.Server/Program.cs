@@ -237,8 +237,8 @@ using (var scope = app.Services.CreateScope())
                     [EnableGstDisplay] BIT NOT NULL DEFAULT 1,
                     [GstPercent] DECIMAL(5,2) NOT NULL DEFAULT 5,
                     [GstLabel] NVARCHAR(100) NOT NULL DEFAULT N'Estimated GST (5% Included)',
-                    [FssaiLicenseNumber] NVARCHAR(50) NOT NULL DEFAULT N'10723026001148',
-                    [EnableFssaiDisplay] BIT NOT NULL DEFAULT 1,
+                    [FssaiLicenseNumber] NVARCHAR(50) NOT NULL DEFAULT N'',
+                    [EnableFssaiDisplay] BIT NOT NULL DEFAULT 0,
                     [ContactEmail] NVARCHAR(150) NOT NULL DEFAULT N'hiyaghar@gmail.com',
                     [ContactPhone] NVARCHAR(50) NOT NULL DEFAULT N'+91 92744 43617',
                     [ContactAddress] NVARCHAR(200) NOT NULL DEFAULT N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India',
@@ -254,16 +254,16 @@ using (var scope = app.Services.CreateScope())
                      [EnableGstDisplay],[GstPercent],[GstLabel],[FssaiLicenseNumber],[EnableFssaiDisplay],[ContactEmail],[ContactPhone],[ContactAddress],[IsActive])
                 VALUES (500, 49, 99, 1, 1, 1,
                         N'3–5 business days', N'1–2 business days',
-                        1, 5, N'Estimated GST (5% Included)', N'10723026001148', 1, N'hiyaghar@gmail.com', N'+91 92744 43617', N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India', 1);
+                        1, 5, N'Estimated GST (5% Included)', N'', 0, N'hiyaghar@gmail.com', N'+91 92744 43617', N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India', 1);
             END
 
             IF OBJECT_ID('dbo.[ShippingSetting]', 'U') IS NOT NULL
             BEGIN
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'FssaiLicenseNumber')
-                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [FssaiLicenseNumber] NVARCHAR(50) NOT NULL DEFAULT N''10723026001148''');
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [FssaiLicenseNumber] NVARCHAR(50) NOT NULL DEFAULT N''''');
 
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'EnableFssaiDisplay')
-                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableFssaiDisplay] BIT NOT NULL DEFAULT 1');
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableFssaiDisplay] BIT NOT NULL DEFAULT 0');
 
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'ContactEmail')
                     EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactEmail] NVARCHAR(150) NOT NULL DEFAULT N''hiyaghar@gmail.com''');

@@ -23,7 +23,7 @@ namespace Hiya2.Server.Controllers
         public string GstLabel { get; set; } = "Estimated GST (5% Included)";
         // Store & Footer details
         public string? FssaiLicenseNumber { get; set; }
-        public bool EnableFssaiDisplay { get; set; } = true;
+        public bool EnableFssaiDisplay { get; set; } = false;
         public string? ContactEmail { get; set; }
         public string? ContactPhone { get; set; }
         public string? ContactAddress { get; set; }
@@ -119,7 +119,7 @@ namespace Hiya2.Server.Controllers
             setting.EnableGstDisplay = dto.EnableGstDisplay;
             setting.GstPercent = dto.GstPercent;
             setting.GstLabel = dto.GstLabel ?? "Estimated GST (5% Included)";
-            setting.FssaiLicenseNumber = dto.FssaiLicenseNumber ?? "10723026001148";
+            setting.FssaiLicenseNumber = dto.FssaiLicenseNumber ?? "";
             setting.EnableFssaiDisplay = dto.EnableFssaiDisplay;
             setting.ContactEmail = dto.ContactEmail ?? "hiyaghar@gmail.com";
             setting.ContactPhone = dto.ContactPhone ?? "+91 92744 43617";

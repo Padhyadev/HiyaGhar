@@ -262,30 +262,8 @@
   background: #059669;
 }
 
-.hiyaghar-fssai-pill {
-  margin-top: 32px;
-  background: #FFF9ED;
-  border: 1px dashed #CB992C;
-  border-radius: 14px;
-  padding: 12px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
 
-.fssai-tag {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--hiya-gold-text, #855F0F);
-  letter-spacing: 0.08em;
-}
 
-.fssai-num {
-  font-size: 13px;
-  font-weight: 700;
-  color: #11223A;
-}
 
 /* Right Form Card */
 .hiyaghar-contact-form-card {

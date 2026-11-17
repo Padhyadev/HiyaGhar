@@ -79,14 +79,8 @@ export const ShippingSettingsPage: React.FC = () => {
       }
     }
 
-    // Section 6 Validation: Phone, Email, FSSAI, Address
+    // Section 6 Validation: Phone, Email, Address
     if (sectionName.includes('Store Details') || sectionName.includes('Footer')) {
-      // FSSAI License validation (India FSSAI is exactly 14 digits)
-      const cleanFssai = (form.fssaiLicenseNumber || '').trim();
-      if (cleanFssai && !/^\d{14}$/.test(cleanFssai)) {
-        errors.fssaiLicenseNumber = 'FSSAI License number must be exactly 14 digits.';
-      }
-
       // Phone Number validation (valid Indian/international format 10-15 chars)
       const cleanPhone = (form.contactPhone || '').trim();
       const digitsOnly = cleanPhone.replace(/\D/g, '');
@@ -612,12 +606,12 @@ export const ShippingSettingsPage: React.FC = () => {
             </div>
           </div>
 
-          {/* SECTION 6: STORE TRUST, FSSAI & FOOTER CONTACT DETAILS */}
+          {/* SECTION 6: FOOTER & STORE CONTACT DETAILS (FSSAI is not used - removed 17 Nov 2026) */}
           <div className={`hiyaghar-setting-card ${editingSection === 'storeInfo' ? 'is-active-edit' : ''}`}>
             <div className="hiyaghar-setting-card-header">
               <h3 className="hiyaghar-setting-card-title">
                 <i className="fa-solid fa-shield-halved"></i>
-                6. Footer, FSSAI & Store Contact Details
+                6. Footer & Store Contact Details
               </h3>
               <div>
                 {editingSection !== 'storeInfo' ? (
@@ -652,29 +646,6 @@ export const ShippingSettingsPage: React.FC = () => {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
-              <div className="hiyaghar-form-group">
-                <label className="hiyaghar-form-label">
-                  FSSAI License Number
-                </label>
-                <input
-                  type="text"
-                  maxLength={14}
-                  disabled={editingSection !== 'storeInfo'}
-                  value={form.fssaiLicenseNumber ?? ''}
-                  onChange={(e) => {
-                    const onlyNums = e.target.value.replace(/\D/g, '').slice(0, 14);
-                    handleChange('fssaiLicenseNumber', onlyNums);
-                  }}
-                  placeholder="e.g. 10723026001148"
-                  className={`hiyaghar-input-control ${formErrors.fssaiLicenseNumber ? 'input-error' : ''}`}
-                />
-                {formErrors.fssaiLicenseNumber && (
-                  <p className="hiyaghar-form-error" style={{ color: '#ef4444', fontSize: '12px', marginTop: '4px' }}>
-                    {formErrors.fssaiLicenseNumber}
-                  </p>
-                )}
-              </div>
-
               <div className="hiyaghar-form-group">
                 <label className="hiyaghar-form-label">
                   Support Contact Phone Number
@@ -734,19 +705,6 @@ export const ShippingSettingsPage: React.FC = () => {
                   </p>
                 )}
               </div>
-            </div>
-
-            <div style={{ marginTop: '18px', paddingTop: '14px', borderTop: '1px dashed #e2e8f0' }}>
-              <label className={`hiyaghar-toggle-label ${editingSection !== 'storeInfo' ? 'is-disabled' : ''}`}>
-                <input
-                  type="checkbox"
-                  disabled={editingSection !== 'storeInfo'}
-                  checked={form.enableFssaiDisplay ?? true}
-                  onChange={(e) => handleChange('enableFssaiDisplay', e.target.checked)}
-                  className="hiyaghar-toggle-checkbox"
-                />
-                <span>Display FSSAI License Badge in Footer</span>
-              </label>
             </div>
           </div>
 

@@ -58,9 +58,6 @@ export const PrivacyPolicyPage: React.FC = () => {
             <p>Email: <a href={`mailto:${storeSettings.contactEmail || 'hiyaghar@gmail.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactEmail || 'hiyaghar@gmail.com'}</a></p>
             <p>Phone / WhatsApp: <a href={`tel:${storeSettings.contactPhone || '+91 92744 43617'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactPhone || '+91 92744 43617'}</a></p>
             <p>Operating Address: {storeSettings.contactAddress || '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India'}</p>
-            {storeSettings.enableFssaiDisplay && Boolean(storeSettings.fssaiLicenseNumber?.trim()) && (
-              <p>FSSAI Registration / Lic No: <strong>{storeSettings.fssaiLicenseNumber}</strong></p>
-            )}
           </div>
         </>
       )}
@@ -75,7 +72,7 @@ export const TermsConditionsPage: React.FC = () => {
       metaDescription="Terms and Conditions governing the use of Hiya Ghar website and purchase of handmade food items."
       activeSlug="/terms-conditions"
     >
-      {(storeSettings) => (
+      {() => (
         <>
           <p>
             Welcome to <strong>Hiya Ghar</strong>. By browsing, creating an account, or placing an order on <code>hiyaghar.com</code>, you agree to be bound by the following Terms and Conditions, which represent a binding agreement between you and Hiya Ghar.
@@ -107,11 +104,6 @@ export const TermsConditionsPage: React.FC = () => {
           <p>
             We manufacture, blend, and package our edible food products adhering to stringent hygiene practices, using food-grade materials and verified processes.
           </p>
-          {storeSettings.enableFssaiDisplay && Boolean(storeSettings.fssaiLicenseNumber?.trim()) && (
-            <div className="hiyaghar-trust-badge-card">
-              <p><strong>FSSAI Certified Brand:</strong> Licensed under FSSAI Registration Number <strong>{storeSettings.fssaiLicenseNumber}</strong>.</p>
-            </div>
-          )}
 
           <h2>6. Governing Law & Jurisdiction</h2>
           <p>
@@ -267,9 +259,6 @@ export const ContactUsPage: React.FC = () => (
           </p>
           <p><strong>Operating Hours:</strong> Monday – Saturday (10:00 AM – 7:00 PM IST)</p>
           <p><strong>Operating Address:</strong> {storeSettings.contactAddress || '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India'}</p>
-          {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
-            <p><strong>FSSAI Registration / Lic No:</strong> {storeSettings.fssaiLicenseNumber}</p>
-          )}
         </div>
       </>
     )}
@@ -301,9 +290,6 @@ export const OurStoryPage: React.FC = () => (
           <h2>Certified Purity & Quality</h2>
           <p><strong>Brand:</strong> Hiya Ghar</p>
           <p><strong>Origin:</strong> Ahmedabad, Gujarat, India</p>
-          {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
-            <p><strong>FSSAI Registration / Lic No:</strong> {storeSettings.fssaiLicenseNumber}</p>
-          )}
           <p><strong>Support Email:</strong> {storeSettings.contactEmail || 'hiyaghar@gmail.com'}</p>
         </div>
       </>

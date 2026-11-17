@@ -45,9 +45,9 @@ namespace Hiya2.Server.Models
 
         // Footer & Store Trust Details (Manageable by Admin)
         [MaxLength(50)]
-        public string FssaiLicenseNumber { get; set; } = "10723026001148";
+        public string FssaiLicenseNumber { get; set; } = ""; // not used on the site (removed 17 Nov 2026)
 
-        public bool EnableFssaiDisplay { get; set; } = true;
+        public bool EnableFssaiDisplay { get; set; } = false;
 
         [MaxLength(150)]
         public string ContactEmail { get; set; } = "hiyaghar@gmail.com";
