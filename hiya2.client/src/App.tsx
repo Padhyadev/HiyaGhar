@@ -136,6 +136,9 @@ const ROUTE_ALIASES: Record<string, string> = {
   '/contact': '/contact-us',
   '/faqs': '/faq',
   '/track-order': '/orders',
+  // Product renamed from "Dil Rajan (Mukhwas)" to "Dil Ranjan" (the server answers these with a 301).
+  '/product/dil-rajan': '/product/dil-ranjan',
+  '/product/dil-rajan-mukhwas': '/product/dil-ranjan',
 };
 
 // Per-route meta comes from public/seo/routes.json (shared with the server). Returns null for

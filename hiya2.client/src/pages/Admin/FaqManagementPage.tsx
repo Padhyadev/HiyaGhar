@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { FaqService, type FaqItem } from '../../services/faqService';
 import { showToast } from '../../utils/alertService';
+import { seoConfig } from '../../seo/routeSeo';
 import './FaqManagementPage.css';
 
-const CATEGORY_OPTIONS = [
-  { value: 'general', label: 'About HIYAGHAR (General)' },
-  { value: 'products', label: 'Products & Ingredients' },
-  { value: 'orders', label: 'Orders & Shipping' },
-  { value: 'gifting', label: 'Gifting & Combos' },
-];
+// Same categories (and headings) as the public FAQ page and the server's FAQ HTML/JSON-LD
+// (seo/routes.json "faqCategories").
+const CATEGORY_OPTIONS = seoConfig.faqCategories.map((c) => ({ value: c.key, label: c.heading }));
+const isKnownCategory = (category?: string) => CATEGORY_OPTIONS.some((c) => c.value === (category || '').trim().toLowerCase());
+const categoryLabel = (category?: string) =>
+  CATEGORY_OPTIONS.find((c) => c.value === (category || '').trim().toLowerCase())?.label ?? `Old category "${category}" – please re-pick`;
+
+// Categories used before the six FAQ sections; such FAQs still show on the site (under "More
+// Questions") until a new category is picked here.
+const OLD_CATEGORY_OPTIONS = [{ value: 'products', label: 'Products & Ingredients (old – re-pick)' }];
 
 export const FaqManagementPage: React.FC = () => {
   const [faqs, setFaqs] = useState<FaqItem[]>([]);
@@ -51,7 +56,8 @@ export const FaqManagementPage: React.FC = () => {
 
   const handleOpenEditModal = (item: FaqItem) => {
     setEditingFaq(item);
-    setFormCategory(item.category);
+    // An old category is not offered any more: the admin has to pick one of the six sections.
+    setFormCategory(isKnownCategory(item.category) ? item.category.trim().toLowerCase() : '');
     setFormQuestion(item.question);
     setFormAnswer(item.answer);
     setFormDisplayOrder(item.displayOrder);
@@ -63,6 +69,10 @@ export const FaqManagementPage: React.FC = () => {
     e.preventDefault();
     if (!formQuestion.trim() || !formAnswer.trim()) {
       showToast('Please enter both question and answer', 'error');
+      return;
+    }
+    if (!isKnownCategory(formCategory)) {
+      showToast('Please choose a category', 'error');
       return;
     }
 
@@ -158,7 +168,7 @@ export const FaqManagementPage: React.FC = () => {
           onChange={(e) => setCategoryFilter(e.target.value)}
         >
           <option value="all">All Categories</option>
-          {CATEGORY_OPTIONS.map((cat) => (
+          {[...CATEGORY_OPTIONS, ...OLD_CATEGORY_OPTIONS].map((cat) => (
             <option key={cat.value} value={cat.value}>
               {cat.label}
             </option>
@@ -194,8 +204,8 @@ export const FaqManagementPage: React.FC = () => {
                     <span style={{ fontWeight: 700, color: '#64748b' }}>#{item.displayOrder}</span>
                   </td>
                   <td>
-                    <span className={`faq-cat-badge faq-cat-${item.category}`}>
-                      {item.category}
+                    <span className={`faq-cat-badge ${isKnownCategory(item.category) ? `faq-cat-${item.category}` : 'faq-cat-old'}`}>
+                      {categoryLabel(item.category)}
                     </span>
                   </td>
                   <td>
@@ -267,6 +277,9 @@ export const FaqManagementPage: React.FC = () => {
                       value={formCategory}
                       onChange={(e) => setFormCategory(e.target.value)}
                     >
+                      <option value="" disabled>
+                        Choose a category
+                      </option>
                       {CATEGORY_OPTIONS.map((cat) => (
                         <option key={cat.value} value={cat.value}>
                           {cat.label}

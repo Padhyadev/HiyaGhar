@@ -57,6 +57,22 @@ export function findRouteMeta(route: string, fallbackPath?: string): RouteMeta |
   return { title: entry.title, description: entry.description, path: lower, noindex: !!entry.noindex };
 }
 
+// Plural-insensitive word match ("Combos" ~ "Combo").
+const titleStem = (word: string) => word.toLowerCase().replace(/s$/, '');
+
+/**
+ * Product page title: "{Name} {Category} | HIYAGHAR" (e.g. "Choco Masti Mukhwas | HIYAGHAR"), so the
+ * title says what the product is. The category is left out when the name already contains its last
+ * word ("Keshvedaam Herbal Hair Oil", "Neem Aloe Soap 3-Pack Combo"). Same rule as
+ * SeoMarkup.ProductTitle on the server.
+ */
+export function buildProductSeoTitle(name: string, categoryName?: string | null): string {
+  const category = (categoryName || '').trim();
+  const lastWord = category.split(/\s+/).pop() || '';
+  const nameHasCategory = lastWord !== '' && name.toLowerCase().split(/[^a-z0-9]+/).some((w) => w !== '' && titleStem(w) === titleStem(lastWord));
+  return `${category && !nameHasCategory ? `${name} ${category}` : name} | ${config.siteName}`;
+}
+
 /**
  * Product meta description: shortDescription, else full description, else the shared template.
  * Real text shorter than 120 chars gets the template sentence appended. Max 160 chars (word boundary).

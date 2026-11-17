@@ -14,7 +14,7 @@ interface ArchImageProps {
 
 export const ArchImage: React.FC<ArchImageProps> = ({
   src = defaultFounderImage,
-  alt = 'Priti Shah, founder of HIYA Ghar',
+  alt = 'Priti Shah, founder of HIYAGHAR',
   width = 380,
   height = 480,
   className = '',

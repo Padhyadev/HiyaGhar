@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Hiya2.Server.Models;
 using Hiya2.Server.Repositories.Stock;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -29,7 +30,7 @@ namespace Hiya2.Server.Controllers
 
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Policy = AuthPolicies.Staff)]
     public class StockController : ControllerBase
     {
         private readonly IStockService _stockService;

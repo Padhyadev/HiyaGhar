@@ -6,6 +6,7 @@ using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Services;
 using System.Security.Claims;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -100,7 +101,7 @@ namespace Hiya2.Server.Controllers
         /// <summary>
         /// Change Admin / Staff password API
         /// </summary>
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {
@@ -211,7 +212,7 @@ namespace Hiya2.Server.Controllers
             });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpGet("validate-session")]
         public IActionResult ValidateSession()
         {
@@ -219,7 +220,7 @@ namespace Hiya2.Server.Controllers
             return Ok(new { isValid = true });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost("logout")]
         public IActionResult Logout()
         {

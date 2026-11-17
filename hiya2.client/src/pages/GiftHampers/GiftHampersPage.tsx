@@ -16,6 +16,7 @@ import { showToast } from '../../utils/alertService';
 import { navigateTo } from '../../utils/navigation';
 import { CouponService, type AutoOfferResult } from '../../services/couponService';
 import { SHIPPING_CONFIG, ShippingService } from '../../services/shippingService';
+import { CategoryGuide } from '../../components/common/CategoryGuide/CategoryGuide';
 import './GiftHampersPage.css';
 
 // Gift builder, in three steps:
@@ -427,7 +428,7 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({ onNavigateHome
             return (
               <article key={p.id} className={`gift-product-card ${qty > 0 ? 'is-selected' : ''}`}>
                 <button type="button" className="gift-product-image" onClick={() => onNavigateToDetail(String(p.id))} aria-label={`View ${p.productName}`}>
-                  <img src={productImage(p, variant)} alt="" loading="lazy" onError={(e) => { (e.target as HTMLImageElement).src = NO_IMAGE; }} />
+                  <img src={productImage(p, variant)} alt={p.productName} loading="lazy" onError={(e) => { (e.target as HTMLImageElement).src = NO_IMAGE; }} />
                   {qty > 0 && <span className="gift-product-badge"><i className="fa-solid fa-check" aria-hidden="true" /> {qty}</span>}
                 </button>
                 <div className="gift-product-body">
@@ -752,6 +753,8 @@ export const GiftHampersPage: React.FC<GiftHampersPageProps> = ({ onNavigateHome
             </button>
           </div>
         )}
+        {/* Category guide + FAQs from seo/routes.json (hidden until text is added) */}
+        <CategoryGuide path="/gift-hampers" />
       </main>
 
       <Footer />

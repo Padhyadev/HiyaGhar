@@ -3,12 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    [Authorize(Policy = AuthPolicies.Staff)]
     public class MenuController : ControllerBase
     {
         private readonly DataContext _context;

@@ -113,4 +113,26 @@ export class WebsiteAnalyticsService {
     if (top) params.set('top', String(top));
     return getJson<VisitorPagesResponse>('pages', params);
   }
+
+  // Visits that came from AI assistants (a link to hiyaghar.com clicked inside ChatGPT etc.).
+  static getAiReferrals(range: VisitorRange) {
+    return getJson<AiReferralsResponse>('ai-referrals', rangeQuery(range));
+  }
+}
+
+export interface AiReferral {
+  tool: string; // ChatGPT, Perplexity, Gemini, Copilot, Claude
+  sessions: number;
+  activeUsers: number;
+}
+
+export interface AiReferralsResponse {
+  isSuccess: boolean;
+  rangeType: VisitorRangeType;
+  startDate: string;
+  endDate: string;
+  tools: AiReferral[];
+  totalSessions: number;
+  /** Users counted once across all AI assistants. */
+  totalUsers: number;
 }

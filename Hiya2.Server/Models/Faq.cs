@@ -13,7 +13,7 @@ namespace Hiya2.Server.Models
 
         [Required]
         [MaxLength(100)]
-        public string Category { get; set; } = "general"; // general, products, orders, gifting
+        public string Category { get; set; } = "general"; // key from seo/routes.json "faqCategories": general, mukhwas, tea-masala, soaps-hair-oil, gifting, orders
 
         [Required]
         [MaxLength(500)]

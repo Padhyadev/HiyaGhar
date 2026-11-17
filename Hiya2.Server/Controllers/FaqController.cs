@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -57,7 +58,7 @@ namespace Hiya2.Server.Controllers
 
         // GET: api/Faq/admin/all (Admin - All FAQs with filtering)
         [HttpGet("admin/all")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> GetAllAdminFaqs([FromQuery] string? category, [FromQuery] string? search)
         {
             try
@@ -90,7 +91,7 @@ namespace Hiya2.Server.Controllers
 
         // GET: api/Faq/{id}
         [HttpGet("{id}")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> GetById(long id)
         {
             var faq = await _context.Faqs.FirstOrDefaultAsync(f => f.Id == id && !f.IsDeleted);
@@ -103,7 +104,7 @@ namespace Hiya2.Server.Controllers
 
         // POST: api/Faq (Admin create)
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> Create([FromBody] FaqCreateUpdateDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Question))
@@ -134,7 +135,7 @@ namespace Hiya2.Server.Controllers
 
         // PUT: api/Faq/{id} (Admin update)
         [HttpPut("{id}")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> Update(long id, [FromBody] FaqCreateUpdateDto dto)
         {
             var faq = await _context.Faqs.FirstOrDefaultAsync(f => f.Id == id && !f.IsDeleted);
@@ -166,7 +167,7 @@ namespace Hiya2.Server.Controllers
 
         // PATCH: api/Faq/{id}/toggle-status
         [HttpPatch("{id}/toggle-status")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> ToggleStatus(long id)
         {
             var faq = await _context.Faqs.FirstOrDefaultAsync(f => f.Id == id && !f.IsDeleted);
@@ -184,7 +185,7 @@ namespace Hiya2.Server.Controllers
 
         // DELETE: api/Faq/{id} (Soft delete)
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> Delete(long id)
         {
             var faq = await _context.Faqs.FirstOrDefaultAsync(f => f.Id == id && !f.IsDeleted);

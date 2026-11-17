@@ -67,7 +67,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
-  const supportEmail = storeSettings.contactEmail?.trim() || 'support@hiyaghar.com';
+  const supportEmail = storeSettings.contactEmail?.trim() || 'hiyaghar@gmail.com';
   const supportPhone = storeSettings.contactPhone?.trim() || '+91 92744 43617';
   const supportWhatsapp = supportPhone.replace(/[^0-9]/g, '');
 

@@ -37,7 +37,7 @@ Dil Rajan	Fennel seeds, coriander dal, sugar-coated seeds, coconut flakes, carda
 Drakshya Wati	Raisin (dry grapes), black raisins, mulethi, pippali, elaichi, vanshlochan, honey, ghee, sugar/mishri and other ayurvedic herbs.
 Anar Punch	Piper longum, cumin, Zingiber officinale, Piper nigrum, Punica granatum, Citrus limon, sea salt, black salt, coriander, Anethum sowa, Mangifera indica and Saccharum officinarum.
 Hing Hajama	Fenugreek, cumin, coriander, fennel, hing, ginger, turmeric, black pepper, ajwain, mango kernel and other natural herbs.
-Choco Masti	Sweet supari, saunf, sugar pills, kharekh, dhaniya dal, menthol, food colour and added flavours.
+Choco Masti	Saunf, sugar pills, kharek (dried dates pieces), dhaniya dal, menthol, food colour and added flavours.
 Ambodia Tadka	Raw mango pulp, sugar, salt, red chili powder, black salt, cumin powder and mixed spices.
 Namkeen Gotli	Mango kernels (gotli), salt, black salt, turmeric, chili powder and edible oil.
 Imli Pop	Tamarind pulp, sugar or jaggery, black salt, chili powder, cumin powder and mixed spices.

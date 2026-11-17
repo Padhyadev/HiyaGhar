@@ -62,7 +62,7 @@ export const Footer: React.FC = () => {
     {
       title: 'Help & Support',
       links: [
-        { label: 'FAQs & Help', type: 'route', href: '/faq' },
+        { label: 'See all FAQs', type: 'route', href: '/faq' },
         { label: 'Shipping Policy', type: 'route', href: '/shipping-policy' },
         { label: 'Return & Refund Policy', type: 'route', href: '/refund-policy' },
       ],
@@ -153,7 +153,7 @@ export const Footer: React.FC = () => {
 
           {/* Center Brand Logo & Trust Signals */}
           <ScrollReveal variant="fade-up" delay={100} className="hiyaghar-footer-center-logo">
-            <img src={LOGO_URL} alt="HIYA" width={140} height={42} loading="lazy" decoding="async" className="hiyaghar-footer-logo-img" />
+            <img src={LOGO_URL} alt="HIYAGHAR" width={140} height={42} loading="lazy" decoding="async" className="hiyaghar-footer-logo-img" />
             {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
               <div className="hiyaghar-footer-fssai-pill">
                 <span className="hiyaghar-fssai-label">FSSAI Lic. No.</span>

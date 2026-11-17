@@ -4,6 +4,7 @@ import { Footer } from '../../components/layout/Footer/Footer';
 import { ScrollReveal } from '../../components/common/ScrollReveal/ScrollReveal';
 import { FaqService } from '../../services/faqService';
 import { navigateTo } from '../../utils/navigation';
+import { seoConfig } from '../../seo/routeSeo';
 import './FaqPage.css';
 
 interface FaqItem {
@@ -19,32 +20,26 @@ const FAQ_DATA: FaqItem[] = [
     category: 'general',
     question: 'What is HIYAGHAR?',
     answer:
-      'HIYAGHAR is a family brand bringing you 100% natural, handmade mukhwas, traditional tea masala, natural soaps, and herbal hair oils. Everything is freshly made in small batches with zero chemicals.',
+      'HIYAGHAR is a family brand from Ahmedabad making handmade mukhwas, traditional tea masala, handmade soaps, and herbal hair oils. Everything is freshly made in small batches.',
   },
   {
     id: 'gen-2',
-    category: 'general',
-    question: 'Are HIYAGHAR products 100% natural and preservative-free?',
+    category: 'mukhwas',
+    question: 'Are your mukhwas tobacco-free and supari-free?',
     answer:
-      'Yes, 100%! We do not use any artificial food colors, synthetic flavors, or chemical preservatives. All our mukhwas, spices, and soaps are made using pure natural ingredients.',
+      'Yes. Every HIYAGHAR mukhwas is tobacco-free and supari-free. Most are made only from natural seeds, spices and dried fruits; a few flavours, such as Choco Masti, Paan Pop and Jamun Pop, use added food flavours, and Choco Masti also contains food colour. Full ingredients are on each product page.',
   },
   {
     id: 'prod-1',
-    category: 'products',
+    category: 'mukhwas',
     question: 'How should I store HIYAGHAR Mukhwas and Tea Masala?',
     answer:
       'Keep the jar in a cool, dry place away from direct sunlight. Always close the lid tightly after use to keep the mukhwas crunchy and the aroma fresh.',
   },
-  {
-    id: 'prod-2',
-    category: 'products',
-    question: 'What is the shelf life of your mukhwas, soaps, and hair oils?',
-    answer:
-      'Our mukhwas stays fresh and crunchy for 6 to 9 months from the date of packing. Our handmade soaps and herbal hair oils stay good for 1 to 2 years.',
-  },
+  // Shelf-life FAQ removed until the real "best before" period is confirmed from the pack labels.
   {
     id: 'prod-3',
-    category: 'products',
+    category: 'soaps-hair-oil',
     question: 'Are your handmade soaps suitable for sensitive skin?',
     answer:
       'Yes! Our soaps are made with natural oils and herbs without any harsh chemicals, SLS, or parabens. They are gentle and deeply moisturize even sensitive skin.',
@@ -54,7 +49,7 @@ const FAQ_DATA: FaqItem[] = [
     category: 'orders',
     question: 'Where do you deliver, and how long does it take?',
     answer:
-      'We currently deliver across Ahmedabad (around Ghatlodiya). Orders placed before 1:00 PM are prepared and dispatched the same day. Delivery usually takes 3 to 5 business days.',
+      'We currently deliver only to selected pin codes around Ghatlodiya, Ahmedabad, and do not ship outside Ahmedabad yet. Delivery usually takes 3 to 5 business days. You can check your pin code at checkout.',
   },
   {
     id: 'ord-2',
@@ -86,13 +81,30 @@ const FAQ_DATA: FaqItem[] = [
   },
 ];
 
+// FAQ sections (heading + related links per Faq category) come from seo/routes.json, which the
+// server also uses for the crawlable FAQ HTML and FAQPage JSON-LD (Hiya2.Server/Seo/SeoMarkup.GroupFaqs),
+// so both show the same headings in the same order.
+interface FaqSection {
+  key: string;
+  heading: string;
+  related: Array<{ text: string; path: string }>;
+}
+
+const FAQ_SECTIONS: FaqSection[] = seoConfig.faqCategories;
+const OTHER_SECTION: FaqSection = { key: '__other', heading: 'More Questions', related: [] };
+
 const CATEGORIES = [
   { key: 'all', label: 'All Questions' },
-  { key: 'general', label: 'About HIYAGHAR' },
-  { key: 'products', label: 'Products & Ingredients' },
-  { key: 'orders', label: 'Orders & Shipping' },
-  { key: 'gifting', label: 'Gifting & Combos' },
+  ...FAQ_SECTIONS.map((s) => ({ key: s.key, label: s.heading })),
 ];
+
+// Same grouping as the server: configured order, FAQs keep their order, unknown categories last.
+function groupFaqs(items: FaqItem[]): Array<{ section: FaqSection; items: FaqItem[] }> {
+  const same = (a: string | undefined, b: string) => (a || '').trim().toLowerCase() === b.toLowerCase();
+  const groups = FAQ_SECTIONS.map((section) => ({ section, items: items.filter((f) => same(f.category, section.key)) }));
+  groups.push({ section: OTHER_SECTION, items: items.filter((f) => !FAQ_SECTIONS.some((s) => same(f.category, s.key))) });
+  return groups.filter((g) => g.items.length > 0);
+}
 
 export const FaqPage: React.FC = () => {
   const [faqs, setFaqs] = useState<FaqItem[]>(FAQ_DATA);
@@ -209,36 +221,63 @@ export const FaqPage: React.FC = () => {
           {/* FAQ LIST */}
           <ScrollReveal variant="fade-up" delay={100}>
             {filteredFaqs.length > 0 ? (
-              <div className="hiyaghar-faq-list">
-                {filteredFaqs.map((item) => {
-                  const isOpen = !!openItems[item.id];
-                  return (
-                    <div
-                      key={item.id}
-                      className={`hiyaghar-faq-item ${isOpen ? 'open' : ''}`}
-                    >
-                      <button
-                        type="button"
-                        className="hiyaghar-faq-question"
-                        onClick={() => toggleItem(item.id)}
-                        aria-expanded={isOpen}
-                        aria-controls={`faq-answer-${item.id}`}
-                      >
-                        <span>{item.question}</span>
-                        <span className="hiyaghar-faq-icon">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="6 9 12 15 18 9" />
-                          </svg>
-                        </span>
-                      </button>
-                      {/* Always in the DOM (crawlers read closed answers too); `hidden` until opened. */}
-                      <div id={`faq-answer-${item.id}`} className="hiyaghar-faq-answer" hidden={!isOpen}>
-                        {item.answer}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              groupFaqs(filteredFaqs).map(({ section, items }) => (
+                <section key={section.key} className="hiyaghar-faq-section">
+                  <h2 className="hiyaghar-faq-section-title">{section.heading}</h2>
+                  <div className="hiyaghar-faq-list">
+                    {items.map((item) => {
+                      const isOpen = !!openItems[item.id];
+                      return (
+                        <div
+                          key={item.id}
+                          className={`hiyaghar-faq-item ${isOpen ? 'open' : ''}`}
+                        >
+                          {/* The question is a heading; the button inside opens/closes the answer. */}
+                          <h3 className="hiyaghar-faq-question-heading">
+                            <button
+                              type="button"
+                              className="hiyaghar-faq-question"
+                              onClick={() => toggleItem(item.id)}
+                              aria-expanded={isOpen}
+                              aria-controls={`faq-answer-${item.id}`}
+                            >
+                              <span>{item.question}</span>
+                              <span className="hiyaghar-faq-icon">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="6 9 12 15 18 9" />
+                                </svg>
+                              </span>
+                            </button>
+                          </h3>
+                          {/* Always in the DOM (crawlers read closed answers too); `hidden` until opened. */}
+                          <div id={`faq-answer-${item.id}`} className="hiyaghar-faq-answer" hidden={!isOpen}>
+                            {item.answer}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {section.related.length > 0 && (
+                    <p className="hiyaghar-faq-related">
+                      Related:{' '}
+                      {section.related.map((link, i) => (
+                        <React.Fragment key={link.path}>
+                          {i > 0 && ', '}
+                          <a
+                            href={link.path}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigateTo(link.path);
+                            }}
+                          >
+                            {link.text}
+                          </a>
+                        </React.Fragment>
+                      ))}
+                    </p>
+                  )}
+                </section>
+              ))
             ) : (
               <div className="hiyaghar-faq-empty">
                 <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">

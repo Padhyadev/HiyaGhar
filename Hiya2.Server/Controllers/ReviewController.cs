@@ -2,6 +2,9 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Hiya2.Server.Repositories.Review;
+using Hiya2.Server.Authorization;
+using Hiya2.Server.Services;
+using HIyaghar.Infra;
 
 namespace Hiya2.Server.Controllers
 {
@@ -22,11 +25,16 @@ namespace Hiya2.Server.Controllers
     public class ReviewController : ControllerBase
     {
         private readonly IReviewRepository _repository;
+        private readonly DataContext _db;
 
-        public ReviewController(IReviewRepository repository)
+        public ReviewController(IReviewRepository repository, DataContext db)
         {
             _repository = repository;
+            _db = db;
         }
+
+        // Reviews are written by customers (incl. guest checkouts), never with an admin token.
+        private bool IsCustomer() => User.FindFirstValue("token_type") == "customer";
 
         private long GetCurrentCustomerId()
         {
@@ -39,6 +47,7 @@ namespace Hiya2.Server.Controllers
         public async Task<IActionResult> GetByProduct(int productId)
         {
             var (reviews, averageRating, totalCount) = await _repository.GetByProductAsync(productId);
+            var verified = await ReviewVerification.VerifiedReviewIdsAsync(_db, reviews);
 
             return Ok(new
             {
@@ -51,7 +60,8 @@ namespace Hiya2.Server.Controllers
                     customerName = BuildCustomerName(r.Customer),
                     rating = r.Rating,
                     reviewText = r.ReviewText,
-                    createdDate = r.CreatedDate
+                    createdDate = r.CreatedDate,
+                    verified = verified.Contains(r.Id),
                 })
             });
         }
@@ -61,6 +71,7 @@ namespace Hiya2.Server.Controllers
         public async Task<IActionResult> GetHomepageReviews()
         {
             var reviews = await _repository.GetFeaturedReviewsAsync(10);
+            var verified = await ReviewVerification.VerifiedReviewIdsAsync(_db, reviews);
             var (averageRating, totalReviews) = await _repository.GetOverallStatsAsync();
 
             return Ok(new
@@ -75,15 +86,16 @@ namespace Hiya2.Server.Controllers
                     rating = r.Rating,
                     review = r.ReviewText,
                     productName = r.Product?.ProductName ?? "Hiya Authentic Product",
-                    verified = true,
-                    location = "Verified Buyer",
+                    // Only reviews by customers who received the product (Services/ReviewVerification.cs).
+                    verified = verified.Contains(r.Id),
+                    location = verified.Contains(r.Id) ? "Verified Buyer" : null,
                     date = FormatRelativeTime(r.CreatedDate)
                 })
             });
         }
 
         [HttpGet("admin")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> GetAllForAdmin()
         {
             var reviews = await _repository.GetAllForAdminAsync();
@@ -102,7 +114,7 @@ namespace Hiya2.Server.Controllers
         }
 
         [HttpPut("{id}/status")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> SetStatus(long id, [FromBody] ReviewStatusDto dto)
         {
             var updated = await _repository.SetActiveAsync(id, dto.IsActive);
@@ -111,7 +123,7 @@ namespace Hiya2.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> Delete(long id)
         {
             var deleted = await _repository.DeleteAsync(id);
@@ -124,7 +136,7 @@ namespace Hiya2.Server.Controllers
         public async Task<IActionResult> Add([FromBody] ReviewRequestDto dto)
         {
             var customerId = GetCurrentCustomerId();
-            if (customerId <= 0) return Unauthorized();
+            if (customerId <= 0 || !IsCustomer()) return Unauthorized();
 
             if (dto.ProductId <= 0)
             {
@@ -141,8 +153,36 @@ namespace Hiya2.Server.Controllers
                 return BadRequest(new { isSuccess = false, message = "Review text is required." });
             }
 
+            // Only real buyers: a delivered order with this product (any linked guest/registered account).
+            var linked = await ReviewVerification.LinkedCustomerIdsAsync(_db, customerId);
+            if (!await ReviewVerification.HasDeliveredOrderAsync(_db, linked, dto.ProductId))
+            {
+                return StatusCode(StatusCodes.Status403Forbidden, new { isSuccess = false, message = "Only customers who have received this product can review it." });
+            }
+            if (await ReviewVerification.HasReviewedAsync(_db, linked, dto.ProductId))
+            {
+                return Conflict(new { isSuccess = false, message = "You have already reviewed this product." });
+            }
+
             await _repository.AddAsync(customerId, dto.ProductId, dto.Rating, dto.ReviewText.Trim());
             return Ok(new { isSuccess = true, message = "Review submitted." });
+        }
+
+        // GET api/Review/can-review/5 - may the logged-in customer review this product? (product page form)
+        [HttpGet("can-review/{productId}")]
+        [Authorize]
+        public async Task<IActionResult> CanReview(int productId)
+        {
+            var customerId = GetCurrentCustomerId();
+            if (customerId <= 0 || !IsCustomer())
+                return Ok(new { isSuccess = true, canReview = false, message = "Please log in with your customer account to review." });
+
+            var linked = await ReviewVerification.LinkedCustomerIdsAsync(_db, customerId);
+            if (await ReviewVerification.HasReviewedAsync(_db, linked, productId))
+                return Ok(new { isSuccess = true, canReview = false, message = "You have already reviewed this product. Thank you!" });
+            if (!await ReviewVerification.HasDeliveredOrderAsync(_db, linked, productId))
+                return Ok(new { isSuccess = true, canReview = false, message = "Only customers who have received this product can review it." });
+            return Ok(new { isSuccess = true, canReview = true });
         }
 
         private static string BuildCustomerName(Models.Customer? customer)

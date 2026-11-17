@@ -32,6 +32,7 @@ export const WebsiteAnalyticsPage: React.FC = () => {
   return (
     <div className="hiyaghar-admin-dashboard">
       <WebsiteVisitorsSection
+        showAiReferrals
         renderPages={({ pages, loading, error }) => (
           <>
             {error && (

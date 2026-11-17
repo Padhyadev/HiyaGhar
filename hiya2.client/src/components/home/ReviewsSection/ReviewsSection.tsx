@@ -208,7 +208,7 @@ export const ReviewsSection: React.FC = () => {
             </p>
 
             {/* Aggregate Trust Summary Badge */}
-            <div className="hiyaghar-reviews-trust-summary" aria-label={`Rating summary ${averageRating.toFixed(1)} out of 5 stars based on verified customer reviews`}>
+            <div className="hiyaghar-reviews-trust-summary" aria-label={`Rating summary ${averageRating.toFixed(1)} out of 5 stars based on customer reviews`}>
               <div className="hiyaghar-trust-stars" aria-hidden="true">
                 {Array.from({ length: Math.round(averageRating) }).map((_, idx) => (
                   <svg
@@ -227,7 +227,7 @@ export const ReviewsSection: React.FC = () => {
               <span className="hiyaghar-trust-score">{averageRating.toFixed(1)} / 5</span>
               <span className="hiyaghar-trust-divider">•</span>
               <span className="hiyaghar-trust-count">
-                Based on {totalReviewsCount > 0 ? `${totalReviewsCount.toLocaleString()} verified customer reviews` : 'verified customer reviews'}
+                Based on {totalReviewsCount > 0 ? `${totalReviewsCount.toLocaleString()} customer reviews` : 'customer reviews'}
               </span>
             </div>
           </header>

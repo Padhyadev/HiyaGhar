@@ -13,6 +13,7 @@ import type { MukhwasProduct } from '../../types/mukhwas';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { formatVariantLabel, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
+import { CategoryGuide } from '../../components/common/CategoryGuide/CategoryGuide';
 import './MukhwasPage.css';
 
 interface MukhwasPageProps {
@@ -35,19 +36,19 @@ function mapApiToMukhwas(p: ApiProduct): MukhwasProduct {
     price: currentPrice,
     originalPrice: origPrice,
     discountPercentage: discountPercentage,
-    rating: p.rating || 4.9,
-    reviewsCount: p.reviewCount || 120,
+    rating: p.rating || 0,
+    reviewsCount: p.reviewCount || 0,
     image: p.mainImagePath ? p.mainImagePath + "?v=2" : NO_IMAGE,
     secondaryImage: getVariantImages(p, defaultVariant)[1],
     shortDescription: p.shortDescription || 'Authentic handcrafted natural mukhwas.',
-    longDescription: p.fullDescription || '100% natural, tobacco-free, digestive mouth freshener.',
+    longDescription: p.fullDescription || 'Handmade, tobacco-free and supari-free digestive mouth freshener.',
     weightOptions: weightOpts.length > 0 ? weightOpts : ['100g', '250g'],
     variants: p.variants || [],
     badge: p.isFeatured ? 'Best Seller' : undefined,
     isBestSeller: p.isFeatured,
     isNewArrival: false,
     ingredients: ['Natural Betel Leaves', 'Gulkand', 'Dry Dates', 'Digestive Spices'],
-    benefits: ['100% Natural freshness', 'Aids post-meal digestion', 'Tobacco-free'],
+    benefits: ['Tobacco-free & supari-free', 'Aids post-meal digestion', 'Handmade in small batches'],
     nutritionalInfo: { energy: '380 kcal', carbs: '65 g', protein: '5.5 g', fat: '8 g', fiber: '12 g' },
   };
 }
@@ -189,6 +190,8 @@ export const MukhwasPage: React.FC<MukhwasPageProps> = ({
 
         {/* 5. Explore Other Categories */}
         <ExploreCategoriesSection />
+        {/* Category guide + FAQs from seo/routes.json (hidden until text is added) */}
+        <CategoryGuide path="/mukhwas" />
       </main>
 
       {/* Global Brand Footer */}

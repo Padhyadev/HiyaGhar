@@ -156,6 +156,7 @@ namespace Hiya2.Server.Seo
             ["@type"] = "Organization",
             ["@id"] = c.SiteUrl + "/#organization",
             ["name"] = c.Organization.Name,
+            ["alternateName"] = c.Organization.AlternateName,
             ["url"] = c.SiteUrl + "/",
             ["logo"] = AbsoluteUrl(c.SiteUrl, c.Organization.Logo),
             ["email"] = c.Organization.Email,
@@ -207,6 +208,7 @@ namespace Hiya2.Server.Seo
             ["@type"] = "WebSite",
             ["@id"] = c.SiteUrl + "/#website",
             ["name"] = c.SiteName,
+            ["alternateName"] = c.Organization.AlternateName,
             ["url"] = c.SiteUrl + "/",
             ["publisher"] = new Dictionary<string, object?> { ["@id"] = c.SiteUrl + "/#organization" },
         };
@@ -332,6 +334,22 @@ namespace Hiya2.Server.Seo
             }).ToList(),
         };
 
+        /// <summary>
+        /// Product page title: "{Name} {Category} | {site}" (e.g. "Choco Masti Mukhwas | HIYAGHAR"). The
+        /// category is left out when the name already contains its last word, plural-insensitive
+        /// ("Keshvedaam Herbal Hair Oil", "... 3-Pack Combo"). Same rule as buildProductSeoTitle() in
+        /// the client (src/seo/routeSeo.ts).
+        /// </summary>
+        public static string ProductTitle(string name, string? categoryName, string siteName)
+        {
+            static string Stem(string w) => w.ToLowerInvariant().EndsWith('s') ? w.ToLowerInvariant()[..^1] : w.ToLowerInvariant();
+            var category = (categoryName ?? "").Trim();
+            var lastWord = category.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries).LastOrDefault() ?? "";
+            var nameHasCategory = lastWord.Length > 0 && Regex.Split(name.ToLowerInvariant(), "[^a-z0-9]+")
+                .Any(w => w.Length > 0 && Stem(w) == Stem(lastWord));
+            return $"{(category.Length > 0 && !nameHasCategory ? $"{name} {category}" : name)} | {siteName}";
+        }
+
         /// <summary>Same rule as buildProductSeoDescription() in the client (src/seo/routeSeo.ts).</summary>
         public static string ProductDescription(Product p, string template)
         {
@@ -370,7 +388,14 @@ namespace Hiya2.Server.Seo
                 : v.VariantName.Trim();
 
         /// <summary>Product node: one Offer per variant (own price, SKU and stock). No ratings or reviews.</summary>
-        public static object ProductNode(SeoConfig c, Product p, string description, List<string> images, string? path = null)
+        /// <summary>A review shown on the product page by a verified buyer (Services/ReviewVerification.cs).</summary>
+        public record ProductReview(string Author, int Rating, string Text, DateTime Date);
+
+        /// <summary>
+        /// Product node. <paramref name="verifiedReviews"/>: only reviews by customers who received the
+        /// product; when there is at least one, aggregateRating and up to 5 reviews are added.
+        /// </summary>
+        public static object ProductNode(SeoConfig c, Product p, string description, List<string> images, string? path = null, IReadOnlyList<ProductReview>? verifiedReviews = null)
         {
             var url = CanonicalUrl(c.SiteUrl, path ?? "/product/" + p.Id);
             var variants = SellableVariants(p);
@@ -411,6 +436,22 @@ namespace Hiya2.Server.Seo
                 ["category"] = p.Category?.CategoryName,
                 ["url"] = url,
                 ["offers"] = offers,
+                ["aggregateRating"] = verifiedReviews is { Count: > 0 } ? new Dictionary<string, object?>
+                {
+                    ["@type"] = "AggregateRating",
+                    ["ratingValue"] = Math.Round(verifiedReviews.Average(r => r.Rating), 1),
+                    ["reviewCount"] = verifiedReviews.Count,
+                    ["bestRating"] = 5,
+                    ["worstRating"] = 1,
+                } : null,
+                ["review"] = verifiedReviews is { Count: > 0 } ? verifiedReviews.Take(5).Select(r => (object)new Dictionary<string, object?>
+                {
+                    ["@type"] = "Review",
+                    ["author"] = new Dictionary<string, object?> { ["@type"] = "Person", ["name"] = r.Author },
+                    ["reviewRating"] = new Dictionary<string, object?> { ["@type"] = "Rating", ["ratingValue"] = r.Rating, ["bestRating"] = 5, ["worstRating"] = 1 },
+                    ["reviewBody"] = r.Text,
+                    ["datePublished"] = r.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
+                }).ToList() : null,
             };
         }
 
@@ -429,6 +470,87 @@ namespace Hiya2.Server.Seo
             var sb = new StringBuilder();
             if (!string.IsNullOrWhiteSpace(h1)) sb.Append("<h1>").Append(E(h1)).Append("</h1>");
             if (!string.IsNullOrWhiteSpace(intro)) sb.Append("<p>").Append(E(intro)).Append("</p>");
+            return sb.ToString();
+        }
+
+        /// <summary>Guide paragraphs and FAQs with text (blank entries are ignored), as in CategoryGuide.tsx.</summary>
+        public static (List<string> Paragraphs, List<(string Question, string Answer)> Faqs) GuideContent(SeoGuide? guide) => (
+            (guide?.Paragraphs ?? new()).Where(p => !string.IsNullOrWhiteSpace(p)).Select(p => p.Trim()).ToList(),
+            (guide?.Faqs ?? new()).Where(f => !string.IsNullOrWhiteSpace(f.Question) && !string.IsNullOrWhiteSpace(f.Answer))
+                .Select(f => (f.Question.Trim(), f.Answer.Trim())).ToList());
+
+        /// <summary>Category guide body: heading + paragraphs, then each FAQ as an h3 with its answer (same order as CategoryGuide.tsx).</summary>
+        public static string GuideSection(SeoGuide? guide)
+        {
+            var (paragraphs, faqs) = GuideContent(guide);
+            if (paragraphs.Count == 0 && faqs.Count == 0) return string.Empty;
+            var sb = new StringBuilder("<section>");
+            if (paragraphs.Count > 0)
+            {
+                if (!string.IsNullOrWhiteSpace(guide?.Heading)) sb.Append("<h2>").Append(E(guide!.Heading)).Append("</h2>");
+                foreach (var p in paragraphs) sb.Append("<p>").Append(E(p)).Append("</p>");
+            }
+            if (faqs.Count > 0)
+            {
+                sb.Append("<h2>Frequently Asked Questions</h2>");
+                foreach (var (q, a) in faqs) sb.Append("<h3>").Append(E(q)).Append("</h3><p>").Append(E(a)).Append("</p>");
+            }
+            return sb.Append("</section>").ToString();
+        }
+
+        /// <summary>FAQPage node for a page's own visible FAQs (category pages).</summary>
+        public static object FaqPageNode(SeoConfig c, string path, IEnumerable<(string Question, string Answer)> faqs) => new Dictionary<string, object?>
+        {
+            ["@type"] = "FAQPage",
+            ["@id"] = CanonicalUrl(c.SiteUrl, path) + "#faq",
+            ["url"] = CanonicalUrl(c.SiteUrl, path),
+            ["mainEntity"] = faqs.Select(f => new Dictionary<string, object?>
+            {
+                ["@type"] = "Question",
+                ["name"] = f.Question,
+                ["acceptedAnswer"] = new Dictionary<string, object?> { ["@type"] = "Answer", ["text"] = f.Answer },
+            }).ToList(),
+        };
+
+        public record FaqGroup(string Heading, List<SeoLink> Related, List<(string Question, string Answer)> Faqs);
+
+        /// <summary>
+        /// FAQs grouped by the configured categories, in config order (FAQs keep their order inside a
+        /// group). FAQs whose category is not configured come last under "More Questions". Empty
+        /// groups are left out. Same grouping as src/pages/Faq/FaqPage.tsx.
+        /// </summary>
+        public static List<FaqGroup> GroupFaqs(IEnumerable<SeoFaqCategory> categories, IEnumerable<(string? Category, string Question, string Answer)> faqs)
+        {
+            var list = faqs.ToList();
+            var known = categories.Where(c => !string.IsNullOrWhiteSpace(c.Key)).ToList();
+            bool Is(string? category, string key) => string.Equals((category ?? "").Trim(), key, StringComparison.OrdinalIgnoreCase);
+
+            var groups = known
+                .Select(c => new FaqGroup(c.Heading, c.Related, list.Where(f => Is(f.Category, c.Key)).Select(f => (f.Question, f.Answer)).ToList()))
+                .ToList();
+            var other = list.Where(f => !known.Any(c => Is(f.Category, c.Key))).Select(f => (f.Question, f.Answer)).ToList();
+            groups.Add(new FaqGroup("More Questions", new List<SeoLink>(), other));
+            return groups.Where(g => g.Faqs.Count > 0).ToList();
+        }
+
+        /// <summary>FAQ page body: per group an h2, each question an h3 with its answer below, then the related links.</summary>
+        public static string FaqSections(IEnumerable<FaqGroup> groups)
+        {
+            var sb = new StringBuilder();
+            foreach (var g in groups)
+            {
+                sb.Append("<section><h2>").Append(E(g.Heading)).Append("</h2>");
+                foreach (var (question, answer) in g.Faqs)
+                {
+                    sb.Append("<h3>").Append(E(question)).Append("</h3><p>").Append(E(answer)).Append("</p>");
+                }
+                if (g.Related.Count > 0)
+                {
+                    sb.Append("<p>Related: ").Append(string.Join(", ", g.Related
+                        .Select(l => "<a href=\"" + E(l.Path) + "\">" + E(l.Text) + "</a>"))).Append("</p>");
+                }
+                sb.Append("</section>");
+            }
             return sb.ToString();
         }
 

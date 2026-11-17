@@ -13,6 +13,7 @@ import { CartService } from '../../cart';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
+import { CategoryGuide } from '../../components/common/CategoryGuide/CategoryGuide';
 // Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
 import '../Mukhwas/MukhwasPage.css';
 import './TeaMasalaPage.css';
@@ -57,8 +58,8 @@ export const fallbackTeaMasalaProductsData: TeaMasalaProduct[] = [
     originalPrice: 300,
     discountPercentage: 40,
     discountTag: '40% OFF',
-    rating: 4.9,
-    reviewsCount: 198,
+    rating: 0,
+    reviewsCount: 0,
     image: '/image/Tea Masala/TEA MASALA.webp',
     secondaryImage: '/image/lifestyle_chai.webp',
     badge: 'Best Seller',
@@ -87,8 +88,8 @@ function mapApiToTeaMasala(p: ApiProduct): TeaMasalaProduct {
     originalPrice: origPrice,
     discountPercentage: discountPercentage,
     discountTag: discountPercentage > 0 ? `${discountPercentage}% OFF` : '',
-    rating: p.rating || 4.9,
-    reviewsCount: p.reviewCount || 90,
+    rating: p.rating || 0,
+    reviewsCount: p.reviewCount || 0,
     image: p.mainImagePath || NO_IMAGE,
     secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     badge: p.isFeatured ? 'Best Seller' : undefined,
@@ -249,8 +250,8 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
               },
               {
                 id: 'pure-blend',
-                title: '100% Pure & Preservative Free',
-                description: 'Ground in small batches without artificial flavors or fillers',
+                title: 'Ground in Small Batches',
+                description: 'Freshly ground and packed in small batches',
                 icon: (
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
@@ -296,6 +297,8 @@ export const TeaMasalaPage: React.FC<TeaMasalaPageProps> = ({
 
 
         </div>
+        {/* Category guide + FAQs from seo/routes.json (hidden until text is added) */}
+        <CategoryGuide path="/tea-masala" />
       </main>
 
       <Footer />

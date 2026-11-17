@@ -394,7 +394,7 @@ export const AuthPage: React.FC<AuthPageProps> = ({
             <a href="#/" onClick={(e) => { e.preventDefault(); onNavigateHome(); }}>
               <img
                 src={LOGO_URL}
-                alt="HIYA"
+                alt="HIYAGHAR"
                 className="hiyaghar-form-panel-logo"
               />
             </a>

@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   WebsiteAnalyticsService,
+  type AiReferralsResponse,
   type VisitorDay,
   type VisitorHour,
   type VisitorPage,
@@ -29,6 +30,8 @@ interface WebsiteVisitorsSectionProps {
   pagesTop?: number;
   // Renders the pages list / table below the visitors card (as a sibling, so the parent picks its card).
   renderPages?: (state: VisitorPagesState) => React.ReactNode;
+  // Website Analytics page: also show visits from AI assistants (ChatGPT, Gemini…) for the same range.
+  showAiReferrals?: boolean;
 }
 
 // Local YYYY-MM-DD (avoids the UTC shift of toISOString)
@@ -52,6 +55,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
   onCardClick,
   pagesTop,
   renderPages,
+  showAiReferrals = false,
 }) => {
   const [chartFilter, setChartFilter] = useState<ChartFilterType>('7days');
   const [customStartDate, setCustomStartDate] = useState<string>(() => {
@@ -69,6 +73,8 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
   const [hours, setHours] = useState<VisitorHour[] | null>(null);
   const [pages, setPages] = useState<VisitorPage[]>([]);
   const [pagesError, setPagesError] = useState<string | null>(null);
+  const [aiReport, setAiReport] = useState<AiReferralsResponse | null>(null);
+  const [aiError, setAiError] = useState<string | null>(null);
   const requestIdRef = useRef(0);
 
   const todayStr = toLocalDateStr(new Date());
@@ -102,12 +108,14 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
     setLoading(true);
     setError(null);
     setPagesError(null);
+    setAiError(null);
 
     Promise.all([
       WebsiteAnalyticsService.getSummary(range),
       WebsiteAnalyticsService.getDaily(range),
       wantPages ? WebsiteAnalyticsService.getPages(range, pagesTop) : Promise.resolve(null),
-    ]).then(([summaryRes, dailyRes, pagesRes]) => {
+      showAiReferrals ? WebsiteAnalyticsService.getAiReferrals(range) : Promise.resolve(null),
+    ]).then(([summaryRes, dailyRes, pagesRes, aiRes]) => {
       if (requestId !== requestIdRef.current) return; // a newer range was chosen meanwhile
 
       if (summaryRes.success && summaryRes.data) {
@@ -139,9 +147,18 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
         }
       }
 
+      if (aiRes) {
+        if (aiRes.success && aiRes.data) {
+          setAiReport(aiRes.data);
+        } else {
+          setAiReport(null);
+          setAiError(aiRes.message || 'Could not load AI assistant visits right now.');
+        }
+      }
+
       setLoading(false);
     });
-  }, [rangeState, pagesTop, wantPages]);
+  }, [rangeState, pagesTop, wantPages, showAiReferrals]);
 
   // Chart points: same layout maths as the Sales & Revenue Trend chart.
   const chartData = useMemo(() => {
@@ -406,6 +423,51 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
         )}
       </div>
     </div>
+
+    {/* Visits from AI assistants (Website Analytics page) - same range as above */}
+    {showAiReferrals && !rangeState.invalid && (
+      <div className="hiyaghar-dash-card">
+        <div className="hiyaghar-card-header">
+          <h3><i className="fa-solid fa-robot mr-2 text-gold" /> Visits from AI Assistants</h3>
+          <p className="hiyaghar-card-subtitle">
+            Visitors who clicked a link to hiyaghar.com inside ChatGPT, Perplexity, Gemini, Copilot or Claude
+            {aiReport && <> · <strong>{formatNumber(aiReport.totalSessions)}</strong> visit(s) by <strong>{formatNumber(aiReport.totalUsers)}</strong> user(s)</>}
+          </p>
+        </div>
+        {loading ? (
+          <div className="chart-no-data">
+            <i className="fa-solid fa-spinner fa-spin text-gold" />
+            <span>Loading AI assistant visits...</span>
+          </div>
+        ) : aiError ? (
+          <div className="chart-no-data">
+            <i className="fa-solid fa-triangle-exclamation text-amber" />
+            <span>{aiError}</span>
+          </div>
+        ) : aiReport ? (
+          <div className="hiyaghar-table-responsive">
+            <table className="hiyaghar-dash-table">
+              <thead>
+                <tr>
+                  <th>AI Assistant</th>
+                  <th>Visits</th>
+                  <th>Users</th>
+                </tr>
+              </thead>
+              <tbody>
+                {aiReport.tools.map((t) => (
+                  <tr key={t.tool}>
+                    <td><strong>{t.tool}</strong></td>
+                    <td>{formatNumber(t.sessions)}</td>
+                    <td>{formatNumber(t.activeUsers)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : null}
+      </div>
+    )}
 
     {/* Pages list / table, rendered by the parent as its own card below this one */}
     {renderPages && !rangeState.invalid && renderPages({ pages, loading, error: pagesError })}

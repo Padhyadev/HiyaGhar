@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -72,7 +73,7 @@ namespace Hiya2.Server.Controllers
             return Ok(new { isSuccess = true, items = rows });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpGet("columns")]
         public async Task<IActionResult> GetColumns()
         {
@@ -170,7 +171,7 @@ namespace Hiya2.Server.Controllers
             return Ok(new { isSuccess = true, categories });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPut("category/{id}")]
         public async Task<IActionResult> UpdateCategory(int id, [FromBody] LovCategoryUpdateDto dto)
         {
@@ -192,7 +193,7 @@ namespace Hiya2.Server.Controllers
             return Ok(new { isSuccess = true, item = category });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? column)
         {
@@ -206,7 +207,7 @@ namespace Hiya2.Server.Controllers
             return Ok(new { isSuccess = true, items = rows });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] LovCreateDto dto)
         {
@@ -252,7 +253,7 @@ namespace Hiya2.Server.Controllers
             return Ok(new { isSuccess = true, item = row });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] LovUpdateDto dto)
         {
@@ -276,7 +277,7 @@ namespace Hiya2.Server.Controllers
             return Ok(new { isSuccess = true, item = row });
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

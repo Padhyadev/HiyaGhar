@@ -19,7 +19,7 @@ export const ClosingCtaSection: React.FC = () => {
           <div className="hg-closing-cta-inner">
             {/* The logo's navy lettering needs a light badge on this dark section */}
             <div className="hg-closing-cta-logo-badge">
-              <img src={LOGO_URL} alt="HIYA Ghar" width={160} height={48} loading="lazy" className="hg-closing-cta-logo" />
+              <img src={LOGO_URL} alt="HIYAGHAR" width={160} height={48} loading="lazy" className="hg-closing-cta-logo" />
             </div>
 
             <h2 id="hg-closing-cta-heading" className="hg-section-heading">Welcome to our ghar</h2>

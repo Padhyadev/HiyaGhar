@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Hiya2.Server.Models;
 using Hiya2.Server.Repositories.Category;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -45,7 +46,7 @@ namespace Hiya2.Server.Controllers
 
         private const long MaxFileSizeBytes = 2 * 1024 * 1024; // 2 MB
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] Category category, IFormFile? imageFile)
         {
@@ -84,7 +85,7 @@ namespace Hiya2.Server.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] Category category, IFormFile? imageFile)
         {
@@ -128,7 +129,7 @@ namespace Hiya2.Server.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

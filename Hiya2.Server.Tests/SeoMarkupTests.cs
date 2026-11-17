@@ -191,4 +191,97 @@ public class SeoMarkupTests
         var orgOnly = JsonDocument.Parse(SeoMarkup.SerializeJsonLd(new[] { SeoMarkup.Organization(c) })).RootElement.GetProperty("@graph")[0];
         Assert.False(orgOnly.TryGetProperty("founder", out _));
     }
+
+    [Theory]
+    [InlineData("Choco Masti", "Mukhwas", "Choco Masti Mukhwas | HIYAGHAR")]
+    [InlineData("Neem Aloe Fresh", "Handmade Soap", "Neem Aloe Fresh Handmade Soap | HIYAGHAR")]
+    [InlineData("Glow Craft Detan Soap", "Handmade Soap", "Glow Craft Detan Soap | HIYAGHAR")]
+    [InlineData("Keshvedaam Herbal Hair Oil", "Hair Oil", "Keshvedaam Herbal Hair Oil | HIYAGHAR")]
+    [InlineData("Tea Masala", "Tea Masala", "Tea Masala | HIYAGHAR")]
+    [InlineData("Neem Aloe Fresh Soap 3-Pack Combo", "Combos", "Neem Aloe Fresh Soap 3-Pack Combo | HIYAGHAR")]
+    [InlineData("Choco Masti", null, "Choco Masti | HIYAGHAR")]
+    public void Product_title_adds_the_category_unless_the_name_already_says_it(string name, string? category, string expected)
+    {
+        Assert.Equal(expected, SeoMarkup.ProductTitle(name, category, "HIYAGHAR"));
+    }
+
+    [Fact]
+    public void Category_guide_is_empty_until_text_is_added_and_then_matches_its_faq_node()
+    {
+        Assert.Equal("", SeoMarkup.GuideSection(null));
+        Assert.Equal("", SeoMarkup.GuideSection(new SeoGuide { Heading = "About", Paragraphs = new() { " " }, Faqs = new() { new SeoQuestion { Question = "Q?", Answer = "" } } }));
+
+        var guide = new SeoGuide
+        {
+            Heading = "About mukhwas",
+            Paragraphs = new() { "Para <one>" },
+            Faqs = new() { new SeoQuestion { Question = "Is it sweet?", Answer = "Yes & crunchy." } },
+        };
+        var html = SeoMarkup.GuideSection(guide);
+        Assert.Equal("<section><h2>About mukhwas</h2><p>Para &lt;one&gt;</p><h2>Frequently Asked Questions</h2><h3>Is it sweet?</h3><p>Yes &amp; crunchy.</p></section>", html);
+
+        var node = JsonDocument.Parse(SeoMarkup.SerializeJsonLd(new[] { SeoMarkup.FaqPageNode(Config(), "/mukhwas", SeoMarkup.GuideContent(guide).Faqs) }))
+            .RootElement.GetProperty("@graph")[0];
+        Assert.Equal("FAQPage", node.GetProperty("@type").GetString());
+        Assert.Equal("Is it sweet?", node.GetProperty("mainEntity")[0].GetProperty("name").GetString());
+        Assert.Equal("Yes & crunchy.", node.GetProperty("mainEntity")[0].GetProperty("acceptedAnswer").GetProperty("text").GetString());
+    }
+
+    [Fact]
+    public void Organization_and_website_carry_the_alternate_brand_name()
+    {
+        var c = Config();
+        c.Organization.AlternateName = "HIYA Ghar";
+        var graph = JsonDocument.Parse(SeoMarkup.SerializeJsonLd(new[] { SeoMarkup.Organization(c), SeoMarkup.WebSite(c) }))
+            .RootElement.GetProperty("@graph").EnumerateArray().ToList();
+
+        Assert.All(graph, n => Assert.Equal("HIYA Ghar", n.GetProperty("alternateName").GetString()));
+
+        // Not configured: the property is left out (no null / empty value).
+        c.Organization.AlternateName = null;
+        var plain = JsonDocument.Parse(SeoMarkup.SerializeJsonLd(new[] { SeoMarkup.Organization(c) })).RootElement.GetProperty("@graph")[0];
+        Assert.False(plain.TryGetProperty("alternateName", out _));
+    }
+
+    [Fact]
+    public void Faqs_are_grouped_in_config_order_with_unknown_categories_last()
+    {
+        var categories = new List<SeoFaqCategory>
+        {
+            new() { Key = "general", Heading = "About HIYAGHAR", Related = new() { new SeoLink { Text = "Our Story", Path = "/our-story" } } },
+            new() { Key = "orders", Heading = "Orders & Shipping" },
+            new() { Key = "gifting", Heading = "Gifting & Combos" }, // no FAQs: left out
+        };
+        var faqs = new (string?, string, string)[]
+        {
+            ("orders", "Q-order-1", "A1"),
+            ("misc", "Q-other", "A2"),
+            ("General", "Q-general", "A3"), // category match ignores case
+            ("orders", "Q-order-2", "A4"),
+        };
+
+        var groups = SeoMarkup.GroupFaqs(categories, faqs);
+
+        Assert.Equal(new[] { "About HIYAGHAR", "Orders & Shipping", "More Questions" }, groups.Select(g => g.Heading));
+        Assert.Equal(new[] { "Q-order-1", "Q-order-2" }, groups[1].Faqs.Select(f => f.Question)); // keeps DB order
+        Assert.Equal(4, groups.Sum(g => g.Faqs.Count)); // nothing dropped
+    }
+
+    [Fact]
+    public void Faq_sections_render_question_headings_answers_and_related_links_encoded()
+    {
+        var groups = new List<SeoMarkup.FaqGroup>
+        {
+            new("Orders & Shipping", new() { new SeoLink { Text = "Shipping Policy", Path = "/shipping-policy" } },
+                new() { (NastyName, "Answer <b>here</b>") }),
+        };
+
+        var html = SeoMarkup.FaqSections(groups);
+
+        Assert.StartsWith("<section><h2>Orders &amp; Shipping</h2><h3>", html);
+        Assert.Contains("<p>Answer &lt;b&gt;here&lt;/b&gt;</p>", html);
+        Assert.Contains("<p>Related: <a href=\"/shipping-policy\">Shipping Policy</a></p>", html);
+        Assert.DoesNotContain("</script>", html);
+        Assert.EndsWith("</section>", html);
+    }
 }

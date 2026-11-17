@@ -105,6 +105,29 @@ namespace Hiya2.Server.Controllers
             });
         }
 
+        // GET api/WebsiteAnalytics/ai-referrals - visits from ChatGPT, Perplexity, Gemini, Copilot and Claude
+        [HttpGet("ai-referrals")]
+        public async Task<IActionResult> GetAiReferrals([FromQuery] string? range, [FromQuery] string? startDate, [FromQuery] string? endDate)
+        {
+            if (!IsStaff()) return Forbid();
+            var dates = _analytics.ResolveRange(range, startDate, endDate);
+            if (!dates.IsSuccess || dates.Data == null) return BadRequest(new { isSuccess = false, message = dates.Message });
+
+            var result = await _analytics.GetAiReferralsAsync(dates.Data);
+            if (!result.IsSuccess || result.Data == null) return Unavailable(result.Message);
+
+            return Ok(new
+            {
+                isSuccess = true,
+                rangeType = dates.Data.GaDay ?? "dates",
+                startDate = dates.Data.StartDate.ToString("yyyy-MM-dd"),
+                endDate = dates.Data.EndDate.ToString("yyyy-MM-dd"),
+                tools = result.Data.Tools,
+                totalSessions = result.Data.TotalSessions,
+                totalUsers = result.Data.TotalUsers,
+            });
+        }
+
         // Google not reachable / not configured: the cause is already logged by the service.
         private ObjectResult Unavailable(string? message) =>
             StatusCode(StatusCodes.Status503ServiceUnavailable, new

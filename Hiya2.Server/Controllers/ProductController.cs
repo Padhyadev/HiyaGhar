@@ -7,6 +7,7 @@ using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Repositories.Product;
 using Hiya2.Server.Services;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -275,7 +276,7 @@ namespace Hiya2.Server.Controllers
         private const long MaxFileSizeBytes = 2 * 1024 * 1024; // 2 MB
         private const int MaxImagesPerVariant = 6;
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] Product product, [FromForm] string? categoryName, IFormFile? mainImage, [FromForm] string? variantsJson, [FromForm] string? imagesJson)
         {
@@ -383,7 +384,7 @@ namespace Hiya2.Server.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromForm] Product product, [FromForm] string? categoryName, IFormFile? mainImage, [FromForm] string? variantsJson, [FromForm] string? imagesJson)
         {
@@ -781,7 +782,7 @@ namespace Hiya2.Server.Controllers
             await _context.SaveChangesAsync();
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -795,7 +796,7 @@ namespace Hiya2.Server.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost("{id}/variant")]
         public async Task<IActionResult> AddVariant(int id, [FromBody] ProductVariant variant)
         {
@@ -809,7 +810,7 @@ namespace Hiya2.Server.Controllers
             return Ok(variant);
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpDelete("variant/{variantId}")]
         public async Task<IActionResult> DeleteVariant(int variantId)
         {
@@ -822,7 +823,7 @@ namespace Hiya2.Server.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost("{id}/images")]
         public async Task<IActionResult> UploadGalleryImage(int id, IFormFile imageFile, [FromQuery] bool isPrimary = false)
         {
@@ -882,7 +883,7 @@ namespace Hiya2.Server.Controllers
             return Ok(productImage);
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpDelete("image/{imageId}")]
         public async Task<IActionResult> DeleteImage(int imageId)
         {

@@ -73,7 +73,7 @@ export const ReviewCard: React.FC<ReviewCardProps> = ({ review, isActive = false
 
         {review.productName && (
           <div className="hiyaghar-review-product-tag">
-            <span className="hiyaghar-review-product-label">Verified Purchase:</span>
+            <span className="hiyaghar-review-product-label">{review.verified ? 'Verified Purchase:' : 'Product:'}</span>
             <span className="hiyaghar-review-product-name">{review.productName}</span>
           </div>
         )}

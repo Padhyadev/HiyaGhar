@@ -2,7 +2,7 @@ import { AdminAuthService } from './adminAuthService';
 
 export interface FaqItem {
   id: number;
-  category: 'general' | 'products' | 'orders' | 'gifting' | string;
+  category: string; // key from seo/routes.json faqCategories (general, mukhwas, tea-masala, soaps-hair-oil, gifting, orders)
   question: string;
   answer: string;
   displayOrder: number;

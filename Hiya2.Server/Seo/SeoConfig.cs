@@ -17,6 +17,8 @@ namespace Hiya2.Server.Seo
         public List<SeoRoute> PrefixRoutes { get; set; } = new();
         public SeoRoute NotFound { get; set; } = new();
         public SeoRoute ProductNotFound { get; set; } = new();
+        /// <summary>FAQ page sections in display order: heading per Faq.Category key and its related links.</summary>
+        public List<SeoFaqCategory> FaqCategories { get; set; } = new();
 
         public SeoRoute? FindRoute(string path)
         {
@@ -26,9 +28,25 @@ namespace Hiya2.Server.Seo
         }
     }
 
+    public class SeoFaqCategory
+    {
+        /// <summary>Faq.Category value (e.g. "general", "orders").</summary>
+        public string Key { get; set; } = string.Empty;
+        public string Heading { get; set; } = string.Empty;
+        public List<SeoLink> Related { get; set; } = new();
+    }
+
+    public class SeoLink
+    {
+        public string Text { get; set; } = string.Empty;
+        public string Path { get; set; } = string.Empty;
+    }
+
     public class SeoOrganization
     {
         public string Name { get; set; } = string.Empty;
+        /// <summary>Other spelling of the brand (schema.org alternateName), e.g. "HIYA Ghar".</summary>
+        public string? AlternateName { get; set; }
         public string Logo { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Telephone { get; set; } = string.Empty;
@@ -69,5 +87,20 @@ namespace Hiya2.Server.Seo
         public bool ContactDetails { get; set; }
         /// <summary>Adds the Store (LocalBusiness) node for the physical shop.</summary>
         public bool LocalBusiness { get; set; }
+        /// <summary>Category page guide text and FAQs (also shown by src/components/common/CategoryGuide).</summary>
+        public SeoGuide? Guide { get; set; }
+    }
+
+    public class SeoGuide
+    {
+        public string? Heading { get; set; }
+        public List<string> Paragraphs { get; set; } = new();
+        public List<SeoQuestion> Faqs { get; set; } = new();
+    }
+
+    public class SeoQuestion
+    {
+        public string Question { get; set; } = string.Empty;
+        public string Answer { get; set; } = string.Empty;
     }
 }

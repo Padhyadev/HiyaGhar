@@ -186,3 +186,9 @@
     align-items: flex-start;
   }
 }
+
+/* Review written by a customer who received the product (server-checked) */
+.hiyaghar-pr-verified {
+  color: #15803d;
+  font-weight: 700;
+}

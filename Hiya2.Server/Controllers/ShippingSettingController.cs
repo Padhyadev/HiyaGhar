@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -99,7 +100,7 @@ namespace Hiya2.Server.Controllers
 
         // ADMIN only — save settings to DB
         [HttpPut]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> Update([FromBody] ShippingSettingRequestDto dto)
         {
             if (dto.StandardShippingPrice < 0 || dto.ExpressShippingPrice < 0 || dto.FreeShippingThreshold < 0)
@@ -120,7 +121,7 @@ namespace Hiya2.Server.Controllers
             setting.GstLabel = dto.GstLabel ?? "Estimated GST (5% Included)";
             setting.FssaiLicenseNumber = dto.FssaiLicenseNumber ?? "10723026001148";
             setting.EnableFssaiDisplay = dto.EnableFssaiDisplay;
-            setting.ContactEmail = dto.ContactEmail ?? "support@hiyaghar.com";
+            setting.ContactEmail = dto.ContactEmail ?? "hiyaghar@gmail.com";
             setting.ContactPhone = dto.ContactPhone ?? "+91 92744 43617";
             setting.ContactAddress = dto.ContactAddress ?? "303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India";
             setting.EnableProductDescriptionTab = dto.EnableProductDescriptionTab;

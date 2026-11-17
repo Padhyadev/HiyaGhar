@@ -11,7 +11,7 @@ export const FounderSection: React.FC = () => {
           {/* Left Column: Arch-shaped portrait */}
           <ScrollReveal variant="fade-right" className="hg-founder-photo-col">
             <ArchImage
-              alt="Priti Shah, founder of HIYA Ghar"
+              alt="Priti Shah, founder of HIYAGHAR"
               width={380}
               height={480}
               loading="lazy"

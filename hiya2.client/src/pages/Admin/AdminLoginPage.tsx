@@ -124,7 +124,7 @@ export const AdminLoginPage: React.FC<AdminLoginPageProps> = ({
       <div className="hiyaghar-admin-login-card">
         <div className="hiyaghar-admin-login-header">
           <div className="hiyaghar-admin-brand" onClick={onNavigateHome}>
-            <img src={LOGO_URL} alt="HIYA" className="hiyaghar-brand-icon" />
+            <img src={LOGO_URL} alt="HIYAGHAR" className="hiyaghar-brand-icon" />
           </div>
           <p className="hiyaghar-admin-login-subtitle">Admin & Staff Portal Access</p>
         </div>

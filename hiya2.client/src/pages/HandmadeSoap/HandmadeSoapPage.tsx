@@ -13,6 +13,7 @@ import { CartService } from '../../cart';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
+import { CategoryGuide } from '../../components/common/CategoryGuide/CategoryGuide';
 // Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
 import '../Mukhwas/MukhwasPage.css';
 import './HandmadeSoapPage.css';
@@ -57,8 +58,8 @@ export const fallbackHandmadeSoapProducts: SoapProduct[] = [
     originalPrice: 180,
     discountPercentage: 33,
     discountTag: '33% OFF',
-    rating: 4.9,
-    reviewsCount: 154,
+    rating: 0,
+    reviewsCount: 0,
     image: '/image/Soap/neem.webp',
     secondaryImage: '/image/lifestyle_bath.webp',
     badge: 'Best Seller',
@@ -87,8 +88,8 @@ function mapApiToSoap(p: ApiProduct): SoapProduct {
     originalPrice: origPrice,
     discountPercentage: discountPercentage,
     discountTag: discountPercentage > 0 ? `${discountPercentage}% OFF` : '',
-    rating: p.rating || 4.8,
-    reviewsCount: p.reviewCount || 100,
+    rating: p.rating || 0,
+    reviewsCount: p.reviewCount || 0,
     image: p.mainImagePath || NO_IMAGE,
     secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     badge: p.isFeatured ? 'Best Seller' : undefined,
@@ -296,6 +297,8 @@ export const HandmadeSoapPage: React.FC<HandmadeSoapPageProps> = ({
 
 
         </div>
+        {/* Category guide + FAQs from seo/routes.json (hidden until text is added) */}
+        <CategoryGuide path="/handmade-soap" />
       </main>
 
       <Footer />

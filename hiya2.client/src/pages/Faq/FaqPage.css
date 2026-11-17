@@ -262,6 +262,38 @@
   gap: 16px;
 }
 
+/* One section per FAQ category: heading, questions, related links */
+.hiyaghar-faq-section + .hiyaghar-faq-section {
+  margin-top: 36px;
+}
+
+.hiyaghar-faq-section-title {
+  margin: 0 0 16px;
+  font-size: 20px;
+  font-weight: 800;
+  color: #11223A;
+}
+
+/* The question heading only carries meaning; the button inside keeps its look */
+.hiyaghar-faq-question-heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+}
+
+.hiyaghar-faq-related {
+  margin: 14px 4px 0;
+  font-size: 14px;
+  color: #475569;
+}
+
+.hiyaghar-faq-related a {
+  color: var(--hiya-gold-text, #855F0F);
+  font-weight: 700;
+  text-decoration: underline;
+}
+
 .hiyaghar-faq-item {
   background: #FFFFFF;
   border-radius: 16px;

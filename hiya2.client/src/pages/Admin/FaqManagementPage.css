@@ -137,9 +137,13 @@
 }
 
 .faq-cat-general { background: #e0f2fe; color: #0369a1; }
-.faq-cat-products { background: #fef3c7; color: #b45309; }
+.faq-cat-mukhwas { background: #fef3c7; color: #b45309; }
+.faq-cat-tea-masala { background: #ffedd5; color: #c2410c; }
+.faq-cat-soaps-hair-oil { background: #ccfbf1; color: #0f766e; }
 .faq-cat-orders { background: #dcfce7; color: #15803d; }
 .faq-cat-gifting { background: #f3e8ff; color: #7e22ce; }
+/* FAQ still in a category from before the six sections: needs a new category */
+.faq-cat-old { background: #fee2e2; color: #b91c1c; }
 
 .faq-status-toggle {
   display: inline-flex;

@@ -113,6 +113,8 @@ builder.Services.AddRateLimiter(options =>
             _ => new FixedWindowRateLimiterOptions { PermitLimit = 10, Window = TimeSpan.FromMinutes(10) }));
 });
 
+// Admin endpoints: staff tokens only (customer and guest tokens are rejected with 403).
+builder.Services.AddAuthorization(AuthPolicies.Configure);
 builder.Services.AddSingleton<IAuthorizationPolicyProvider, DynamicPermissionPolicyProvider>();
 builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
@@ -237,7 +239,7 @@ using (var scope = app.Services.CreateScope())
                     [GstLabel] NVARCHAR(100) NOT NULL DEFAULT N'Estimated GST (5% Included)',
                     [FssaiLicenseNumber] NVARCHAR(50) NOT NULL DEFAULT N'10723026001148',
                     [EnableFssaiDisplay] BIT NOT NULL DEFAULT 1,
-                    [ContactEmail] NVARCHAR(150) NOT NULL DEFAULT N'support@hiyaghar.com',
+                    [ContactEmail] NVARCHAR(150) NOT NULL DEFAULT N'hiyaghar@gmail.com',
                     [ContactPhone] NVARCHAR(50) NOT NULL DEFAULT N'+91 92744 43617',
                     [ContactAddress] NVARCHAR(200) NOT NULL DEFAULT N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India',
                     [IsActive] BIT NOT NULL DEFAULT 1,
@@ -252,7 +254,7 @@ using (var scope = app.Services.CreateScope())
                      [EnableGstDisplay],[GstPercent],[GstLabel],[FssaiLicenseNumber],[EnableFssaiDisplay],[ContactEmail],[ContactPhone],[ContactAddress],[IsActive])
                 VALUES (500, 49, 99, 1, 1, 1,
                         N'3–5 business days', N'1–2 business days',
-                        1, 5, N'Estimated GST (5% Included)', N'10723026001148', 1, N'support@hiyaghar.com', N'+91 92744 43617', N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India', 1);
+                        1, 5, N'Estimated GST (5% Included)', N'10723026001148', 1, N'hiyaghar@gmail.com', N'+91 92744 43617', N'303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India', 1);
             END
 
             IF OBJECT_ID('dbo.[ShippingSetting]', 'U') IS NOT NULL
@@ -264,7 +266,7 @@ using (var scope = app.Services.CreateScope())
                     EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableFssaiDisplay] BIT NOT NULL DEFAULT 1');
 
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'ContactEmail')
-                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactEmail] NVARCHAR(150) NOT NULL DEFAULT N''support@hiyaghar.com''');
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactEmail] NVARCHAR(150) NOT NULL DEFAULT N''hiyaghar@gmail.com''');
 
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'ContactPhone')
                     EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [ContactPhone] NVARCHAR(50) NOT NULL DEFAULT N''+91 92744 43617''');
@@ -450,12 +452,11 @@ using (var scope = app.Services.CreateScope())
 
                     INSERT INTO dbo.[Faq] ([Category], [Question], [Answer], [DisplayOrder], [IsActive], [IsDeleted], [CreatedDate])
                     VALUES
-                    ('general', 'What is HIYAGHAR?', 'HIYAGHAR is a family brand bringing you 100% natural, handmade mukhwas, traditional tea masala, natural soaps, and herbal hair oils. Everything is freshly made in small batches with zero chemicals.', 1, 1, 0, GETDATE()),
-                    ('general', 'Are HIYAGHAR products 100% natural and preservative-free?', 'Yes, 100%! We do not use any artificial food colors, synthetic flavors, or chemical preservatives. All our mukhwas, spices, and soaps are made using pure natural ingredients.', 2, 1, 0, GETDATE()),
-                    ('products', 'How should I store HIYAGHAR Mukhwas and Tea Masala?', 'Keep the jar in a cool, dry place away from direct sunlight. Always close the lid tightly after use to keep the mukhwas crunchy and the aroma fresh.', 3, 1, 0, GETDATE()),
-                    ('products', 'What is the shelf life of your mukhwas, soaps, and hair oils?', 'Our mukhwas stays fresh and crunchy for 6 to 9 months from the date of packing. Our handmade soaps and herbal hair oils stay good for 1 to 2 years.', 4, 1, 0, GETDATE()),
-                    ('products', 'Are your handmade soaps suitable for sensitive skin?', 'Yes! Our soaps are made with natural oils and herbs without any harsh chemicals, SLS, or parabens. They are gentle and deeply moisturize even sensitive skin.', 5, 1, 0, GETDATE()),
-                    ('orders', 'Where do you deliver, and how long does it take?', 'We currently deliver across Ahmedabad (around Ghatlodiya). Orders placed before 1:00 PM are prepared and dispatched the same day. Delivery usually takes 3 to 5 business days.', 6, 1, 0, GETDATE()),
+                    ('general', 'What is HIYAGHAR?', 'HIYAGHAR is a family brand from Ahmedabad making handmade mukhwas, traditional tea masala, handmade soaps, and herbal hair oils. Everything is freshly made in small batches.', 1, 1, 0, GETDATE()),
+                    ('mukhwas', 'Are your mukhwas tobacco-free and supari-free?', 'Yes. Every HIYAGHAR mukhwas is tobacco-free and supari-free. Most are made only from natural seeds, spices and dried fruits; a few flavours, such as Choco Masti, Paan Pop and Jamun Pop, use added food flavours, and Choco Masti also contains food colour. Full ingredients are on each product page.', 2, 1, 0, GETDATE()),
+                    ('mukhwas', 'How should I store HIYAGHAR Mukhwas and Tea Masala?', 'Keep the jar in a cool, dry place away from direct sunlight. Always close the lid tightly after use to keep the mukhwas crunchy and the aroma fresh.', 3, 1, 0, GETDATE()),
+                    ('soaps-hair-oil', 'Are your handmade soaps suitable for sensitive skin?', 'Yes! Our soaps are made with natural oils and herbs without any harsh chemicals, SLS, or parabens. They are gentle and deeply moisturize even sensitive skin.', 5, 1, 0, GETDATE()),
+                    ('orders', 'Where do you deliver, and how long does it take?', 'We currently deliver only to selected pin codes around Ghatlodiya, Ahmedabad, and do not ship outside Ahmedabad yet. Delivery usually takes 3 to 5 business days. You can check your pin code at checkout.', 6, 1, 0, GETDATE()),
                     ('orders', 'How can I check my order status?', 'You will receive an email confirmation as soon as your order is placed. You can also view your live order status anytime by logging in and going to ''My Account → Orders''.', 7, 1, 0, GETDATE()),
                     ('orders', 'What payment methods do you accept?', 'We accept UPI (Google Pay, PhonePe, Paytm), all Debit and Credit Cards, Net Banking, and Cash on Delivery (COD) across eligible pin codes.', 8, 1, 0, GETDATE()),
                     ('gifting', 'Can I customize a combo or gift hamper for weddings or festivals?', 'Yes! You can build your own gift box directly on our website, or contact us on WhatsApp for bulk orders for weddings, festivals, and corporate gifting.', 9, 1, 0, GETDATE()),
@@ -643,6 +644,9 @@ var routeAliases = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCa
     ["/contact"] = "/contact-us",
     ["/faqs"] = "/faq",
     ["/track-order"] = "/orders",
+    // Product renamed from "Dil Rajan (Mukhwas)" to "Dil Ranjan"; search engines still know the old URLs.
+    ["/product/dil-rajan"] = "/product/dil-ranjan",
+    ["/product/dil-rajan-mukhwas"] = "/product/dil-ranjan",
 };
 
 app.Use(async (context, next) =>

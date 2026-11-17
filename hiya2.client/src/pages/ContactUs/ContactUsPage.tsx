@@ -234,8 +234,8 @@ export const ContactUsPage: React.FC = () => {
                     </div>
                     <div className="hiyaghar-contact-item-content">
                       <span className="hiyaghar-contact-label">Email Support</span>
-                      <a href={`mailto:${storeSettings.contactEmail || 'support@hiyaghar.com'}`} className="hiyaghar-contact-val">
-                        {storeSettings.contactEmail || 'support@hiyaghar.com'}
+                      <a href={`mailto:${storeSettings.contactEmail || 'hiyaghar@gmail.com'}`} className="hiyaghar-contact-val">
+                        {storeSettings.contactEmail || 'hiyaghar@gmail.com'}
                       </a>
                     </div>
                   </div>

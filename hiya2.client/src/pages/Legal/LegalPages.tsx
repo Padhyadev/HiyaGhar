@@ -55,7 +55,7 @@ export const PrivacyPolicyPage: React.FC = () => {
           </p>
           <div className="hiyaghar-trust-badge-card">
             <p><strong>Hiya Ghar</strong></p>
-            <p>Email: <a href={`mailto:${storeSettings.contactEmail || 'support@hiyaghar.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactEmail || 'support@hiyaghar.com'}</a></p>
+            <p>Email: <a href={`mailto:${storeSettings.contactEmail || 'hiyaghar@gmail.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactEmail || 'hiyaghar@gmail.com'}</a></p>
             <p>Phone / WhatsApp: <a href={`tel:${storeSettings.contactPhone || '+91 92744 43617'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>{storeSettings.contactPhone || '+91 92744 43617'}</a></p>
             <p>Operating Address: {storeSettings.contactAddress || '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India'}</p>
             {storeSettings.enableFssaiDisplay && Boolean(storeSettings.fssaiLicenseNumber?.trim()) && (
@@ -83,7 +83,7 @@ export const TermsConditionsPage: React.FC = () => {
 
           <h2>1. Artisanal Product Authenticity & Natural Variations</h2>
           <p>
-            All Hiya Ghar digestives, mukhwas recipes, spice masalas, cold-process soaps, and hair oils are handcrafted in small batches using 100% natural, honest ingredients without synthetic artificial colors or preservatives. Because of natural harvesting variations, slight natural variations in seed size, color tone, or botanical aroma may occur across batches, which is a hallmark of authentic handcrafted products.
+            All Hiya Ghar digestives, mukhwas recipes, spice masalas, cold-process soaps, and hair oils are handcrafted in small batches, and the full ingredients of every product are listed on its product page. All our mukhwas are tobacco-free and supari-free. Because of natural harvesting variations, slight natural variations in seed size, color tone, or botanical aroma may occur across batches, which is a hallmark of authentic handcrafted products.
           </p>
 
           <h2>2. Pricing, Invoicing & Taxes</h2>
@@ -168,7 +168,7 @@ export const RefundPolicyPage: React.FC = () => {
             Reach out to our friendly support team for immediate resolution:
           </p>
           <div className="hiyaghar-trust-badge-card">
-            <p>Email: <a href={`mailto:${storeSettings.contactEmail || 'support@hiyaghar.com'}`}>{storeSettings.contactEmail || 'support@hiyaghar.com'}</a></p>
+            <p>Email: <a href={`mailto:${storeSettings.contactEmail || 'hiyaghar@gmail.com'}`}>{storeSettings.contactEmail || 'hiyaghar@gmail.com'}</a></p>
             <p>WhatsApp / Call: <a href={`https://wa.me/${(storeSettings.contactPhone || '919274443617').replace(/[^0-9]/g, '')}`}>{storeSettings.contactPhone || '+91 92744 43617'}</a></p>
             <p>Support Timings: Monday – Saturday (10:00 AM – 7:00 PM IST)</p>
           </div>
@@ -206,7 +206,7 @@ export const ShippingPolicyPage: React.FC = () => {
 
           <h2>3. Order Processing & Delivery Time</h2>
           <ul>
-            <li><strong>Handling & Dispatch Time:</strong> Orders placed before 1:00 PM IST are prepared, fresh-sealed, and dispatched on the same business day. Orders placed after 1:00 PM or on Sundays/Public Holidays are dispatched the next business day.</li>
+            <li><strong>Handling & Dispatch:</strong> Every order is freshly prepared, sealed and packed after it is placed, then dispatched for delivery. We do not offer same-day dispatch.</li>
             <li><strong>Delivery Time:</strong> Usually takes <strong>{storeSettings.standardDeliveryDays || '3–5 business days'}</strong> from the order date.</li>
           </ul>
 
@@ -261,8 +261,8 @@ export const ContactUsPage: React.FC = () => (
           </p>
           <p>
             <strong>Support Email:</strong>{' '}
-            <a href={`mailto:${storeSettings.contactEmail || 'support@hiyaghar.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>
-              {storeSettings.contactEmail || 'support@hiyaghar.com'}
+            <a href={`mailto:${storeSettings.contactEmail || 'hiyaghar@gmail.com'}`} style={{ color: 'inherit', textDecoration: 'underline' }}>
+              {storeSettings.contactEmail || 'hiyaghar@gmail.com'}
             </a>
           </p>
           <p><strong>Operating Hours:</strong> Monday – Saturday (10:00 AM – 7:00 PM IST)</p>
@@ -289,7 +289,7 @@ export const OurStoryPage: React.FC = () => (
 
         <h2>Our Heritage & Philosophy</h2>
         <p>
-          In every Indian home, a meal is never truly complete without a comforting post-meal digestive. Our handcrafted mukhwas, aromatic royal chai spices, and artisan personal care products are prepared using time-honored traditional techniques without artificial preservatives or synthetic chemicals.
+          In every Indian home, a meal is never truly complete without a comforting post-meal digestive. Our handcrafted mukhwas, aromatic royal chai spices, and artisan personal care products are prepared in small batches using time-honored traditional techniques.
         </p>
 
         <h2>100% Handcrafted & Natural</h2>
@@ -304,7 +304,7 @@ export const OurStoryPage: React.FC = () => (
           {storeSettings.enableFssaiDisplay && storeSettings.fssaiLicenseNumber && (
             <p><strong>FSSAI Registration / Lic No:</strong> {storeSettings.fssaiLicenseNumber}</p>
           )}
-          <p><strong>Support Email:</strong> {storeSettings.contactEmail || 'support@hiyaghar.com'}</p>
+          <p><strong>Support Email:</strong> {storeSettings.contactEmail || 'hiyaghar@gmail.com'}</p>
         </div>
       </>
     )}

@@ -705,7 +705,7 @@ export const ShippingSettingsPage: React.FC = () => {
                   disabled={editingSection !== 'storeInfo'}
                   value={form.contactEmail ?? ''}
                   onChange={(e) => handleChange('contactEmail', e.target.value)}
-                  placeholder="support@hiyaghar.com"
+                  placeholder="hiyaghar@gmail.com"
                   className={`hiyaghar-input-control ${formErrors.contactEmail ? 'input-error' : ''}`}
                 />
                 {formErrors.contactEmail && (

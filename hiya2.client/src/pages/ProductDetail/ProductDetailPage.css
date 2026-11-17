@@ -1339,3 +1339,19 @@
     width: 100%;
   }
 }
+
+/* Product FAQ card: it reuses the tabs card (rounded, overflow hidden, no padding of its own),
+   so give it inner spacing - otherwise the heading is clipped by the rounded corner. */
+.hiyaghar-product-faq {
+  padding: 24px 28px 12px;
+}
+
+.hiyaghar-product-faq summary {
+  padding: 2px 0;
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-product-faq {
+    padding: 18px 18px 8px;
+  }
+}

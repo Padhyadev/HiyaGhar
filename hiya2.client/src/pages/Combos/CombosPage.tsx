@@ -8,6 +8,7 @@ import { ComboService } from '../../services/comboService';
 import { navigateTo } from '../../utils/navigation';
 import { showToast } from '../../utils/alertService';
 import { comboToCard, type ComboCard } from './comboCard';
+import { CategoryGuide } from '../../components/common/CategoryGuide/CategoryGuide';
 // Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
 import '../Mukhwas/MukhwasPage.css';
 
@@ -99,6 +100,8 @@ export const CombosPage: React.FC<CombosPageProps> = ({ onNavigateHome, onNaviga
             )}
           </div>
         </section>
+        {/* Category guide + FAQs from seo/routes.json (hidden until text is added) */}
+        <CategoryGuide path="/combos" />
       </main>
 
       <Footer />

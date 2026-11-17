@@ -6,10 +6,55 @@
   "defaultImage": "/image/og-default.webp",
   "fallbackImage": "/image/HiyaGhar.webp",
   "productDescriptionTemplate": "Buy {name} from the HIYAGHAR {category}collection, handcrafted in small batches. See price, available sizes and stock, and order online.",
+  "faqCategories": [
+    {
+      "key": "general",
+      "heading": "About HIYAGHAR",
+      "related": [
+        { "text": "Our Story", "path": "/our-story" },
+        { "text": "Contact Us", "path": "/contact-us" }
+      ]
+    },
+    {
+      "key": "mukhwas",
+      "heading": "Mukhwas",
+      "related": [{ "text": "Shop Mukhwas", "path": "/mukhwas" }]
+    },
+    {
+      "key": "tea-masala",
+      "heading": "Tea Masala",
+      "related": [{ "text": "Shop Tea Masala", "path": "/tea-masala" }]
+    },
+    {
+      "key": "soaps-hair-oil",
+      "heading": "Soaps & Hair Oil",
+      "related": [
+        { "text": "Handmade Soap", "path": "/handmade-soap" },
+        { "text": "Hair Oil", "path": "/hair-oil" }
+      ]
+    },
+    {
+      "key": "gifting",
+      "heading": "Gifting & Combos",
+      "related": [
+        { "text": "Gift Hampers", "path": "/gift-hampers" },
+        { "text": "Combo Packs", "path": "/combos" }
+      ]
+    },
+    {
+      "key": "orders",
+      "heading": "Ordering, Shipping & Payment",
+      "related": [
+        { "text": "Shipping Policy", "path": "/shipping-policy" },
+        { "text": "Refund & Cancellation Policy", "path": "/refund-policy" }
+      ]
+    }
+  ],
   "organization": {
     "name": "HIYAGHAR",
+    "alternateName": "HIYA Ghar",
     "logo": "/image/HiyaGhar.webp",
-    "email": "support@hiyaghar.com",
+    "email": "hiyaghar@gmail.com",
     "telephone": "+91 9274443617",
     "streetAddress": "303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya",
     "addressLocality": "Ahmedabad",
@@ -40,6 +85,28 @@
     },
     {
       "path": "/mukhwas",
+      "guide": {
+        "heading": "About HIYAGHAR Mukhwas",
+        "paragraphs": [
+          "HIYAGHAR mukhwas are handmade in small batches by our family kitchen in Ahmedabad. We currently make 21 flavours, from sweet favourites like Choco Masti, Jamun Pop and Amla Madhur to classic digestive mixes like Hing Hajma, Digestive Mix and Til Alsi Mix.",
+          "Every HIYAGHAR mukhwas is tobacco-free and supari-free. Most flavours are made only from seeds, spices and dried fruits; a few use added food flavours, and each product page lists the full ingredients.",
+          "Mukhwas come in pouches and bottles from 100 g to 300 g, priced from ₹50 to ₹150. We deliver to selected pin codes around Ghatlodiya, Ahmedabad, with free delivery on orders of ₹500 or more."
+        ],
+        "faqs": [
+          {
+            "question": "Are your mukhwas tobacco-free and supari-free?",
+            "answer": "Yes. Every HIYAGHAR mukhwas is tobacco-free and supari-free. Most are made only from natural seeds, spices and dried fruits; a few flavours, such as Choco Masti, Paan Pop and Jamun Pop, use added food flavours, and Choco Masti also contains food colour. Full ingredients are on each product page."
+          },
+          {
+            "question": "How many mukhwas flavours does HIYAGHAR have?",
+            "answer": "HIYAGHAR currently offers 21 handmade mukhwas flavours, including Choco Masti, Jamun Pop, Amla Madhur, Dil Ranjan, Kalkatti Pan, Hing Hajma and Shahi Kharek. Each flavour's ingredients, pack sizes and prices are listed on its product page."
+          },
+          {
+            "question": "What pack sizes do your mukhwas come in?",
+            "answer": "Our mukhwas come in pouches and bottles. Pack sizes range from 100 g to 300 g depending on the flavour, and prices currently range from ₹50 to ₹150 per pack. You can choose the size and pack type on each product page."
+          }
+        ]
+      },
       "title": "Premium Natural Mukhwas Collection | HIYAGHAR",
       "description": "Shop HIYAGHAR premium mukhwas: handcrafted digestive mouth fresheners made from traditional family recipes with natural ingredients. See flavours and prices.",
       "h1": "Premium Mukhwas",
@@ -51,6 +118,32 @@
     },
     {
       "path": "/tea-masala",
+      "guide": {
+        "heading": "About HIYAGHAR Tea Masala",
+        "paragraphs": [
+          "HIYAGHAR Tea Masala is a homemade blend of traditional Indian spices made from our family recipe in Ahmedabad. The spices are slow-roasted and freshly ground in small batches for masala chai.",
+          "It contains cardamom, cloves, cinnamon, black pepper, dry ginger, nutmeg and fennel seeds, and enhances the flavour and aroma of your tea. Add a pinch to your tea while it brews.",
+          "Tea Masala comes in 50 g (₹80), 100 g (₹160) and 200 g (₹320) packs, and in two soap and chai combos."
+        ],
+        "faqs": [
+          {
+            "question": "What spices are in HIYAGHAR Tea Masala?",
+            "answer": "HIYAGHAR Tea Masala contains cardamom, cloves, cinnamon, black pepper, dry ginger, nutmeg and fennel seeds. The spices are slow-roasted and freshly ground in small batches."
+          },
+          {
+            "question": "What does HIYAGHAR Tea Masala do for my tea?",
+            "answer": "HIYAGHAR Tea Masala enhances the flavour and aroma of tea with a rich blend of traditional Indian spices, making every cup more enjoyable. Add a pinch to your tea while it brews."
+          },
+          {
+            "question": "What sizes and prices does Tea Masala come in?",
+            "answer": "HIYAGHAR Tea Masala comes in three pack sizes: 50 g for ₹80, 100 g for ₹160 and 200 g for ₹320. The 50 g pack is also part of our Daily Refresh and Morning Glow & Masala Chai combos."
+          },
+          {
+            "question": "Can I buy HIYAGHAR tea masala in a combo?",
+            "answer": "Yes. Tea Masala (50 g) comes in two combos: the Daily Refresh Combo with 2 Neem Aloe Fresh soaps for ₹210, and the Morning Glow & Masala Chai Combo with 2 Glow Craft Detan soaps for ₹250."
+          }
+        ]
+      },
       "title": "Authentic Traditional Tea Masala | HIYAGHAR",
       "description": "HIYAGHAR Tea Masala is an aromatic, authentic spice blend for making Indian chai at home. Choose your pack size, check the price and order online.",
       "h1": "Tea Masala",
@@ -62,6 +155,32 @@
     },
     {
       "path": "/handmade-soap",
+      "guide": {
+        "heading": "About HIYAGHAR Handmade Soaps",
+        "paragraphs": [
+          "HIYAGHAR soaps are handmade, cold-processed soaps made in small batches. We currently make two bars: Neem Aloe Fresh and Glow Craft Detan.",
+          "Neem Aloe Fresh (₹70) is made with coconut, olive and castor oils, aloe vera extract, neem extract and glycerin. Glow Craft Detan (₹90) is made with coconut, olive and castor oils, glycerin, shea butter, turmeric extract, aloe vera extract and licorice extract.",
+          "Both soaps are also sold in 3-pack combos, and with Tea Masala in our soap and chai combos."
+        ],
+        "faqs": [
+          {
+            "question": "Which handmade soaps does HIYAGHAR sell?",
+            "answer": "HIYAGHAR currently sells two handmade soaps: Neem Aloe Fresh and Glow Craft Detan. Both are also available in 3-pack combos, either three of one soap or a mix of both, and with Tea Masala in our soap and chai combos."
+          },
+          {
+            "question": "What are HIYAGHAR soaps made with?",
+            "answer": "Both HIYAGHAR soaps are cold-processed with coconut, olive and castor oils. Neem Aloe Fresh adds aloe vera extract, neem extract and glycerin; Glow Craft Detan adds glycerin, shea butter, turmeric, aloe vera and licorice extracts."
+          },
+          {
+            "question": "How much do HIYAGHAR soaps cost?",
+            "answer": "Neem Aloe Fresh costs ₹70 and Glow Craft Detan costs ₹90 per bar. Our soap 3-pack combos cost ₹200 to ₹260, which is ₹10 less than buying the three bars separately."
+          },
+          {
+            "question": "Are HIYAGHAR soaps suitable for sensitive skin?",
+            "answer": "Yes. Both HIYAGHAR handmade soaps, Neem Aloe Fresh and Glow Craft Detan, are made without SLS or parabens and are gentle enough for sensitive skin. They are cold-processed with coconut, olive and castor oils."
+          }
+        ]
+      },
       "title": "Natural Handmade Cold Process Soaps | HIYAGHAR",
       "description": "Browse HIYAGHAR handmade cold-process herbal soap bars, crafted in small batches with plant-based ingredients. Compare prices and offers, and order online.",
       "h1": "Handmade Soap",
@@ -73,6 +192,27 @@
     },
     {
       "path": "/hair-oil",
+      "guide": {
+        "heading": "About Keshvedaam Herbal Hair Oil",
+        "paragraphs": [
+          "Keshvedaam Herbal Hair Oil is HIYAGHAR's homemade herbal hair oil, prepared using the traditional Kshirpak slow-boiling method and hand-blended in small batches.",
+          "It is made with coconut oil, sesame oil and almond oil, infused with bhringraj, amla, brahmi, hibiscus, curry leaves, fenugreek (methi), neem and aloe vera. It deeply conditions the scalp, reduces dryness, and leaves hair soft, smooth and naturally shiny. It is priced at ₹209."
+        ],
+        "faqs": [
+          {
+            "question": "What is in Keshvedaam Herbal Hair Oil?",
+            "answer": "Keshvedaam Herbal Hair Oil is made with coconut oil, sesame oil and almond oil, infused with bhringraj, amla, brahmi, hibiscus, curry leaves, fenugreek (methi), neem and aloe vera."
+          },
+          {
+            "question": "What does Keshvedaam Herbal Hair Oil do?",
+            "answer": "Keshvedaam Herbal Hair Oil deeply conditions the scalp, reduces dryness, and leaves hair soft, smooth and naturally shiny. It is made in small batches using the traditional Kshirpak slow-boiling method."
+          },
+          {
+            "question": "How much does Keshvedaam Herbal Hair Oil cost?",
+            "answer": "Keshvedaam Herbal Hair Oil costs ₹209. You can order it on its product page for delivery to selected pin codes around Ghatlodiya, Ahmedabad."
+          }
+        ]
+      },
       "title": "Ayurvedic Herbal Hair Oil | HIYAGHAR",
       "description": "Shop HIYAGHAR Ayurvedic herbal hair oil for scalp nourishment, formulated with botanical extracts and handcrafted in small batches. Check price and order.",
       "h1": "Hair Oil",
@@ -84,6 +224,23 @@
     },
     {
       "path": "/gift-hampers",
+      "guide": {
+        "heading": "Build Your Own HIYAGHAR Gift",
+        "paragraphs": [
+          "Our gift builder lets you choose any HIYAGHAR products – mukhwas, tea masala, handmade soaps and hair oil – and send them as a gift. Pick the products and quantities, then choose normal gifting at no extra cost, or personalised gifting for ₹100 per gift box.",
+          "With personalised gifting, you write your own message and add a photo, and we print them on an A4 gift insert placed inside the box. We choose a gift box that fits your products and deliver it to the recipient's address within our delivery area around Ghatlodiya, Ahmedabad."
+        ],
+        "faqs": [
+          {
+            "question": "Can I send HIYAGHAR products as a gift?",
+            "answer": "Yes. On our Gift Hampers page you can pick any products, choose normal gifting for free or personalised gifting for ₹100 per gift box, and enter the recipient's name, phone and address. We pack your products in a gift box chosen to fit them."
+          },
+          {
+            "question": "Can I add a personalised message and photo to the gift?",
+            "answer": "Yes. With personalised gifting (₹100 per gift box) you can write your own message of up to 600 characters and add a photo. We print them on an A4 gift insert and place it inside the gift box."
+          }
+        ]
+      },
       "title": "Build Your Own Gift Box | HIYAGHAR Gift Hampers",
       "description": "Build your own HIYAGHAR gift: pick handcrafted mukhwas, tea masala, soaps and hair oil, we choose the gift box. Add a printed photo and message for ₹100.",
       "h1": "Gift Hampers",
@@ -95,6 +252,23 @@
     },
     {
       "path": "/combos",
+      "guide": {
+        "heading": "HIYAGHAR Combo Packs",
+        "paragraphs": [
+          "HIYAGHAR combo packs bundle our handmade products at a lower price than buying them separately. Choose a 3-pack of our handmade soaps – Neem Aloe Fresh, Glow Craft Detan, or a mix of both – or pair our Tea Masala (50 g) with two soaps in the Daily Refresh Combo or the Morning Glow & Masala Chai Combo.",
+          "Combos are priced from ₹200 to ₹260, and each costs ₹10 less than its items bought separately. Delivery is free on orders of ₹500 or more."
+        ],
+        "faqs": [
+          {
+            "question": "What combo packs does HIYAGHAR offer?",
+            "answer": "HIYAGHAR offers six combo packs: four handmade soap 3-packs (₹200 to ₹260) and two soap and tea masala combos, the Daily Refresh Combo (₹210) and the Morning Glow & Masala Chai Combo (₹250). Each combo costs ₹10 less than buying its items separately."
+          },
+          {
+            "question": "Can I buy HIYAGHAR tea masala in a combo?",
+            "answer": "Yes. Tea Masala (50 g) comes in two combos: the Daily Refresh Combo with 2 Neem Aloe Fresh soaps for ₹210, and the Morning Glow & Masala Chai Combo with 2 Glow Craft Detan soaps for ₹250."
+          }
+        ]
+      },
       "title": "Mukhwas & Wellness Combo Packs | HIYAGHAR",
       "description": "Shop HIYAGHAR combo packs: ready-made sets of handcrafted mukhwas, tea masala, soap and hair oil at one combo price, lower than buying each item separately.",
       "h1": "Combo Packs",
@@ -118,7 +292,7 @@
     {
       "path": "/contact-us",
       "title": "Contact Us | HIYAGHAR",
-      "description": "Contact HIYAGHAR by phone or WhatsApp on +91 9274443617 or email support@hiyaghar.com. Ask about orders, custom combo boxes, gift hampers or bulk orders.",
+      "description": "Contact HIYAGHAR by phone or WhatsApp on +91 9274443617 or email hiyaghar@gmail.com. Ask about orders, custom combo boxes, gift hampers or bulk orders.",
       "h1": "Contact Us",
       "linkText": "Contact Us",
       "intro": "Have questions about our handcrafted natural mukhwas, custom combo boxes, corporate gift hampers, or your delivery? We’re always here to assist you.",
@@ -132,7 +306,7 @@
       "title": "Frequently Asked Questions (FAQ) | HIYAGHAR",
       "description": "Find answers to common questions about HIYAGHAR handcrafted natural mukhwas, tea masala, soaps, shipping, and custom gifting.",
       "h1": "Frequently Asked Questions",
-      "linkText": "FAQs & Help",
+      "linkText": "See all FAQs",
       "intro": "Everything you need to know about our handcrafted products, ingredients, shipping, and custom gifting.",
       "schemaType": "FAQPage",
       "sitemap": true

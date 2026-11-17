@@ -50,7 +50,7 @@ namespace Hiya2.Server.Models
         public bool EnableFssaiDisplay { get; set; } = true;
 
         [MaxLength(150)]
-        public string ContactEmail { get; set; } = "support@hiyaghar.com";
+        public string ContactEmail { get; set; } = "hiyaghar@gmail.com";
 
         [MaxLength(50)]
         public string ContactPhone { get; set; } = "+91 92744 43617";

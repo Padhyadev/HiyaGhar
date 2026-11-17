@@ -55,6 +55,23 @@ namespace Hiya2.Server.Services
         public long ActiveUsers { get; set; }
     }
 
+    /// <summary>Visits that came from one AI assistant (a link to hiyaghar.com clicked inside it).</summary>
+    public class AiReferral
+    {
+        public string Tool { get; set; } = "";
+        public long Sessions { get; set; }
+        public long ActiveUsers { get; set; }
+    }
+
+    public class AiReferralReport
+    {
+        /// <summary>Every tracked AI assistant, in a fixed order (0 when there were no visits).</summary>
+        public List<AiReferral> Tools { get; set; } = new();
+        public long TotalSessions { get; set; }
+        /// <summary>Users counted once across all AI assistants (not the sum of the rows).</summary>
+        public long TotalUsers { get; set; }
+    }
+
     public class AnalyticsResult<T>
     {
         public bool IsSuccess { get; set; }
@@ -75,6 +92,8 @@ namespace Hiya2.Server.Services
         // Today / yesterday: active users per hour (today only up to the current hour).
         Task<AnalyticsResult<List<VisitorHour>>> GetHourlyAsync(VisitorDateRange range);
         Task<AnalyticsResult<List<VisitorPage>>> GetPagesAsync(VisitorDateRange range, int? top);
+        // Visits from AI assistants (ChatGPT, Perplexity, Gemini, Copilot, Claude) by session source.
+        Task<AnalyticsResult<AiReferralReport>> GetAiReferralsAsync(VisitorDateRange range);
         // Startup check: logs whether the key file can be used (full path + reason). Never throws.
         void LogStartupStatus(string environmentName);
     }
@@ -230,6 +249,60 @@ namespace Hiya2.Server.Services
                 }).ToList();
             });
         }
+
+        // AI assistants and the session sources (referrer / utm_source) GA records for their links.
+        private static readonly (string Tool, string[] Sources)[] AiTools =
+        {
+            ("ChatGPT", new[] { "chatgpt.com", "chat.openai.com" }),
+            ("Perplexity", new[] { "perplexity.ai", "www.perplexity.ai" }),
+            ("Gemini", new[] { "gemini.google.com", "bard.google.com" }),
+            ("Copilot", new[] { "copilot.microsoft.com" }),
+            ("Claude", new[] { "claude.ai" }),
+        };
+
+        public Task<AnalyticsResult<AiReferralReport>> GetAiReferralsAsync(VisitorDateRange range) =>
+            CachedAsync(range, "ai-referrals", async client =>
+            {
+                var sources = AiTools.SelectMany(t => t.Sources).ToList();
+                RunReportRequest Request(bool bySource)
+                {
+                    var request = NewRequest(range);
+                    var sourceFilter = new FilterExpression
+                    {
+                        Filter = new Filter
+                        {
+                            FieldName = "sessionSource",
+                            InListFilter = new Filter.Types.InListFilter { CaseSensitive = false, Values = { sources } },
+                        },
+                    };
+                    // Keep the HiyaGhar stream filter AND add the AI sources.
+                    request.DimensionFilter = new FilterExpression
+                    {
+                        AndGroup = new FilterExpressionList { Expressions = { request.DimensionFilter, sourceFilter } },
+                    };
+                    if (bySource) request.Dimensions.Add(new Dimension { Name = "sessionSource" });
+                    request.Metrics.Add(new Metric { Name = "sessions" });
+                    request.Metrics.Add(new Metric { Name = "activeUsers" });
+                    return request;
+                }
+
+                var bySource = await client.RunReportAsync(Request(true));
+                var totals = await client.RunReportAsync(Request(false)); // users counted once overall
+                var rows = bySource.Rows.Select(r => (Source: r.DimensionValues[0].Value.ToLowerInvariant(),
+                    Sessions: ParseLong(r.MetricValues[0].Value), Users: ParseLong(r.MetricValues[1].Value))).ToList();
+                var total = totals.Rows.FirstOrDefault();
+
+                return new AiReferralReport
+                {
+                    Tools = AiTools.Select(t =>
+                    {
+                        var mine = rows.Where(r => t.Sources.Contains(r.Source)).ToList();
+                        return new AiReferral { Tool = t.Tool, Sessions = mine.Sum(r => r.Sessions), ActiveUsers = mine.Sum(r => r.Users) };
+                    }).ToList(),
+                    TotalSessions = total == null ? 0 : ParseLong(total.MetricValues[0].Value),
+                    TotalUsers = total == null ? 0 : ParseLong(total.MetricValues[1].Value),
+                };
+            });
 
         // Every query: the configured property, the date range, and ONLY the HiyaGhar web stream
         // (the property also holds another website).

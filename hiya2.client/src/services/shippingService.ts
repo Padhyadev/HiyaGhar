@@ -46,7 +46,7 @@ export const DEFAULT_SHIPPING_SETTINGS: ShippingSettings = {
   gstLabel: 'Estimated GST (5% Included)',
   fssaiLicenseNumber: '10723026001148',
   enableFssaiDisplay: true,
-  contactEmail: 'support@hiyaghar.com',
+  contactEmail: 'hiyaghar@gmail.com',
   contactPhone: '+91 92744 43617',
   contactAddress: '303, APM Mall Complex, Near Bharat Petrol Pump, Sattadhar Cross Road, Ghatlodiya Ahmedabad 380061, Gujarat, India',
   enableProductDescriptionTab: true,
@@ -123,7 +123,14 @@ export class ShippingService {
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (stored) {
-        return { ...DEFAULT_SHIPPING_SETTINGS, ...JSON.parse(stored) };
+        const parsed = JSON.parse(stored);
+        return {
+          ...DEFAULT_SHIPPING_SETTINGS,
+          ...parsed,
+          fssaiLicenseNumber: (parsed?.fssaiLicenseNumber && String(parsed.fssaiLicenseNumber).trim().length > 0)
+            ? String(parsed.fssaiLicenseNumber).trim()
+            : DEFAULT_SHIPPING_SETTINGS.fssaiLicenseNumber,
+        };
       }
     } catch {
       // Fallback
@@ -167,7 +174,9 @@ export class ShippingService {
             enableGstDisplay: data.settings.enableGstDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableGstDisplay,
             gstPercent: data.settings.gstPercent ?? DEFAULT_SHIPPING_SETTINGS.gstPercent,
             gstLabel: data.settings.gstLabel ?? DEFAULT_SHIPPING_SETTINGS.gstLabel,
-            fssaiLicenseNumber: data.settings.fssaiLicenseNumber ?? DEFAULT_SHIPPING_SETTINGS.fssaiLicenseNumber,
+            fssaiLicenseNumber: (data.settings.fssaiLicenseNumber && String(data.settings.fssaiLicenseNumber).trim().length > 0)
+              ? String(data.settings.fssaiLicenseNumber).trim()
+              : DEFAULT_SHIPPING_SETTINGS.fssaiLicenseNumber,
             enableFssaiDisplay: data.settings.enableFssaiDisplay ?? DEFAULT_SHIPPING_SETTINGS.enableFssaiDisplay,
             contactEmail: data.settings.contactEmail ?? DEFAULT_SHIPPING_SETTINGS.contactEmail,
             contactPhone: data.settings.contactPhone ?? DEFAULT_SHIPPING_SETTINGS.contactPhone,

@@ -49,6 +49,8 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
 
   // Change Password Modal State
   const [isPasswordModalOpen, setIsPasswordModalOpen] = useState<boolean>(false);
+  const [currentPassword, setCurrentPassword] = useState<string>('');
+  const [showCurrentPass, setShowCurrentPass] = useState<boolean>(false);
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showNewPass, setShowNewPass] = useState<boolean>(false);
@@ -57,6 +59,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
   const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>({});
 
   const handleOpenPasswordModal = () => {
+    setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
     setPasswordErrors({});
@@ -67,10 +70,16 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     e.preventDefault();
     const errors: Record<string, string> = {};
 
+    // The server checks the current password before changing it.
+    if (!currentPassword) {
+      errors.currentPassword = 'Please enter your current password';
+    }
     if (!newPassword) {
       errors.newPassword = 'Please enter new password';
     } else if (newPassword.length < 8) {
       errors.newPassword = 'Please enter at least 8 characters';
+    } else if (newPassword === currentPassword) {
+      errors.newPassword = 'New password must be different from the current password';
     }
     if (!confirmPassword) {
       errors.confirmPassword = 'Please enter confirm password';
@@ -85,7 +94,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
     setPasswordErrors({});
 
     setPasswordLoading(true);
-    const res = await AdminAuthService.changePassword('', newPassword);
+    const res = await AdminAuthService.changePassword(currentPassword, newPassword);
     setPasswordLoading(false);
 
     if (res.success) {
@@ -240,7 +249,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
             ☰
           </button>
           <div className="hiyaghar-topbar-brand" onClick={() => onNavigate('/admin/dashboard')}>
-            <img src={LOGO_URL} alt="HIYA" className="hiyaghar-topbar-logo" />
+            <img src={LOGO_URL} alt="HIYAGHAR" className="hiyaghar-topbar-logo" />
           </div>
         </div>
 
@@ -507,6 +516,42 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({
                   {passwordErrors.form}
                 </div>
               )}
+
+              <div className="hiyaghar-form-group" style={{ marginBottom: '12px' }}>
+                <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155' }}>Current Password *</label>
+                <div className="hiyaghar-password-wrapper">
+                  <input
+                    type={showCurrentPass ? 'text' : 'password'}
+                    placeholder="Your current password"
+                    autoComplete="current-password"
+                    className={passwordErrors.currentPassword ? 'input-error' : ''}
+                    value={currentPassword}
+                    onChange={(e) => {
+                      setCurrentPassword(e.target.value);
+                      if (passwordErrors.currentPassword) setPasswordErrors((prev) => ({ ...prev, currentPassword: '' }));
+                    }}
+                  />
+                  <button
+                    type="button"
+                    className="hiyaghar-password-toggle-btn"
+                    onClick={() => setShowCurrentPass(!showCurrentPass)}
+                    title={showCurrentPass ? 'Hide password' : 'Show password'}
+                  >
+                    {showCurrentPass ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                        <line x1="1" y1="1" x2="23" y2="23" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+                {passwordErrors.currentPassword && <span className="hiyaghar-field-error">{passwordErrors.currentPassword}</span>}
+              </div>
 
               <div className="hiyaghar-form-group" style={{ marginBottom: '12px' }}>
                 <label style={{ fontSize: '0.82rem', fontWeight: 700, color: '#334155' }}>New Password *</label>

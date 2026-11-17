@@ -484,7 +484,7 @@ export const Header: React.FC = () => {
           {/* Center Brand Logo */}
           <div className="hiyaghar-header-center">
             <a href="/" className="hiyaghar-ref-logo" aria-label="Home" onClick={(e) => { e.preventDefault(); window.history.pushState(null, '', '/'); window.dispatchEvent(new Event('popstate')); }}>
-              <img src={LOGO_URL} alt="HIYA" width={160} height={48} fetchPriority="high" className="hiyaghar-logo-img" />
+              <img src={LOGO_URL} alt="HIYAGHAR" width={160} height={48} fetchPriority="high" className="hiyaghar-logo-img" />
             </a>
           </div>
 
@@ -1038,7 +1038,7 @@ export const Header: React.FC = () => {
                   <div className="hiyaghar-search-pills">
                     {(allProducts.length > 0
                       ? allProducts.slice(0, 6).map((p) => p.productName)
-                      : ['Kalkatti Pan', 'Amla Madhur', 'Shahi Kharek', 'Jamun Pop', 'Dil Raja', 'Tea Masala']
+                      : ['Kalkatti Pan', 'Amla Madhur', 'Shahi Kharek', 'Jamun Pop', 'Dil Ranjan', 'Tea Masala']
                     ).map((tag) => (
                       <button
                         key={tag}

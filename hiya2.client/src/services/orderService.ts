@@ -485,7 +485,7 @@ export class OrderService {
         <div style="clear: both;"></div>
 
         <div style="margin-top: 40px; text-align: center; font-size: 12px; color: var(--hiya-muted, #475467); border-top: 1px solid #eee; padding-top: 15px; line-height: 1.5;">
-          Thank you for choosing HIYAGHAR. For customer care, email ${ShippingService.getSettings().contactEmail || 'support@hiyaghar.com'} or call ${ShippingService.getSettings().contactPhone || '+91 92744 43617'}.<br/>
+          Thank you for choosing HIYAGHAR. For customer care, email ${ShippingService.getSettings().contactEmail || 'hiyaghar@gmail.com'} or call ${ShippingService.getSettings().contactPhone || '+91 92744 43617'}.<br/>
           This is a computer-generated tax invoice and requires no signature.
         </div>
       </div>
@@ -732,7 +732,7 @@ export class OrderService {
       doc.line(14, footerY - 4, 196, footerY - 4);
 
       const invoiceStore = ShippingService.getSettings();
-      const invoiceEmail = invoiceStore.contactEmail || 'support@hiyaghar.com';
+      const invoiceEmail = invoiceStore.contactEmail || 'hiyaghar@gmail.com';
       const invoicePhone = invoiceStore.contactPhone || '+91 92744 43617';
 
       doc.setFont('helvetica', 'normal');

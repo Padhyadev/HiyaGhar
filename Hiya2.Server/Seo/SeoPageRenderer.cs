@@ -84,7 +84,7 @@ namespace Hiya2.Server.Seo
                 }
                 var product = await _products.GetByIdAsync(found.Id);
                 if (product == null) return NotFoundResult(path, s, baseNodes);
-                page = BuildProductPage(product, found.Path, c, s.DefaultImage, baseNodes);
+                page = BuildProductPage(product, found.Path, c, s.DefaultImage, baseNodes, await VerifiedReviewsAsync(found.Id));
             }
             else
             {
@@ -172,6 +172,11 @@ namespace Hiya2.Server.Seo
                 body += "<p>" + SeoMarkup.E($"Showing {items.Count} {label}product{(items.Count == 1 ? "" : "s")}") + "</p>";
                 body += SeoMarkup.LinkList(items);
                 if (pageNode != null) pageNode["mainEntity"] = SeoMarkup.ItemList(c, items);
+
+                // Category guide + FAQs from routes.json (nothing until text is added there).
+                body += SeoMarkup.GuideSection(route.Guide);
+                var guideFaqs = SeoMarkup.GuideContent(route.Guide).Faqs;
+                if (guideFaqs.Count > 0) page.JsonLd.Add(SeoMarkup.FaqPageNode(c, route.Path!, guideFaqs));
                 page.JsonLd.Add(SeoMarkup.Breadcrumbs(c, new[] { ("Home", "/"), (route.Breadcrumb ?? route.H1 ?? route.Title, route.Path!) }));
             }
 
@@ -181,19 +186,22 @@ namespace Hiya2.Server.Seo
                 var faqs = await _db.Faqs.AsNoTracking()
                     .Where(f => !f.IsDeleted && f.IsActive)
                     .OrderBy(f => f.DisplayOrder).ThenBy(f => f.Id)
-                    .Select(f => new { f.Question, f.Answer })
+                    .Select(f => new { f.Category, f.Question, f.Answer })
                     .ToListAsync();
 
+                // One list, grouped like the React page (src/pages/Faq/FaqPage.tsx): the visible
+                // headings/answers and the FAQPage JSON-LD are both built from it, in the same order.
+                var groups = SeoMarkup.GroupFaqs(c.FaqCategories, faqs.Select(f => (f.Category, f.Question, f.Answer)));
                 if (pageNode != null)
                 {
-                    pageNode["mainEntity"] = faqs.Select(f => new Dictionary<string, object?>
+                    pageNode["mainEntity"] = groups.SelectMany(g => g.Faqs).Select(f => new Dictionary<string, object?>
                     {
                         ["@type"] = "Question",
                         ["name"] = f.Question,
                         ["acceptedAnswer"] = new Dictionary<string, object?> { ["@type"] = "Answer", ["text"] = f.Answer },
                     }).ToList();
                 }
-                body += "<dl>" + string.Concat(faqs.Select(f => "<dt>" + SeoMarkup.E(f.Question) + "</dt><dd>" + SeoMarkup.E(f.Answer) + "</dd>")) + "</dl>";
+                body += SeoMarkup.FaqSections(groups);
             }
 
             if (route.ContactDetails)
@@ -222,7 +230,21 @@ namespace Hiya2.Server.Seo
             page.BodyHtml = SeoMarkup.Prerender(body);
         }
 
-        private static SeoPage BuildProductPage(Models.Product p, string path, SeoConfig c, string defaultImage, List<object> baseNodes)
+        /// <summary>Active reviews of the product written by customers who received it (newest first).</summary>
+        private async Task<List<SeoMarkup.ProductReview>> VerifiedReviewsAsync(int productId)
+        {
+            var reviews = await _db.Reviews.AsNoTracking()
+                .Include(r => r.Customer)
+                .Where(r => r.ProductId == productId && r.IsActive && !r.IsDeleted)
+                .OrderByDescending(r => r.CreatedDate)
+                .ToListAsync();
+            var verified = await Services.ReviewVerification.VerifiedReviewIdsAsync(_db, reviews);
+            return reviews.Where(r => verified.Contains(r.Id))
+                .Select(r => new SeoMarkup.ProductReview(Services.ReviewVerification.DisplayName(r.Customer), r.Rating, r.ReviewText, r.CreatedDate))
+                .ToList();
+        }
+
+        private static SeoPage BuildProductPage(Models.Product p, string path, SeoConfig c, string defaultImage, List<object> baseNodes, List<SeoMarkup.ProductReview> verifiedReviews)
         {
             var description = SeoMarkup.ProductDescription(p, c.ProductDescriptionTemplate);
             var images = SeoMarkup.ProductImages(c, p, defaultImage);
@@ -230,12 +252,12 @@ namespace Hiya2.Server.Seo
 
             var page = new SeoPage
             {
-                Title = $"{p.ProductName} | {c.SiteName}",
+                Title = SeoMarkup.ProductTitle(p.ProductName, p.Category?.CategoryName, c.SiteName),
                 Description = description,
                 Path = path,
                 Image = images[0],
                 OgType = "product",
-                JsonLd = new List<object>(baseNodes) { SeoMarkup.ProductNode(c, p, description, images, path) },
+                JsonLd = new List<object>(baseNodes) { SeoMarkup.ProductNode(c, p, description, images, path, verifiedReviews) },
             };
 
             var crumbs = new List<(string, string)> { ("Home", "/") };
@@ -291,6 +313,13 @@ namespace Hiya2.Server.Seo
                 body += "<h2>Frequently Asked Questions</h2><dl>"
                     + string.Concat(meta.Faqs.Select(f => "<dt>" + SeoMarkup.E(f.Question) + "</dt><dd>" + SeoMarkup.E(f.Answer) + "</dd>")) + "</dl>";
                 page.JsonLd.Add(SeoMarkup.ProductFaqNode(c, path, meta.Faqs));
+            }
+            // Verified-buyer reviews: the same ones (and the same average) as the Product aggregateRating.
+            if (verifiedReviews.Count > 0)
+            {
+                var avg = Math.Round(verifiedReviews.Average(r => r.Rating), 1).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture);
+                body += "<h2>Customer Reviews</h2><p>" + SeoMarkup.E($"Rated {avg} out of 5 from {verifiedReviews.Count} verified buyer review{(verifiedReviews.Count == 1 ? "" : "s")}") + "</p><ul>"
+                    + string.Concat(verifiedReviews.Take(5).Select(r => "<li><strong>" + SeoMarkup.E(r.Author) + "</strong> – " + r.Rating + "/5 – " + SeoMarkup.E(r.Text) + "</li>")) + "</ul>";
             }
             if (categoryRoute?.Path != null)
             {

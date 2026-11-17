@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Hiya2.Server.Models;
 using Hiya2.Server.Repositories.HomePageComponent;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -41,7 +42,7 @@ namespace Hiya2.Server.Controllers
             return Ok(component);
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] HomePageComponent component)
         {
@@ -56,7 +57,7 @@ namespace Hiya2.Server.Controllers
             return CreatedAtAction(nameof(GetByKey), new { key = created.Key }, created);
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] HomePageComponent component)
         {
@@ -76,7 +77,7 @@ namespace Hiya2.Server.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -89,7 +90,7 @@ namespace Hiya2.Server.Controllers
             return NoContent();
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpPost("{id}/item")]
         public async Task<IActionResult> AddItem(int id, [FromBody] HomePageComponentItem item)
         {
@@ -102,7 +103,7 @@ namespace Hiya2.Server.Controllers
             return Ok(item);
         }
 
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         [HttpDelete("item/{itemId}")]
         public async Task<IActionResult> DeleteItem(int itemId)
         {

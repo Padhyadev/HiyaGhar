@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Services;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -109,7 +110,7 @@ namespace Hiya2.Server.Controllers
         }
 
         [HttpGet("admin/subscribers")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> GetAllSubscribers()
         {
             var subscribers = await _context.NewsletterSubscribers

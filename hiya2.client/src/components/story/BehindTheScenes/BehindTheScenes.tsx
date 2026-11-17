@@ -6,10 +6,10 @@ import './BehindTheScenes.css';
 declare const __STORY_BTS_IMAGES__: number[];
 
 const PHOTOS: Record<number, { caption: string; alt: string }> = {
-  1: { caption: 'Roasting', alt: 'Seeds and spices being slow-roasted in the HIYA Ghar kitchen' },
+  1: { caption: 'Roasting', alt: 'Seeds and spices being slow-roasted in the HIYAGHAR kitchen' },
   2: { caption: 'Mixing', alt: 'Roasted ingredients being mixed by hand for a batch of mukhwas' },
   3: { caption: 'Filling jars', alt: 'Fresh mukhwas being filled into HIYA jars by hand' },
-  4: { caption: 'Packing your order', alt: 'A HIYA Ghar order being packed for delivery' },
+  4: { caption: 'Packing your order', alt: 'A HIYAGHAR order being packed for delivery' },
 };
 
 /**

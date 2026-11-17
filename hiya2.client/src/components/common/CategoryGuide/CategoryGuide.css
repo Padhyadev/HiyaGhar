@@ -1,0 +1,71 @@
+/* Category page guide text + FAQs (AEO). Colours follow the site tokens (navy / gold / cream). */
+.hiyaghar-category-guide {
+  padding: 48px 0;
+}
+
+.hiyaghar-category-guide-text,
+.hiyaghar-category-guide-faqs {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.hiyaghar-category-guide-faqs {
+  margin-top: 32px;
+}
+
+.hiyaghar-category-guide h2 {
+  margin: 0 0 14px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #11223A;
+}
+
+.hiyaghar-category-guide-text p {
+  margin: 0 0 12px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: #475569;
+}
+
+.hiyaghar-category-guide-faq {
+  background: #FFFFFF;
+  border: 1px solid #EAE4D5;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.hiyaghar-category-guide-faq summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 20px;
+}
+
+.hiyaghar-category-guide-faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.hiyaghar-category-guide-faq summary h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #11223A;
+}
+
+.hiyaghar-category-guide-faq[open] summary h3 {
+  color: var(--hiya-gold-text, #855F0F);
+}
+
+.hiyaghar-category-guide-faq p {
+  margin: 0;
+  padding: 0 20px 18px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: #475569;
+}
+
+@media (max-width: 768px) {
+  .hiyaghar-category-guide {
+    padding: 32px 0;
+  }
+}

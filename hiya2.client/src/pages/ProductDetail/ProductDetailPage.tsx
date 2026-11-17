@@ -19,7 +19,7 @@ import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE, prod
 import { parseProductFullDescription, NUTRITION_SERVING_SIZE, type ComboItem } from '../../utils/productMetaStore';
 import { showToast } from '../../utils/alertService';
 import { SEO } from '../../components/common/SEO/SEO';
-import { buildProductSeoDescription, seoConfig } from '../../seo/routeSeo';
+import { buildProductSeoDescription, buildProductSeoTitle, seoConfig } from '../../seo/routeSeo';
 import { trackViewItem } from '../../utils/analytics';
 import './ProductDetailPage.css';
 
@@ -169,8 +169,9 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           name: apiProd.productName,
           category: 'special',
           categoryLabel: (apiProd as any).categoryName || apiProd.category?.categoryName || 'Mukhwas',
-          shortDescription: apiProd.shortDescription || '100% natural organic product.',
+          shortDescription: apiProd.shortDescription || 'Handmade in small batches by HIYAGHAR.',
           longDescription: parsed.cleanDescription,
+          seoTitle: buildProductSeoTitle(apiProd.productName, apiProd.category?.categoryName || (apiProd as any).categoryName),
           seoDescription: buildProductSeoDescription(
             apiProd.productName,
             apiProd.category?.categoryName || (apiProd as any).categoryName,
@@ -698,7 +699,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
     <div className="hiyaghar-product-detail-layout">
       {!isLoadingProduct && product && !productNotFound ? (
         <SEO
-          title={`${product.name} | HIYAGHAR`}
+          title={product.seoTitle || `${product.name} | HIYAGHAR`}
           description={product.seoDescription || buildProductSeoDescription(product.name, undefined)}
           path={canonicalPath || `/product/${productId}`}
           image={product.seoImage || product.image}
@@ -1050,7 +1051,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
                       <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
                     </svg>
                   </span>
-                  <span>100% Natural</span>
+                  {/* Only claims we can back up: mukhwas are confirmed tobacco- and supari-free. */}
+                  <span>{(product.categoryLabel || '').toLowerCase().includes('mukhwas') ? 'Tobacco & Supari Free' : 'Handmade in Small Batches'}</span>
                 </div>
                 {(() => {
                   const catL = (product.categoryLabel || '').toLowerCase();
@@ -1328,7 +1330,7 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
           {/* Product FAQs (admin: Products > How to Use, Shelf Life & FAQs). Answers are always in
               the DOM (<details>), so crawlers read them; the server adds FAQPage JSON-LD. */}
           {product.faqs?.length > 0 && (
-            <section className="hiyaghar-detail-tabs-container" aria-labelledby="product-faq-heading" style={{ marginTop: '24px' }}>
+            <section className="hiyaghar-detail-tabs-container hiyaghar-product-faq" aria-labelledby="product-faq-heading" style={{ marginTop: '24px' }}>
               <h2 id="product-faq-heading" className="pane-subheading" style={{ fontSize: '1.25rem', margin: '0 0 12px' }}>
                 Frequently Asked Questions
               </h2>

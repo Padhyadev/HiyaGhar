@@ -70,6 +70,8 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => 
   const [reviewText, setReviewText] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [formMessage, setFormMessage] = useState<string | null>(null);
+  // Logged-in customers: may they review? Only buyers who received this product (server check).
+  const [eligibility, setEligibility] = useState<{ canReview: boolean; message?: string } | null>(null);
 
   const loadReviews = async () => {
     setLoading(true);
@@ -82,6 +84,9 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => 
 
   useEffect(() => {
     loadReviews();
+    if (CustomerAuthService.isLoggedIn()) {
+      ReviewApiService.canReview(productId).then(setEligibility);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [productId]);
 
@@ -105,7 +110,7 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => 
     if (result.success) {
       setRating(0);
       setReviewText('');
-      setFormMessage('Thank you! Your review has been posted.');
+      setEligibility({ canReview: false, message: 'Thank you! Your review has been posted.' });
       await loadReviews();
     } else {
       setFormMessage(result.message || 'Something went wrong. Please try again.');
@@ -128,7 +133,13 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => 
 
       <div className="hiyaghar-pr-write">
         <h4 className="hiyaghar-pr-write-title">Write a Review</h4>
-        {isLoggedIn ? (
+        {isLoggedIn && eligibility && !eligibility.canReview ? (
+          <div className="hiyaghar-pr-login-prompt">
+            <p>{eligibility.message || 'Only customers who have received this product can review it.'}</p>
+          </div>
+        ) : isLoggedIn && !eligibility ? (
+          <p className="hiyaghar-pr-empty">Checking...</p>
+        ) : isLoggedIn ? (
           <form onSubmit={handleSubmit} className="hiyaghar-pr-form">
             <StarPicker value={rating} onChange={setRating} />
             <textarea
@@ -145,7 +156,7 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => 
           </form>
         ) : (
           <div className="hiyaghar-pr-login-prompt">
-            <p>Please log in to write a review.</p>
+            <p>Bought this product? Please log in to write a review.</p>
             <button
               type="button"
               className="hiyaghar-pr-login-btn"
@@ -172,7 +183,10 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({ productId }) => 
                 </span>
               </div>
               <p className="hiyaghar-pr-card-text">{review.reviewText}</p>
-              <span className="hiyaghar-pr-card-author">{review.customerName}</span>
+              <span className="hiyaghar-pr-card-author">
+                {review.customerName}
+                {review.verified && <span className="hiyaghar-pr-verified"> · ✓ Verified buyer</span>}
+              </span>
             </div>
           ))
         )}

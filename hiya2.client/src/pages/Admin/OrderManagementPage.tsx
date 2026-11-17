@@ -494,7 +494,7 @@ export const OrderManagementPage: React.FC = () => {
       doc.line(14, footerY - 4, 196, footerY - 4);
 
       const slipStore = ShippingService.getSettings();
-      const slipEmail = slipStore.contactEmail || 'support@hiyaghar.com';
+      const slipEmail = slipStore.contactEmail || 'hiyaghar@gmail.com';
       const slipPhone = slipStore.contactPhone || '+91 92744 43617';
 
       doc.setFont('helvetica', 'normal');
@@ -650,7 +650,7 @@ export const OrderManagementPage: React.FC = () => {
           </table>
 
           <div class="footer">
-            <p>Thank you for choosing <strong>HIYAGHAR</strong>! For support, contact ${ShippingService.getSettings().contactEmail || 'support@hiyaghar.com'} or call ${ShippingService.getSettings().contactPhone || '+91 92744 43617'}</p>
+            <p>Thank you for choosing <strong>HIYAGHAR</strong>! For support, contact ${ShippingService.getSettings().contactEmail || 'hiyaghar@gmail.com'} or call ${ShippingService.getSettings().contactPhone || '+91 92744 43617'}</p>
             <p style="margin-top: 4px;">This is a computer generated invoice and does not require physical signature.</p>
           </div>
         </div>

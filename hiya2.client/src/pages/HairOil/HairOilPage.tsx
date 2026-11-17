@@ -13,6 +13,7 @@ import { CartService } from '../../cart';
 import { ProductService, type Product as ApiProduct } from '../../services/productService';
 import { formatVariantLabel, getDefaultVariant, getVariantImages, NO_IMAGE } from '../../utils/productFormat';
 import { showToast } from '../../utils/alertService';
+import { CategoryGuide } from '../../components/common/CategoryGuide/CategoryGuide';
 // Shared listing-page styles (grid section spacing, empty state) live with the Mukhwas page.
 import '../Mukhwas/MukhwasPage.css';
 import './HairOilPage.css';
@@ -57,8 +58,8 @@ export const fallbackHairOilProductsData: HairOilProduct[] = [
     originalPrice: 399,
     discountPercentage: 38,
     discountTag: '38% OFF',
-    rating: 4.9,
-    reviewsCount: 210,
+    rating: 0,
+    reviewsCount: 0,
     image: '/image/Hair Oil/hair oil.webp',
     secondaryImage: '/image/lifestyle_hair.webp',
     badge: 'Best Seller',
@@ -96,8 +97,8 @@ function mapApiToHairOil(p: ApiProduct): HairOilProduct {
     originalPrice: origPrice,
     discountPercentage: discountPercentage,
     discountTag: discountPercentage > 0 ? `${discountPercentage}% OFF` : '',
-    rating: p.rating || 4.9,
-    reviewsCount: p.reviewCount || 150,
+    rating: p.rating || 0,
+    reviewsCount: p.reviewCount || 0,
     image: p.mainImagePath || NO_IMAGE,
     secondaryImage: getVariantImages(p, getDefaultVariant(p.variants))[1],
     badge: p.isFeatured ? 'Best Seller' : undefined,
@@ -270,7 +271,7 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
               {
                 id: 'chemical-free',
                 title: 'Zero Mineral Oil & Silicones',
-                description: '100% natural nourishing formula without heavy artificial additives',
+                description: 'Herbal hair oil made in small batches',
                 icon: (
                   <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -304,6 +305,8 @@ export const HairOilPage: React.FC<HairOilPageProps> = ({
 
 
         </div>
+        {/* Category guide + FAQs from seo/routes.json (hidden until text is added) */}
+        <CategoryGuide path="/hair-oil" />
       </main>
 
       <Footer />

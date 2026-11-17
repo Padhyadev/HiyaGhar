@@ -36,7 +36,7 @@ export const DEFAULT_ANNOUNCEMENTS: AnnouncementItem[] = [
   },
   {
     id: 'ann_4',
-    text: '100% NATURAL & HOMEMADE WITH LOVE',
+    text: 'HANDMADE IN SMALL BATCHES WITH LOVE',
     isActive: true,
     displayOrder: 4,
   },

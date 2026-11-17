@@ -6,6 +6,7 @@ using Hiya2.Server.Models;
 using Hiya2.Server.Services;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Hiya2.Server.Authorization;
 
 namespace Hiya2.Server.Controllers
 {
@@ -233,7 +234,7 @@ namespace Hiya2.Server.Controllers
 
         // GET: api/ContactQuery/admin/all (Admin)
         [HttpGet("admin/all")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> GetAllAdmin([FromQuery] string? status = null, [FromQuery] string? search = null)
         {
             try
@@ -292,7 +293,7 @@ namespace Hiya2.Server.Controllers
 
         // PUT: api/ContactQuery/admin/{id}/status (Admin)
         [HttpPut("admin/{id}/status")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> UpdateStatus(long id, [FromBody] UpdateContactQueryStatusDto dto)
         {
             try
@@ -345,7 +346,7 @@ namespace Hiya2.Server.Controllers
 
         // DELETE: api/ContactQuery/admin/{id} (Admin)
         [HttpDelete("admin/{id}")]
-        [Authorize]
+        [Authorize(Policy = AuthPolicies.Staff)]
         public async Task<IActionResult> Delete(long id)
         {
             try
