@@ -95,7 +95,10 @@ const OTHER_SECTION: FaqSection = { key: '__other', heading: 'More Questions', r
 
 const CATEGORIES = [
   { key: 'all', label: 'All Questions' },
-  ...FAQ_SECTIONS.map((s) => ({ key: s.key, label: s.heading })),
+  ...FAQ_SECTIONS.map((s) => ({
+    key: s.key,
+    label: s.key === 'orders' ? 'Ordering & Shipping' : s.heading,
+  })),
 ];
 
 // Same grouping as the server: configured order, FAQs keep their order, unknown categories last.
@@ -110,7 +113,6 @@ export const FaqPage: React.FC = () => {
   const [faqs, setFaqs] = useState<FaqItem[]>(FAQ_DATA);
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
-  const [searchQuery, setSearchQuery] = useState<string>('');
 
   useEffect(() => {
     FaqService.getPublicFaqs().then((res) => {
@@ -127,20 +129,11 @@ export const FaqPage: React.FC = () => {
 
   const toggleItem = (id: string | number) => {
     const key = String(id);
-    setOpenItems((prev) => ({
-      ...prev,
-      [key]: !prev[key],
-    }));
+    setOpenItems((prev) => (prev[key] ? {} : { [key]: true }));
   };
 
   const filteredFaqs = faqs.filter((item) => {
-    const matchesCategory =
-      activeCategory === 'all' || item.category?.toLowerCase() === activeCategory.toLowerCase();
-    const matchesSearch =
-      searchQuery.trim() === '' ||
-      item.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.answer.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return activeCategory === 'all' || item.category?.toLowerCase() === activeCategory.toLowerCase();
   });
 
   return (
@@ -163,39 +156,11 @@ export const FaqPage: React.FC = () => {
             <div className="hiyaghar-faq-hero-overlay" />
 
             <div className="hiyaghar-faq-hero-inner">
-              
-
               <span className="hiyaghar-faq-badge">HELP & SUPPORT CENTER</span>
               <h1 className="hiyaghar-faq-title">Frequently Asked Questions</h1>
               <p className="hiyaghar-faq-subtitle">
                 Everything you need to know about our handcrafted products, ingredients, shipping, and custom gifting.
               </p>
-
-              {/* SEARCH BAR */}
-              <div className="hiyaghar-faq-search-box">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-                <input
-                  type="text"
-                  className="hiyaghar-faq-search-input"
-                  aria-label="Search frequently asked questions"
-                  placeholder="Search questions (e.g. shipping, mukhwas)..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    className="hiyaghar-faq-clear-btn"
-                    onClick={() => setSearchQuery('')}
-                    aria-label="Clear search"
-                  >
-                    ✕
-                  </button>
-                )}
-              </div>
             </div>
           </div>
         </section>
@@ -285,15 +250,8 @@ export const FaqPage: React.FC = () => {
                   <line x1="21" y1="21" x2="16.65" y2="16.65" />
                   <line x1="8" y1="11" x2="14" y2="11" />
                 </svg>
-                <h2>No answers found</h2>
-                <p>We couldn't find any questions matching "{searchQuery}".</p>
-                <button
-                  type="button"
-                  className="hiyaghar-faq-btn-secondary"
-                  onClick={() => setSearchQuery('')}
-                >
-                  Clear Search
-                </button>
+                <h2>No questions found</h2>
+                <p>There are no questions in this category yet.</p>
               </div>
             )}
           </ScrollReveal>
