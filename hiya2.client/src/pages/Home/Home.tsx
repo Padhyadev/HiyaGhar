@@ -7,7 +7,6 @@ import { CombosSection } from '../../components/home/CombosSection/CombosSection
 import { WhyHiyaSection } from '../../components/home/WhyHiyaSection/WhyHiyaSection';
 import { FeaturedStorySection } from '../../components/home/FeaturedStorySection/FeaturedStorySection';
 import { FounderStrip } from '../../components/story/FounderStrip/FounderStrip';
-import { GiftingHampersSection } from '../../components/home/GiftingHampersSection/GiftingHampersSection';
 import { ReviewsSection } from '../../components/home/ReviewsSection/ReviewsSection';
 import { HiyaAtHomeSection } from '../../components/home/HiyaAtHomeSection/HiyaAtHomeSection';
 import { Footer } from '../../components/layout/Footer/Footer';
@@ -30,7 +29,6 @@ export const Home: React.FC = () => {
         <FeaturedStorySection />
         {/* Founder Strip below product categories and above footer */}
         <FounderStrip />
-        <GiftingHampersSection />
         <ReviewsSection />
         <HiyaAtHomeSection />
       </main>
