@@ -345,8 +345,8 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
   const ingredientsTabLabel = hasIngredients && hasBenefits
     ? 'Ingredients & Benefits'
     : hasIngredients
-    ? 'Ingredients'
-    : 'Benefits';
+      ? 'Ingredients'
+      : 'Benefits';
 
   useEffect(() => {
     const isCurrentTabVisible =
@@ -379,31 +379,31 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
 
   const attributeGroups: { name: string; values: string[] }[] = hasStructuredAttributes
     ? (() => {
-        const groups: Record<string, string[]> = {};
-        (product?.variants || []).forEach((v: any) => {
-          (v.attributes || []).forEach((a: any) => {
-            if (a.attributeValue && a.attributeValue.trim()) {
-              if (!groups[a.attributeName]) groups[a.attributeName] = [];
-              if (!groups[a.attributeName].includes(a.attributeValue.trim())) {
-                groups[a.attributeName].push(a.attributeValue.trim());
-              }
+      const groups: Record<string, string[]> = {};
+      (product?.variants || []).forEach((v: any) => {
+        (v.attributes || []).forEach((a: any) => {
+          if (a.attributeValue && a.attributeValue.trim()) {
+            if (!groups[a.attributeName]) groups[a.attributeName] = [];
+            if (!groups[a.attributeName].includes(a.attributeValue.trim())) {
+              groups[a.attributeName].push(a.attributeValue.trim());
             }
-          });
+          }
         });
-        return Object.keys(groups)
-          .sort(byAdminOrder<string>((name) => attributeOrder?.attributeOrder(name) ?? null, (a, b) => a.localeCompare(b)))
-          .map((name) => ({ name, values: [...groups[name]].sort(sortValuesOf(name)) }))
-          .filter((g) => g.values.length > 0);
-      })()
+      });
+      return Object.keys(groups)
+        .sort(byAdminOrder<string>((name) => attributeOrder?.attributeOrder(name) ?? null, (a, b) => a.localeCompare(b)))
+        .map((name) => ({ name, values: [...groups[name]].sort(sortValuesOf(name)) }))
+        .filter((g) => g.values.length > 0);
+    })()
     : (rawWeightOptions.length > 0 ? [{ name: 'Weight', values: [...rawWeightOptions].sort(sortValuesOf('Weight')) }] : []);
 
   const matchedVariant = hasStructuredAttributes
     ? (product?.variants || []).find((v: any) => {
-        const attrs = v.attributes || [];
-        const selectedKeys = Object.keys(selectedAttrs);
-        if (attrs.length === 0 || attrs.length !== selectedKeys.length) return false;
-        return attrs.every((a: any) => selectedAttrs[a.attributeName] === a.attributeValue);
-      })
+      const attrs = v.attributes || [];
+      const selectedKeys = Object.keys(selectedAttrs);
+      if (attrs.length === 0 || attrs.length !== selectedKeys.length) return false;
+      return attrs.every((a: any) => selectedAttrs[a.attributeName] === a.attributeValue);
+    })
     : undefined;
 
   const selectedWeight = hasStructuredAttributes
@@ -561,10 +561,10 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
       : activeVariant || (rawWeightOptions.length === 0 ? getDefaultVariant(product?.variants) : undefined));
   const totalStockUnits = stockVariant
     ? (typeof stockVariant.sellableStock === 'number'
-        ? stockVariant.sellableStock
-        : (typeof stockVariant.stockQuantity === 'number' ? stockVariant.stockQuantity : 99))
+      ? stockVariant.sellableStock
+      : (typeof stockVariant.stockQuantity === 'number' ? stockVariant.stockQuantity : 99))
     : (product?.variants?.length ? 0 : 99);
-  
+
   const cartItemId = `${product?.id}-${selectedWeight}`;
   // A product with a single variant (soaps, hair oil, combos) can sit in the cart under
   // different labels ("No Variant", "", ...), so count every line of it; otherwise match the
@@ -767,584 +767,664 @@ export const ProductDetailPage: React.FC<ProductDetailPageProps> = ({
             </div>
           </div>
         ) : (
-        <div className="hiyaghar-container">
-          {/* Back Button & Breadcrumbs Navigation Bar */}
-          {(() => {
-            const catName = product.categoryLabel || 'Mukhwas';
-            const catLower = catName.toLowerCase();
-            let catPath = '/mukhwas';
-            if (catLower.includes('soap')) catPath = '/handmade-soap';
-            else if (catLower.includes('tea') || catLower.includes('masala')) catPath = '/tea-masala';
-            else if (catLower.includes('hair') || catLower.includes('oil')) catPath = '/hair-oil';
-            else if (catLower.includes('hamper') || catLower.includes('gift')) catPath = '/gift-hampers';
-            else if (catLower.includes('mukhwas') || catLower.includes('natural')) catPath = '/mukhwas';
+          <div className="hiyaghar-container">
+            {/* Back Button & Breadcrumbs Navigation Bar */}
+            {(() => {
+              const catName = product.categoryLabel || 'Mukhwas';
+              const catLower = catName.toLowerCase();
+              let catPath = '/mukhwas';
+              if (catLower.includes('soap')) catPath = '/handmade-soap';
+              else if (catLower.includes('tea') || catLower.includes('masala')) catPath = '/tea-masala';
+              else if (catLower.includes('hair') || catLower.includes('oil')) catPath = '/hair-oil';
+              else if (catLower.includes('hamper') || catLower.includes('gift')) catPath = '/gift-hampers';
+              else if (catLower.includes('mukhwas') || catLower.includes('natural')) catPath = '/mukhwas';
 
-            return (
-              <div className="hiyaghar-detail-nav-bar">
-                <button
-                  type="button"
-                  className="hiyaghar-detail-back-button"
-                  onClick={() => {
-                    // Came from this listing: go back so it reopens where the shopper left it.
-                    if (cameDirectlyFrom(catPath)) window.history.back();
-                    else navigateTo(catPath);
-                  }}
-                  aria-label={`Back to ${catName}`}
-                  title={`Back to ${catName}`}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12" />
-                    <polyline points="12 19 5 12 12 5" />
-                  </svg>
-                  <span>Back to {catName}</span>
-                </button>
-              </div>
-            );
-          })()}
-
-          {/* Hero Two-Column Container */}
-          <div className="hiyaghar-detail-hero-grid">
-            {/* Gallery Column */}
-            <div className="hiyaghar-detail-gallery-col">
-              <div className="hiyaghar-detail-main-img-card">
-                {product.badge && (
-                  <span className="hiyaghar-detail-badge">{product.badge}</span>
-                )}
-                <button
-                  type="button"
-                  className={`hiyaghar-detail-image-wishlist-btn ${isWishlisted ? 'is-active' : ''}`}
-                  onClick={handleWishlistToggle}
-                  title={isWishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
-                  aria-label={isWishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill={isWishlisted ? '#ef4444' : 'none'} stroke={isWishlisted ? '#ef4444' : 'currentColor'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
-                  </svg>
-                </button>
-                <img
-                  ref={mainImgRef}
-                  src={selectedImage || product.image}
-                  alt={product.name}
-                  className="hiyaghar-detail-main-img"
-                />
-              </div>
-
-              {galleryImages.length > 1 && (
-                <div className="hiyaghar-detail-thumbnails-row">
-                  {galleryImages.map((img, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      className={`hiyaghar-thumbnail-btn ${selectedImage === img ? 'is-active' : ''}`}
-                      onClick={() => setSelectedImage(img)}
-                    >
-                      <img src={img} alt={`${product.name} view ${idx + 1}`} />
-                    </button>
-                  ))}
+              return (
+                <div className="hiyaghar-detail-nav-bar">
+                  <button
+                    type="button"
+                    className="hiyaghar-detail-back-button"
+                    onClick={() => {
+                      // Came from this listing: go back so it reopens where the shopper left it.
+                      if (cameDirectlyFrom(catPath)) window.history.back();
+                      else navigateTo(catPath);
+                    }}
+                    aria-label={`Back to ${catName}`}
+                    title={`Back to ${catName}`}
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="19" y1="12" x2="5" y2="12" />
+                      <polyline points="12 19 5 12 12 5" />
+                    </svg>
+                    <span>Back to {catName}</span>
+                  </button>
                 </div>
-              )}
-            </div>
+              );
+            })()}
 
-            {/* Info Column */}
-            <div className="hiyaghar-detail-info-col">
-              <span className="hiyaghar-detail-cat">{product.categoryLabel || 'Natural Product'}</span>
-              <h1 className="hiyaghar-detail-title">{product.name}</h1>
+            {/* Hero Two-Column Container */}
+            <div className="hiyaghar-detail-hero-grid">
+              {/* Gallery Column */}
+              <div className="hiyaghar-detail-gallery-col">
+                <div className="hiyaghar-detail-main-img-card">
+                  {product.badge && (
+                    <span className="hiyaghar-detail-badge">{product.badge}</span>
+                  )}
+                  <button
+                    type="button"
+                    className={`hiyaghar-detail-image-wishlist-btn ${isWishlisted ? 'is-active' : ''}`}
+                    onClick={handleWishlistToggle}
+                    title={isWishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
+                    aria-label={isWishlisted ? 'Remove from Wishlist' : 'Save to Wishlist'}
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill={isWishlisted ? '#ef4444' : 'none'} stroke={isWishlisted ? '#ef4444' : 'currentColor'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                  </button>
+                  <img
+                    ref={mainImgRef}
+                    src={selectedImage || product.image}
+                    alt={product.name}
+                    className="hiyaghar-detail-main-img"
+                  />
+                </div>
 
-              {/* Price Box */}
-
-              <div className="hiyaghar-detail-price-box">
-                <span className="hiyaghar-detail-price">
-                  ₹<AnimatedNumber value={currentPrice} />
-                </span>
-                {currentOriginalPrice > currentPrice && (
-                  <>
-                    <span className="hiyaghar-detail-original-price">
-                      ₹{currentOriginalPrice}
-                    </span>
-                    <span className="hiyaghar-detail-discount-tag">
-                      {discountPercentage}% OFF
-                    </span>
-                  </>
-                )}
-                <div className="hiyaghar-tax-note">(Inclusive of all taxes)</div>
-              </div>
-
-              <p className="hiyaghar-detail-lead">{product.shortDescription}</p>
-
-              {/* Combo (admin: Catalog > Combos): the products in the box, each linking to its own page. */}
-              {product.comboItems?.length > 0 && (
-                <div className="hiyaghar-detail-option-group" style={{ background: '#fffdf2', border: '1px solid #f1e3b5', borderRadius: '12px', padding: '14px 16px' }}>
-                  <h2 style={{ fontSize: '1rem', fontWeight: 800, color: '#11223A', margin: '0 0 8px' }}>This combo includes</h2>
-                  <ul style={{ margin: 0, paddingLeft: '18px', lineHeight: 1.8 }}>
-                    {product.comboItems.map((item: ComboItem) => (
-                      <li key={`${item.productId}-${item.variantId}`}>
-                        <strong>{item.quantity} ×</strong>{' '}
-                        <a
-                          href={productPath(item.name, item.productId)}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            navigateTo(productPath(item.name, item.productId));
-                          }}
-                          style={{ color: '#11223A' }}
-                        >
-                          {item.name}
-                        </a>
-                        {formatVariantLabel(item.variant) && (
-                          <span style={{ color: '#64748b' }}> ({formatVariantLabel(item.variant)})</span>
-                        )}
-                      </li>
+                {galleryImages.length > 1 && (
+                  <div className="hiyaghar-detail-thumbnails-row">
+                    {galleryImages.map((img, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        className={`hiyaghar-thumbnail-btn ${selectedImage === img ? 'is-active' : ''}`}
+                        onClick={() => setSelectedImage(img)}
+                      >
+                        <img src={img} alt={`${product.name} view ${idx + 1}`} />
+                      </button>
                     ))}
-                  </ul>
-                  {currentOriginalPrice > currentPrice && (
-                    <p style={{ margin: '8px 0 0', color: '#166534', fontWeight: 700 }}>
-                      Bought separately: ₹{currentOriginalPrice} – you save ₹{currentOriginalPrice - currentPrice}
-                    </p>
-                  )}
-                </div>
-              )}
-
-              {/* Attribute Selector - one labeled row per attribute (Weight, Packing, ...), alphabetical, all on one line */}
-              {attributeGroups.length > 0 && (
-                <div className="hiyaghar-detail-option-group">
-                  {attributeGroups.map((group) => (
-                    <div key={group.name} className="hiyaghar-attr-group-row">
-                      <span className="hiyaghar-attr-group-label">{group.name}:</span>
-                      {group.values.map((val) => {
-                        const inStock = isAttrPillInStock(group.name, val);
-                        return (
-                          <button
-                            type="button"
-                            key={val}
-                            className={`hiyaghar-attr-pill ${selectedAttrs[group.name] === val ? 'is-selected' : ''} ${!inStock ? 'is-pill-out-of-stock' : ''}`}
-                            onClick={() => handleSelectAttrValue(group.name, val)}
-                            title={!inStock ? `${val} is out of stock` : undefined}
-                          >
-                            <span>{val}</span>
-                            {!inStock && <span className="hiyaghar-pill-stock-tag"> (Out of Stock)</span>}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  ))}
-                  {!isCombinationAvailable && (
-                    <div style={{ color: '#dc2626', fontSize: '0.85rem', fontWeight: 700 }}>
-                      This combination isn't available.
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Stock status - shown for every product, including ones without sizes (soaps, hair oil, combos) */}
-              {isCombinationAvailable && (
-                <div className="hiyaghar-detail-stock-status">
-                  {isOutOfStock && (
-                    <div className="hiyaghar-stock-status-box is-out-of-stock">
-                      <span className="stock-dot"></span>
-                      <span>Currently Out of Stock</span>
-                    </div>
-                  )}
-                  {isAllInCart && (
-                    <div className="hiyaghar-stock-status-box is-out-of-stock">
-                      <span className="stock-dot"></span>
-                      <span>All available stock ({totalStockUnits}) is in your Cart</span>
-                    </div>
-                  )}
-                  {!isOutOfStock && !isAllInCart && availableStockUnits > 0 && availableStockUnits < 10 && (
-                    <div className="hiyaghar-stock-status-box is-low-stock">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="12" />
-                        <line x1="12" y1="16" x2="12.01" y2="16" />
-                      </svg>
-                      <span>
-                        {/* Counts down as the shopper raises the quantity: 9 left at qty 1, 8 at qty 2, ... */}
-                        {quantity < availableStockUnits ? (
-                          <>Hurry! Only <strong>{availableStockUnits - (quantity - 1)}</strong> left in stock!</>
-                        ) : (
-                          <>You've selected all <strong>{availableStockUnits}</strong> left in stock!</>
-                        )}
-                      </span>
-                    </div>
-                  )}
-                  {!isOutOfStock && !isAllInCart && availableStockUnits >= 10 && (
-                    <div className="hiyaghar-stock-status-box is-in-stock">
-                      <span className="stock-dot in-stock"></span>
-                      <span>In Stock</span>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Quantity Stepper */}
-              <div className="hiyaghar-detail-option-group">
-                <label className="hiyaghar-option-label">Quantity:</label>
-                <div className="hiyaghar-qty-stepper">
-                  <button
-                    type="button"
-                    className="qty-btn"
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    disabled={quantity <= 1 || isOutOfStock || isAllInCart}
-                    title={quantity <= 1 ? 'Minimum quantity is 1' : 'Decrease quantity'}
-                  >
-                    -
-                  </button>
-                  <span className="qty-val">{quantity}</span>
-                  <button
-                    type="button"
-                    className="qty-btn"
-                    onClick={() => setQuantity((q) => Math.min(Math.max(1, availableStockUnits), q + 1))}
-                    disabled={isOutOfStock || isAllInCart || quantity >= availableStockUnits}
-                    title={availableStockUnits <= 0 ? 'No more units available' : quantity >= availableStockUnits ? `Only ${availableStockUnits} more available` : 'Increase quantity'}
-                  >
-                    +
-                  </button>
-                </div>
+                  </div>
+                )}
               </div>
 
-              {/* Action Buttons */}
-              {/* Exactly one state: a single disabled "Out of Stock" button, or Add to Cart + Buy Now */}
-              <div className="hiyaghar-detail-actions-row">
-                {isOutOfStock ? (
-                  <button
-                    type="button"
-                    className="hiyaghar-detail-btn-cart"
-                    disabled
-                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
-                  >
-                    Out of Stock
-                  </button>
-                ) : (
-                  <>
+              {/* Info Column */}
+              <div className="hiyaghar-detail-info-col">
+                <span className="hiyaghar-detail-cat">{product.categoryLabel || 'Natural Product'}</span>
+
+                {/* Rating Display */}
+                <div className="hiyaghar-detail-rating">
+                  <div className="rating-stars">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <svg
+                        key={star}
+                        width="16"
+                        height="16"
+                        viewBox="0 0 24 24"
+                        fill={star <= Math.floor(product.rating || 0) ? '#fbbf24' : (star === Math.ceil(product.rating || 0) && (product.rating || 0) % 1 !== 0 ? 'url(#star-gradient)' : 'none')}
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      >
+                        <defs>
+                          <linearGradient id="star-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset={`${((product.rating || 0) % 1) * 100}%`} stopColor="#fbbf24" />
+                            <stop offset={`${((product.rating || 0) % 1) * 100}%`} stopColor="#d1d5db" />
+                          </linearGradient>
+                        </defs>
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                      </svg>
+                    ))}
+                  </div>
+                  <span className="rating-value">
+                    {product.rating || 0}{product.rating && product.rating % 1 !== 0 ? '.5' : ''}/5
+                  </span>
+                  {product.reviewsCount > 0 && (
+                    <a href="#reviews" className="reviews-count" onClick={(e) => {
+                      e.preventDefault();
+                      setActiveTab('reviews');
+                      document.getElementById('reviews')?.scrollIntoView({ behavior: 'smooth' });
+                    }}>
+                      ({product.reviewsCount} {product.reviewsCount === 1 ? 'review' : 'reviews'})
+                    </a>
+                  )}
+                </div>
+
+                <h1 className="hiyaghar-detail-title">{product.name}</h1>
+
+                {/* Price Box */}
+
+                <div className="hiyaghar-detail-price-box">
+                  <span className="hiyaghar-detail-price">
+                    ₹<AnimatedNumber value={currentPrice} />
+                  </span>
+                  {currentOriginalPrice > currentPrice && (
+                    <>
+                      <span className="hiyaghar-detail-original-price">
+                        ₹{currentOriginalPrice}
+                      </span>
+                      <span className="hiyaghar-detail-discount-tag">
+                        {discountPercentage}% OFF
+                      </span>
+                    </>
+                  )}
+                  <div className="hiyaghar-tax-note">(Inclusive of all taxes)</div>
+                </div>
+
+                <p className="hiyaghar-detail-lead">{product.shortDescription}</p>
+
+                {/* Hero Features Section */}
+                <div className="hiyaghar-detail-features">
+                  <div className="feature-item">
+                    <span className="feature-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    </span>
+                    <span className="feature-text">Premium Quality</span>
+                  </div>
+                  <div className="feature-item">
+                    <span className="feature-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                      </svg>
+                    </span>
+                    <span className="feature-text">Handmade with Love</span>
+                  </div>
+                  <div className="feature-item">
+                    <span className="feature-icon">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                      </svg>
+                    </span>
+                    <span className="feature-text">100% Natural</span>
+                  </div>
+                  {product.categoryLabel?.toLowerCase().includes('mukhwas') && (
+                    <div className="feature-item">
+                      <span className="feature-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M9 11l3 3L22 4"/>
+                          <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                        </svg>
+                      </span>
+                      <span className="feature-text">Tobacco & Supari Free</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Combo (admin: Catalog > Combos): the products in the box, each linking to its own page. */}
+                {product.comboItems?.length > 0 && (
+                  <div className="hiyaghar-detail-option-group" style={{ background: '#fffdf2', border: '1px solid #f1e3b5', borderRadius: '12px', padding: '14px 16px' }}>
+                    <h2 style={{ fontSize: '1rem', fontWeight: 800, color: '#11223A', margin: '0 0 8px' }}>This combo includes</h2>
+                    <ul style={{ margin: 0, paddingLeft: '18px', lineHeight: 1.8 }}>
+                      {product.comboItems.map((item: ComboItem) => (
+                        <li key={`${item.productId}-${item.variantId}`}>
+                          <strong>{item.quantity} ×</strong>{' '}
+                          <a
+                            href={productPath(item.name, item.productId)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              navigateTo(productPath(item.name, item.productId));
+                            }}
+                            style={{ color: '#11223A' }}
+                          >
+                            {item.name}
+                          </a>
+                          {formatVariantLabel(item.variant) && (
+                            <span style={{ color: '#64748b' }}> ({formatVariantLabel(item.variant)})</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                    {currentOriginalPrice > currentPrice && (
+                      <p style={{ margin: '8px 0 0', color: '#166534', fontWeight: 700 }}>
+                        Bought separately: ₹{currentOriginalPrice} – you save ₹{currentOriginalPrice - currentPrice}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Attribute Selector - one labeled row per attribute (Weight, Packing, ...), alphabetical, all on one line */}
+                {attributeGroups.length > 0 && (
+                  <div className="hiyaghar-detail-option-group">
+                    {attributeGroups.map((group) => (
+                      <div key={group.name} className="hiyaghar-attr-group-row">
+                        <span className="hiyaghar-attr-group-label">{group.name}:</span>
+                        {group.values.map((val) => {
+                          const inStock = isAttrPillInStock(group.name, val);
+                          return (
+                            <button
+                              type="button"
+                              key={val}
+                              className={`hiyaghar-attr-pill ${selectedAttrs[group.name] === val ? 'is-selected' : ''} ${!inStock ? 'is-pill-out-of-stock' : ''}`}
+                              onClick={() => handleSelectAttrValue(group.name, val)}
+                              title={!inStock ? `${val} is out of stock` : undefined}
+                            >
+                              <span>{val}</span>
+                              {!inStock && <span className="hiyaghar-pill-stock-tag"> (Out of Stock)</span>}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    ))}
+                    {!isCombinationAvailable && (
+                      <div style={{ color: '#dc2626', fontSize: '0.85rem', fontWeight: 700 }}>
+                        This combination isn't available.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Stock status - shown for every product, including ones without sizes (soaps, hair oil, combos) */}
+                {isCombinationAvailable && (
+                  <div className="hiyaghar-detail-stock-status">
+                    {isOutOfStock && (
+                      <div className="hiyaghar-stock-status-box is-out-of-stock">
+                        <span className="stock-dot"></span>
+                        <span>Currently Out of Stock</span>
+                      </div>
+                    )}
+                    {isAllInCart && (
+                      <div className="hiyaghar-stock-status-box is-out-of-stock">
+                        <span className="stock-dot"></span>
+                        <span>All available stock ({totalStockUnits}) is in your Cart</span>
+                      </div>
+                    )}
+                    {!isOutOfStock && !isAllInCart && availableStockUnits > 0 && availableStockUnits < 10 && (
+                      <div className="hiyaghar-stock-status-box is-low-stock">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10" />
+                          <line x1="12" y1="8" x2="12" y2="12" />
+                          <line x1="12" y1="16" x2="12.01" y2="16" />
+                        </svg>
+                        <span>
+                          {/* Counts down as the shopper raises the quantity: 9 left at qty 1, 8 at qty 2, ... */}
+                          {quantity < availableStockUnits ? (
+                            <>Hurry! Only <strong>{availableStockUnits - (quantity - 1)}</strong> left in stock!</>
+                          ) : (
+                            <>You've selected all <strong>{availableStockUnits}</strong> left in stock!</>
+                          )}
+                        </span>
+                      </div>
+                    )}
+                    {!isOutOfStock && !isAllInCart && availableStockUnits >= 10 && (
+                      <div className="hiyaghar-stock-status-box is-in-stock">
+                        <span className="stock-dot in-stock"></span>
+                        <span>In Stock</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Quantity Stepper */}
+                <div className="hiyaghar-detail-option-group">
+                  <label className="hiyaghar-option-label">Quantity:</label>
+                  <div className="hiyaghar-qty-stepper">
+                    <button
+                      type="button"
+                      className="qty-btn"
+                      onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                      disabled={quantity <= 1 || isOutOfStock || isAllInCart}
+                      title={quantity <= 1 ? 'Minimum quantity is 1' : 'Decrease quantity'}
+                    >
+                      -
+                    </button>
+                    <span className="qty-val">{quantity}</span>
+                    <button
+                      type="button"
+                      className="qty-btn"
+                      onClick={() => setQuantity((q) => Math.min(Math.max(1, availableStockUnits), q + 1))}
+                      disabled={isOutOfStock || isAllInCart || quantity >= availableStockUnits}
+                      title={availableStockUnits <= 0 ? 'No more units available' : quantity >= availableStockUnits ? `Only ${availableStockUnits} more available` : 'Increase quantity'}
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                {/* Exactly one state: a single disabled "Out of Stock" button, or Add to Cart + Buy Now */}
+                <div className="hiyaghar-detail-actions-row">
+                  {isOutOfStock ? (
                     <button
                       type="button"
                       className="hiyaghar-detail-btn-cart"
-                      onClick={handleAddToCart}
-                      disabled={!isCombinationAvailable || isAllInCart}
+                      disabled
                       style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                    >
+                      Out of Stock
+                    </button>
+                  ) : (
+                    <>
+                      <button
+                        type="button"
+                        className="hiyaghar-detail-btn-cart"
+                        onClick={handleAddToCart}
+                        disabled={!isCombinationAvailable || isAllInCart}
+                        style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="9" cy="21" r="1"></circle>
+                          <circle cx="20" cy="21" r="1"></circle>
+                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                        </svg>
+                        {isAllInCart ? 'In Cart (Max Limit)' : 'Add to Cart'}
+                      </button>
+
+                      <button
+                        type="button"
+                        className="hiyaghar-detail-btn-buy"
+                        onClick={handleBuyNow}
+                        disabled={!isCombinationAvailable}
+                      >
+                        Buy Now
+                      </button>
+                    </>
+                  )}
+                </div>
+
+                {/* Trust Micro Badges */}
+                <div className="hiyaghar-detail-trust-pills">
+                  <div className="trust-pill">
+                    <span className="icon" style={{ color: '#16a34a', display: 'flex', alignItems: 'center' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z" />
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                      </svg>
+                    </span>
+                    {/* Only claims we can back up: mukhwas are confirmed tobacco- and supari-free. */}
+                    <span>{(product.categoryLabel || '').toLowerCase().includes('mukhwas') ? 'Tobacco & Supari Free' : 'Handmade in Small Batches'}</span>
+                  </div>
+                  {(() => {
+                    const catL = (product.categoryLabel || '').toLowerCase();
+                    const isSoap = catL.includes('soap');
+                    const isOil = catL.includes('oil');
+                    return (
+                      <div className="trust-pill">
+                        <span className="icon" style={{ color: '#d97706', display: 'flex', alignItems: 'center' }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                          </svg>
+                        </span>
+                        <span>{isSoap ? 'Gentle On Skin' : isOil ? 'Root Nourishing' : 'Airtight Moisture Seal'}</span>
+                      </div>
+                    );
+                  })()}
+                  <div className="trust-pill">
+                    <span className="icon" style={{ color: '#2563eb', display: 'flex', alignItems: 'center' }}>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="1" y="3" width="15" height="13"></rect>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
+                        <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                        <circle cx="18.5" cy="18.5" r="2.5"></circle>
+                      </svg>
+                    </span>
+                    <span>{isOutOfStock ? 'Made in Small Batches' : 'Dispatched in 24 Hrs'}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Frequently Bought Together / Cross-Sell Bundle Section */}
+            {/* The bundle always includes this item, so hide it (and its "Add N Items to Cart") when out of stock */}
+            {fbtCrossSells.length > 0 && !isOutOfStock && (
+              <section className="hiyaghar-fbt-section" aria-label="Frequently Bought Together">
+                <div className="hiyaghar-fbt-header">
+                  <span className="hiyaghar-fbt-badge">Curated Bundle & Save</span>
+                  <h2 className="hiyaghar-fbt-title">Frequently Bought Together</h2>
+                </div>
+
+                <div className="hiyaghar-fbt-grid">
+                  {/* Bundle Items Cards */}
+                  <div className="hiyaghar-fbt-items-row">
+                    {/* Main Product */}
+                    <div className="hiyaghar-fbt-item-card is-active">
+                      <input
+                        type="checkbox"
+                        checked={true}
+                        disabled={true}
+                        className="hiyaghar-fbt-item-checkbox"
+                        aria-label={product.name}
+                      />
+                      <img
+                        src={selectedImage || product.image}
+                        alt={product.name}
+                        className="hiyaghar-fbt-item-img"
+                      />
+                      <div className="hiyaghar-fbt-item-details">
+                        <span className="hiyaghar-fbt-item-name" title={product.name}>
+                          {product.name}
+                        </span>
+                        <span className="hiyaghar-fbt-item-sub">This Item ({selectedWeight})</span>
+                        <div className="hiyaghar-fbt-item-price-wrap">
+                          <span className="hiyaghar-fbt-item-price">₹{currentPrice}</span>
+                          {currentOriginalPrice > currentPrice && (
+                            <span className="hiyaghar-fbt-item-orig-price">₹{currentOriginalPrice}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {fbtCrossSells.map((crossItem) => {
+                      const isSelected = !!selectedFbtIds[crossItem.id];
+                      return (
+                        <React.Fragment key={crossItem.id}>
+                          <div className="hiyaghar-fbt-plus-sign">+</div>
+                          <div
+                            className={`hiyaghar-fbt-item-card ${isSelected ? 'is-active' : ''}`}
+                            onClick={() => {
+                              setSelectedFbtIds((prev) => ({
+                                ...prev,
+                                [crossItem.id]: !prev[crossItem.id],
+                              }));
+                            }}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isSelected}
+                              onClick={(e) => e.stopPropagation()}
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                setSelectedFbtIds((prev) => ({
+                                  ...prev,
+                                  [crossItem.id]: e.target.checked,
+                                }));
+                              }}
+                              className="hiyaghar-fbt-item-checkbox"
+                              aria-label={crossItem.name}
+                            />
+                            <img
+                              src={crossItem.image}
+                              alt={crossItem.name}
+                              className="hiyaghar-fbt-item-img"
+                            />
+                            <div className="hiyaghar-fbt-item-details">
+                              <span className="hiyaghar-fbt-item-name" title={crossItem.name}>
+                                {crossItem.name}
+                              </span>
+                              <span className="hiyaghar-fbt-item-sub">{formatVariantLabel(crossItem.weight)}</span>
+                              <div className="hiyaghar-fbt-item-price-wrap">
+                                <span className="hiyaghar-fbt-item-price">₹{crossItem.price}</span>
+                                {crossItem.originalPrice > crossItem.price && (
+                                  <span className="hiyaghar-fbt-item-orig-price">
+                                    ₹{crossItem.originalPrice}
+                                  </span>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </React.Fragment>
+                      );
+                    })}
+                  </div>
+
+                  {/* Bundle Summary & CTA Box */}
+                  <div className="hiyaghar-fbt-summary-card">
+                    <span className="hiyaghar-fbt-summary-label">
+                      Bundle Total ({1 + activeFbtItems.length} Products):
+                    </span>
+                    <div className="hiyaghar-fbt-summary-pricing">
+                      <span className="hiyaghar-fbt-summary-total">₹{fbtTotalPrice}</span>
+                      {fbtTotalOriginalPrice > fbtTotalPrice && (
+                        <span className="hiyaghar-fbt-summary-orig">₹{fbtTotalOriginalPrice}</span>
+                      )}
+                    </div>
+                    {fbtTotalSavings > 0 && (
+                      <span className="hiyaghar-fbt-summary-save">
+                        Save ₹{fbtTotalSavings} with this bundle
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      className="hiyaghar-fbt-add-btn"
+                      onClick={handleAddFbtBundleToCart}
+                      disabled={!isCombinationAvailable || isOutOfStock || isAllInCart}
                     >
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                         <circle cx="9" cy="21" r="1"></circle>
                         <circle cx="20" cy="21" r="1"></circle>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                       </svg>
-                      {isAllInCart ? 'In Cart (Max Limit)' : 'Add to Cart'}
+                      Add {1 + activeFbtItems.length} Items to Cart
                     </button>
+                  </div>
+                </div>
+              </section>
+            )}
 
+            {/* Description & Details Tabs Section */}
+            {hasAnyVisibleTab && (
+              <div className="hiyaghar-detail-tabs-container">
+                <div className="hiyaghar-detail-tabs-header">
+                  {showDescTab && (
                     <button
                       type="button"
-                      className="hiyaghar-detail-btn-buy"
-                      onClick={handleBuyNow}
-                      disabled={!isCombinationAvailable}
+                      className={`hiyaghar-tab-btn ${activeTab === 'description' ? 'is-active' : ''}`}
+                      onClick={() => setActiveTab('description')}
                     >
-                      Buy Now
+                      Product Description
                     </button>
-                  </>
-                )}
-              </div>
-
-              {/* Trust Micro Badges */}
-              <div className="hiyaghar-detail-trust-pills">
-                <div className="trust-pill">
-                  <span className="icon" style={{ color: '#16a34a', display: 'flex', alignItems: 'center' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
-                      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
-                    </svg>
-                  </span>
-                  {/* Only claims we can back up: mukhwas are confirmed tobacco- and supari-free. */}
-                  <span>{(product.categoryLabel || '').toLowerCase().includes('mukhwas') ? 'Tobacco & Supari Free' : 'Handmade in Small Batches'}</span>
-                </div>
-                {(() => {
-                  const catL = (product.categoryLabel || '').toLowerCase();
-                  const isSoap = catL.includes('soap');
-                  const isOil = catL.includes('oil');
-                  return (
-                    <div className="trust-pill">
-                      <span className="icon" style={{ color: '#d97706', display: 'flex', alignItems: 'center' }}>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                      </span>
-                      <span>{isSoap ? 'Gentle On Skin' : isOil ? 'Root Nourishing' : 'Airtight Moisture Seal'}</span>
-                    </div>
-                  );
-                })()}
-                <div className="trust-pill">
-                  <span className="icon" style={{ color: '#2563eb', display: 'flex', alignItems: 'center' }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="1" y="3" width="15" height="13"></rect>
-                      <polygon points="16 8 20 8 23 11 23 16 16 16 8"></polygon>
-                      <circle cx="5.5" cy="18.5" r="2.5"></circle>
-                      <circle cx="18.5" cy="18.5" r="2.5"></circle>
-                    </svg>
-                  </span>
-                  <span>{isOutOfStock ? 'Made in Small Batches' : 'Dispatched in 24 Hrs'}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Frequently Bought Together / Cross-Sell Bundle Section */}
-          {/* The bundle always includes this item, so hide it (and its "Add N Items to Cart") when out of stock */}
-          {fbtCrossSells.length > 0 && !isOutOfStock && (
-            <section className="hiyaghar-fbt-section" aria-label="Frequently Bought Together">
-              <div className="hiyaghar-fbt-header">
-                <span className="hiyaghar-fbt-badge">Curated Bundle & Save</span>
-                <h2 className="hiyaghar-fbt-title">Frequently Bought Together</h2>
-              </div>
-
-              <div className="hiyaghar-fbt-grid">
-                {/* Bundle Items Cards */}
-                <div className="hiyaghar-fbt-items-row">
-                  {/* Main Product */}
-                  <div className="hiyaghar-fbt-item-card is-active">
-                    <input
-                      type="checkbox"
-                      checked={true}
-                      disabled={true}
-                      className="hiyaghar-fbt-item-checkbox"
-                      aria-label={product.name}
-                    />
-                    <img
-                      src={selectedImage || product.image}
-                      alt={product.name}
-                      className="hiyaghar-fbt-item-img"
-                    />
-                    <div className="hiyaghar-fbt-item-details">
-                      <span className="hiyaghar-fbt-item-name" title={product.name}>
-                        {product.name}
-                      </span>
-                      <span className="hiyaghar-fbt-item-sub">This Item ({selectedWeight})</span>
-                      <div className="hiyaghar-fbt-item-price-wrap">
-                        <span className="hiyaghar-fbt-item-price">₹{currentPrice}</span>
-                        {currentOriginalPrice > currentPrice && (
-                          <span className="hiyaghar-fbt-item-orig-price">₹{currentOriginalPrice}</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {fbtCrossSells.map((crossItem) => {
-                    const isSelected = !!selectedFbtIds[crossItem.id];
-                    return (
-                      <React.Fragment key={crossItem.id}>
-                        <div className="hiyaghar-fbt-plus-sign">+</div>
-                        <div
-                          className={`hiyaghar-fbt-item-card ${isSelected ? 'is-active' : ''}`}
-                          onClick={() => {
-                            setSelectedFbtIds((prev) => ({
-                              ...prev,
-                              [crossItem.id]: !prev[crossItem.id],
-                            }));
-                          }}
-                          style={{ cursor: 'pointer' }}
-                        >
-                          <input
-                            type="checkbox"
-                            checked={isSelected}
-                            onClick={(e) => e.stopPropagation()}
-                            onChange={(e) => {
-                              e.stopPropagation();
-                              setSelectedFbtIds((prev) => ({
-                                ...prev,
-                                [crossItem.id]: e.target.checked,
-                              }));
-                            }}
-                            className="hiyaghar-fbt-item-checkbox"
-                            aria-label={crossItem.name}
-                          />
-                          <img
-                            src={crossItem.image}
-                            alt={crossItem.name}
-                            className="hiyaghar-fbt-item-img"
-                          />
-                          <div className="hiyaghar-fbt-item-details">
-                            <span className="hiyaghar-fbt-item-name" title={crossItem.name}>
-                              {crossItem.name}
-                            </span>
-                            <span className="hiyaghar-fbt-item-sub">{formatVariantLabel(crossItem.weight)}</span>
-                            <div className="hiyaghar-fbt-item-price-wrap">
-                              <span className="hiyaghar-fbt-item-price">₹{crossItem.price}</span>
-                              {crossItem.originalPrice > crossItem.price && (
-                                <span className="hiyaghar-fbt-item-orig-price">
-                                  ₹{crossItem.originalPrice}
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
-
-                {/* Bundle Summary & CTA Box */}
-                <div className="hiyaghar-fbt-summary-card">
-                  <span className="hiyaghar-fbt-summary-label">
-                    Bundle Total ({1 + activeFbtItems.length} Products):
-                  </span>
-                  <div className="hiyaghar-fbt-summary-pricing">
-                    <span className="hiyaghar-fbt-summary-total">₹{fbtTotalPrice}</span>
-                    {fbtTotalOriginalPrice > fbtTotalPrice && (
-                      <span className="hiyaghar-fbt-summary-orig">₹{fbtTotalOriginalPrice}</span>
-                    )}
-                  </div>
-                  {fbtTotalSavings > 0 && (
-                    <span className="hiyaghar-fbt-summary-save">
-                      Save ₹{fbtTotalSavings} with this bundle
-                    </span>
                   )}
-                  <button
-                    type="button"
-                    className="hiyaghar-fbt-add-btn"
-                    onClick={handleAddFbtBundleToCart}
-                    disabled={!isCombinationAvailable || isOutOfStock || isAllInCart}
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="9" cy="21" r="1"></circle>
-                      <circle cx="20" cy="21" r="1"></circle>
-                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
-                    Add {1 + activeFbtItems.length} Items to Cart
-                  </button>
+                  {showIngredientsTab && (
+                    <button
+                      type="button"
+                      className={`hiyaghar-tab-btn ${activeTab === 'ingredients' ? 'is-active' : ''}`}
+                      onClick={() => setActiveTab('ingredients')}
+                    >
+                      {ingredientsTabLabel}
+                    </button>
+                  )}
+                  {showNutritionTab && (
+                    <button
+                      type="button"
+                      className={`hiyaghar-tab-btn ${activeTab === 'nutrition' ? 'is-active' : ''}`}
+                      onClick={() => setActiveTab('nutrition')}
+                    >
+                      Nutritional Facts
+                    </button>
+                  )}
+                  {showReviewsTab && (
+                    <button
+                      type="button"
+                      className={`hiyaghar-tab-btn ${activeTab === 'reviews' ? 'is-active' : ''}`}
+                      onClick={() => setActiveTab('reviews')}
+                    >
+                      Reviews
+                    </button>
+                  )}
+                </div>
+
+                <div className="hiyaghar-detail-tab-content">
+                  {/* Text panels stay in the DOM so crawlers read every tab; inactive ones are `hidden`. */}
+                  {showDescTab && (
+                    <div hidden={activeTab !== 'description'}>
+                      <p className="hiyaghar-tab-paragraph">
+                        {product.longDescription || product.shortDescription}
+                      </p>
+                      {product.howToUse && (
+                        <>
+                          <h4 className="pane-subheading">How to Use:</h4>
+                          <p className="hiyaghar-tab-paragraph" style={{ whiteSpace: 'pre-line' }}>{product.howToUse}</p>
+                        </>
+                      )}
+                      {product.shelfLife && (
+                        <p className="hiyaghar-tab-paragraph"><strong>Shelf Life:</strong> {product.shelfLife}</p>
+                      )}
+                    </div>
+                  )}
+
+                  {showIngredientsTab && (
+                    <div hidden={activeTab !== 'ingredients'}>
+                      {product.ingredients?.length > 0 && (
+                        <>
+                          <h4 className="pane-subheading">Key Ingredients:</h4>
+                          <div className="ingredients-pills-list" style={{ marginBottom: '24px' }}>
+                            {product.ingredients.map((ing: string, i: number) => (
+                              <span key={i} className="ing-pill">{ing}</span>
+                            ))}
+                          </div>
+                        </>
+                      )}
+
+                      {product.benefits && product.benefits.length > 0 && (
+                        <>
+                          <h4 className="pane-subheading">Health & Wellness Benefits:</h4>
+                          <ul className="benefits-checklist">
+                            {product.benefits?.map((b: string, i: number) => (
+                              <li key={i}>
+                                <span className="check-icon">✓</span> {b}
+                              </li>
+                            ))}
+                          </ul>
+                        </>
+                      )}
+                    </div>
+                  )}
+
+                  {showNutritionTab && (
+                    <div hidden={activeTab !== 'nutrition'}>
+                      <h4 className="pane-subheading">
+                        Nutritional Values (per {NUTRITION_SERVING_SIZE} serving):
+                      </h4>
+                      <table className="hiyaghar-nutrition-table">
+                        <tbody>
+                          {Object.entries(product.nutritionalInfo).map(([nutrientName, nutrientValue]) => (
+                            <tr key={nutrientName}>
+                              <td><strong>{nutrientName}</strong></td>
+                              <td>{String(nutrientValue ?? '')}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+
+                  {showReviewsTab && activeTab === 'reviews' && (
+                    <ProductReviews productId={product.id} />
+                  )}
                 </div>
               </div>
-            </section>
-          )}
+            )}
 
-          {/* Description & Details Tabs Section */}
-          {hasAnyVisibleTab && (
-            <div className="hiyaghar-detail-tabs-container">
-              <div className="hiyaghar-detail-tabs-header">
-                {showDescTab && (
-                  <button
-                    type="button"
-                    className={`hiyaghar-tab-btn ${activeTab === 'description' ? 'is-active' : ''}`}
-                    onClick={() => setActiveTab('description')}
-                  >
-                    Product Description
-                  </button>
-                )}
-                {showIngredientsTab && (
-                  <button
-                    type="button"
-                    className={`hiyaghar-tab-btn ${activeTab === 'ingredients' ? 'is-active' : ''}`}
-                    onClick={() => setActiveTab('ingredients')}
-                  >
-                    {ingredientsTabLabel}
-                  </button>
-                )}
-                {showNutritionTab && (
-                  <button
-                    type="button"
-                    className={`hiyaghar-tab-btn ${activeTab === 'nutrition' ? 'is-active' : ''}`}
-                    onClick={() => setActiveTab('nutrition')}
-                  >
-                    Nutritional Facts
-                  </button>
-                )}
-                {showReviewsTab && (
-                  <button
-                    type="button"
-                    className={`hiyaghar-tab-btn ${activeTab === 'reviews' ? 'is-active' : ''}`}
-                    onClick={() => setActiveTab('reviews')}
-                  >
-                    Reviews
-                  </button>
-                )}
-              </div>
-
-              <div className="hiyaghar-detail-tab-content">
-                {/* Text panels stay in the DOM so crawlers read every tab; inactive ones are `hidden`. */}
-                {showDescTab && (
-                  <div hidden={activeTab !== 'description'}>
-                    <p className="hiyaghar-tab-paragraph">
-                      {product.longDescription || product.shortDescription}
-                    </p>
-                    {product.howToUse && (
-                      <>
-                        <h4 className="pane-subheading">How to Use:</h4>
-                        <p className="hiyaghar-tab-paragraph" style={{ whiteSpace: 'pre-line' }}>{product.howToUse}</p>
-                      </>
-                    )}
-                    {product.shelfLife && (
-                      <p className="hiyaghar-tab-paragraph"><strong>Shelf Life:</strong> {product.shelfLife}</p>
-                    )}
-                  </div>
-                )}
-
-                {showIngredientsTab && (
-                  <div hidden={activeTab !== 'ingredients'}>
-                    {product.ingredients?.length > 0 && (
-                      <>
-                        <h4 className="pane-subheading">Key Ingredients:</h4>
-                        <div className="ingredients-pills-list" style={{ marginBottom: '24px' }}>
-                          {product.ingredients.map((ing: string, i: number) => (
-                            <span key={i} className="ing-pill">{ing}</span>
-                          ))}
-                        </div>
-                      </>
-                    )}
-
-                    {product.benefits && product.benefits.length > 0 && (
-                      <>
-                        <h4 className="pane-subheading">Health & Wellness Benefits:</h4>
-                        <ul className="benefits-checklist">
-                          {product.benefits?.map((b: string, i: number) => (
-                            <li key={i}>
-                              <span className="check-icon">✓</span> {b}
-                            </li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
-                  </div>
-                )}
-
-                {showNutritionTab && (
-                  <div hidden={activeTab !== 'nutrition'}>
-                    <h4 className="pane-subheading">
-                      Nutritional Values (per {NUTRITION_SERVING_SIZE} serving):
-                    </h4>
-                    <table className="hiyaghar-nutrition-table">
-                      <tbody>
-                        {Object.entries(product.nutritionalInfo).map(([nutrientName, nutrientValue]) => (
-                          <tr key={nutrientName}>
-                            <td><strong>{nutrientName}</strong></td>
-                            <td>{String(nutrientValue ?? '')}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-
-                {showReviewsTab && activeTab === 'reviews' && (
-                  <ProductReviews productId={product.id} />
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Product FAQs (admin: Products > How to Use, Shelf Life & FAQs). Answers are always in
+            {/* Product FAQs (admin: Products > How to Use, Shelf Life & FAQs). Answers are always in
               the DOM (<details>), so crawlers read them; the server adds FAQPage JSON-LD. */}
-          {product.faqs?.length > 0 && (
-            <section className="hiyaghar-detail-tabs-container hiyaghar-product-faq" aria-labelledby="product-faq-heading" style={{ marginTop: '24px' }}>
-              <h2 id="product-faq-heading" className="pane-subheading" style={{ fontSize: '1.25rem', margin: '0 0 12px' }}>
-                Frequently Asked Questions
-              </h2>
-              {product.faqs.map((faq: { question: string; answer: string }, i: number) => (
-                <details key={i} style={{ borderTop: '1px solid #e2e8f0', padding: '12px 0' }}>
-                  <summary style={{ cursor: 'pointer', fontWeight: 700, color: '#11223A' }}>{faq.question}</summary>
-                  <p className="hiyaghar-tab-paragraph" style={{ margin: '8px 0 0', whiteSpace: 'pre-line' }}>{faq.answer}</p>
-                </details>
-              ))}
-            </section>
-          )}
+            {product.faqs?.length > 0 && (
+              <section className="hiyaghar-detail-tabs-container hiyaghar-product-faq" aria-labelledby="product-faq-heading" style={{ marginTop: '24px' }}>
+                <h2 id="product-faq-heading" className="pane-subheading" style={{ fontSize: '1.25rem', margin: '0 0 12px' }}>
+                  Frequently Asked Questions
+                </h2>
+                {product.faqs.map((faq: { question: string; answer: string }, i: number) => (
+                  <details key={i} style={{ borderTop: '1px solid #e2e8f0', padding: '12px 0' }}>
+                    <summary style={{ cursor: 'pointer', fontWeight: 700, color: '#11223A' }}>{faq.question}</summary>
+                    <p className="hiyaghar-tab-paragraph" style={{ margin: '8px 0 0', whiteSpace: 'pre-line' }}>{faq.answer}</p>
+                  </details>
+                ))}
+              </section>
+            )}
 
-          <YouMayAlsoLike productId={product.id} />
-        </div>
+            <YouMayAlsoLike productId={product.id} />
+          </div>
         )}
       </main>
 

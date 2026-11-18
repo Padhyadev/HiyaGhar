@@ -338,6 +338,81 @@
   margin-bottom: 8px;
 }
 
+/* Rating Display */
+.hiyaghar-detail-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.rating-stars {
+  display: flex;
+  gap: 2px;
+}
+
+.rating-stars svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.rating-value {
+  font-weight: 700;
+  color: var(--hiya-navy, #11223A);
+  font-size: 14px;
+}
+
+.reviews-count {
+  font-size: 14px;
+  color: var(--hiya-gold-text, #855F0F);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.reviews-count:hover {
+  color: var(--hiya-navy, #11223A);
+}
+
+/* Hero Features Section */
+.hiyaghar-detail-features {
+  display: flex;
+  gap: 16px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #F8F4F1;
+  border: 1px solid #E8E2C9;
+  border-radius: 50px;
+  padding: 8px 16px;
+  transition: all 0.2s ease;
+}
+
+.feature-item:hover {
+  background-color: #FFFDF5;
+  border-color: var(--hiya-gold-text, #855F0F);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(203, 153, 44, 0.1);
+}
+
+.feature-icon {
+  color: var(--hiya-gold-text, #855F0F);
+  flex-shrink: 0;
+}
+
+.feature-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--hiya-navy, #11223A);
+  white-space: nowrap;
+}
+
 .hiyaghar-detail-title {
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
