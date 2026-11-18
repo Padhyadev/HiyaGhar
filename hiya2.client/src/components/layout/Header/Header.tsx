@@ -16,6 +16,7 @@ import './Header.css';
 import { showNoImageOnError, NO_IMAGE, productPath } from '../../../utils/productFormat';
 import { LOGO_URL } from '../../../utils/brand';
 import { REWARD_COINS_ENABLED } from '../../../utils/features';
+import { InstallAppButton } from '../../common/InstallAppButton/InstallAppButton';
 
 
 function getSideCartCategory(item: { name: string; weight?: string; category?: string }): string {
@@ -971,6 +972,8 @@ export const Header: React.FC = () => {
                   <span>Logout</span>
                 </button>
               )}
+              {/* Shown only when the site can be installed (or as a tip on iPhone/iPad) */}
+              <InstallAppButton variant="menu" />
             </nav>
           </div>
         </div>,

@@ -17,6 +17,15 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#11223A" />
+  <!-- Installable app (PWA): manifest + Apple home-screen tags. Outside the SEO_HEAD markers on
+       purpose, so the server-rendered HTML keeps them. There is deliberately NO service worker
+       (see main.tsx / Program.cs): installing does not need one in Chrome/Edge, and it can never
+       keep visitors on an old copy of the site. -->
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="HIYAGHAR" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <!-- Preload Largest Contentful Paint (LCP) Hero Image -->
   <link rel="preload" as="image" href="/image/Jamun_Pop.webp" fetchpriority="high" type="image/webp" />
   <!-- DM Sans is self-hosted via @fontsource (bundled into the CSS chunk with font-display:swap).

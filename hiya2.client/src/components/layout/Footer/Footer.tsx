@@ -4,6 +4,7 @@ import { navigateTo } from '../../../utils/navigation';
 import { ShippingService, type ShippingSettings } from '../../../services/shippingService';
 import './Footer.css';
 import { LOGO_URL } from '../../../utils/brand';
+import { InstallAppButton } from '../../common/InstallAppButton/InstallAppButton';
 
 // "+91 92744 43617" / "9274443617" / "09274443617" -> "+919274443617"
 const toTelHref = (phone: string): string => {
@@ -181,6 +182,8 @@ export const Footer: React.FC = () => {
                 .filter(Boolean)
                 .flatMap((item, i) => (i === 0 ? [item] : [' | ', item]))}
             </p>
+            {/* Shown only when the site can be installed (or as a tip on iPhone/iPad) */}
+            <InstallAppButton variant="footer" />
           </ScrollReveal>
 
           {/* Right Copyright */}

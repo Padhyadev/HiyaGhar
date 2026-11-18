@@ -1,0 +1,66 @@
+/* "Install App" button (utils/pwaInstall.ts). Brand colours: navy / gold / cream. */
+.hiyaghar-install-app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.hiyaghar-install-app-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: 1px solid rgba(203, 153, 44, 0.5);
+  background: #ffffff;
+  color: var(--hiya-navy, #11223A);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.hiyaghar-install-app-btn:hover,
+.hiyaghar-install-app-btn:focus-visible {
+  background: var(--hiya-navy, #11223A);
+  color: #ffffff;
+}
+
+.hiyaghar-install-app-tip {
+  margin: 0;
+  max-width: 260px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: #FFF9ED;
+  border: 1px dashed #CB992C;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--hiya-navy, #11223A);
+  text-align: center;
+}
+
+.hiyaghar-install-app-tip svg {
+  display: inline-block; /* global styles make svg block-level; keep the Share icon in the sentence */
+  vertical-align: -2px;
+  margin: 0 3px;
+}
+
+/* Mobile menu: full-width row at the end of the drawer */
+.hiyaghar-install-app--menu {
+  align-items: stretch;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #EAE4D5;
+}
+
+.hiyaghar-install-app--menu .hiyaghar-install-app-btn {
+  justify-content: center;
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 14px;
+}
+
+.hiyaghar-install-app--menu .hiyaghar-install-app-tip {
+  max-width: none;
+}

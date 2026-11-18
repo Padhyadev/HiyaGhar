@@ -711,6 +711,12 @@ app.UseStaticFiles(new StaticFileOptions
         {
             ctx.Context.Response.Headers.Append("Cache-Control", "no-cache,no-store,must-revalidate");
         }
+        else if (fileName.EndsWith(".webmanifest") || reqPath.StartsWithSegments("/icons"))
+        {
+            // Installable-app manifest and its icons keep their names: always re-check, so a
+            // changed icon or name reaches installed apps (unchanged = tiny 304 reply).
+            ctx.Context.Response.Headers.Append("Cache-Control", "public,no-cache");
+        }
         else if (fileName.EndsWith(".woff2") || fileName.EndsWith(".woff") || fileName.EndsWith(".ttf"))
         {
             // Fonts at non-hashed paths (e.g. /fonts/) get 7-day cache

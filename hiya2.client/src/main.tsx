@@ -5,10 +5,14 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import './styles/globals/global.css';
 import App from './App.tsx';
 import { startVersionWatch } from './utils/appVersion';
+import { initInstallPrompt } from './utils/pwaInstall';
 import { CartService } from './cart';
 
 // Reload tabs that are still running a version from before the last publish (see appVersion.ts).
 startVersionWatch();
+
+// "Install App": catch the browser's one-time install offer before React renders (see pwaInstall.ts).
+initInstallPrompt();
 
 // Bring prices saved in the cart up to today's catalog prices (see CartService.refreshPrices).
 void CartService.refreshPrices(true);

@@ -14,6 +14,7 @@ import { PageTransition } from './components/common/PageTransition/PageTransitio
 import { installScrollMemory, restoreScrollOnPopstate } from './utils/scrollMemory';
 import { REWARD_COINS_ENABLED } from './utils/features';
 import { FloatingWidgets } from './components/common/FloatingWidgets/FloatingWidgets';
+import { InstallAppPopup } from './components/common/InstallAppButton/InstallAppPopup';
 import { preloadCriticalImages } from './services/imagePreloaderService';
 import { SEO } from './components/common/SEO/SEO';
 import { findRouteMeta, type RouteMeta } from './seo/routeSeo';
@@ -899,6 +900,8 @@ function App() {
         </ChunkErrorBoundary>
       </PageTransition>
       {!currentRoute.toLowerCase().startsWith('/admin') && <FloatingWidgets />}
+      {/* "Install HIYAGHAR" banner: only when installing is possible; never in admin or checkout */}
+      {!currentRoute.toLowerCase().startsWith('/admin') && <InstallAppPopup route={currentRoute} />}
     </PermissionProvider>
   );
 }

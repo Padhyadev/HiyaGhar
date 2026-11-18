@@ -1,0 +1,154 @@
+/* Install banner: dark rounded bar at the bottom. On phones it leaves room on the right for the
+   floating WhatsApp / back-to-top buttons (FloatingWidgets, bottom-right). */
+.hiyaghar-install-popup {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  width: min(520px, calc(100vw - 32px));
+  z-index: 9980; /* below the floating widgets (9990) and modals */
+  background: #11223A;
+  color: #ffffff;
+  border-radius: 18px;
+  padding: 12px 12px 12px 14px;
+  box-shadow: 0 14px 40px rgba(17, 34, 58, 0.35);
+  animation: hiyagharInstallIn 0.35s ease-out;
+}
+
+@keyframes hiyagharInstallIn {
+  from { opacity: 0; transform: translate(-50%, 16px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.hiyaghar-install-popup-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hiyaghar-install-popup-logo {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: #FFFDF5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hiyaghar-install-popup-logo img {
+  display: block;
+  width: 40px;
+  height: 40px;
+}
+
+.hiyaghar-install-popup-text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.hiyaghar-install-popup-text strong {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.hiyaghar-install-popup-text span {
+  font-size: 12.5px;
+  color: rgba(255, 255, 255, 0.72);
+  line-height: 1.35;
+}
+
+.hiyaghar-install-popup-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #CB992C;
+  color: #11223A;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.hiyaghar-install-popup-btn:hover,
+.hiyaghar-install-popup-btn:focus-visible {
+  background: #E0B04A;
+}
+
+.hiyaghar-install-popup-btn svg,
+.hiyaghar-install-popup-close svg,
+.hiyaghar-install-popup-tip svg {
+  display: inline-block;
+}
+
+.hiyaghar-install-popup-close {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.hiyaghar-install-popup-close:hover,
+.hiyaghar-install-popup-close:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.hiyaghar-install-popup-tip {
+  margin: 10px 0 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 12.5px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.hiyaghar-install-popup-tip svg {
+  vertical-align: -2px;
+  margin: 0 3px;
+}
+
+/* Phones: keep clear of the floating buttons on the right */
+@media (max-width: 768px) {
+  .hiyaghar-install-popup {
+    left: 12px;
+    right: 84px;
+    width: auto;
+    bottom: 20px;
+    transform: none;
+    padding: 10px;
+    border-radius: 16px;
+    animation-name: hiyagharInstallInMobile;
+  }
+
+  @keyframes hiyagharInstallInMobile {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .hiyaghar-install-popup-row { gap: 8px; }
+  .hiyaghar-install-popup-logo { width: 40px; height: 40px; border-radius: 10px; }
+  .hiyaghar-install-popup-logo img { width: 32px; height: 32px; }
+  .hiyaghar-install-popup-text strong { font-size: 14px; }
+  .hiyaghar-install-popup-text span { font-size: 11.5px; }
+  .hiyaghar-install-popup-btn { padding: 8px 10px; font-size: 13px; }
+  .hiyaghar-install-popup-btn svg { display: none; }
+  .hiyaghar-install-popup-close { width: 28px; height: 28px; }
+}
