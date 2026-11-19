@@ -56,6 +56,10 @@ export interface VisitorExtendedSummaryWithPreviousResponse {
   endDate: string;
   current: VisitorExtendedSummary;
   previous: VisitorExtendedSummary;
+  /** Today: false until Google Analytics has processed at least one hour (nothing fair to compare yet). */
+  comparisonAvailable?: boolean;
+  /** Today: today and yesterday are both counted from midnight up to and including this hour (0-23). */
+  comparedUpToHour?: number | null;
 }
 
 export interface SessionChannel {

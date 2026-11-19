@@ -30,8 +30,11 @@ let started = false;
 
 const isAdminPage = () => window.location.pathname.toLowerCase().startsWith('/admin');
 
+// Local testing (a production build opened on this computer) is never sent to Google.
+const isLocalHost = () => /^(localhost|127\.0\.0\.1|\[::1\])$/i.test(window.location.hostname);
+
 function gtag(...args: GtagArgs) {
-  if (!ENABLED || isAdminPage()) return;
+  if (!ENABLED || isAdminPage() || isLocalHost()) return;
   init();
   window.gtag?.(...args);
 }

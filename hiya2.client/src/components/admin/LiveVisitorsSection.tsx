@@ -5,6 +5,8 @@ import { WebsiteAnalyticsService, type RealtimeItem, type RealtimeResponse } fro
 // Refreshes every 60 seconds while the browser tab is visible.
 
 const REFRESH_MS = 60_000;
+// Same as RealtimeCacheDuration on the server.
+const SERVER_CACHE_MS = 30_000;
 
 const formatNumber = (n: number) => n.toLocaleString('en-IN');
 
@@ -56,7 +58,11 @@ export const LiveVisitorsSection: React.FC = () => {
   const [data, setData] = useState<RealtimeResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  // The server keeps live numbers for 30 seconds, so a refresh sooner would only return the same
+  // numbers: the button rests for 30 seconds after each load instead of looking broken.
+  const [coolingDown, setCoolingDown] = useState(false);
   const inFlight = useRef(false);
+  const cooldownTimer = useRef<number | undefined>(undefined);
 
   const load = useCallback(async () => {
     if (inFlight.current) return;
@@ -71,7 +77,12 @@ export const LiveVisitorsSection: React.FC = () => {
     }
     setLoading(false);
     inFlight.current = false;
+    setCoolingDown(true);
+    window.clearTimeout(cooldownTimer.current);
+    cooldownTimer.current = window.setTimeout(() => setCoolingDown(false), SERVER_CACHE_MS);
   }, []);
+
+  useEffect(() => () => window.clearTimeout(cooldownTimer.current), []);
 
   useEffect(() => {
     load();
@@ -106,7 +117,14 @@ export const LiveVisitorsSection: React.FC = () => {
             {updatedAt && <> · updated {updatedAt}</>}
           </p>
         </div>
-        <button type="button" className="live-visitors-refresh" onClick={load} disabled={loading} title="Refresh now">
+        <button
+          type="button"
+          className="live-visitors-refresh"
+          onClick={load}
+          disabled={loading || coolingDown}
+          title={coolingDown ? 'Just updated - you can refresh again in a few seconds' : 'Refresh now'}
+          aria-label="Refresh live visitors"
+        >
           <i className={`fa-solid fa-rotate-right ${loading ? 'fa-spin' : ''}`} />
         </button>
       </div>
@@ -131,7 +149,7 @@ export const LiveVisitorsSection: React.FC = () => {
           )}
 
           <div className="hiyaghar-metrics-grid" style={{ marginTop: '16px' }}>
-            <div className="hiyaghar-metric-card live-visitors-card">
+            <div className="hiyaghar-metric-card revenue-card">
               <div className="hiyaghar-metric-icon bg-green-light text-green">
                 <i className="fa-solid fa-signal" />
               </div>
@@ -141,7 +159,7 @@ export const LiveVisitorsSection: React.FC = () => {
                 <span className="hiyaghar-metric-subtext text-green">On the website in the last 30 minutes</span>
               </div>
             </div>
-            <div className="hiyaghar-metric-card live-visitors-card">
+            <div className="hiyaghar-metric-card revenue-card">
               <div className="hiyaghar-metric-icon bg-blue-light text-blue">
                 <i className="fa-solid fa-user-clock" />
               </div>
@@ -151,7 +169,7 @@ export const LiveVisitorsSection: React.FC = () => {
                 <span className="hiyaghar-metric-subtext text-blue">Closest to "on the site right now"</span>
               </div>
             </div>
-            <div className="hiyaghar-metric-card live-visitors-card">
+            <div className="hiyaghar-metric-card revenue-card">
               <div className="hiyaghar-metric-icon bg-purple-light text-purple">
                 <i className="fa-solid fa-eye" />
               </div>
@@ -162,7 +180,7 @@ export const LiveVisitorsSection: React.FC = () => {
               </div>
             </div>
             {data.devices.map((d) => (
-              <div key={d.name} className="hiyaghar-metric-card live-visitors-card">
+              <div key={d.name} className="hiyaghar-metric-card revenue-card">
                 <div className="hiyaghar-metric-icon bg-teal-light text-teal">
                   <i className={`fa-solid ${deviceIcon(d.name)}`} />
                 </div>
@@ -194,11 +212,9 @@ export const LiveVisitorsSection: React.FC = () => {
             <span>Now</span>
           </div>
 
-          <div className="traffic-two-col" style={{ marginTop: '16px' }}>
+          <div className="live-visitors-tables">
             <RealtimeTable title="Pages being viewed" icon="fa-file-lines" label="Page Title" items={data.pages} />
             <RealtimeTable title="Countries" icon="fa-earth-asia" label="Country" items={data.countries} />
-          </div>
-          <div className="traffic-two-col" style={{ marginTop: '16px' }}>
             <RealtimeTable title="Cities" icon="fa-city" label="City" items={data.cities} />
           </div>
         </>

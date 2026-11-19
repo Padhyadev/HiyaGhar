@@ -61,6 +61,10 @@ namespace Hiya2.Server.Services
     {
         public VisitorExtendedSummary Current { get; set; } = new();
         public VisitorExtendedSummary Previous { get; set; } = new();
+        /// <summary>False when there is nothing fair to compare with (today, before GA processed any hour).</summary>
+        public bool ComparisonAvailable { get; set; } = true;
+        /// <summary>Today only: both days are compared from midnight up to and including this hour (0-23).</summary>
+        public int? ComparedUpToHour { get; set; }
     }
 
     public class SessionChannel
@@ -216,6 +220,9 @@ namespace Hiya2.Server.Services
         private static readonly TimeSpan TodayCacheDuration = TimeSpan.FromMinutes(5);
         // Realtime numbers: short cache so several admins refreshing do not use up the realtime quota.
         private static readonly TimeSpan RealtimeCacheDuration = TimeSpan.FromSeconds(30);
+        // How far behind GA standard reports usually run for today (current hour + the 3 before it).
+        // Empty hours inside this window are shown as "processing", older empty hours as 0.
+        private const int ProcessingLagHours = 4;
         private static readonly int[] PresetDays = { 7, 14, 30 };
         private const int MaxRangeMonths = 14;
         private const int MaxPageRows = 10000;
@@ -375,26 +382,70 @@ namespace Hiya2.Server.Services
                 return ParseExtendedSummary(response);
             });
 
-        public Task<AnalyticsResult<VisitorExtendedSummaryWithPrevious>> GetAllMetricsWithPreviousPeriodAsync(VisitorDateRange range) =>
-            CachedAsync(range, "extendedSummaryWithPrevious", async client =>
+        // Current period (cached like every other report) + previous period (cached separately for
+        // 45 minutes: it never changes). Today is only processed by GA up to a few hours ago, so it is
+        // compared with yesterday UP TO THE SAME HOUR, not with the whole of yesterday.
+        public async Task<AnalyticsResult<VisitorExtendedSummaryWithPrevious>> GetAllMetricsWithPreviousPeriodAsync(VisitorDateRange range)
+        {
+            var current = await GetExtendedSummaryAsync(range);
+            if (!current.IsSuccess || current.Data == null)
+                return AnalyticsResult<VisitorExtendedSummaryWithPrevious>.Fail(current.Message ?? "Website analytics is not available right now.");
+
+            int? upToHour = null;
+            if (range.GaDay == "today")
             {
-                var currentRequest = NewExtendedSummaryRequest(range);
-                var prevRange = GetPreviousPeriod(range);
-                var previousRequest = NewExtendedSummaryRequest(prevRange);
-
-                var currentTask = client.RunReportAsync(currentRequest);
-                var previousTask = client.RunReportAsync(previousRequest);
-                await System.Threading.Tasks.Task.WhenAll(currentTask, previousTask);
-
-                var currentResponse = await currentTask;
-                var previousResponse = await previousTask;
-
-                return new VisitorExtendedSummaryWithPrevious
+                var hourly = await GetHourlyAsync(range); // cached; tells which hours GA has processed
+                if (!hourly.IsSuccess || hourly.Data == null)
+                    return AnalyticsResult<VisitorExtendedSummaryWithPrevious>.Fail(hourly.Message ?? "Website analytics is not available right now.");
+                upToHour = hourly.Data.Where(h => !h.Pending).Select(h => h.Hour).DefaultIfEmpty(-1).Max();
+                if (upToHour < 0)
                 {
-                    Current = ParseExtendedSummary(currentResponse),
-                    Previous = ParseExtendedSummary(previousResponse),
-                };
+                    // Nothing processed yet today: no fair comparison possible.
+                    return AnalyticsResult<VisitorExtendedSummaryWithPrevious>.Ok(new VisitorExtendedSummaryWithPrevious
+                    {
+                        Current = current.Data,
+                        ComparisonAvailable = false,
+                        ComparedUpToHour = upToHour,
+                    });
+                }
+            }
+
+            var prevRange = GetPreviousPeriod(range);
+            var prevKey = $"extendedPrev:{prevRange.StartDate:yyyyMMdd}:{prevRange.EndDate:yyyyMMdd}:{(upToHour?.ToString(CultureInfo.InvariantCulture) ?? "all")}";
+            var previous = await CachedQueryAsync(prevKey, CacheDuration, async client =>
+            {
+                var request = NewExtendedSummaryRequest(prevRange);
+                if (upToHour is int lastHour)
+                {
+                    var hourFilter = new FilterExpression
+                    {
+                        Filter = new Filter
+                        {
+                            FieldName = "hour", // "00".."23"
+                            InListFilter = new Filter.Types.InListFilter
+                            {
+                                Values = { Enumerable.Range(0, lastHour + 1).Select(h => h.ToString("00", CultureInfo.InvariantCulture)) },
+                            },
+                        },
+                    };
+                    request.DimensionFilter = new FilterExpression
+                    {
+                        AndGroup = new FilterExpressionList { Expressions = { request.DimensionFilter, hourFilter } },
+                    };
+                }
+                return ParseExtendedSummary(await client.RunReportAsync(request));
             });
+            if (!previous.IsSuccess || previous.Data == null)
+                return AnalyticsResult<VisitorExtendedSummaryWithPrevious>.Fail(previous.Message ?? "Website analytics is not available right now.");
+
+            return AnalyticsResult<VisitorExtendedSummaryWithPrevious>.Ok(new VisitorExtendedSummaryWithPrevious
+            {
+                Current = current.Data,
+                Previous = previous.Data,
+                ComparisonAvailable = true,
+                ComparedUpToHour = upToHour,
+            });
+        }
 
         public Task<AnalyticsResult<SessionChannelReport>> GetSessionChannelsAsync(VisitorDateRange range) =>
             CachedAsync(range, "sessionChannels", async client =>
@@ -573,15 +624,18 @@ namespace Hiya2.Server.Services
                 // Every hour with 0 for hours without visitors; today only up to the current hour (India).
                 var isToday = range.GaDay == "today";
                 var lastHour = isToday ? NowIst().Hour : 23;
-                // Today: GA standard reports lag a few hours behind (Realtime does not). Hours after the
-                // last hour GA returned are not processed yet, so they are marked Pending instead of 0.
+                // Today: GA standard reports lag a few hours behind (Realtime does not). GA leaves out
+                // hours without visitors, so an empty hour is only "not processed yet" when it is after
+                // the last hour GA returned AND within the last ProcessingLagHours hours. Older empty
+                // hours (e.g. a quiet night) are real zeros.
                 var lastProcessedHour = byHour.Count > 0 ? byHour.Keys.Max() : -1;
+                var firstPendingHour = Math.Max(lastProcessedHour + 1, lastHour - (ProcessingLagHours - 1));
                 return Enumerable.Range(0, lastHour + 1)
                     .Select(h => new VisitorHour
                     {
                         Hour = h,
                         ActiveUsers = byHour.TryGetValue(h, out var users) ? users : 0,
-                        Pending = isToday && h > lastProcessedHour,
+                        Pending = isToday && h >= firstPendingHour,
                     })
                     .ToList();
             });
@@ -785,17 +839,20 @@ namespace Hiya2.Server.Services
                     return request;
                 }
 
+                // Last 30 and last 5 minutes in one request: GA adds a "dateRange" column with the names.
                 var totalsRequest = Request(null, 30);
+                totalsRequest.MinuteRanges.Clear();
+                totalsRequest.MinuteRanges.Add(new MinuteRange { Name = "last30", StartMinutesAgo = 29, EndMinutesAgo = 0 });
+                totalsRequest.MinuteRanges.Add(new MinuteRange { Name = "last5", StartMinutesAgo = 4, EndMinutesAgo = 0 });
                 totalsRequest.Metrics.Add(new Metric { Name = "screenPageViews" });
 
                 var totalsTask = client.RunRealtimeReportAsync(totalsRequest);
-                var last5Task = client.RunRealtimeReportAsync(Request(null, 5));
                 var minutesTask = client.RunRealtimeReportAsync(Request("minutesAgo", 30));
                 var pagesTask = client.RunRealtimeReportAsync(Request("unifiedScreenName", 30, 10));
                 var countriesTask = client.RunRealtimeReportAsync(Request("country", 30, 10));
                 var citiesTask = client.RunRealtimeReportAsync(Request("city", 30, 10));
                 var devicesTask = client.RunRealtimeReportAsync(Request("deviceCategory", 30));
-                await Task.WhenAll(totalsTask, last5Task, minutesTask, pagesTask, countriesTask, citiesTask, devicesTask);
+                await Task.WhenAll(totalsTask, minutesTask, pagesTask, countriesTask, citiesTask, devicesTask);
 
                 static List<RealtimeItem> Items(RunRealtimeReportResponse r) => r.Rows
                     .Select(row => new RealtimeItem
@@ -809,8 +866,12 @@ namespace Hiya2.Server.Services
                 var byMinute = minutesTask.Result.Rows
                     .GroupBy(r => (int)ParseLong(r.DimensionValues[0].Value))
                     .ToDictionary(g => g.Key, g => g.Sum(r => ParseLong(r.MetricValues[0].Value)));
-                var totals = totalsTask.Result.Rows.FirstOrDefault();
-                var last5 = last5Task.Result.Rows.FirstOrDefault();
+                // A range without visitors has no row at all.
+                var totalsResponse = totalsTask.Result;
+                var rangeCol = totalsResponse.DimensionHeaders.Select(h => h.Name).ToList().IndexOf("dateRange");
+                Row? RangeRow(string name) => rangeCol < 0 ? null : totalsResponse.Rows.FirstOrDefault(r => r.DimensionValues[rangeCol].Value == name);
+                var totals = RangeRow("last30");
+                var last5 = RangeRow("last5");
 
                 return new RealtimeReport
                 {

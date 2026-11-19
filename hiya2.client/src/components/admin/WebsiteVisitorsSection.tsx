@@ -52,6 +52,9 @@ interface WebsiteVisitorsSectionProps {
   showGeo?: boolean;
   // Website Analytics page: also show device category breakdown.
   showDevices?: boolean;
+  // Where the "who is on the site right now" hint points: 'above' = the Live Visitors panel sits
+  // above this block (Website Analytics page); 'link' = a link that calls onCardClick (Dashboard).
+  liveVisitorsHint?: 'above' | 'link';
 }
 
 // Local YYYY-MM-DD (avoids the UTC shift of toISOString)
@@ -129,6 +132,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
   showTrafficSources = false,
   showGeo = false,
   showDevices = false,
+  liveVisitorsHint,
 }) => {
   const [chartFilter, setChartFilter] = useState<ChartFilterType>('today');
   const [customStartDate, setCustomStartDate] = useState<string>(() => {
@@ -139,7 +143,10 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
   const [customEndDate, setCustomEndDate] = useState<string>(() => toLocalDateStr(new Date()));
 
   const [loading, setLoading] = useState<boolean>(true);
+  // Chart (daily / hourly) error.
   const [error, setError] = useState<string | null>(null);
+  // Summary cards error (summary or all-metrics request).
+  const [metricsError, setMetricsError] = useState<string | null>(null);
   const [summary, setSummary] = useState<{ rangeType: VisitorRangeType; activeUsers: number; pageViews: number; startDate: string; endDate: string } | null>(null);
   const [extendedSummaryWithPrev, setExtendedSummaryWithPrev] = useState<VisitorExtendedSummaryWithPreviousResponse | null>(null);
   const [sessionChannels, setSessionChannels] = useState<SessionChannel[]>([]);
@@ -192,6 +199,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
     const requestId = ++requestIdRef.current;
     setLoading(true);
     setError(null);
+    setMetricsError(null);
     setPagesError(null);
     setAiError(null);
     setSessionChannelsError(null);
@@ -199,13 +207,14 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
     setGeoError(null);
     setDeviceError(null);
 
-    const fetchSummary = WebsiteAnalyticsService.getSummary(range);
+    // The all-metrics request already holds active users + page views, so the plain summary is
+    // only requested when the extended metrics are not (Dashboard).
+    const wantAllMetrics = showExtendedSummary || showPreviousPeriodComparison;
+    const fetchSummary = wantAllMetrics ? Promise.resolve(null) : WebsiteAnalyticsService.getSummary(range);
     const fetchDaily = WebsiteAnalyticsService.getDaily(range);
     const fetchPages = wantPages ? WebsiteAnalyticsService.getPages(range, pagesTop) : Promise.resolve(null);
     const fetchAi = showAiReferrals ? WebsiteAnalyticsService.getAiReferrals(range) : Promise.resolve(null);
-    const fetchAllWithPrev = (showExtendedSummary || showPreviousPeriodComparison)
-      ? WebsiteAnalyticsService.getAllMetricsWithPrevious(range)
-      : Promise.resolve(null);
+    const fetchAllWithPrev = wantAllMetrics ? WebsiteAnalyticsService.getAllMetricsWithPrevious(range) : Promise.resolve(null);
     const fetchChannels = showTrafficSources ? WebsiteAnalyticsService.getSessionChannels(range) : Promise.resolve(null);
     const fetchSources = showTrafficSources ? WebsiteAnalyticsService.getTopTrafficSources(range, 10) : Promise.resolve(null);
     const fetchGeo = showGeo ? WebsiteAnalyticsService.getGeoReport(range, 10) : Promise.resolve(null);
@@ -228,8 +237,9 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
         new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true })
       );
 
-      if (summaryRes.success && summaryRes.data) {
-        setSummary(summaryRes.data);
+      if (summaryRes) {
+        setSummary(summaryRes.success && summaryRes.data ? summaryRes.data : null);
+        if (!summaryRes.success) setMetricsError(summaryRes.message || 'Could not load the visitor numbers right now.');
       } else {
         setSummary(null);
       }
@@ -241,18 +251,14 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
       } else {
         setDays([]);
         setHours(null);
-      }
-
-      if (!summaryRes.success || !dailyRes.success) {
-        setError(summaryRes.message || dailyRes.message || 'Could not load website analytics right now.');
+        setError(dailyRes.message || 'Could not load the visitors chart right now.');
       }
 
       if (allWithPrevRes) {
-        if (allWithPrevRes.success && allWithPrevRes.data) {
-          setExtendedSummaryWithPrev(allWithPrevRes.data);
-        } else {
-          setExtendedSummaryWithPrev(null);
-        }
+        setExtendedSummaryWithPrev(allWithPrevRes.success && allWithPrevRes.data ? allWithPrevRes.data : null);
+        if (!allWithPrevRes.success) setMetricsError(allWithPrevRes.message || 'Could not load the visitor numbers right now.');
+      } else {
+        setExtendedSummaryWithPrev(null);
       }
 
       if (channelsRes) {
@@ -350,25 +356,41 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
     return { items, maxValue, pendingLabel: null as string | null };
   }, [days, hours]);
 
-  const cardClass = `hiyaghar-dash-metric-card${onCardClick ? ' cursor-pointer' : ''}`;
-  const cardValue = (val: number | undefined) => (val === undefined ? '—' : formatNumber(val));
+  // Clickable cards (Dashboard) lift on hover; "revenue-card" is the plain, non-clickable style.
+  const cardClass = `hiyaghar-metric-card${onCardClick ? '' : ' revenue-card'}`;
+  // Cards show "—" while loading, for an unusable custom range, or when their data failed to load
+  // (never the numbers of the previously selected range).
+  const cardsBlank = loading || !!rangeState.invalid || !!metricsError;
+  const cardValue = (val: number | undefined) => (cardsBlank || val === undefined ? '—' : formatNumber(val));
 
-  const compLabel = getComparisonLabel(chartFilter);
   const curr = extendedSummaryWithPrev?.current;
   const prev = extendedSummaryWithPrev?.previous;
+  const comparisonAvailable = extendedSummaryWithPrev?.comparisonAvailable !== false;
+  const comparedUpToHour = extendedSummaryWithPrev?.comparedUpToHour;
+  // Today is compared with yesterday up to the same processed hour, e.g. "yesterday until 3 PM".
+  const compLabel =
+    chartFilter === 'today' && comparedUpToHour !== undefined && comparedUpToHour !== null && comparedUpToHour >= 0
+      ? `yesterday until ${formatHour((comparedUpToHour + 1) % 24)}`
+      : getComparisonLabel(chartFilter);
+  // Range shown in the header (from whichever request answered).
+  const rangeInfo = rangeState.invalid ? null : summary ?? extendedSummaryWithPrev;
 
   const renderTrend = (currentVal?: number, previousVal?: number) => {
-    if (!showPreviousPeriodComparison || loading || currentVal === undefined || previousVal === undefined) {
+    if (!showPreviousPeriodComparison || cardsBlank || currentVal === undefined || previousVal === undefined) {
       return null;
     }
+    if (!comparisonAvailable) {
+      return <span className="hiyaghar-metric-comparison text-neutral">No comparison yet today</span>;
+    }
     if (previousVal === 0 && currentVal === 0) {
-      return <span className="hiyaghar-metric-comparison text-neutral">-</span>;
+      return <span className="hiyaghar-metric-comparison text-neutral">Same as {compLabel} (0)</span>;
     }
     if (previousVal === 0) {
+      // A percentage from 0 means nothing ("+100%" would be wrong): say it went up from 0.
       return (
         <span className="hiyaghar-metric-comparison text-green-dark">
           <i className="fa-solid fa-arrow-trend-up mr-1" />
-          +100% vs {compLabel}
+          Up from 0 vs {compLabel}
         </span>
       );
     }
@@ -390,15 +412,15 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
       {/* Visitors block card: title + filters + metrics + chart */}
       <div className="hiyaghar-dash-card">
         {/* Header row: title on the left, date filter pills on the right */}
-        <div className="chart-header-row">
-          <div className="chart-title-block">
+        <div className="hiyaghar-card-header flex-between flex-wrap-gap">
+          <div>
             <h3>
               <i className="fa-solid fa-globe mr-2 text-gold" />
               Website Visitors
             </h3>
-            <p className="chart-subtitle">
+            <p className="hiyaghar-card-subtitle">
               HiyaGhar website visitors from Google Analytics
-              {summary && <> · {summary.rangeType === 'today' ? `Today, ${formatRangeDate(summary.startDate)}` : summary.rangeType === 'yesterday' ? `Yesterday, ${formatRangeDate(summary.startDate)}` : `${formatRangeDate(summary.startDate)} – ${formatRangeDate(summary.endDate)}`}</>}
+              {rangeInfo && <> · {rangeInfo.rangeType === 'today' ? `Today, ${formatRangeDate(rangeInfo.startDate)}` : rangeInfo.rangeType === 'yesterday' ? `Yesterday, ${formatRangeDate(rangeInfo.startDate)}` : `${formatRangeDate(rangeInfo.startDate)} – ${formatRangeDate(rangeInfo.endDate)}`}</>}
             </p>
           </div>
 
@@ -485,9 +507,12 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
             <div className="hiyaghar-metric-info">
               <span className="hiyaghar-metric-label">Active Users</span>
               <span className="hiyaghar-metric-value">
-                {cardValue(error ? undefined : curr ? curr.activeUsers : summary?.activeUsers)}
+                {cardValue(curr ? curr.activeUsers : summary?.activeUsers)}
               </span>
-              <span className="hiyaghar-metric-subtext text-blue">Visitors in selected range</span>
+              <span className="hiyaghar-metric-subtext text-blue">
+                {/* Today's number only covers the hours GA has processed; Live Visitors is "right now". */}
+                {chartFilter === 'today' ? 'Processed so far today (recent hours still processing)' : 'Visitors in selected range'}
+              </span>
               {renderTrend(curr?.activeUsers, prev?.activeUsers)}
             </div>
           </div>
@@ -500,7 +525,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
             <div className="hiyaghar-metric-info">
               <span className="hiyaghar-metric-label">Page Views</span>
               <span className="hiyaghar-metric-value">
-                {cardValue(error ? undefined : curr ? curr.pageViews : summary?.pageViews)}
+                {cardValue(curr ? curr.pageViews : summary?.pageViews)}
               </span>
               <span className="hiyaghar-metric-subtext text-purple">Pages viewed in selected range</span>
               {renderTrend(curr?.pageViews, prev?.pageViews)}
@@ -517,7 +542,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 <div className="hiyaghar-metric-info">
                   <span className="hiyaghar-metric-label">Total Users</span>
                   <span className="hiyaghar-metric-value">
-                    {cardValue(error ? undefined : curr?.totalUsers)}
+                    {cardValue(curr?.totalUsers)}
                   </span>
                   <span className="hiyaghar-metric-subtext text-green">All unique visitors</span>
                   {renderTrend(curr?.totalUsers, prev?.totalUsers)}
@@ -532,7 +557,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 <div className="hiyaghar-metric-info">
                   <span className="hiyaghar-metric-label">New Users</span>
                   <span className="hiyaghar-metric-value">
-                    {cardValue(error ? undefined : curr?.newUsers)}
+                    {cardValue(curr?.newUsers)}
                   </span>
                   <span className="hiyaghar-metric-subtext text-teal">First-time visitors</span>
                   {renderTrend(curr?.newUsers, prev?.newUsers)}
@@ -547,7 +572,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 <div className="hiyaghar-metric-info">
                   <span className="hiyaghar-metric-label">Returning Users</span>
                   <span className="hiyaghar-metric-value">
-                    {cardValue(error ? undefined : curr?.returningUsers)}
+                    {cardValue(curr?.returningUsers)}
                   </span>
                   <span className="hiyaghar-metric-subtext text-orange">Repeat visitors</span>
                   {renderTrend(curr?.returningUsers, prev?.returningUsers)}
@@ -562,7 +587,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 <div className="hiyaghar-metric-info">
                   <span className="hiyaghar-metric-label">Sessions</span>
                   <span className="hiyaghar-metric-value">
-                    {cardValue(error ? undefined : curr?.sessions)}
+                    {cardValue(curr?.sessions)}
                   </span>
                   <span className="hiyaghar-metric-subtext text-red">Total site visits</span>
                   {renderTrend(curr?.sessions, prev?.sessions)}
@@ -577,7 +602,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 <div className="hiyaghar-metric-info">
                   <span className="hiyaghar-metric-label">Event Count</span>
                   <span className="hiyaghar-metric-value">
-                    {cardValue(error ? undefined : curr?.eventCount)}
+                    {cardValue(curr?.eventCount)}
                   </span>
                   <span className="hiyaghar-metric-subtext text-indigo">Total events tracked</span>
                   {renderTrend(curr?.eventCount, prev?.eventCount)}
@@ -592,7 +617,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 <div className="hiyaghar-metric-info">
                   <span className="hiyaghar-metric-label">Avg. Engagement</span>
                   <span className="hiyaghar-metric-value">
-                    {error ? '—' : formatEngagementTime(curr?.averageEngagementTimeSeconds)}
+                    {cardsBlank || !curr ? '—' : formatEngagementTime(curr.averageEngagementTimeSeconds)}
                   </span>
                   <span className="hiyaghar-metric-subtext text-pink">Time spent per user</span>
                   {renderTrend(curr?.averageEngagementTimeSeconds, prev?.averageEngagementTimeSeconds)}
@@ -601,6 +626,13 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
             </>
           )}
         </div>
+
+        {metricsError && !loading && !rangeState.invalid && (
+          <p className="visitors-metrics-error">
+            <i className="fa-solid fa-triangle-exclamation text-amber mr-2" />
+            {metricsError}
+          </p>
+        )}
 
         {/* Part 8: Active users chart with axis labels & rich tooltips */}
         <div className="hiyaghar-chart-container">
@@ -626,7 +658,8 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
             </div>
           ) : (
             <div className="modern-svg-chart-wrapper">
-              <svg viewBox="0 0 900 240" className="modern-svg-chart" preserveAspectRatio="none">
+              {/* Scales evenly (no stretched text or oval dots on wide screens). */}
+              <svg viewBox="0 0 900 240" className="modern-svg-chart visitors-svg-chart" preserveAspectRatio="xMidYMid meet">
                 <defs>
                   <linearGradient id="visitorsAreaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                     <stop offset="0%" stopColor="#D19A27" stopOpacity="0.45" />
@@ -644,14 +677,14 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 </defs>
 
                 {/* Horizontal Grid Lines */}
+                {/* (max at y=20, half at y=102.5, 0 at y=185 - the lines sit exactly on the labels) */}
                 <line x1="45" y1="20" x2="880" y2="20" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4 4" />
-                <line x1="45" y1="75" x2="880" y2="75" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4 4" />
-                <line x1="45" y1="130" x2="880" y2="130" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4 4" />
+                <line x1="45" y1="102.5" x2="880" y2="102.5" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="4 4" />
                 <line x1="45" y1="185" x2="880" y2="185" stroke="#e2e8f0" strokeWidth="1" />
 
                 {/* Y-Axis Value Labels & Title */}
                 <text x="40" y="24" textAnchor="end" className="svg-axis-label">{formatNumber(chartData.maxValue)}</text>
-                <text x="40" y="105" textAnchor="end" className="svg-axis-label">{formatNumber(Math.round(chartData.maxValue / 2))}</text>
+                <text x="40" y="106" textAnchor="end" className="svg-axis-label">{formatNumber(Math.round(chartData.maxValue / 2))}</text>
                 <text x="40" y="188" textAnchor="end" className="svg-axis-label">0</text>
                 <text x="45" y="12" className="svg-axis-label" fontWeight="600" fill="#64748b" fontSize="10">Active Users</text>
                 <text x="880" y="232" textAnchor="end" className="svg-axis-label" fontWeight="600" fill="#64748b" fontSize="10">
@@ -787,13 +820,22 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                 <i className="fa-solid fa-circle-info mr-1 text-amber" />
                 {chartData.pendingLabel ? (
                   <>
-                    <strong>{chartData.pendingLabel}</strong> is still being processed by Google Analytics (usually a few hours),
+                    <strong>{chartData.pendingLabel}</strong> may still be processing in Google Analytics (usually a few hours),
                     so it is shaded instead of shown as 0.
                   </>
                 ) : (
                   <>Recent hours can take a few hours to appear in Google Analytics.</>
-                )}{' '}
-                For who is on the site right now, see <strong>Live Visitors</strong> on the Website Analytics page.
+                )}
+                {liveVisitorsHint === 'above' && <> For who is on the site right now, see <strong>Live Visitors</strong> above.</>}
+                {liveVisitorsHint === 'link' && onCardClick && (
+                  <>
+                    {' '}For who is on the site right now,{' '}
+                    <button type="button" className="visitors-inline-link" onClick={onCardClick}>
+                      open Live Visitors
+                    </button>
+                    .
+                  </>
+                )}
               </>
             ) : (
               <>
@@ -845,6 +887,11 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                   <i className="fa-solid fa-layer-group mr-2 text-blue" />
                   Sessions by Channel Grouping
                 </h4>
+                {sessionChannels.length === 0 ? (
+                  <div className="chart-no-data" style={{ padding: '32px 0' }}>
+                    <span>No sessions recorded in this period.</span>
+                  </div>
+                ) : (
                 <div className="hiyaghar-table-responsive">
                   <table className="hiyaghar-dash-table">
                     <thead>
@@ -890,6 +937,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                     </tbody>
                   </table>
                 </div>
+                )}
               </div>
 
               {/* Right Column: Top Traffic Sources (Source / Medium) */}
@@ -1054,6 +1102,11 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
               <i className="fa-solid fa-triangle-exclamation text-amber" />
               <span>{deviceError}</span>
             </div>
+          ) : deviceTotalUsers === 0 ? (
+            <div className="chart-no-data">
+              <i className="fa-solid fa-laptop text-amber" />
+              <span>No device data for this period.</span>
+            </div>
           ) : (
             <div style={{ marginTop: '16px' }}>
               <div className="hiyaghar-metrics-grid" style={{ marginBottom: '16px' }}>
@@ -1068,7 +1121,7 @@ export const WebsiteVisitorsSection: React.FC<WebsiteVisitorsSectionProps> = ({
                     : 'bg-purple-light text-purple';
 
                   return (
-                    <div key={d.category} className="hiyaghar-dash-metric-card">
+                    <div key={d.category} className="hiyaghar-metric-card revenue-card">
                       <div className={`hiyaghar-metric-icon ${colorClass}`}>
                         <i className={`fa-solid ${icon}`} />
                       </div>

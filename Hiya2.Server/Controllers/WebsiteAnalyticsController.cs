@@ -229,6 +229,10 @@ namespace Hiya2.Server.Controllers
                     eventCount = result.Data.Previous.EventCount,
                     averageEngagementTimeSeconds = result.Data.Previous.AverageEngagementTimeSeconds,
                 },
+                // Today: false before GA has processed any hour (no fair comparison yet).
+                comparisonAvailable = result.Data.ComparisonAvailable,
+                // Today: both days are compared from midnight up to and including this hour.
+                comparedUpToHour = result.Data.ComparedUpToHour,
             });
         }
 

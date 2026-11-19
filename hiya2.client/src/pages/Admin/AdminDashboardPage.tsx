@@ -578,6 +578,7 @@ export const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({ onNaviga
       {canViewWebsiteAnalytics && (
         <WebsiteVisitorsSection
           onCardClick={() => onNavigate('/admin/website-analytics')}
+          liveVisitorsHint="link"
           pagesTop={5}
           renderPages={({ pages, loading: pagesLoading, error: pagesError }) => (
             <div className="hiyaghar-dash-card">

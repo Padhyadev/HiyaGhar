@@ -73,6 +73,7 @@ export const WebsiteAnalyticsPage: React.FC = () => {
         showTrafficSources
         showGeo
         showDevices
+        liveVisitorsHint="above"
         renderPages={({ pages, loading, error }) => (
           <>
             {error && (
