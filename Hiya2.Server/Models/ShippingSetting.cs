@@ -64,6 +64,12 @@ namespace Hiya2.Server.Models
         public bool EnableProductNutritionTab { get; set; } = true;
         public bool EnableProductReviewsTab { get; set; } = true;
 
+        // Admin Order Notification Recipients (Comma-separated list of emails)
+        [MaxLength(1000)]
+        public string AdminNotificationEmails { get; set; } = "vmgami333@gmail.com,pranav@yopmail.com,pranav0612@yopmail.com";
+
+        public bool EnableAdminOrderAlerts { get; set; } = true;
+
         public bool IsActive { get; set; } = true;
         public long? LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }

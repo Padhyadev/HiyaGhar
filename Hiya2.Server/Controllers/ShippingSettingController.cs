@@ -1,13 +1,20 @@
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HIyaghar.Infra;
 using Hiya2.Server.Models;
 using Hiya2.Server.Authorization;
+using Hiya2.Server.Services;
 
 namespace Hiya2.Server.Controllers
 {
+    public class SendTestEmailDto
+    {
+        public string Email { get; set; } = string.Empty;
+    }
+
     public class ShippingSettingRequestDto
     {
         public decimal FreeShippingThreshold { get; set; }
@@ -32,6 +39,9 @@ namespace Hiya2.Server.Controllers
         public bool EnableProductIngredientsTab { get; set; } = true;
         public bool EnableProductNutritionTab { get; set; } = true;
         public bool EnableProductReviewsTab { get; set; } = true;
+        // Admin Order Notification Recipients
+        public string? AdminNotificationEmails { get; set; }
+        public bool EnableAdminOrderAlerts { get; set; } = true;
     }
 
     [ApiController]
@@ -93,7 +103,9 @@ namespace Hiya2.Server.Controllers
                     enableProductDescriptionTab = s.EnableProductDescriptionTab,
                     enableProductIngredientsTab = s.EnableProductIngredientsTab,
                     enableProductNutritionTab = s.EnableProductNutritionTab,
-                    enableProductReviewsTab = s.EnableProductReviewsTab
+                    enableProductReviewsTab = s.EnableProductReviewsTab,
+                    adminNotificationEmails = s.AdminNotificationEmails ?? "vmgami333@gmail.com,pranav@yopmail.com,pranav0612@yopmail.com",
+                    enableAdminOrderAlerts = s.EnableAdminOrderAlerts
                 }
             });
         }
@@ -128,11 +140,60 @@ namespace Hiya2.Server.Controllers
             setting.EnableProductIngredientsTab = dto.EnableProductIngredientsTab;
             setting.EnableProductNutritionTab = dto.EnableProductNutritionTab;
             setting.EnableProductReviewsTab = dto.EnableProductReviewsTab;
+
+            if (dto.AdminNotificationEmails != null)
+            {
+                setting.AdminNotificationEmails = dto.AdminNotificationEmails.Trim();
+            }
+            setting.EnableAdminOrderAlerts = dto.EnableAdminOrderAlerts;
+
             setting.LastModifiedBy = GetCurrentUserId();
             setting.LastModifiedDate = DateTime.Now;
 
             await _context.SaveChangesAsync();
-            return Ok(new { isSuccess = true, message = "Shipping settings saved to database." });
+            return Ok(new { isSuccess = true, message = "Store settings saved to database." });
+        }
+
+        // ADMIN only — send a test notification email to a specific recipient
+        [HttpPost("test-email")]
+        [Authorize(Policy = AuthPolicies.Staff)]
+        public async Task<IActionResult> SendTestEmail([FromBody] SendTestEmailDto dto, [FromServices] IEmailService emailService)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Email))
+            {
+                return BadRequest(new { isSuccess = false, message = "Please provide an email address." });
+            }
+
+            var cleanEmail = dto.Email.Trim();
+            if (!Regex.IsMatch(cleanEmail, @"^[^@\s]+@[^@\s]+\.[^@\s]+$"))
+            {
+                return BadRequest(new { isSuccess = false, message = "Invalid email address format." });
+            }
+
+            var istNow = DateTime.UtcNow.AddHours(5.5).ToString("dd MMM yyyy, hh:mm tt") + " IST";
+            var triggeredBy = User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue(ClaimTypes.Email) ?? "HIYAGHAR Admin Portal";
+
+            var templateData = new Dictionary<string, string>
+            {
+                { "targetEmail", cleanEmail },
+                { "sentAt", istNow },
+                { "triggeredBy", triggeredBy },
+                { "companyName", "HIYAGHAR" }
+            };
+
+            var (isSuccess, message) = await emailService.SendEmailAsync(
+                cleanEmail,
+                "HIYAGHAR - Notification System Test",
+                "admin_test_email",
+                templateData
+            );
+
+            if (!isSuccess)
+            {
+                return StatusCode(500, new { isSuccess = false, message = $"Failed to send test email: {message}" });
+            }
+
+            return Ok(new { isSuccess = true, message = $"Test email sent successfully to {cleanEmail}." });
         }
     }
 }

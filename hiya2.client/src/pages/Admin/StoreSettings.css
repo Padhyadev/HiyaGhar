@@ -221,3 +221,160 @@
 .hiyaghar-section-btn-cancel:hover {
   background: #e2e8f0;
 }
+
+/* ==========================================================================
+   ORDER NOTIFICATION EMAILS CARD STYLING
+   ========================================================================== */
+.notification-emails-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notification-toggle-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 14px 18px;
+}
+
+.notification-toggle-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 2px;
+}
+
+.notification-email-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.notification-email-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  gap: 12px;
+}
+
+.notification-email-row:hover {
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.notification-email-text {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  word-break: break-all;
+}
+
+.notification-email-text i {
+  color: #D19A27;
+  font-size: 14px;
+}
+
+.notification-email-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.notification-btn-test {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  border: 1px solid #bfdbfe;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notification-btn-test:hover:not(:disabled) {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+.notification-btn-test:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.notification-btn-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notification-btn-remove:hover:not(:disabled) {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.notification-btn-remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notification-add-box {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-top: 6px;
+}
+
+.notification-add-btn {
+  height: 44px;
+  padding: 0 18px;
+  background: #11223a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.notification-add-btn:hover {
+  background: #1e3a63;
+}
+
+.notification-empty-note {
+  padding: 16px;
+  text-align: center;
+  background: #fffbeb;
+  border: 1px dashed #fde68a;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #92400e;
+}

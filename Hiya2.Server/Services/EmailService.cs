@@ -2,6 +2,8 @@ using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text.RegularExpressions;
+using HIyaghar.Infra;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Hiya2.Server.Services
 {
@@ -9,17 +11,46 @@ namespace Hiya2.Server.Services
     {
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
+        private readonly IServiceScopeFactory _scopeFactory;
 
-        public EmailService(IConfiguration configuration, IWebHostEnvironment environment)
+        public EmailService(IConfiguration configuration, IWebHostEnvironment environment, IServiceScopeFactory scopeFactory)
         {
             _configuration = configuration;
             _environment = environment;
+            _scopeFactory = scopeFactory;
         }
 
         private IConfigurationSection EmailConfig => _configuration.GetSection("Email");
 
         public string GetAdminNotificationRecipients()
         {
+            try
+            {
+                using var scope = _scopeFactory.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+                var setting = context.ShippingSettings.FirstOrDefault(s => s.IsActive);
+                if (setting != null)
+                {
+                    if (!setting.EnableAdminOrderAlerts)
+                    {
+                        return string.Empty; // Admin explicitly turned off order alerts
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(setting.AdminNotificationEmails))
+                    {
+                        var list = setting.AdminNotificationEmails
+                            .Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                            .Distinct(StringComparer.OrdinalIgnoreCase);
+                        return string.Join(",", list);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[EMAIL RECIPIENTS DB ERROR] {ex.Message}");
+            }
+
+            // Fallback to appsettings.json
             var fromEmail = EmailConfig.GetValue<string>("FromEmail") ?? string.Empty;
             var adminEmail = EmailConfig.GetValue<string>("AdminNotificationEmail") ?? string.Empty;
 

@@ -13,7 +13,11 @@ export const ShippingSettingsPage: React.FC = () => {
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   // Individual Section Edit States
-  const [editingSection, setEditingSection] = useState<'none' | 'deliveryCharges' | 'deliveryTimeline' | 'gst' | 'zones' | 'storeInfo' | 'productTabs'>('none');
+  const [editingSection, setEditingSection] = useState<'none' | 'deliveryCharges' | 'deliveryTimeline' | 'gst' | 'zones' | 'storeInfo' | 'productTabs' | 'notifications'>('none');
+
+  // Order Notification Emails State
+  const [newNotificationEmail, setNewNotificationEmail] = useState<string>('');
+  const [testingEmail, setTestingEmail] = useState<string | null>(null);
 
   // Announcements State
   const [announcements, setAnnouncements] = useState<AnnouncementItem[]>([]);
@@ -129,6 +133,83 @@ export const ShippingSettingsPage: React.FC = () => {
     // Notify same-tab listeners
     window.dispatchEvent(new StorageEvent('storage', { key: 'hiyaghar_shipping_settings' }));
     setEditingSection('none');
+  };
+
+  // Order Notification Emails Handlers
+  const getNotificationEmailList = (): string[] => {
+    if (!form.adminNotificationEmails) return [];
+    return form.adminNotificationEmails
+      .split(/[,;\n]/)
+      .map((e) => e.trim())
+      .filter((e) => e.length > 0);
+  };
+
+  const handleAddNotificationEmail = () => {
+    const clean = newNotificationEmail.trim().toLowerCase();
+    if (!clean) {
+      showToast('Please enter an email address.', 'error');
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) {
+      showToast('Please enter a valid email address (e.g. store@domain.com).', 'error');
+      return;
+    }
+    const currentList = getNotificationEmailList();
+    if (currentList.some((e) => e.toLowerCase() === clean)) {
+      showToast('This email is already in the recipient list.', 'info');
+      return;
+    }
+    const updatedList = [...currentList, clean];
+    handleChange('adminNotificationEmails', updatedList.join(', '));
+    setNewNotificationEmail('');
+    showToast(`Added ${clean}. Click Save to apply.`, 'success');
+  };
+
+  const handleRemoveNotificationEmail = (emailToRemove: string) => {
+    const currentList = getNotificationEmailList();
+    const updatedList = currentList.filter((e) => e.toLowerCase() !== emailToRemove.toLowerCase());
+    handleChange('adminNotificationEmails', updatedList.join(', '));
+    showToast(`Removed ${emailToRemove}. Click Save to apply.`, 'info');
+  };
+
+  const handleSendTestEmail = async (targetEmail: string) => {
+    if (testingEmail) return;
+    setTestingEmail(targetEmail);
+    try {
+      const token = AdminAuthService.getToken();
+      const authHeaders: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+      const result = await ShippingService.sendTestNotificationEmail(targetEmail, authHeaders);
+      if (result.isSuccess) {
+        showToast(`✅ Test email sent successfully to ${targetEmail}!`, 'success');
+      } else {
+        showToast(result.message || 'Failed to send test email.', 'error');
+      }
+    } catch (err: any) {
+      showToast(err?.message || 'Error sending test email.', 'error');
+    } finally {
+      setTestingEmail(null);
+    }
+  };
+
+  const handleSendTestToAll = async () => {
+    const list = getNotificationEmailList();
+    if (list.length === 0) {
+      showToast('No active notification emails configured.', 'info');
+      return;
+    }
+    setTestingEmail('ALL');
+    let successCount = 0;
+    try {
+      const token = AdminAuthService.getToken();
+      const authHeaders: HeadersInit = token ? { 'Authorization': `Bearer ${token}` } : {};
+      for (const email of list) {
+        const result = await ShippingService.sendTestNotificationEmail(email, authHeaders);
+        if (result.isSuccess) successCount++;
+      }
+      showToast(`✅ Test emails sent to ${successCount} of ${list.length} recipients!`, 'success');
+    } finally {
+      setTestingEmail(null);
+    }
   };
 
   // Announcements Handlers
@@ -940,6 +1021,187 @@ export const ShippingSettingsPage: React.FC = () => {
                   </span>
                 </label>
               </div>
+            </div>
+          </div>
+
+          {/* SECTION 8: ORDER & INQUIRY NOTIFICATION EMAILS */}
+          <div className={`hiyaghar-setting-card ${editingSection === 'notifications' ? 'is-active-edit' : ''}`}>
+            <div className="hiyaghar-setting-card-header">
+              <h3 className="hiyaghar-setting-card-title">
+                <i className="fa-solid fa-envelope-circle-check"></i>
+                8. Order &amp; Inquiry Notification Emails
+              </h3>
+              <div>
+                {editingSection !== 'notifications' ? (
+                  <button
+                    type="button"
+                    className="hiyaghar-section-btn-edit"
+                    onClick={() => setEditingSection('notifications')}
+                  >
+                    <i className="fa-solid fa-pen-to-square"></i>
+                    Edit Notification Emails
+                  </button>
+                ) : (
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      type="button"
+                      className="hiyaghar-section-btn-cancel"
+                      onClick={handleCancelSection}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      className="hiyaghar-section-btn-save"
+                      onClick={() => handleSaveSection('Order Notification Emails')}
+                    >
+                      <i className="fa-solid fa-floppy-disk"></i>
+                      Save Emails
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="notification-emails-wrap">
+              {/* Alert Toggle */}
+              <div className="notification-toggle-box">
+                <div>
+                  <div style={{ fontWeight: 700, color: '#0f172a', fontSize: '14px' }}>
+                    Send Instant Order Alerts to Admins
+                  </div>
+                  <div className="notification-toggle-desc">
+                    When enabled, every new customer order and contact inquiry is forwarded to the active emails below.
+                  </div>
+                </div>
+                <label className={`hiyaghar-toggle-label ${editingSection !== 'notifications' ? 'is-disabled' : ''}`}>
+                  <input
+                    type="checkbox"
+                    disabled={editingSection !== 'notifications'}
+                    checked={form.enableAdminOrderAlerts ?? true}
+                    onChange={(e) => handleChange('enableAdminOrderAlerts', e.target.checked)}
+                    className="hiyaghar-toggle-checkbox"
+                  />
+                  <span style={{ fontWeight: 600, color: form.enableAdminOrderAlerts ? '#0f766e' : '#64748b' }}>
+                    {form.enableAdminOrderAlerts ? 'Alerts Enabled' : 'Alerts Disabled'}
+                  </span>
+                </label>
+              </div>
+
+              {/* Active Emails List */}
+              <div>
+                <label className="hiyaghar-form-label" style={{ marginBottom: '8px' }}>
+                  <i className="fa-solid fa-users" style={{ color: '#D19A27' }}></i>
+                  Active Notification Recipients ({getNotificationEmailList().length})
+                </label>
+
+                {getNotificationEmailList().length === 0 ? (
+                  <div className="notification-empty-note">
+                    ⚠️ No admin notification emails configured. No order alerts will be delivered.
+                  </div>
+                ) : (
+                  <div className="notification-email-list">
+                    {getNotificationEmailList().map((email) => (
+                      <div key={email} className="notification-email-row">
+                        <span className="notification-email-text">
+                          <i className="fa-solid fa-envelope"></i>
+                          {email}
+                        </span>
+                        <div className="notification-email-actions">
+                          <button
+                            type="button"
+                            className="notification-btn-test"
+                            title="Send a test notification to this email"
+                            disabled={testingEmail !== null}
+                            onClick={() => handleSendTestEmail(email)}
+                          >
+                            {testingEmail === email ? (
+                              <>
+                                <i className="fa-solid fa-spinner fa-spin"></i>
+                                Sending...
+                              </>
+                            ) : (
+                              <>
+                                <i className="fa-solid fa-paper-plane"></i>
+                                Send Test
+                              </>
+                            )}
+                          </button>
+                          {editingSection === 'notifications' && (
+                            <button
+                              type="button"
+                              className="notification-btn-remove"
+                              title="Remove recipient"
+                              onClick={() => handleRemoveNotificationEmail(email)}
+                            >
+                              <i className="fa-solid fa-trash-can"></i>
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Add New Email Box (When in edit mode) */}
+              {editingSection === 'notifications' && (
+                <div style={{ marginTop: '4px' }}>
+                  <label className="hiyaghar-form-label" style={{ marginBottom: '6px' }}>
+                    <i className="fa-solid fa-user-plus" style={{ color: '#D19A27' }}></i>
+                    Add New Notification Recipient
+                  </label>
+                  <div className="notification-add-box">
+                    <input
+                      type="email"
+                      value={newNotificationEmail}
+                      onChange={(e) => setNewNotificationEmail(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddNotificationEmail();
+                        }
+                      }}
+                      placeholder="e.g. manager@hiyaghar.com"
+                      className="hiyaghar-input-control"
+                      style={{ flex: 1 }}
+                    />
+                    <button
+                      type="button"
+                      className="notification-add-btn"
+                      onClick={handleAddNotificationEmail}
+                    >
+                      <i className="fa-solid fa-plus"></i>
+                      Add Email
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Test All Button (When at least 1 email exists) */}
+              {getNotificationEmailList().length > 1 && (
+                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '4px' }}>
+                  <button
+                    type="button"
+                    className="notification-btn-test"
+                    style={{ padding: '8px 16px', fontSize: '13px' }}
+                    disabled={testingEmail !== null}
+                    onClick={handleSendTestToAll}
+                  >
+                    {testingEmail === 'ALL' ? (
+                      <>
+                        <i className="fa-solid fa-spinner fa-spin"></i>
+                        Sending Test to All...
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa-solid fa-paper-plane"></i>
+                        Send Test to All Active Recipients
+                      </>
+                    )}
+                  </button>
+                </div>
+              )}
             </div>
           </div>
 

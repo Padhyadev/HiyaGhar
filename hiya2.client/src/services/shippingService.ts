@@ -22,6 +22,9 @@ export interface ShippingSettings {
   enableProductIngredientsTab: boolean;
   enableProductNutritionTab: boolean;
   enableProductReviewsTab: boolean;
+  // Admin Order Notification Recipients
+  adminNotificationEmails: string;
+  enableAdminOrderAlerts: boolean;
 }
 
 const STORAGE_KEY = 'hiyaghar_shipping_settings';
@@ -53,6 +56,8 @@ export const DEFAULT_SHIPPING_SETTINGS: ShippingSettings = {
   enableProductIngredientsTab: true,
   enableProductNutritionTab: true,
   enableProductReviewsTab: true,
+  adminNotificationEmails: 'vmgami333@gmail.com, pranav@yopmail.com, pranav0612@yopmail.com',
+  enableAdminOrderAlerts: true,
 };
 
 export const SHIPPING_CONFIG = {
@@ -175,6 +180,8 @@ export class ShippingService {
             enableProductIngredientsTab: data.settings.enableProductIngredientsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductIngredientsTab,
             enableProductNutritionTab: data.settings.enableProductNutritionTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductNutritionTab,
             enableProductReviewsTab: data.settings.enableProductReviewsTab ?? DEFAULT_SHIPPING_SETTINGS.enableProductReviewsTab,
+            adminNotificationEmails: data.settings.adminNotificationEmails ?? DEFAULT_SHIPPING_SETTINGS.adminNotificationEmails,
+            enableAdminOrderAlerts: data.settings.enableAdminOrderAlerts ?? DEFAULT_SHIPPING_SETTINGS.enableAdminOrderAlerts,
           };
           // Sync DB value to localStorage so offline reads are up to date
           ShippingService.saveSettings(apiSettings);
@@ -220,6 +227,8 @@ export class ShippingService {
           enableProductIngredientsTab: settings.enableProductIngredientsTab,
           enableProductNutritionTab: settings.enableProductNutritionTab,
           enableProductReviewsTab: settings.enableProductReviewsTab,
+          adminNotificationEmails: settings.adminNotificationEmails,
+          enableAdminOrderAlerts: settings.enableAdminOrderAlerts,
         }),
       });
       const data = await res.json().catch(() => ({}));
@@ -234,6 +243,35 @@ export class ShippingService {
     // Still sync localStorage so changes persist across views
     ShippingService.saveSettings(settings);
     return false;
+  }
+
+  /**
+   * Send a test notification email to a specific admin email address.
+   */
+  public static async sendTestNotificationEmail(
+    email: string,
+    authHeaders: HeadersInit
+  ): Promise<{ isSuccess: boolean; message: string }> {
+    try {
+      const res = await fetch('/api/shippingsetting/test-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(typeof authHeaders === 'object' ? authHeaders : {}),
+        },
+        body: JSON.stringify({ email }),
+      });
+      const data = await res.json().catch(() => ({}));
+      return {
+        isSuccess: Boolean(res.ok && data?.isSuccess),
+        message: data?.message || (res.ok ? `Test email sent to ${email}.` : 'Failed to send test email.'),
+      };
+    } catch (e: any) {
+      return {
+        isSuccess: false,
+        message: e?.message || 'Network error while sending test email.',
+      };
+    }
   }
 
   /**

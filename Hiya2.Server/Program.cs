@@ -285,6 +285,12 @@ using (var scope = app.Services.CreateScope())
 
                 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'EnableProductReviewsTab')
                     EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableProductReviewsTab] BIT NOT NULL DEFAULT 1');
+
+                IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'AdminNotificationEmails')
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [AdminNotificationEmails] NVARCHAR(1000) NOT NULL DEFAULT N''vmgami333@gmail.com,pranav@yopmail.com,pranav0612@yopmail.com''');
+
+                IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('dbo.[ShippingSetting]') AND name = 'EnableAdminOrderAlerts')
+                    EXEC(N'ALTER TABLE dbo.[ShippingSetting] ADD [EnableAdminOrderAlerts] BIT NOT NULL DEFAULT 1');
             END
 
             IF OBJECT_ID('dbo.[Coupon]', 'U') IS NOT NULL
