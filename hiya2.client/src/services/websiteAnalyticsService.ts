@@ -23,6 +23,71 @@ export interface VisitorSummaryResponse {
   pageViews: number;
 }
 
+export interface VisitorExtendedSummaryResponse {
+  isSuccess: boolean;
+  rangeType: VisitorRangeType;
+  startDate: string;
+  endDate: string;
+  activeUsers: number;
+  pageViews: number;
+  totalUsers: number;
+  newUsers: number;
+  returningUsers: number;
+  sessions: number;
+  eventCount: number;
+  averageEngagementTimeSeconds: number;
+}
+
+export interface VisitorExtendedSummary {
+  activeUsers: number;
+  pageViews: number;
+  totalUsers: number;
+  newUsers: number;
+  returningUsers: number;
+  sessions: number;
+  eventCount: number;
+  averageEngagementTimeSeconds: number;
+}
+
+export interface VisitorExtendedSummaryWithPreviousResponse {
+  isSuccess: boolean;
+  rangeType: VisitorRangeType;
+  startDate: string;
+  endDate: string;
+  current: VisitorExtendedSummary;
+  previous: VisitorExtendedSummary;
+}
+
+export interface SessionChannel {
+  channel: string;
+  sessions: number;
+  percentage: number;
+}
+
+export interface SessionChannelsResponse {
+  isSuccess: boolean;
+  rangeType: VisitorRangeType;
+  startDate: string;
+  endDate: string;
+  channels: SessionChannel[];
+  totalSessions: number;
+}
+
+export interface TrafficSource {
+  source: string;
+  medium: string;
+  sessions: number;
+  activeUsers: number;
+}
+
+export interface TrafficSourcesResponse {
+  isSuccess: boolean;
+  rangeType: VisitorRangeType;
+  startDate: string;
+  endDate: string;
+  sources: TrafficSource[];
+}
+
 export interface VisitorDay {
   date: string; // yyyy-MM-dd
   activeUsers: number;
@@ -31,6 +96,8 @@ export interface VisitorDay {
 export interface VisitorHour {
   hour: number; // 0-23, India time
   activeUsers: number;
+  /** Today only: Google Analytics has not processed this hour yet (0 means "unknown", not "no visitors"). */
+  pending?: boolean;
 }
 
 // Today / yesterday come back per hour ("hours"); every other range per day ("days").
@@ -46,8 +113,39 @@ export interface VisitorDailyResponse {
 
 export interface VisitorPage {
   pagePath: string;
+  pageTitle: string;
   views: number;
   activeUsers: number;
+  averageEngagementTimeSeconds: number;
+}
+
+export interface GeoLocationItem {
+  name: string;
+  activeUsers: number;
+}
+
+export interface GeoResponse {
+  isSuccess: boolean;
+  rangeType: VisitorRangeType;
+  startDate: string;
+  endDate: string;
+  countries: GeoLocationItem[];
+  cities: GeoLocationItem[];
+}
+
+export interface DeviceCategoryItem {
+  category: string;
+  activeUsers: number;
+  percentage: number;
+}
+
+export interface DeviceResponse {
+  isSuccess: boolean;
+  rangeType: VisitorRangeType;
+  startDate: string;
+  endDate: string;
+  categories: DeviceCategoryItem[];
+  totalUsers: number;
 }
 
 export interface VisitorPagesResponse {
@@ -118,6 +216,64 @@ export class WebsiteAnalyticsService {
   static getAiReferrals(range: VisitorRange) {
     return getJson<AiReferralsResponse>('ai-referrals', rangeQuery(range));
   }
+
+  // Extended summary metrics for Website Analytics page.
+  static getExtendedSummary(range: VisitorRange) {
+    return getJson<VisitorExtendedSummaryResponse>('extended-summary', rangeQuery(range));
+  }
+
+  // All extended metrics with current and previous period data for comparison.
+  static getAllMetricsWithPrevious(range: VisitorRange) {
+    return getJson<VisitorExtendedSummaryWithPreviousResponse>('all-metrics-with-previous', rangeQuery(range));
+  }
+
+  // Sessions by channel grouping.
+  static getSessionChannels(range: VisitorRange) {
+    return getJson<SessionChannelsResponse>('session-channels', rangeQuery(range));
+  }
+
+  // Top traffic sources.
+  static getTopTrafficSources(range: VisitorRange, top: number = 10) {
+    const params = rangeQuery(range);
+    params.set('top', String(top));
+    return getJson<TrafficSourcesResponse>('top-traffic-sources', params);
+  }
+
+  // Visitors by Country and City (top 10 each).
+  static getGeoReport(range: VisitorRange, top: number = 10) {
+    const params = rangeQuery(range);
+    params.set('top', String(top));
+    return getJson<GeoResponse>('geo', params);
+  }
+
+  // Device category breakdown (Desktop, Mobile, Tablet).
+  static getDeviceReport(range: VisitorRange) {
+    return getJson<DeviceResponse>('devices', rangeQuery(range));
+  }
+
+  // People on the website right now (Google Analytics Realtime, last 30 minutes).
+  static getRealtime() {
+    return getJson<RealtimeResponse>('realtime', new URLSearchParams());
+  }
+}
+
+export interface RealtimeItem {
+  name: string;
+  activeUsers: number;
+}
+
+export interface RealtimeResponse {
+  isSuccess: boolean;
+  activeUsers30Min: number;
+  activeUsers5Min: number;
+  pageViews30Min: number;
+  /** 30 values, oldest first; the last one is the current minute. */
+  perMinute: number[];
+  pages: RealtimeItem[];
+  countries: RealtimeItem[];
+  cities: RealtimeItem[];
+  devices: RealtimeItem[];
+  fetchedAtUtc: string;
 }
 
 export interface AiReferral {
