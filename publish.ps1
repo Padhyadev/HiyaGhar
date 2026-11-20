@@ -130,6 +130,12 @@ if ($LASTEXITCODE -ne 0) {
 }
 Write-Success "ASP.NET Core publish complete to $OutputDir"
 
+# Create logs directory for IIS stdout logging
+$logsDir = Join-Path $OutputDir "logs"
+if (-not (Test-Path $logsDir)) {
+    New-Item -ItemType Directory -Path $logsDir -Force | Out-Null
+}
+
 # 5. VERIFY CRITICAL FILES
 Write-Step "Verifying publish artifacts..."
 $criticalFiles = @(
